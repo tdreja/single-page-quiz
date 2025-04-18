@@ -1,0 +1,100 @@
+html {
+    /* Blue */
+    --color-blue: rgb(72, 149, 239);
+    --color-blue-shadow: rgba(72, 149, 239, 0.5);
+    --color-blue-text: black;
+
+    /* Red */
+    --color-red: rgb(186, 24, 27);
+    --color-red-shadow: rgba(186, 24, 27, 0.5);
+    --color-red-text: white;
+
+    /* Green */
+    --color-green: rgb(49, 87, 44);
+    --color-green-shadow: rgba(49, 87, 44, 0.5);
+    --color-green-text: white;
+
+    /* Yellow */
+    --color-yellow: rgb(252, 191, 73);
+    --color-yellow-shadow: rgba(252, 191, 73, 0.5);
+    --color-yellow-text: black;
+
+    /* Orange */
+    --color-orange: rgb(232, 93, 4);
+    --color-orange-shadow: rgba(232, 93, 4, 0.5);
+    --color-orange-text: black;
+
+    /* Purple */
+    --color-purple: rgb(114, 9, 183);
+    --color-purple-shadow: rgba(114, 9, 183, 0.5);
+    --color-purple-text: white;
+
+    /* Turquoise */
+    --color-turquoise: rgb(0, 175, 185);
+    --color-turquoise-shadow: rgba(0, 175, 185, 0.5);
+    --color-turquoise-text: black;
+
+    /* White */
+    --color-white: rgb(211, 211, 211);
+    --color-white-shadow: rgba(211, 211, 211, 0.5);
+    --color-white-text: black;
+}
+
+/* Make templates invisible */
+[team=template],
+[player=template],
+[choice=template] {
+    display: none !important;
+}
+
+/* Teams */
+.bg-team-color {
+    background-color: var(--team-color, unset);
+    color: var(--team-color-text, unset);
+}
+
+[team] {
+    order: var(--team-order, unset);
+}
+
+[player] {
+    order: var(--player-order, unset);
+}
+
+.buzzer-shadow {
+    box-shadow: var(--team-color-shadow, gray) 0px 0px 0px 4px;
+}
+
+/* Multiple choice question */
+body:not([current-question=text-multiple-choice]) #text-multiple-choice {
+    display: none !important;
+} 
+
+.answers-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.answer {
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+/* region BootStrap Adjustments */
+
+.card > .list-group {
+    border-bottom: none;
+}
+
+.card > .list-group > .list-group-item {
+    border-bottom: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+}
+
+.btn-group > .btn[disabled] {
+    width: 1em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+}
+
+/* endregion BootStrap Adjustments */
