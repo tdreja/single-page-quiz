@@ -17,3 +17,9 @@ export interface Team {
     readonly players: Map<Emoji, Player>,
     gamepad?: number
 }
+
+export function addAllColorsTo(set: Set<TeamColor>) {
+    for(const color of Object.keys(TeamColor)) {
+        set.add(color as TeamColor);
+    }
+}

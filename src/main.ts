@@ -2,12 +2,13 @@ import './bootstrap.css';
 import './game.css';
 
 import {Game, GameRound, GameSection, GameState, RoundState} from "./model/game";
-import {Emoji, Player} from "./model/player";
+import {addAllEmojisTo, Emoji, Player} from "./model/player";
 import {TextChoice, TextMultipleChoiceQuestion} from "./model/question";
-import {Team, TeamColor} from "./model/team";
+import {addAllColorsTo, Team, TeamColor} from "./model/team";
 import {renderQuestion} from "./renderer/question-renderer";
 import {renderTeams} from "./renderer/teams-renderer";
 import {EventType, GameEvent} from "./events/common-events";
+import { AddPlayerEvent, AddTeamEvent } from './events/setup-events';
 
 export const game: Game = {
     sections: [],
@@ -23,53 +24,15 @@ export const game: Game = {
 
 // region Teams & Players
 
-export const playerBlueDuck: Player = {
-    name: "Duck",
-    emoji: Emoji.DUCK,
-    points: 25,
-    team: TeamColor.BLUE
-}
-export const playerBlueCamel: Player = {
-    name: "Camel",
-    emoji: Emoji.CAMEL,
-    points: 20,
-    team: TeamColor.BLUE
-}
-export const teamBlue: Team = {
-    color: TeamColor.BLUE,
-    points: 20,
-    players: new Map(),
-    gamepad: 0
-}
-teamBlue.players.set(Emoji.DUCK, playerBlueDuck);
-teamBlue.players.set(Emoji.CAMEL, playerBlueCamel);
-game.players.set(Emoji.DUCK, playerBlueDuck);
-game.players.set(Emoji.CAMEL, playerBlueCamel);
-game.teams.set(TeamColor.BLUE, teamBlue);
-game.selectingTeam = teamBlue;
+addAllColorsTo(game.availableColors);
+addAllEmojisTo(game.availableEmojis);
 
-export const playerRedCat: Player = {
-    name: "Cat",
-    emoji: Emoji.CAT,
-    points: 80,
-    team: TeamColor.RED
+for(const color of Object.keys(TeamColor)) {
+    new AddTeamEvent(color).updateGame(game);
 }
-export const playerRedEagle: Player = {
-    name: "Eagle",
-    emoji: Emoji.EAGLE,
-    points: 190,
-    team: TeamColor.RED
+for(const _ of Object.keys(Emoji)) {
+    new AddPlayerEvent(`Player-${game.players.size}`).updateGame(game);
 }
-export const teamRed: Team = {
-    color: TeamColor.RED,
-    points: 100,
-    players: new Map()
-}
-teamRed.players.set(Emoji.CAT, playerRedCat);
-teamRed.players.set(Emoji.EAGLE, playerRedEagle);
-game.players.set(Emoji.CAT, playerRedCat);
-game.players.set(Emoji.EAGLE, playerRedEagle);
-game.teams.set(TeamColor.RED, teamRed);
 
 // endregion Teams & Players
 

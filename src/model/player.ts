@@ -80,3 +80,9 @@ export function getEmojiCharacter(emoji: Emoji): string {
     const character = emojiCharacters.get(emoji);
     return character ? character : '';
 }
+
+export function addAllEmojisTo(set: Set<Emoji>) {
+    for(const color of Object.keys(Emoji)) {
+        set.add(color as Emoji);
+    }
+}
