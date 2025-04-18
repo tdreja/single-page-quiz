@@ -18,6 +18,7 @@ export function renderTeams(game: Game) {
         );
         return;
     }
+    teamsContainer.style.setProperty('--teams-count', `${game.teams.size}`);
     updateFromMap(teamsContainer, 'team', game.teams, (element, color, team, newElement) =>
         updateTeam(game, element as HTMLElement, color, team, newElement)
     );

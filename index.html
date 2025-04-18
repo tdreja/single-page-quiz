@@ -8,40 +8,8 @@
   </head>
   <body>
     <script type="module" src="/src/main.ts"></script>
-    <nav class="navbar bg-body-secondary">Test</nav>
+    <nav class="navbar sticky-top bg-body-secondary">Settings</nav>
         <main class="container-fluid d-flex flex-row flex-nowrap gap-2 pt-2">
-            <aside
-                id="teams-container"
-                class="d-flex flex-column flex-shrink-0 gap-2"
-            >
-                <article team="template" class="card">
-                    <div class="card-header d-flex flex-row gap-2 justify-content-between">
-                      <span class="badge p-2 rounded-pill bg-team-color" part="team-name">Blau</span>
-                      <span part="team-points">500</span>
-                    </div>
-                    <ul
-                        part="player-list"
-                        class="card-body list-group list-group-flush p-0 d-flex flex-column"
-                    >
-                        <li
-                            player="template"
-                            class="list-group-item d-inline-flex flex-row gap-2"
-                        >
-                            <span part="emoji-container">🐱</span>
-                            <span part="player-name" class="flex-grow-1">Thomas</span>
-                            <span part="player-points">500</span>
-                        </li>
-                    </ul>
-                    <div class="card-body">
-                        <button type="button" part="answer-btn" class="btn btn-outline-primary">Answer</button>
-                        <button type="button" part="add-controller-btn" class="btn btn-outline-secondary">Add controller</button>
-                        <button type="button" part="remove-controller-btn" class="btn btn-outline-secondary">Remove controller</button>
-                    </div>
-                    <div class="card-footer text-body-secondary">
-                        2 days ago
-                    </div>
-                </article>
-            </aside>
             <div class="col">
                 <article class="card" id="text-multiple-choice">
                     <div class="card-header">
@@ -60,5 +28,20 @@
                 </article>
             </div>
         </main>
+    <nav id="teams-container" class="navbar fixed-bottom bg-body-secondary team-grid">
+        <div class="card d-flex flex-grow-1" team="template">
+            <div class="card-header d-inline-flex flex-row gap-1 justify-content-between bg-team-color">
+                <span part="team-name">Blue</span>
+                <span part="team-points">100</span>
+            </div>
+            <div class="card-body d-flex flex-column flex-wrap" part="player-list">
+                <div player="template" class="d-inline-flex flex-row gap-1 justify-content-between">
+                    <span part="emoji-container">🐱</span>
+                    <span part="player-name">Thomas</span>
+                    <span part="player-points">100</span>
+                </div>
+            </div>
+        </div>
+    </nav>
   </body>
 </html>

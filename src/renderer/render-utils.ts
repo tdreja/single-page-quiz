@@ -107,6 +107,10 @@ export function updateFromMap<KEY, VALUE>(
 
 export function getPart(html: Element, partName: string | null): Element | null {
     if(partName) {
+        const atElement = html.getAttribute("part");
+        if(atElement === partName) {
+            return html;
+        }
         return html.querySelector(`[part=${partName}]`);
     }
     return html;
