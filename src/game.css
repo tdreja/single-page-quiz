@@ -40,13 +40,6 @@ html {
     --color-white-text: black;
 }
 
-/* Make templates invisible */
-[team=template],
-[player=template],
-[choice=template] {
-    display: none !important;
-}
-
 /* Teams */
 
 .team-grid {

@@ -1,14 +1,6 @@
-import {checkCurrentRound, Game} from '../model/game';
-import { Emoji, getEmojiCharacter, Player } from '../model/player';
-import { Team, TeamColor } from '../model/team';
-import {
-    addClickListenerToPart,
-    getPart,
-    updateAttributeAtPart,
-    updateFromMap,
-    updatePartInnerHtml, updateStyleAtPart
-} from './render-utils';
-import {RequestAttemptEvent} from "../events/round-events";
+import { Game } from '../model/game';
+import { getEmojiCharacter, Player } from '../model/player';
+import { Team } from '../model/team';
 
 export function renderTeams(game: Game) {
     const teamsContainer = document.getElementById('teams-container');
@@ -19,51 +11,46 @@ export function renderTeams(game: Game) {
         return;
     }
     teamsContainer.style.setProperty('--teams-count', `${game.teams.size}`);
-    updateFromMap(teamsContainer, 'team', game.teams, (element, color, team, newElement) =>
-        updateTeam(game, element as HTMLElement, color, team, newElement)
-    );
+    for(const child of Array.from(teamsContainer.children)) {
+        teamsContainer.removeChild(child);
+    }
+    let newHtml = '';
+    for(const team of game.teams.values()) {
+        newHtml += renderTeam(team);
+    }
+    teamsContainer.innerHTML = newHtml;
 }
 
-function updateTeam(game: Game, element: HTMLElement, color: TeamColor, team: Team, newElement: boolean) {
-    element.style.setProperty('--team-color', `var(--color-${color.toLowerCase()})`);
-    element.style.setProperty('--team-color-shadow', `var(--color-${color.toLowerCase()}-shadow)`);
-    element.style.setProperty('--team-color-text', `var(--color-${color.toLowerCase()}-text)`);
-    element.style.setProperty('--team-order', `${-team.points}`);
-
-    const isCurrentlyAttempting = checkCurrentRound(game, round => round.currentlyAttempting.has(color));
-    updateStyleAtPart(element, null, 'buzzer-shadow', isCurrentlyAttempting);
-
-    updatePartInnerHtml(element, 'team-name', color);
-    updatePartInnerHtml(element, 'team-points', `${team.points}`);
-
-    const players = getPart(element, 'player-list');
-    if (players) {
-        updateFromMap(
-            players as HTMLElement,
-            'player',
-            team.players,
-            (element, emoji, player, newElement) =>
-                updatePlayer(element as HTMLElement, emoji, player, newElement)
-        );
-    }
-
-    const hasAnswered = checkCurrentRound(game, round => round.alreadyAttempted.has(color));
-    const hasGamepad = team.gamepad !== undefined;
-    updateAttributeAtPart(element, 'add-controller-btn', 'hidden', hasGamepad ? '' : null);
-    updateAttributeAtPart(element, 'remove-controller-btn', 'hidden', hasGamepad ? null : '');
-    updateAttributeAtPart(element, 'answer-btn', 'hidden', hasAnswered ? '' : null);
-
-    if(newElement) {
-        addClickListenerToPart(element, 'answer-btn', () => document.dispatchEvent(new RequestAttemptEvent(color)));
-        addClickListenerToPart(element, 'add-controller-btn', ev => console.log('Add Controller', ev.target));
-        addClickListenerToPart(element, 'remove-controller-btn', ev => console.log('Remove Controller', ev.target));
-    }
+function renderTeam(team: Team): string {
+    let playersHtml = '';
+    for(const player of team.players.values()) {
+        playersHtml += renderPlayer(player);
+    } 
+    const colorLowerCase = team.color.toLowerCase();
+    /*html*/
+    return `
+        <div part="team" class="card d-flex flex-grow-1" 
+            team="${team.color}"
+            style="--team-color: var(--color-${colorLowerCase}); --team-color-text: var(--color-${colorLowerCase}-text);"
+            >
+            <div part="team-headline" class="card-header d-inline-flex flex-row gap-1 justify-content-between bg-team-color">
+                <span part="team-name">${team.color}</span>
+                <span part="team-points">${team.points}</span>
+            </div>
+            <div part="player-list" class="card-body d-flex flex-column flex-wrap">
+                ${playersHtml}
+            </div>
+        </div>
+    `;
 }
 
-function updatePlayer(element: HTMLElement, emoji: Emoji, player: Player, newElement: boolean) {
-    element.style.setProperty('--player-order', `${-player.points}`);
-
-    updatePartInnerHtml(element, 'emoji-container', getEmojiCharacter(emoji));
-    updatePartInnerHtml(element, 'player-name', player.name);
-    updatePartInnerHtml(element, 'player-points', `${player.points}`);
+function renderPlayer(player: Player): string {
+    /*html*/
+    return `
+    <div part="player" player="${player.emoji}" class="d-inline-flex flex-row gap-1 justify-content-between">
+        <span part="emoji-container">${getEmojiCharacter(player.emoji)}</span>
+        <span part="player-name">${player.name}</span>
+        <span part="player-points">${player.points}</span>
+    </div>
+    `;
 }
