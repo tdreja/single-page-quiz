@@ -1,22 +1,8 @@
+import { nextRandom, shuffleArray } from "../model/common";
 import { Game } from "../model/game/game";
 import { Emoji, Player } from "../model/game/player";
 import { Team, TeamColor } from "../model/game/team";
 import { EventType, GameEvent } from "./common-events";
-
-export function nextRandom<VALUE>(values: Set<VALUE>): VALUE | null {
-    if(values.size === 0) {
-        return null;
-    }
-    const randNr = Math.floor(Math.random() * values.size);
-    let count = 0;
-    for(let value of values) {
-        if(count === randNr) {
-            return value;
-        }
-        count++;
-    }
-    return null;
-}
 
 export function findSmallestTeam(teams: Map<TeamColor, Team>): Team | null {
     let smallestTeam: Team | null = null;
@@ -188,14 +174,6 @@ export class RemovePlayerEvent extends GameEvent {
             addPlayerSmallestToTeam(player, game.teams);
         }
         return true;
-    }
-
-  }
-
-  function shuffleArray<TYPE>(array: Array<TYPE>) {
-    for (let i = array.length - 1; i >= 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
     }
 }
 
