@@ -5,8 +5,8 @@ import { prepareGame } from './dev/dev-setup';
 import { EventType, GameEvent } from "./events/common-events";
 import { renderQuestion } from "./renderer/question-renderer";
 import { renderTeams } from "./renderer/teams-renderer";
-import { JsonGame, restoreGame, storeGame } from './model/json';
 import { Game, GameState } from './model/game';
+import { JsonGame, restoreGame, storeGame } from './json/game';
 
 const game: Game = {
     sections: [],
