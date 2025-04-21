@@ -1,5 +1,5 @@
-import {RoundState} from "../model/game";
-import {TeamColor} from "../model/team";
+import {RoundState} from "../model/game/game";
+import {TeamColor} from "../model/game/team";
 import {
     choiceAWrong,
     choiceBCorrect,

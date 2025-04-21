@@ -1,5 +1,5 @@
-import { Emoji, Player } from "../model/player";
-import { Team, TeamColor } from "../model/team";
+import { Emoji, Player } from "../model/game/player";
+import { Team, TeamColor } from "../model/game/team";
 import { game, newTestSetup, playerBlueDuck, playerRedCamel, teamBlue, teamRed } from "./data.test";
 import { AddPlayerEvent, AddTeamEvent, findSmallestTeam, nextRandom, RemovePlayerEvent, RemoveTeamEvent, RenamePlayerEvent, ReRollEmojiEvent, ShuffleTeamsEvent } from "./setup-events";
 

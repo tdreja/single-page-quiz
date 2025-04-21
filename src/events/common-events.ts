@@ -1,4 +1,4 @@
-import {Game, GameRound, GameState} from "../model/game";
+import {Game, GameRound, GameState} from "../model/game/game";
 
 export enum EventType {
     // Events for each round

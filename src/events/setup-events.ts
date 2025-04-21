@@ -1,6 +1,6 @@
-import { Game } from "../model/game";
-import { Emoji, Player } from "../model/player";
-import { Team, TeamColor } from "../model/team";
+import { Game } from "../model/game/game";
+import { Emoji, Player } from "../model/game/player";
+import { Team, TeamColor } from "../model/game/team";
 import { EventType, GameEvent } from "./common-events";
 
 export function nextRandom<VALUE>(values: Set<VALUE>): VALUE | null {

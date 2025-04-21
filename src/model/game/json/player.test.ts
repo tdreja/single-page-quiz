@@ -1,6 +1,6 @@
-import { Game, GameState } from "../model/game";
-import { Emoji, Player } from "../model/player";
-import { TeamColor } from "../model/team";
+import { Game, GameState } from "../game";
+import { Emoji, Player } from "../player";
+import { TeamColor } from "../team";
 import { restoreGame } from "./game";
 import { JsonPlayer, storePlayer } from "./player";
 

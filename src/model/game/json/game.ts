@@ -1,4 +1,4 @@
-import { Game } from "../model/game";
+import { Game } from "../game";
 import { JsonPlayer, restorePlayers, storePlayer } from "./player";
 import { JsonTeam, restoreTeams, storeTeam } from "./team";
 

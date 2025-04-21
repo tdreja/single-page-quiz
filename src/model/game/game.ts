@@ -1,6 +1,6 @@
 import {Team, TeamColor} from "./team";
 import {Emoji, Player} from "./player";
-import { Question } from "./question";
+import { Question } from "../question";
 
 export enum GameState {
     TEAM_SETUP,

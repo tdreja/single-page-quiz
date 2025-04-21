@@ -4,10 +4,10 @@ import {
   GameRound,
   GameSection,
   RoundState,
-} from "../model/game";
-import { addAllEmojisTo, Emoji } from "../model/player";
+} from "../model/game/game";
+import { addAllEmojisTo, Emoji } from "../model/game/player";
 import { TextChoice, TextMultipleChoiceQuestion } from "../model/question";
-import { addAllColorsTo, TeamColor } from "../model/team";
+import { addAllColorsTo, TeamColor } from "../model/game/team";
 
 export function prepareGame(game : Game) {
 
@@ -121,7 +121,8 @@ export function prepareGame(game : Game) {
   };
 
   const textQuestion: TextMultipleChoiceQuestion =
-    new TextMultipleChoiceQuestion("q1", 101, "How much is the fish?", [
+    new TextMultipleChoiceQuestion("q1");
+    textQuestion.update(101, "How much is the fish?", [
       choiceA,
       choiceB,
       choiceC,

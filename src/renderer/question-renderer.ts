@@ -1,4 +1,4 @@
-import { Game, GameRound } from "../model/game";
+import { Game, GameRound } from "../model/game/game";
 import { EstimateQuestion, TextMultipleChoiceQuestion } from "../model/question";
 import { updateFromMap, updatePartInnerHtml } from "./render-utils";
 

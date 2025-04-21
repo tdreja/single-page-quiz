@@ -1,6 +1,6 @@
-import { Game } from '../model/game';
-import { getEmojiCharacter, Player } from '../model/player';
-import { Team } from '../model/team';
+import { Game } from '../model/game/game';
+import { getEmojiCharacter, Player } from '../model/game/player';
+import { Team } from '../model/game/team';
 
 export function renderTeams(game: Game) {
     const teamsContainer = document.getElementById('teams-container');

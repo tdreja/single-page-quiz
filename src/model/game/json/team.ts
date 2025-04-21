@@ -1,6 +1,6 @@
-import { Game } from "../model/game";
-import { Emoji } from "../model/player";
-import { Team, TeamColor } from "../model/team";
+import { Game } from "../game";
+import { Emoji } from "../player";
+import { Team, TeamColor } from "../team";
 import { JsonGame } from "./game";
 
 

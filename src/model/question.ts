@@ -1,5 +1,4 @@
-import { JsonEstimate, JsonQuestion } from "../json/question";
-import { TeamColor } from "./team";
+import { TeamColor } from "./game/team";
 
 export enum QuestionType {
     TEXT_MULTIPLE_CHOICE = 'text-multiple-choice',
@@ -12,9 +11,7 @@ export enum QuestionType {
 export interface Question {
     readonly questionId: string,
     readonly pointsForCompletion: number
-    readonly type: QuestionType,
-    updateFromJson: (json: JsonQuestion) => void,
-    storeAsJson: () => JsonQuestion,
+    readonly type: QuestionType
 }
 
 /**
@@ -89,44 +86,6 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
             this._choices.set(choice.choiceId, choice);
         }
     }
-
-    public updateFromJson(json: JsonQuestion) {
-        if(this._questionId !== json.questionId) {
-            return;
-        }
-        this._text = json.text || '';
-        this._pointsForCompletion = json.pointsForCompletion || 0;
-        this._choices.clear();
-        if(!json.choices) {
-            return;
-        }
-        
-        for(const choice of json.choices) {
-            if(!choice.choiceId) {
-                continue;
-            }
-            const textChoice: TextChoice = {
-                text: choice.text || '',
-                choiceId: choice.choiceId,
-                correct: choice.correct || false,
-                selectedBy: new Set(),
-            }
-            if(choice.selectedBy) {
-                for(const team of choice.selectedBy) {
-                    textChoice.selectedBy.add(team);
-                }
-            }
-            this.choices.set(choice.choiceId, textChoice);
-        }
-    }
-
-    public storeAsJson(): JsonQuestion {
-        return {
-            questionId: this.questionId,
-            text: this.text,
-            type: this.type
-        }
-    }
 }
 
 /**
@@ -176,34 +135,5 @@ export class EstimateQuestion implements TextQuestion {
         this._pointsForCompletion = pointsForCompletion;
         this._text = text;
         this._target = target;
-    }
-
-    public updateFromJson(question: JsonQuestion) {
-        if(this._questionId !== question.questionId) {
-            return;
-        }
-        this._pointsForCompletion = question.pointsForCompletion || 0;
-        this._target = question.estimateTarget || 0;
-        this._estimates.clear();
-        if(!question.estimates) {
-            return;
-        }
-        for(const teamEstimate of question.estimates) {
-            if(teamEstimate.teamColor && teamEstimate.estimate) {
-                this._estimates.set(teamEstimate.teamColor, teamEstimate.estimate);
-            }
-        }
-    }
-
-    public storeAsJson(): JsonQuestion {
-        const storedEstimates: Array<JsonEstimate> = [];
-        return {
-            questionId: this.questionId,
-            estimateTarget: this.target,
-            text: this.text,
-            type: this.type,
-            pointsForCompletion: this.pointsForCompletion,
-            estimates: storedEstimates
-        }
     }
 }

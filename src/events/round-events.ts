@@ -1,5 +1,5 @@
-import {Game, GameRound, GameState, RoundState} from "../model/game";
-import {TeamColor} from "../model/team";
+import {Game, GameRound, GameState, RoundState} from "../model/game/game";
+import {TeamColor} from "../model/game/team";
 import {EventType, GameEvent, GameRoundEvent} from "./common-events";
 
 /**

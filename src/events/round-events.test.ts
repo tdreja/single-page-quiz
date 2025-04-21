@@ -1,5 +1,5 @@
-import { RoundState } from "../model/game";
-import { TeamColor } from "../model/team";
+import { RoundState } from "../model/game/game";
+import { TeamColor } from "../model/game/team";
 import { game, newTestSetup, questionId, round, sectionId } from "./data.test";
 import {
   ActivateBuzzerEvent,

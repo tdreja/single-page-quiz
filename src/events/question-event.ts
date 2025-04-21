@@ -1,6 +1,6 @@
-import { completeRound, Game, GameRound, RoundState } from "../model/game";
+import { completeRound, Game, GameRound, RoundState } from "../model/game/game";
 import { Choice, EstimateQuestion, MultipleChoiceQuestion, TextMultipleChoiceQuestion } from "../model/question";
-import { TeamColor } from "../model/team";
+import { TeamColor } from "../model/game/team";
 import { EventType, GameRoundEvent } from "./common-events";
 
 export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
