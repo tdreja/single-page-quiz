@@ -1,16 +1,14 @@
 import './bootstrap.css';
 import './game.css';
 
-import {Game, GameRound, GameSection, GameState, RoundState} from "./model/game";
-import {addAllEmojisTo, Emoji, Player} from "./model/player";
-import {TextChoice, TextMultipleChoiceQuestion} from "./model/question";
-import {addAllColorsTo, Team, TeamColor} from "./model/team";
-import {renderQuestion} from "./renderer/question-renderer";
-import {renderTeams} from "./renderer/teams-renderer";
-import {EventType, GameEvent} from "./events/common-events";
-import { AddPlayerEvent, AddTeamEvent } from './events/setup-events';
+import { prepareGame } from './dev/dev-setup';
+import { EventType, GameEvent } from "./events/common-events";
+import { renderQuestion } from "./renderer/question-renderer";
+import { renderTeams } from "./renderer/teams-renderer";
+import { JsonGame, restoreGame, storeGame } from './model/json';
+import { Game, GameState } from './model/game';
 
-export const game: Game = {
+const game: Game = {
     sections: [],
     availableEmojis: new Set(),
     availableColors: new Set(),
@@ -19,98 +17,19 @@ export const game: Game = {
     selectingTeam: null,
     currentRound: null,
     roundCounter: 0,
-    state: GameState.GAME_ACTIVE
+    state: GameState.GAME_ACTIVE,
+  };
+
+const previousGame = window.localStorage.getItem('game');
+if(previousGame) {
+    const json = JSON.parse(previousGame) as JsonGame;
+    console.log('We have a previous game. Trying to restore it', json);
+    restoreGame(game, json);
+} else {
+    console.log('No game stored. Used DEV game');
+    prepareGame(game);
+    window.localStorage.setItem('game', JSON.stringify(storeGame(game)));
 }
-
-// region Teams & Players
-
-addAllColorsTo(game.availableColors);
-addAllEmojisTo(game.availableEmojis);
-
-
-const maxTeams = 5;
-for(const color of Object.keys(TeamColor)) {
-    if(game.teams.size === maxTeams) {
-        continue;
-    }
-    new AddTeamEvent(color).updateGame(game);
-    const team = game.teams.get(color as TeamColor);
-    if(team) {
-        team.points = Math.floor((5000 * Math.random()) / 100) * 100;
-    }
-}
-
-const names: Array<string> = [
-    "Lena", "Jonas", "Mia", "Paul", "Emma",
-    "Noah", "Lea", "Elias", "Sophie", "Finn",
-    "Hannah", "Ben", "Luca", "Marie", "Tim",
-    "Anna", "Felix", "Laura", "Maximilian", "Amelie",
-    "Leon", "Nele", "Julian", "Lina", "Moritz",
-    "Emily", "Nico", "Johanna", "Fabian", "Clara",
-    "Tom", "Luisa", "David", "Isabell", "Jan",
-    "Maya", "Simon", "Katharina", "Oskar", "Helena",
-    "Erik", "Lilly", "Philipp", "Pia", "Samuel",
-    "Greta", "Tobias", "Franziska", "Matteo", "Marlene"
-  ];  
-
-for(const _ of Object.keys(Emoji)) {
-    new AddPlayerEvent(names[game.players.size]).updateGame(game);
-}
-for(const emoji of Object.keys(Emoji)) {
-    const player = game.players.get(emoji as Emoji);
-    if(player) {
-        player.points = Math.floor((3000 * Math.random()) / 100) * 100;
-    }
-}
-
-// endregion Teams & Players
-
-// region Questions
-
-export const choiceA: TextChoice = {
-    choiceId: "A",
-    correct: false,
-    selectedBy: new Set(),
-    text: 'Alpha'
-}
-export const choiceB: TextChoice = {
-    choiceId: "B",
-    correct: false,
-    selectedBy: new Set(),
-    text: 'Beta'
-}
-export const choiceC: TextChoice = {
-    choiceId: "C",
-    correct: true,
-    selectedBy: new Set(),
-    text: 'Gamma'
-}
-export const choiceD: TextChoice = {
-    choiceId: "D",
-    correct: false,
-    selectedBy: new Set(),
-    text: 'Delta'
-}
-
-export const textQuestion: TextMultipleChoiceQuestion = new TextMultipleChoiceQuestion('q1', 101, 'How much is the fish?', [choiceA, choiceB, choiceC, choiceD]);
-export const round: GameRound = {
-    question: textQuestion,
-    state: RoundState.BUZZER_ACTIVE,
-    currentlyAttempting: new Set(),
-    alreadyAttempted: new Set(),
-    completedBy: new Set(),
-    inSection: "common",
-    timerStart: null
-}
-export const section: GameSection = {
-    name: "common",
-    rounds: [round]
-}
-
-game.sections.push(section);
-game.currentRound = round;
-
-// endregion Questions
 
 const eventListener: EventListener = (ev: Event) => {
     if(ev instanceof GameEvent && ev.updateGame(game)) {
