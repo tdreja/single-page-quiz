@@ -1,8 +1,8 @@
 import { Game, GameState } from "../model/game";
-import { Emoji } from "../model/player";
+import { Emoji, Player } from "../model/player";
 import { TeamColor } from "../model/team";
 import { restoreGame } from "./game";
-import { JsonPlayer } from "./player";
+import { JsonPlayer, storePlayer } from "./player";
 
 const game: Game = {
   sections: [],
@@ -73,4 +73,19 @@ test('Two players, one from JSON', () => {
     expect(game.availableEmojis.size).toBe(1);
     expect(game.availableEmojis).toContain(Emoji.CAMEL);
     expect(game.players.get(Emoji.BEAVER)).toBeTruthy();
+});
+
+test('Store player as JSON', () => {
+    const player: Player = {
+        name: Emoji.CAT,
+        emoji: Emoji.CAT,
+        points: 200,
+        team: TeamColor.GREEN
+    };
+    const json = storePlayer(player);
+    restoreGame(game, { players: [json]});
+    expect(game.players.size).toBe(1);
+    const playerRestored = game.players.get(Emoji.CAT);
+    expect(playerRestored).toBeTruthy();
+    expect(playerRestored).toEqual(player);
 });
