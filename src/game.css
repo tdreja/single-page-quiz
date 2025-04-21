@@ -42,12 +42,13 @@ html {
 
 /* Teams */
 
-.team-grid {
+#teams-container {
     display: grid;
     gap: 0.5em;
     grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
     padding-left: 0.5em;
     padding-right: 0.5em;
+    align-items: stretch;
 }
 
 .bg-team-color {
@@ -60,12 +61,28 @@ html {
 }
 
 [part=player-list] {
-    max-height: 15vh;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+    gap: 0.25rem;
+    align-content: flex-start;
 }
 
 [player] {
     order: var(--player-order, unset);
-    font-size: 0.8em;
+    font-size: 0.8rem;
+    display: inline-grid;
+    grid-template-columns: auto 1fr 1fr;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+[part=emoji] {
+    font-size: 1.5rem;
+    border-radius: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: inline-flex;
+    justify-content: center;
 }
 
 .buzzer-shadow {

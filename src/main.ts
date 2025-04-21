@@ -27,11 +27,40 @@ export const game: Game = {
 addAllColorsTo(game.availableColors);
 addAllEmojisTo(game.availableEmojis);
 
+
+const maxTeams = 5;
 for(const color of Object.keys(TeamColor)) {
+    if(game.teams.size === maxTeams) {
+        continue;
+    }
     new AddTeamEvent(color).updateGame(game);
+    const team = game.teams.get(color as TeamColor);
+    if(team) {
+        team.points = Math.floor((5000 * Math.random()) / 100) * 100;
+    }
 }
+
+const names: Array<string> = [
+    "Lena", "Jonas", "Mia", "Paul", "Emma",
+    "Noah", "Lea", "Elias", "Sophie", "Finn",
+    "Hannah", "Ben", "Luca", "Marie", "Tim",
+    "Anna", "Felix", "Laura", "Maximilian", "Amelie",
+    "Leon", "Nele", "Julian", "Lina", "Moritz",
+    "Emily", "Nico", "Johanna", "Fabian", "Clara",
+    "Tom", "Luisa", "David", "Isabell", "Jan",
+    "Maya", "Simon", "Katharina", "Oskar", "Helena",
+    "Erik", "Lilly", "Philipp", "Pia", "Samuel",
+    "Greta", "Tobias", "Franziska", "Matteo", "Marlene"
+  ];  
+
 for(const _ of Object.keys(Emoji)) {
-    new AddPlayerEvent(`Player-${game.players.size}`).updateGame(game);
+    new AddPlayerEvent(names[game.players.size]).updateGame(game);
+}
+for(const emoji of Object.keys(Emoji)) {
+    const player = game.players.get(emoji as Emoji);
+    if(player) {
+        player.points = Math.floor((3000 * Math.random()) / 100) * 100;
+    }
 }
 
 // endregion Teams & Players
