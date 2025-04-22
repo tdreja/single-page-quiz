@@ -112,7 +112,8 @@ function getTextChoices(json: JsonQuestionContent): Map<string, TextChoice> {
         result.set(id, {
             text: jsonChoice.text,
             choiceId: id,
-            correct: jsonChoice.correct || false
+            correct: jsonChoice.correct || false,
+            selectedBy: new Set<TeamColor>(),
         });
     }
 

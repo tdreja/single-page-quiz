@@ -1,5 +1,6 @@
 import { Game, GameRound } from "../model/game/game";
-import { EstimateQuestion, TextMultipleChoiceQuestion } from "../model/question";
+import { EstimateQuestion } from "../model/quiz/estimate-question";
+import { TextMultipleChoiceQuestion } from "../model/quiz/multiple-choice-question";
 import { updateFromMap, updatePartInnerHtml } from "./render-utils";
 
 export function renderQuestion(game: Game) {

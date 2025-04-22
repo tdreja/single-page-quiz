@@ -1,7 +1,8 @@
 import {Game, GameRound, GameSection, GameState, RoundState} from "../model/game/game";
 import {Emoji, Player} from "../model/game/player";
-import {EstimateQuestion, TextChoice, TextMultipleChoiceQuestion} from "../model/question";
 import {Team, TeamColor} from "../model/game/team";
+import { EstimateQuestion } from "../model/quiz/estimate-question";
+import { TextChoice, TextMultipleChoiceQuestion } from "../model/quiz/multiple-choice-question";
 
 export const questionId: string = 'quest';
 export const questionEstimateId: string = 'estimate';
@@ -35,12 +36,13 @@ export function newTestSetup() {
         selectedBy: new Set(),
         text: 'b'
     };
-    questionMultiChoice = new TextMultipleChoiceQuestion(questionId);
-    questionMultiChoice.update(questionPoints, "Question?", [choiceAWrong, choiceBCorrect]);
-    questionEstimate = new EstimateQuestion(questionEstimateId);
-    questionEstimate.update(200, 'Estimate', 1000);
+    const choices = new Map<string, TextChoice>();
+    choices.set('a', choiceAWrong);
+    choices.set('b', choiceBCorrect);
+    questionMultiChoice = new TextMultipleChoiceQuestion(questionId, questionPoints, "Question?", choices);
+    questionEstimate = new EstimateQuestion(questionEstimateId, 200, 'Estimate', 1000);
 
-// Team Blue
+    // Team Blue
     playerBlueDuck = {
         name: 'Duck',
         emoji: Emoji.DUCK,

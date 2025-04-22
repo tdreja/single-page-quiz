@@ -6,8 +6,8 @@ import {
   RoundState,
 } from "../model/game/game";
 import { addAllEmojisTo, Emoji } from "../model/game/player";
-import { TextChoice, TextMultipleChoiceQuestion } from "../model/question";
 import { addAllColorsTo, TeamColor } from "../model/game/team";
+import { TextChoice, TextMultipleChoiceQuestion } from "../model/quiz/multiple-choice-question";
 
 export function prepareGame(game : Game) {
 
@@ -119,15 +119,13 @@ export function prepareGame(game : Game) {
     selectedBy: new Set(),
     text: "Delta",
   };
+  const choices = new Map<string, TextChoice>();
+  choices.set('A', choiceA);
+  choices.set('B', choiceB);
+  choices.set('C', choiceC);
+  choices.set('D', choiceD);
 
-  const textQuestion: TextMultipleChoiceQuestion =
-    new TextMultipleChoiceQuestion("q1");
-    textQuestion.update(101, "How much is the fish?", [
-      choiceA,
-      choiceB,
-      choiceC,
-      choiceD,
-    ]);
+  const textQuestion: TextMultipleChoiceQuestion = new TextMultipleChoiceQuestion("q1", 101, "How much is the fish?", choices);
   const round: GameRound = {
     question: textQuestion,
     state: RoundState.BUZZER_ACTIVE,

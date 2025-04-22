@@ -1,5 +1,5 @@
 import { TeamColor } from "../game/team";
-import { JsonMutableState, JsonQuestionContent } from "./json";
+import { JsonChoice, JsonMutableState, JsonQuestionContent } from "./json";
 import { ImageQuestion, Question, QuestionType, TextQuestion } from "./question";
 
 /**
@@ -7,7 +7,8 @@ import { ImageQuestion, Question, QuestionType, TextQuestion } from "./question"
  */
 export interface Choice {
     readonly choiceId: string,
-    readonly correct: boolean
+    readonly correct: boolean,
+    readonly selectedBy: Set<TeamColor>
 }
 
 /**
@@ -22,7 +23,6 @@ export interface TextChoice extends Choice {
  */
 export interface MultipleChoiceQuestion<CHOICE extends Choice> extends Question {
     readonly choices: Map<string, CHOICE>;
-    readonly alreadySelected: Map<string, TeamColor>;
     readonly choicesSorted: Array<CHOICE>;
 }
 
@@ -32,7 +32,6 @@ export interface MultipleChoiceQuestion<CHOICE extends Choice> extends Question 
 export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextChoice>, TextQuestion {
 
     private readonly _choices: Map<string, TextChoice>;
-    private readonly _alreadySelected: Map<string, TeamColor>;
     private readonly _completedBy: Set<TeamColor>;
     private readonly _questionId: string;
     private readonly _pointsForCompletion: number;
@@ -44,7 +43,6 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
         this._choices = choices;
         this._pointsForCompletion = pointsForCompletion;
         this._text = text;
-        this._alreadySelected = new Map<string, TeamColor>();
         this._completedBy = new Set<TeamColor>();
         this._completed = false;
     }
@@ -69,10 +67,6 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
         return QuestionType.TEXT_MULTIPLE_CHOICE;
     }
 
-    public get alreadySelected(): Map<string, TeamColor> {
-        return this._alreadySelected;
-    }
-
     public get completedBy(): Set<TeamColor> {
         return this._completedBy;
     }
@@ -82,11 +76,23 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
     }
 
     public get alreadyAttempted(): Array<TeamColor> {
-        return Array.from(this._alreadySelected.values());
+        const attempted: Array<TeamColor> = [];
+        for(const choice of this.choices.values()) {
+            choice.selectedBy.forEach(team => attempted.push(team));
+        }
+        return attempted;
     }
 
     public get choicesSorted(): Array<TextChoice> {
         return Array.from(this._choices.values()).sort((a,b) => a.choiceId.localeCompare(a.choiceId));
+    }
+
+    protected get jsonChoices(): Array<JsonChoice> {
+        return this.choicesSorted.map(choice => ({
+            choiceId: choice.choiceId,
+            correct: choice.correct,
+            text: choice.text
+        }));
     }
 
     public exportJsonQuestionContent(): JsonQuestionContent {
@@ -94,14 +100,16 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
             type: this.type,
             pointsForCompletion: this.pointsForCompletion,
             text: this.text,
-            choices: this.choicesSorted
+            choices: this.jsonChoices
         }
     }
 
     public exportJsonMutableState(): JsonMutableState {
         const data: any = {};
-        for(const [choice, team] of this._alreadySelected) {
-            data[choice] = team;
+        for(const choice of this._choices.values()) {
+            if(choice.selectedBy.size > 0) {
+                data[choice.choiceId] = Array.from(choice.selectedBy);
+            }
         }
         return {
             questionId: this._questionId,
@@ -120,14 +128,19 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
         if(state.completedBy) {
             state.completedBy.forEach((t) => this._completedBy.add(t));
         }
-        this._alreadySelected.clear();
+        for(const choice of this._choices.values()) {
+            choice.selectedBy.clear();
+        }
         if(!state.customState) {
             return;
         }
         for(const choiceId of Object.keys(state.customState)) {
+            const teams = state.customState[choiceId];
             const choice = this.choices.get(choiceId);
-            if(choice) {
-                this._alreadySelected.set(choiceId, state.customState[choiceId] as TeamColor);
+            if(teams && choice) {
+                for(const team of Object.keys(teams)) {
+                    choice.selectedBy.add(team as TeamColor);
+                }
             }
         }
     }
@@ -159,7 +172,7 @@ export class ImageMultipleChoiceQuestion extends TextMultipleChoiceQuestion impl
             pointsForCompletion: this.pointsForCompletion,
             text: this.text,
             imageBase64: this.imageBase64,
-            choices: this.choicesSorted
+            choices: this.jsonChoices
         }
     }
 
