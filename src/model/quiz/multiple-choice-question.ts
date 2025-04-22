@@ -1,6 +1,6 @@
-import { TeamColor } from "../game/team";
+import { Team, TeamColor } from "../game/team";
 import { JsonChoice, JsonMutableState, JsonQuestionContent } from "./json";
-import { ImageQuestion, Question, QuestionType, TextQuestion } from "./question";
+import { addPointsToTeam, ImageQuestion, Question, QuestionType, TextQuestion } from "./question";
 
 /**
  * Base API for choices selectable in multiple-choice questions 
@@ -75,12 +75,22 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
         return this._completed;
     }
 
-    public get alreadyAttempted(): Array<TeamColor> {
-        const attempted: Array<TeamColor> = [];
-        for(const choice of this.choices.values()) {
-            choice.selectedBy.forEach(team => attempted.push(team));
+    public alreadyAttempted(team: TeamColor): boolean {
+        for(const choice of this._choices.values()) {
+            if(choice.selectedBy.has(team)) {
+                return true;
+            }
         }
-        return attempted;
+        return false;
+    }
+
+    public completeQuestion(teams: Array<Team>) {
+        this._completedBy.clear();
+        for(const team of teams) {
+            this._completedBy.add(team.color);
+            addPointsToTeam(this.pointsForCompletion, team);
+        }
+        this._completed = true;
     }
 
     public get choicesSorted(): Array<TextChoice> {

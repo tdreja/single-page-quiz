@@ -21,7 +21,7 @@ beforeEach(() => {
 
 test("startRound", () => {
   expect(startRound.updateGame(game)).toBe(true);
-  expect(game.currentRound).toBe(round);
+  expect(game.round).toBe(round);
   expect(round.state).toBe(RoundState.SHOW_QUESTION);
   expect(round.timerStart).toBeNull();
   expect(startRound.updateGame(game)).toBe(false);
@@ -45,10 +45,6 @@ test("activateBuzzer", () => {
   // Not during attempt
   round.state = RoundState.TEAM_CAN_ATTEMPT;
   expect(activateBuzzer.updateGame(game)).toBe(false);
-
-  // Not for completed ones
-  round.state = RoundState.CLOSED;
-  expect(activateBuzzer.updateGame(game)).toBe(false);
 });
 
 test("requestAttempt", () => {
@@ -66,10 +62,10 @@ test("requestAttempt", () => {
   expect(s1).toBeTruthy();
   expect(requestAttemptBlue.updateGame(game)).toBe(true);
   expect(round.state).toBe(RoundState.TEAM_CAN_ATTEMPT);
-  expect(round.currentlyAttempting).toContain(TeamColor.BLUE);
-  expect(round.currentlyAttempting.size).toBe(1);
-  expect(round.alreadyAttempted).toContain(TeamColor.BLUE);
-  expect(round.alreadyAttempted.size).toBe(1);
+  expect(round.answeringTeams).toContain(TeamColor.BLUE);
+  expect(round.answeringTeams.size).toBe(1);
+  expect(round.question.alreadyAttempted(TeamColor.BLUE)).toBeTruthy();
+  expect(round.question.alreadyAttempted(TeamColor.RED)).toBeFalsy();
   const s2 = round.timerStart;
   expect(s2).toBeTruthy();
   expect(s1 !== s2).toBeTruthy();
@@ -85,11 +81,10 @@ test("requestAttempt", () => {
   // Red still can
   expect(requestAttemptRed.updateGame(game)).toBe(true);
   expect(round.state).toBe(RoundState.TEAM_CAN_ATTEMPT);
-  expect(round.currentlyAttempting).toContain(TeamColor.RED);
-  expect(round.currentlyAttempting.size).toBe(1);
-  expect(round.alreadyAttempted).toContain(TeamColor.BLUE);
-  expect(round.alreadyAttempted).toContain(TeamColor.RED);
-  expect(round.alreadyAttempted.size).toBe(2);
+  expect(round.answeringTeams).toContain(TeamColor.RED);
+  expect(round.answeringTeams.size).toBe(1);
+  expect(round.question.alreadyAttempted(TeamColor.BLUE)).toBeTruthy();
+  expect(round.question.alreadyAttempted(TeamColor.RED)).toBeTruthy();
   expect(round.timerStart).toBeTruthy();
   expect(s2 !== round.timerStart).toBeTruthy();
 
@@ -103,10 +98,11 @@ test('skipRound', () => {
     expect(skipRound.updateGame(game)).toBe(false);
     expect(startRound.updateGame(game)).toBe(true);
     expect(skipRound.updateGame(game)).toBe(true);
-    expect(round.state).toBe(RoundState.COMPLETE_WITH_RESULTS);
-    expect(round.alreadyAttempted.size).toBe(0);
-    expect(round.completedBy.size).toBe(0);
-    expect(round.currentlyAttempting.size).toBe(0);
+    expect(round.state).toBe(RoundState.SHOW_RESULTS);
+    expect(round.question.alreadyAttempted(TeamColor.BLUE)).toBeFalsy();
+    expect(round.question.alreadyAttempted(TeamColor.RED)).toBeFalsy();
+    expect(round.question.completedBy.size).toBe(0);
+    expect(round.answeringTeams.size).toBe(0);
     expect(round.timerStart).toBeNull();
 
     expect(skipRound.updateGame(game)).toBe(false);
@@ -118,12 +114,12 @@ test('closeRound', () => {
     expect(startRound.updateGame(game)).toBe(true);
     expect(closeRound.updateGame(game)).toBe(false);
     expect(skipRound.updateGame(game)).toBe(true);
-    expect(round.state).toBe(RoundState.COMPLETE_WITH_RESULTS);
+    expect(round.state).toBe(RoundState.SHOW_RESULTS);
     expect(round.timerStart).toBeNull();
 
     expect(closeRound.updateGame(game)).toBe(true);
-    expect(round.state).toBe(RoundState.CLOSED);
-    expect(game.currentRound).toBeNull();
-    expect(game.roundCounter).toBe(1);
+    expect(round.state).toBe(RoundState.SHOW_RESULTS);
+    expect(game.round).toBeNull();
+    expect(game.roundsCounter).toBe(1);
     expect(closeRound.updateGame(game)).toBe(false);
 });

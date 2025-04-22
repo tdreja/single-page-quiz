@@ -1,21 +1,11 @@
-import { Game, GameState } from "../game";
+import { emptyGame, Game } from "../game";
 import { Emoji, Player } from "../player";
 import { Team, TeamColor } from "../team";
 import { restoreGame } from "./game";
 import { storePlayer } from "./player";
 import { JsonTeam, restoreTeams, storeTeam } from "./team";
 
-const game: Game = {
-    sections: [],
-    availableEmojis: new Set(),
-    availableColors: new Set(),
-    players: new Map(),
-    teams: new Map(),
-    selectingTeam: null,
-    currentRound: null,
-    roundCounter: 0,
-    state: GameState.TEAM_SETUP
-}
+const game: Game = emptyGame();
 const camel: Player = {
     name: Emoji.CAMEL,
     emoji: Emoji.CAMEL,

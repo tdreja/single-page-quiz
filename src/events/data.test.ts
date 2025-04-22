@@ -1,4 +1,4 @@
-import {Game, GameRound, GameSection, GameState, RoundState} from "../model/game/game";
+import {emptyGame, Game, GameRound, GameSection, GameState, RoundState} from "../model/game/game";
 import {Emoji, Player} from "../model/game/player";
 import {Team, TeamColor} from "../model/game/team";
 import { EstimateQuestion } from "../model/quiz/estimate-question";
@@ -73,39 +73,29 @@ export function newTestSetup() {
     // Question, Round and Section
     round = {
         question: questionMultiChoice,
-        state: RoundState.WAIT_ON_REVEAL,
-        currentlyAttempting: new Set(),
-        completedBy: new Set(),
-        alreadyAttempted: new Set(),
-        inSection: sectionId,
+        inSectionName: sectionId,
+        state: RoundState.SHOW_QUESTION,
+        answeringTeams: new Set(),
         timerStart: null
     }
     estimateRound = {
         question: questionEstimate,
-        state: RoundState.WAIT_ON_REVEAL,
-        currentlyAttempting: new Set(),
-        completedBy: new Set(),
-        alreadyAttempted: new Set(),
-        inSection: sectionId,
+        inSectionName: sectionId,
+        state: RoundState.SHOW_QUESTION,
+        answeringTeams: new Set(),
         timerStart: null
     }
     section = {
-        name: sectionId,
-        rounds: [round, estimateRound]
+        sectionName: sectionId,
+        questions: new Map()
     }
+    section.questions.set(questionMultiChoice.questionId, questionMultiChoice);
+    section.questions.set(questionEstimate.questionId, questionEstimate);
 
     // Game
-    game = {
-        sections: [section],
-        availableEmojis: new Set(),
-        availableColors: new Set(),
-        players: new Map(),
-        teams: new Map(),
-        selectingTeam: null,
-        currentRound: null,
-        roundCounter: 0,
-        state: GameState.GAME_ACTIVE,
-    }
+    game = emptyGame();
+    game.state = GameState.GAME_ACTIVE;
+    game.sections.set(sectionId, section);
     game.teams.set(TeamColor.BLUE, teamBlue);
     game.players.set(Emoji.DUCK, playerBlueDuck);
     game.teams.set(TeamColor.RED, teamRed);

@@ -128,18 +128,16 @@ export function prepareGame(game : Game) {
   const textQuestion: TextMultipleChoiceQuestion = new TextMultipleChoiceQuestion("q1", 101, "How much is the fish?", choices);
   const round: GameRound = {
     question: textQuestion,
+    inSectionName: "common",
     state: RoundState.BUZZER_ACTIVE,
-    currentlyAttempting: new Set(),
-    alreadyAttempted: new Set(),
-    completedBy: new Set(),
-    inSection: "common",
+    answeringTeams: new Set(),
     timerStart: null,
   };
   const section: GameSection = {
-    name: "common",
-    rounds: [round],
+    sectionName: "common",
+    questions: new Map(),
   };
-
-  game.sections.push(section);
-  game.currentRound = round;
+  section.questions.set(textQuestion.questionId, textQuestion);
+  game.sections.set(section.sectionName, section);
+  game.round = round;
 }

@@ -1,4 +1,4 @@
-import { TeamColor } from "../game/team"
+import { Team, TeamColor } from "../game/team"
 import { JsonMutableState, JsonQuestionContent } from "./json"
 
 export enum QuestionType {
@@ -15,9 +15,10 @@ export interface Question {
     readonly questionId: string,
     readonly pointsForCompletion: number,
     readonly type: QuestionType,
-    readonly alreadyAttempted: Array<TeamColor>,
     readonly completedBy: Set<TeamColor>,
-    completed: boolean,
+    readonly completed: boolean,
+    completeQuestion: (teams: Array<Team>) => void,
+    alreadyAttempted: (team: TeamColor) => boolean,
     exportJsonQuestionContent: () => JsonQuestionContent,
     exportJsonMutableState: () => JsonMutableState,
     importJsonMutableState: (state: JsonMutableState) => void,
@@ -35,4 +36,11 @@ export interface TextQuestion extends Question {
  */
 export interface ImageQuestion extends Question {
     readonly imageBase64: string
+}
+
+export function addPointsToTeam(points: number, team: Team) {
+    team.points += points;
+    for(const player of team.players.values()) {
+        player.points += points;
+    }
 }

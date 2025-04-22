@@ -1,6 +1,6 @@
-import { TeamColor } from "../game/team";
+import { Team, TeamColor } from "../game/team";
 import { JsonMutableState, JsonQuestionContent } from "./json";
-import { QuestionType, TextQuestion } from "./question";
+import { addPointsToTeam, QuestionType, TextQuestion } from "./question";
 
 export class ActionQuestion implements TextQuestion {
 
@@ -44,8 +44,17 @@ export class ActionQuestion implements TextQuestion {
         return this._completed;
     }
 
-    public get alreadyAttempted(): Array<TeamColor> {
-        return Array.from(this._alreadyAttempted);
+    public alreadyAttempted(team: TeamColor): boolean {
+        return this._alreadyAttempted.has(team);
+    }
+    
+    public completeQuestion(teams: Array<Team>) {
+        this._completedBy.clear();
+        for(const team of teams) {
+            this._completedBy.add(team.color);
+            addPointsToTeam(this.pointsForCompletion, team);
+        }
+        this._completed = true;
     }
     
     public exportJsonQuestionContent(): JsonQuestionContent {

@@ -1,4 +1,5 @@
 import {Game, GameRound, GameState, RoundState} from "../model/game/game";
+import { getQuestion } from "../model/game/json/game";
 import {TeamColor} from "../model/game/team";
 import {EventType, GameEvent, GameRoundEvent} from "./common-events";
 
@@ -22,27 +23,27 @@ export class StartRoundEvent extends GameEvent {
         }
 
         // Force complete the old round
-        if(game.currentRound) {
+        if(game.round) {
             // We're already active?
-            if(game.currentRound.question.questionId === this._questionId 
-                && game.currentRound.inSection === this._sectionName) {
+            if(game.round.question.questionId === this._questionId) {
                 return false;
             }
-            const oldRound = game.currentRound;
-            game.currentRound = null;
-            oldRound.state = RoundState.CLOSED;
+            const oldQuestion = game.round.question;
+            game.round = null;
+            oldQuestion.completeQuestion([]);
         }
 
-        const section = game.sections.find(s => s.name === this._sectionName);
-        if(!section) {
+        const question = getQuestion(game, this._sectionName, this._questionId);
+        if(!question || question.completed) {
             return false;
         }
-        const round = section.rounds.find(r => r.question.questionId === this._questionId);
-        if(!round || round.state !== RoundState.WAIT_ON_REVEAL) {
-            return false;
-        }
-        round.state = RoundState.SHOW_QUESTION;
-        game.currentRound = round;
+        game.round = {
+            question,
+            inSectionName: this._sectionName,
+            answeringTeams: new Set<TeamColor>(),
+            state: RoundState.SHOW_QUESTION,
+            timerStart: null
+        };
         return true;
     }
 }
@@ -56,7 +57,7 @@ export class ActivateBuzzerEvent extends GameRoundEvent {
         super(EventType.ACTIVATE_BUZZER, eventInitDict);
     }
 
-    public updateRound(game: Game, round: GameRound): boolean {
+    public updateQuestionRound(game: Game, round: GameRound): boolean {
         // Skip non-relevant states
         if(round.state === RoundState.SHOW_QUESTION) {
             round.state = RoundState.BUZZER_ACTIVE;
@@ -80,7 +81,7 @@ export class RequestAttemptEvent extends GameRoundEvent {
         this._team = team;
     }
 
-    public updateRound(game: Game, round: GameRound): boolean {
+    public updateQuestionRound(game: Game, round: GameRound): boolean {
         // Skip non-relevant states
         if(round.state !== RoundState.BUZZER_ACTIVE) {
             return false;
@@ -88,12 +89,11 @@ export class RequestAttemptEvent extends GameRoundEvent {
         if(!game.teams.get(this._team)) {
             return false;
         }
-        if(round.alreadyAttempted.has(this._team)) {
+        if(round.question.alreadyAttempted(this._team)) {
             return false;
         }
-        round.currentlyAttempting.clear();
-        round.currentlyAttempting.add(this._team);
-        round.alreadyAttempted.add(this._team);
+        round.answeringTeams.clear();
+        round.answeringTeams.add(this._team);
         round.state = RoundState.TEAM_CAN_ATTEMPT;
         round.timerStart = new Date();
         return true;
@@ -109,15 +109,13 @@ export class SkipRoundEvent extends GameRoundEvent {
         super(EventType.SKIP_ROUND, eventInitDict);
     }
 
-    public updateRound(game: Game, round: GameRound): boolean {
-        if(round.state === RoundState.WAIT_ON_REVEAL 
-            || round.state === RoundState.CLOSED 
-            || round.state === RoundState.COMPLETE_WITH_RESULTS) {
+    public updateQuestionRound(game: Game, round: GameRound): boolean {
+        if(round.state === RoundState.SHOW_RESULTS) {
             return false;
         }
-        round.state = RoundState.COMPLETE_WITH_RESULTS;
-        round.currentlyAttempting.clear();
-        round.timerStart = null;
+        round.state = RoundState.SHOW_RESULTS;
+        round.answeringTeams.clear();
+        round.question.completeQuestion([]);
         return true;
     }
 }
@@ -131,15 +129,12 @@ export class CloseRoundEvent extends GameRoundEvent {
         super(EventType.CLOSE_ROUND, eventInitDict);
     }
 
-    public updateRound(game: Game, round: GameRound): boolean {
-        if(round.state !== RoundState.COMPLETE_WITH_RESULTS) {
+    public updateQuestionRound(game: Game, round: GameRound): boolean {
+        if(round.state !== RoundState.SHOW_RESULTS) {
             return false;
         }
-        round.state = RoundState.CLOSED;
-        round.currentlyAttempting.clear();
-        game.currentRound = null;
-        game.roundCounter += 1;
-        round.timerStart = null;
+        game.round = null;
+        game.roundsCounter += 1;
         return true;
     }
 }

@@ -43,12 +43,11 @@ export abstract class GameRoundEvent extends GameEvent {
         if (game.state !== GameState.GAME_ACTIVE) {
             return false;
         }
-        const round = game.currentRound;
-        if (round) {
-            return this.updateRound(game, round);
+        if (game.round) {
+            return this.updateQuestionRound(game, game.round);
         }
         return false;
     }
 
-    public abstract updateRound(game: Game, round: GameRound): boolean
+    public abstract updateQuestionRound(game: Game, round: GameRound): boolean
 }

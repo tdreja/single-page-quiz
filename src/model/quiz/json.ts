@@ -9,6 +9,7 @@ import { Question, QuestionType } from "./question";
 
 /**
  * Static data for a complete quiz with all sections
+ * @see Game
 */
 export interface JsonQuiz {
     sections?: Array<JsonQuizSection>
@@ -16,14 +17,16 @@ export interface JsonQuiz {
 
 /**
  * Named Group/section of questions
+ * @see GameSection
  */
 export interface JsonQuizSection {
-    name?: string,
+    sectionName?: string,
     questions?: Array<JsonQuestionContent>
 }
 
 /**
  * Static content of a question in the game
+ * @see Question
 */
 export interface JsonQuestionContent {
     type?: QuestionType,
@@ -47,6 +50,7 @@ export interface JsonChoice {
  * Mutable content of the question that can be changed by the teams submitting their answers
 */
 export interface JsonMutableState {
+    sectionName?: string,
     questionId?: string,
     completedBy?: Array<TeamColor>,
     completed?: boolean,
@@ -55,7 +59,7 @@ export interface JsonMutableState {
 
 export function exportStaticContent(game: Game): JsonQuiz {
     const sections: Array<JsonQuizSection> = [];
-    for(const section of game.sections) {
+    for(const section of game.sections.values()) {
         sections.push(exportStaticSectionContent(section));
     }
     return {
@@ -64,10 +68,9 @@ export function exportStaticContent(game: Game): JsonQuiz {
 }
 
 function exportStaticSectionContent(section: GameSection): JsonQuizSection {
-    const questions: Array<JsonQuestionContent> = [];
     return {
-        name: section.name,
-        questions
+        sectionName: section.sectionName,
+        questions: Array.from(section.questions.values()).map((q) => q.exportJsonQuestionContent())
     }
 }
 

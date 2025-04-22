@@ -9,14 +9,16 @@ export function asSet<VALUE>(value?: VALUE, ...others: Array<VALUE>): Set<VALUE>
     return result;
 }
 
-export function arrayAsSet<VALUE>(value: Array<VALUE>): Set<VALUE> {
+export function arrayAsSet<VALUE>(value?: Array<VALUE>): Set<VALUE> {
     const result: Set<VALUE> = new Set<VALUE>();
+    if(!value) {
+        return result;
+    }
     for(const otherValue of value) {
         result.add(otherValue);
     }
     return result;
 }
-
 
 
 export function shuffleArray<TYPE>(array: Array<TYPE>) {

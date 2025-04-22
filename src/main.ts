@@ -9,14 +9,13 @@ import { Game, GameState } from './model/game/game';
 import { JsonGame, restoreGame, storeGame } from './model/game/json/game';
 
 const game: Game = {
-    sections: [],
+    sections: new Map(),
     availableEmojis: new Set(),
     availableColors: new Set(),
     players: new Map(),
     teams: new Map(),
-    selectingTeam: null,
-    currentRound: null,
-    roundCounter: 0,
+    round: null,
+    roundsCounter: 0,
     state: GameState.GAME_ACTIVE,
   };
 

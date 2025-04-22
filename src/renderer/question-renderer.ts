@@ -4,22 +4,22 @@ import { TextMultipleChoiceQuestion } from "../model/quiz/multiple-choice-questi
 import { updateFromMap, updatePartInnerHtml } from "./render-utils";
 
 export function renderQuestion(game: Game) {
-    if(!game.currentRound) {
+    if(!game.round) {
         document.body.removeAttribute('current-question');
         return;
     }
 
-    if(game.currentRound.question instanceof TextMultipleChoiceQuestion) {
+    if(game.round.question instanceof TextMultipleChoiceQuestion) {
         document.body.setAttribute('current-question', 'text-multiple-choice');
-        renderTextMultipleChoiceQuestion(game, game.currentRound, game.currentRound.question);
+        renderTextMultipleChoiceQuestion(game, game.round, game.round.question);
         return;
     }
-    if(game.currentRound.question instanceof EstimateQuestion) {
+    if(game.round.question instanceof EstimateQuestion) {
         document.body.setAttribute('current-question', 'estimate');
-        renderEstimateQuestion(game, game.currentRound, game.currentRound.question);
+        renderEstimateQuestion(game, game.round, game.round.question);
         return;
     }
-    console.error('Could not render current question. Unknown type!', game.currentRound.question);
+    console.error('Could not render current question. Unknown type!', game.round.question);
 }
 
 function renderTextMultipleChoiceQuestion(game: Game, round: GameRound, question: TextMultipleChoiceQuestion) {
@@ -29,7 +29,7 @@ function renderTextMultipleChoiceQuestion(game: Game, round: GameRound, question
         return;
     }
 
-    updatePartInnerHtml(html, 'section', round.inSection);
+    updatePartInnerHtml(html, 'section', round.inSectionName);
     updatePartInnerHtml(html, 'points', `${question.pointsForCompletion}`);
     updatePartInnerHtml(html, 'question-text', question.text);
 
