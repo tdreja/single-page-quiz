@@ -18,7 +18,6 @@ export interface Question {
     readonly completedBy: Set<TeamColor>,
     readonly completed: boolean,
     completeQuestion: (teams: Array<Team>) => void,
-    alreadyAttempted: (team: TeamColor) => boolean,
     exportJsonQuestionContent: () => JsonQuestionContent,
     exportJsonMutableState: () => JsonMutableState,
     importJsonMutableState: (state: JsonMutableState) => void,

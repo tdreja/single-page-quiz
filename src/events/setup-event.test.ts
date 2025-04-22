@@ -1,6 +1,7 @@
 import { nextRandom } from "../model/common";
 import { Emoji, Player } from "../model/game/player";
 import { Team, TeamColor } from "../model/game/team";
+import { EventChange } from "./common-events";
 import { game, newTestSetup, playerBlueDuck, playerRedCamel, teamBlue, teamRed } from "./data.test";
 import { AddPlayerEvent, AddTeamEvent, findSmallestTeam, RemovePlayerEvent, RemoveTeamEvent, RenamePlayerEvent, ReRollEmojiEvent, ShuffleTeamsEvent } from "./setup-events";
 
@@ -45,11 +46,11 @@ test('findSmallestTeam', () => {
 test('addPlayer', () => {
     const addPlayer = new AddPlayerEvent('CatPlayer');
     expect(game.availableEmojis.size).toBe(0);
-    expect(addPlayer.updateGame(game)).toBe(false);
+    expect(addPlayer.updateGame(game)).toEqual([]);
     expect(game.players.size).toBe(2);
 
     game.availableEmojis.add(Emoji.CAT);
-    expect(addPlayer.updateGame(game)).toBe(true);
+    expect(addPlayer.updateGame(game)).toEqual([EventChange.GAME]);
     expect(game.players.size).toBe(3);
     const cat = game.players.get(Emoji.CAT);
     expect(cat).toBeTruthy();
@@ -62,7 +63,7 @@ test('addPlayer', () => {
 
 test('removePlayer', () => {
     expect(game.players.size).toBe(2);
-    expect(new RemovePlayerEvent(Emoji.DUCK).updateGame(game)).toBe(true);
+    expect(new RemovePlayerEvent(Emoji.DUCK).updateGame(game)).toEqual([EventChange.GAME]);
     expect(game.players.size).toBe(1);
     expect(game.availableEmojis.size).toBe(1);
     expect(game.availableEmojis).toContain(Emoji.DUCK);
@@ -70,19 +71,19 @@ test('removePlayer', () => {
 });
 
 test('renamePlayer', () => {
-    expect(new RenamePlayerEvent(Emoji.CROCODILE, 'Croc').updateGame(game)).toBe(false);
+    expect(new RenamePlayerEvent(Emoji.CROCODILE, 'Croc').updateGame(game)).toEqual([]);
 
     expect(playerRedCamel.name).toBe('Camel');
-    expect(new RenamePlayerEvent(Emoji.CAMEL, 'RedCamel').updateGame(game)).toBe(true);
+    expect(new RenamePlayerEvent(Emoji.CAMEL, 'RedCamel').updateGame(game)).toEqual([EventChange.GAME]);
     expect(playerRedCamel.name).toBe('RedCamel');
 });
 
 test('reRollEmoji', () => {
     expect(game.availableEmojis.size).toBe(0);
-    expect(new ReRollEmojiEvent(Emoji.DUCK).updateGame(game)).toBe(false);
+    expect(new ReRollEmojiEvent(Emoji.DUCK).updateGame(game)).toEqual([]);
 
     game.availableEmojis.add(Emoji.CROCODILE);
-    expect(new ReRollEmojiEvent(Emoji.DUCK).updateGame(game)).toBe(true);
+    expect(new ReRollEmojiEvent(Emoji.DUCK).updateGame(game)).toEqual([EventChange.GAME]);
 
     expect(game.players.get(Emoji.DUCK)).toBeUndefined();
     expect(game.players.get(Emoji.CROCODILE)).toBe(playerBlueDuck);
@@ -91,15 +92,15 @@ test('reRollEmoji', () => {
     expect(game.availableEmojis.size).toBe(1);
     expect(game.availableEmojis).toContain(Emoji.DUCK);
 
-    expect(new ReRollEmojiEvent(Emoji.DUCK).updateGame(game)).toBe(false);
+    expect(new ReRollEmojiEvent(Emoji.DUCK).updateGame(game)).toEqual([]);
 });
 
 test('addTeam', () => {
-    expect(new AddTeamEvent().updateGame(game)).toBe(false);
-    expect(new AddTeamEvent(TeamColor.ORANGE).updateGame(game)).toBe(false);
+    expect(new AddTeamEvent().updateGame(game)).toEqual([]);
+    expect(new AddTeamEvent(TeamColor.ORANGE).updateGame(game)).toEqual([]);
 
     game.availableColors.add(TeamColor.ORANGE);
-    expect(new AddTeamEvent().updateGame(game)).toBe(true);
+    expect(new AddTeamEvent().updateGame(game)).toEqual([EventChange.GAME]);
     const teamOrange = game.teams.get(TeamColor.ORANGE);
     expect(teamOrange).toBeTruthy();
     expect(teamOrange ? teamOrange.color : null).toBe(TeamColor.ORANGE);
@@ -108,10 +109,10 @@ test('addTeam', () => {
 });
 
 test('removeTeam', () => {
-    expect(new RemoveTeamEvent(TeamColor.ORANGE).updateGame(game)).toBe(false);
+    expect(new RemoveTeamEvent(TeamColor.ORANGE).updateGame(game)).toEqual([]);
 
     game.availableColors.add(TeamColor.ORANGE);
-    expect(new AddTeamEvent(TeamColor.ORANGE).updateGame(game)).toBe(true);
+    expect(new AddTeamEvent(TeamColor.ORANGE).updateGame(game)).toEqual([EventChange.GAME]);
     const teamOrange = game.teams.get(TeamColor.ORANGE);
     expect(teamOrange).toBeTruthy();
     if(!teamOrange) {
@@ -120,7 +121,7 @@ test('removeTeam', () => {
     expect(game.availableColors.size).toBe(0);
     expect(game.teams.size).toBe(3);
 
-    expect(new RemoveTeamEvent(TeamColor.BLUE).updateGame(game)).toBe(true);
+    expect(new RemoveTeamEvent(TeamColor.BLUE).updateGame(game)).toEqual([EventChange.GAME]);
     expect(game.availableColors.size).toBe(1);
     expect(game.availableColors).toContain(TeamColor.BLUE);
     expect(game.teams.size).toBe(2);
@@ -135,7 +136,7 @@ test('removeTeam', () => {
 test('shuffleTeams', () => {
     expect(game.teams.size).toBe(2);
 
-    expect(new ShuffleTeamsEvent(2).updateGame(game)).toBe(true);
+    expect(new ShuffleTeamsEvent(2).updateGame(game)).toEqual([EventChange.GAME]);
     expect(game.teams.size).toBe(2);
 
     expect(playerBlueDuck.team).toBeTruthy();

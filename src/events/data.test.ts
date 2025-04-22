@@ -1,4 +1,4 @@
-import {emptyGame, Game, GameRound, GameSection, GameState, RoundState} from "../model/game/game";
+import {emptyGame, Game, GameSection, GameState} from "../model/game/game";
 import {Emoji, Player} from "../model/game/player";
 import {Team, TeamColor} from "../model/game/team";
 import { EstimateQuestion } from "../model/quiz/estimate-question";
@@ -17,8 +17,6 @@ export let playerBlueDuck: Player;
 export let playerRedCamel: Player
 export let teamBlue: Team;
 export let teamRed: Team;
-export let round: GameRound;
-export let estimateRound: GameRound;
 export let section: GameSection;
 export let game: Game;
 
@@ -71,20 +69,6 @@ export function newTestSetup() {
     teamRed.players.set(Emoji.CAMEL, playerRedCamel);
 
     // Question, Round and Section
-    round = {
-        question: questionMultiChoice,
-        inSectionName: sectionId,
-        state: RoundState.SHOW_QUESTION,
-        answeringTeams: new Set(),
-        timerStart: null
-    }
-    estimateRound = {
-        question: questionEstimate,
-        inSectionName: sectionId,
-        state: RoundState.SHOW_QUESTION,
-        answeringTeams: new Set(),
-        timerStart: null
-    }
     section = {
         sectionName: sectionId,
         questions: new Map()

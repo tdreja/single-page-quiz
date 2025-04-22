@@ -2,7 +2,7 @@ import { nextRandom, shuffleArray } from "../model/common";
 import { Game } from "../model/game/game";
 import { Emoji, Player } from "../model/game/player";
 import { Team, TeamColor } from "../model/game/team";
-import { EventType, GameEvent } from "./common-events";
+import { EventChange, EventType, GameEvent } from "./common-events";
 
 export function findSmallestTeam(teams: Map<TeamColor, Team>): Team | null {
     let smallestTeam: Team | null = null;
@@ -30,10 +30,10 @@ export class AddPlayerEvent extends GameEvent {
     this._name = name;
   }
 
-  public updateGame(game: Game): boolean {
+  public updateGame(game: Game): Array<EventChange> {
     const emoji = nextRandom(game.availableEmojis);
     if(!emoji) {
-        return false;
+        return [];
     }
     game.availableEmojis.delete(emoji);
     const player: Player = {
@@ -44,7 +44,7 @@ export class AddPlayerEvent extends GameEvent {
     };
     game.players.set(emoji, player);
     addPlayerSmallestToTeam(player, game.teams);
-    return true;
+    return [EventChange.GAME];
   }
 }
 
@@ -56,10 +56,10 @@ export class RemovePlayerEvent extends GameEvent {
       this._emoji = emoji as Emoji;
     }
   
-    public updateGame(game: Game): boolean {
+    public updateGame(game: Game): Array<EventChange> {
         const player = game.players.get(this._emoji);
         if(!player) {
-            return false;
+            return [];
         }
         game.players.delete(this._emoji);
         game.availableEmojis.add(this._emoji);
@@ -67,7 +67,7 @@ export class RemovePlayerEvent extends GameEvent {
         if(team) {
             team.players.delete(this._emoji);
         }
-        return true;
+        return [EventChange.GAME];
     }
   }
 
@@ -81,13 +81,13 @@ export class RemovePlayerEvent extends GameEvent {
       this._newName = newName;
     }
   
-    public updateGame(game: Game): boolean {
+    public updateGame(game: Game): Array<EventChange> {
         const player = game.players.get(this._emoji);
         if(!player) {
-            return false;
+            return [];
         }
         player.name = this._newName;
-        return true;
+        return [EventChange.GAME];
     }
   }
 
@@ -99,15 +99,15 @@ export class RemovePlayerEvent extends GameEvent {
       this._oldEmoji = oldEmoji as Emoji;
     }
   
-    public updateGame(game: Game): boolean {
+    public updateGame(game: Game): Array<EventChange> {
         const player = game.players.get(this._oldEmoji);
         if(!player) {
-            return false;
+            return [];
         }
         // Find new available emoji
         const newEmoji = nextRandom(game.availableEmojis);
         if(!newEmoji) {
-            return false;
+            return [];
         }
         game.availableEmojis.delete(newEmoji);
         game.availableEmojis.add(this._oldEmoji);
@@ -121,7 +121,7 @@ export class RemovePlayerEvent extends GameEvent {
             team.players.delete(this._oldEmoji);
             team.players.set(newEmoji, player);
         }
-        return true;
+        return [EventChange.GAME];
     }
   }
 
@@ -134,13 +134,13 @@ export class RemovePlayerEvent extends GameEvent {
       this._color = color;
     }
   
-    public updateGame(game: Game): boolean {
+    public updateGame(game: Game): Array<EventChange> {
         let newColor: TeamColor | null = this._color ? this._color as TeamColor : null;
         if(!newColor || !game.availableColors.has(newColor)) {
             newColor = nextRandom(game.availableColors);
         }
         if(!newColor) {
-            return false;
+            return [];
         }
         game.availableColors.delete(newColor);
         const team: Team = {
@@ -149,7 +149,7 @@ export class RemovePlayerEvent extends GameEvent {
             players: new Map()
         };
         game.teams.set(newColor, team);
-        return true;
+        return [EventChange.GAME];
     }
   }
 
@@ -162,10 +162,10 @@ export class RemovePlayerEvent extends GameEvent {
       this._color = color as TeamColor;
     }
   
-    public updateGame(game: Game): boolean {
+    public updateGame(game: Game): Array<EventChange> {
         const team = game.teams.get(this._color);
         if(!team) {
-            return false;
+            return [];
         }
         game.teams.delete(this._color);
         game.availableColors.add(this._color);
@@ -173,7 +173,7 @@ export class RemovePlayerEvent extends GameEvent {
         for(let [_, player] of team.players) {
             addPlayerSmallestToTeam(player, game.teams);
         }
-        return true;
+        return [EventChange.GAME];
     }
 }
 
@@ -186,7 +186,7 @@ export class RemovePlayerEvent extends GameEvent {
         this._teamCount = Number(teamCount);
     }
 
-    public updateGame(game: Game): boolean {
+    public updateGame(game: Game): Array<EventChange> {
         // Ensure that we have enough teams
         const targetCount: number = Math.max(this._teamCount, 2);
         this.makeColorsAvailable(game);
@@ -203,7 +203,7 @@ export class RemovePlayerEvent extends GameEvent {
         for(let player of randomPlayers) {
             addPlayerSmallestToTeam(player, game.teams);
         }
-        return true;
+        return [EventChange.GAME];
     }
 
     protected makeColorsAvailable(game: Game): void {

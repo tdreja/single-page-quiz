@@ -130,7 +130,8 @@ export function prepareGame(game : Game) {
     question: textQuestion,
     inSectionName: "common",
     state: RoundState.BUZZER_ACTIVE,
-    answeringTeams: new Set(),
+    attemptingTeams: new Set(),
+    teamsAlreadyAttempted: new Set(),
     timerStart: null,
   };
   const section: GameSection = {

@@ -23,7 +23,8 @@ export interface JsonCurrentRound {
     question?: JsonMutableState,
     state?: RoundState,
     timerStart?: Date,
-    answeringTeams?: Array<TeamColor>
+    attemptingTeams?: Array<TeamColor>,
+    teamsAlreadyAttempted?: Array<TeamColor>,
 }
 
 
@@ -53,7 +54,8 @@ export function storeCurrentRound(game: Game): JsonCurrentRound {
     if(game.round) {
         return {
             question: game.round.question.exportJsonMutableState(),
-            answeringTeams: Array.from(game.round.answeringTeams),
+            attemptingTeams: Array.from(game.round.attemptingTeams),
+            teamsAlreadyAttempted: Array.from(game.round.teamsAlreadyAttempted),
             timerStart: game.round.timerStart || undefined,
             state: game.round.state
         }
@@ -114,7 +116,8 @@ export function restoreCurrentRound(game: Game, json?: JsonCurrentRound) {
         question,
         inSectionName: json.question.sectionName || '',
         state: json.state || RoundState.SHOW_QUESTION,
-        answeringTeams: arrayAsSet(json.answeringTeams),
+        teamsAlreadyAttempted: arrayAsSet(json.teamsAlreadyAttempted),
+        attemptingTeams: arrayAsSet(json.attemptingTeams),
         timerStart: json.timerStart || null
     }
 }

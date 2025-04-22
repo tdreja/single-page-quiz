@@ -24,13 +24,19 @@ export enum EventType {
     SHUFFLE_TEAMS = 'shuffle-teams'
 }
 
+export enum EventChange {
+    QUIZ_CONTENT = 'quiz-content',
+    GAME = 'game',
+    CURRENT_ROUND = 'current-round'
+}
+
 export abstract class GameEvent extends Event {
 
     protected constructor(type: EventType, eventInitDict?: EventInit) {
         super(type, eventInitDict);
     }
 
-    public abstract updateGame(game: Game): boolean
+    public abstract updateGame(game: Game): Array<EventChange>
 }
 
 export abstract class GameRoundEvent extends GameEvent {
@@ -39,15 +45,15 @@ export abstract class GameRoundEvent extends GameEvent {
         super(type, eventInitDict);
     }
 
-    public updateGame(game: Game): boolean {
+    public updateGame(game: Game): Array<EventChange> {
         if (game.state !== GameState.GAME_ACTIVE) {
-            return false;
+            return [];
         }
         if (game.round) {
             return this.updateQuestionRound(game, game.round);
         }
-        return false;
+        return [];
     }
 
-    public abstract updateQuestionRound(game: Game, round: GameRound): boolean
+    public abstract updateQuestionRound(game: Game, round: GameRound): Array<EventChange>
 }

@@ -2,7 +2,7 @@ import { Game, GameRound, getTeams, RoundState } from "../model/game/game";
 import { Team, TeamColor } from "../model/game/team";
 import { EstimateQuestion } from "../model/quiz/estimate-question";
 import { Choice, ImageMultipleChoiceQuestion, MultipleChoiceQuestion, TextMultipleChoiceQuestion } from "../model/quiz/multiple-choice-question";
-import { EventType, GameRoundEvent } from "./common-events";
+import { EventChange, EventType, GameRoundEvent } from "./common-events";
 
 export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
 
@@ -15,47 +15,47 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
         this._overrideTeam = overrideTeam ? overrideTeam as TeamColor : null;
     }
 
-    public updateQuestionRound(game: Game, round: GameRound): boolean {
+    public updateQuestionRound(game: Game, round: GameRound): Array<EventChange> {
         // Find the teams that attempted the answer
         const teams = this.findCurrentTeams(game, round);
         if(teams.length === 0) {
-            return false;
+            return [];
         }
         
         // Find the correct question
         const question: MultipleChoiceQuestion<Choice> | null = this.findQuestion(round);
         if(!question) {
-            return false;
+            return [];
         }
 
         // Find the choice
         const choice = question.choices.get(this._choiceId);
         if(!choice) {
-            return false;
+            return [];
         }
 
         // Mark choice by team
         teams.forEach((team) => {
             choice.selectedBy.add(team.color);
-            round.answeringTeams.delete(team.color);
+            round.attemptingTeams.delete(team.color);
         });
 
         // Complete round if possible
         if(choice.correct) {
             question.completeQuestion(teams);
             round.state = RoundState.SHOW_RESULTS;
-            return true;
+            return [EventChange.CURRENT_ROUND, EventChange.GAME];
         }
         // Otherwise wait for another attempt
         round.state = RoundState.SHOW_QUESTION;
-        return true;
+        return [EventChange.CURRENT_ROUND];
     }
 
     protected findCurrentTeams(game: Game, round: GameRound): Array<Team> {
         if(this._overrideTeam) {
             return getTeams(game, [this._overrideTeam]);
         }
-        return getTeams(game, round.answeringTeams);
+        return getTeams(game, round.attemptingTeams);
     }
 
     protected findQuestion(round: GameRound): MultipleChoiceQuestion<Choice> | null {
@@ -81,19 +81,20 @@ export class SubmitEstimateEvent extends GameRoundEvent {
         this._estimate = Number(estimate);
     }
 
-    public updateQuestionRound(game: Game, round: GameRound): boolean {
+    public updateQuestionRound(game: Game, round: GameRound): Array<EventChange> {
         if(!game.teams.get(this._team)) {
-            return false;
+            return [];
         }
         const question = this.findQuestion(round);
         if(!question) {
-            return false;
+            return [];
         }
         question.estimates.set(this._team, this._estimate);
+        round.teamsAlreadyAttempted.add(this._team);
 
         // Not everyone has estimated? Wait further
         if(question.estimates.size !== game.teams.size) {
-            return true;
+            return [EventChange.CURRENT_ROUND];
         }
 
         let closestTeams: Array<TeamColor> = [];
@@ -111,7 +112,7 @@ export class SubmitEstimateEvent extends GameRoundEvent {
         const winnerTeams: Array<Team> = getTeams(game, closestTeams);
         question.completeQuestion(winnerTeams);
         round.state = RoundState.SHOW_RESULTS;
-        return true;
+        return [EventChange.CURRENT_ROUND, EventChange.GAME];
     }
 
     protected findQuestion(round: GameRound): EstimateQuestion | null {

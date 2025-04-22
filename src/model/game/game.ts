@@ -30,7 +30,8 @@ export interface GameSection {
 export interface GameRound {
     readonly inSectionName: string,
     readonly question: Question,
-    readonly answeringTeams: Set<TeamColor>
+    readonly attemptingTeams: Set<TeamColor>,
+    readonly teamsAlreadyAttempted: Set<TeamColor>,
     state: RoundState,
     timerStart: Date | null,
 }
