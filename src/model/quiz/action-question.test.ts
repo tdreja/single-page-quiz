@@ -1,7 +1,7 @@
 import {ActionQuestion} from "./action-question.ts";
 import {emptyGame, Game, GameSection} from "../game/game.ts";
-import {Question} from "./question.ts";
 import {exportStaticContent, JsonQuiz, updateJsonQuizAtGame} from "./json.ts";
+import {clear} from "../game/key-value.ts";
 
 describe('ActionQuestion', () => {
     const sId = 'Test';
@@ -10,18 +10,18 @@ describe('ActionQuestion', () => {
     const actionQuestion: ActionQuestion = new ActionQuestion(qId, 10, "Test question text");
     const gameSection: GameSection = {
         sectionName: sId,
-        questions: new Map<string, Question>(),
-    }
-    gameSection.questions.set(qId, actionQuestion);
+        questions: {},
+        };
+        gameSection.questions[qId] = actionQuestion;
 
     const game: Game = emptyGame();
-    game.sections.set(sId, gameSection);
+    game.sections[sId] = gameSection;
 
 
     test('Export and re-import question via JSON', () => {
         // Export the game to JsonQuiz
         const exportedQuiz = exportStaticContent(game);
-        game.sections.clear();
+        clear(game.sections);
 
         // Convert the JsonQuiz to a JSON string
         const jsonString = JSON.stringify(exportedQuiz);
@@ -34,10 +34,10 @@ describe('ActionQuestion', () => {
 
         // Assertions to verify the game state after re-import
         expect(game.sections.size).toBe(1);
-        const section = game.sections.get(sId);
+        const section = game.sections[sId];
         expect(section).toBeDefined();
         expect(section?.questions.size).toBe(1);
-        const question = section?.questions.get(qId);
+        const question = section?.questions[qId];
         expect(question).toBeDefined();
         expect(question?.questionId).toBe(qId);
         expect(question).toEqual(actionQuestion);

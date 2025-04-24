@@ -1,10 +1,11 @@
 import { arrayAsSet } from "../../common";
 import { JsonMutableState } from "../../quiz/json";
 import { Question } from "../../quiz/question";
-import { Game, RoundState } from "../game";
+import {Game, RoundState} from "../game";
 import { TeamColor } from "../team";
 import { JsonPlayer, restorePlayers, storePlayer } from "./player";
 import { JsonTeam, restoreTeams, storeTeam } from "./team";
+import {iteratorOf, map} from "../key-value.ts";
 
 /**
  * Overall game state with players, teams and the already handled questions
@@ -30,13 +31,13 @@ export interface JsonCurrentRound {
 
 export function storeGame(game: Game): JsonGame {
     // Export all players and teams
-    const players = Array.from(game.players.values()).map(player => storePlayer(player));
-    const teams = Array.from(game.teams.values()).map(team => storeTeam(team));
+    const players = map(p => storePlayer(p), game.players);
+    const teams = map(t => storeTeam(t), game.teams);
 
     // Only export already completed questions
     const completedQuestions: Array<JsonMutableState> = [];
-    for(const section of game.sections.values()) {
-        for(const question of section.questions.values()) {
+    for(const section of iteratorOf(game.sections)) {
+        for(const question of iteratorOf(section.questions)) {
             if(question.completed) {
                 completedQuestions.push(question.exportJsonMutableState());
             }
@@ -76,11 +77,11 @@ export function getQuestion(game: Game, sectionName?: string, questionId?: strin
     if(!sectionName || !questionId) {
         return undefined;
     }
-    const section = game.sections.get(sectionName);
+    const section = game.sections[sectionName];
     if(!section) {
         return undefined;
     }
-    return section.questions.get(questionId);
+    return section.questions[questionId];
 }
 
 function restoreCompletedQuestions(game: Game, json: JsonGame) {

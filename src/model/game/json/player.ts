@@ -1,7 +1,8 @@
 import { Game } from "../game";
-import { Emoji, Player } from "../player";
+import {Emoji, Player} from "../player";
 import { TeamColor } from "../team";
 import { JsonGame } from "./game";
+import {emojisOf} from "../key-value.ts";
 
 export interface JsonPlayer {
     name?: string;
@@ -34,11 +35,11 @@ export function restorePlayers(game: Game, json: JsonGame) {
     }
 
     // Remove other players from game
-    for(const existingEmoji of Array.from(game.players.keys())) {
+    for(const existingEmoji of emojisOf(game.players)) {
         if(usedEmoji.has(existingEmoji)) {
             continue;
         }
-        game.players.delete(existingEmoji);
+        delete game.players[existingEmoji];
         game.availableEmojis.add(existingEmoji);
     }
 }
@@ -50,7 +51,7 @@ function restorePlayer(game: Game, json: JsonPlayer): Emoji | null {
     }
 
     // Update the existing player
-    const existing = game.players.get(json.emoji);
+    const existing = game.players[json.emoji];
     if(existing) {
         if(json.name) {
             existing.name = json.name;
@@ -71,6 +72,6 @@ function restorePlayer(game: Game, json: JsonPlayer): Emoji | null {
         points: json.points || 0,
         team: json.team || null
     };
-    game.players.set(json.emoji, newPlayer);
+    game.players[json.emoji] = newPlayer;
     return json.emoji;
 }

@@ -1,7 +1,9 @@
 import { Game } from "../game";
-import { Emoji } from "../player";
-import { Team, TeamColor } from "../team";
+import {Emoji} from "../player";
+import {Team, TeamColor} from "../team";
 import { JsonGame } from "./game";
+import {deleteAll} from "../../common.ts";
+import {colorsOf, emojisOf} from "../key-value.ts";
 
 
 export interface JsonTeam {
@@ -16,7 +18,7 @@ export function storeTeam(team: Team): JsonTeam {
         color: team.color,
         points: team.points,
         gamepad: team.gamepad,
-        players: Array.from(team.players.keys())
+        players: emojisOf(team.players)
     }
 }
 
@@ -36,12 +38,12 @@ export function restoreTeams(game: Game, json: JsonGame) {
     }
 
     // Remove other teams from game
-    for(const existingColor of Array.from(game.teams.keys())) {
-        if(usedColors.has(existingColor)) {
+    for(const color of colorsOf(game.teams)) {
+        if(usedColors.has(color)) {
             continue;
         }
-        game.availableColors.add(existingColor);
-        game.teams.delete(existingColor);
+        game.availableColors.add(color);
+        delete game.teams[color];
     }
 }
 
@@ -52,7 +54,7 @@ function restoreTeam(game: Game, json: JsonTeam): TeamColor | null {
     }
 
     // Update the existing team
-    const existing = game.teams.get(json.color);
+    const existing = game.teams[json.color];
     if(existing) {
         if(json.gamepad) {
             existing.gamepad = json.gamepad;
@@ -67,20 +69,20 @@ function restoreTeam(game: Game, json: JsonTeam): TeamColor | null {
     const newTeam: Team = {
         color: json.color,
         points: json.points || 0,
-        players: new Map()
+        players: {}
     }
-    game.teams.set(json.color, newTeam);
+    game.teams[json.color] = newTeam;
     restorePlayersInTeam(game, newTeam, json.players);
     return json.color;
 }
 
 function restorePlayersInTeam(game: Game, team: Team, jsonPlayers?: Array<Emoji>) {
-    team.players.clear();
+    deleteAll(team.players);
     if(jsonPlayers) {
         for(const emoji of jsonPlayers) {
-            const player = game.players.get(emoji);
+            const player = game.players[emoji];
             if(player) {
-                team.players.set(emoji, player);
+                team.players[emoji] = player;
             }
         }
     }
