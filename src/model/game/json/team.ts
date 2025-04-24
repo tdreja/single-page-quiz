@@ -1,14 +1,16 @@
 import { Game } from "../game";
 import { Emoji } from "../player";
 import { Team, TeamColor } from "../team";
-import { JsonGame } from "./game";
+import { JsonUpdatableGameData } from "./game";
 
-
-export interface JsonTeam {
-    color?: TeamColor,
-    points?: number,
-    players?: Array<Emoji>,
-    gamepad?: number;
+/**
+ * JSON is identical to the regular team, but only contains the Emojis as an Array
+ */
+type OptionalTeam = {
+    [property in keyof Team as Exclude<property, 'players'>]?: Team[property]
+}
+export interface JsonTeam extends OptionalTeam {
+    players?: Array<Emoji>
 }
 
 export function storeTeam(team: Team): JsonTeam {
@@ -21,7 +23,7 @@ export function storeTeam(team: Team): JsonTeam {
 }
 
 
-export function restoreTeams(game: Game, json: JsonGame) {
+export function restoreTeams(game: Game, json: JsonUpdatableGameData) {
     const usedColors: Set<TeamColor> = new Set<TeamColor>();
 
     // Add or update the teams from json

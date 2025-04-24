@@ -1,7 +1,8 @@
 import {ActionQuestion} from "./action-question.ts";
 import {emptyGame, Game, GameSection} from "../game/game.ts";
 import {Question} from "./question.ts";
-import {exportStaticContent, JsonQuiz, updateJsonQuizAtGame} from "./json.ts";
+import {exportStaticContent, updateJsonQuizAtGame} from "./json.ts";
+import {JsonStaticGameData} from "../game/json/game.ts";
 
 describe('ActionQuestion', () => {
     const sId = 'Test';
@@ -27,7 +28,7 @@ describe('ActionQuestion', () => {
         const jsonString = JSON.stringify(exportedQuiz);
 
         // Parse the JSON string back to a JsonQuiz object
-        const parsedQuiz: JsonQuiz = JSON.parse(jsonString);
+        const parsedQuiz: JsonStaticGameData = JSON.parse(jsonString);
 
         // Update the game with the parsed JsonQuiz
         updateJsonQuizAtGame(game, parsedQuiz);

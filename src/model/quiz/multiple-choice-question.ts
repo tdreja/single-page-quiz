@@ -1,5 +1,10 @@
 import { Team, TeamColor } from "../game/team";
-import { JsonChoice, JsonMutableState, JsonQuestionContent } from "./json";
+import {
+    JsonStaticChoiceData,
+    JsonStaticQuestionData,
+    JsonDynamicQuestionData,
+    IndexedByColor
+} from "./json";
 import { addPointsToTeam, ImageQuestion, Question, QuestionType, TextQuestion } from "./question";
 
 /**
@@ -97,7 +102,7 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
         return Array.from(this._choices.values()).sort((a,b) => a.choiceId.localeCompare(a.choiceId));
     }
 
-    protected get jsonChoices(): Array<JsonChoice> {
+    protected get jsonChoices(): Array<JsonStaticChoiceData> {
         return this.choicesSorted.map(choice => ({
             choiceId: choice.choiceId,
             correct: choice.correct,
@@ -105,7 +110,7 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
         }));
     }
 
-    public exportJsonQuestionContent(): JsonQuestionContent {
+    public exportStaticQuestionData(): JsonStaticQuestionData {
         return {
             type: this.type,
             pointsForCompletion: this.pointsForCompletion,
@@ -114,22 +119,22 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
         }
     }
 
-    public exportJsonMutableState(): JsonMutableState {
-        const data: any = {};
+    public exportDynamicQuestionData(): JsonDynamicQuestionData {
+        const data: IndexedByColor = {};
         for(const choice of this._choices.values()) {
-            if(choice.selectedBy.size > 0) {
-                data[choice.choiceId] = Array.from(choice.selectedBy);
+            for(const team of choice.selectedBy) {
+                data[team] = choice.choiceId;
             }
         }
         return {
             questionId: this._questionId,
             completed: this._completed,
             completedBy: Array.from(this._completedBy),
-            customState: data
+            additionalData: data
         };
     }
 
-    public importJsonMutableState(state: JsonMutableState) {
+    public importDynamicQuestionData(state: JsonDynamicQuestionData) {
         if(this._questionId !== state.questionId) {
             return;
         }
@@ -141,16 +146,14 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
         for(const choice of this._choices.values()) {
             choice.selectedBy.clear();
         }
-        if(!state.customState) {
+        if(!state.additionalData) {
             return;
         }
-        for(const choiceId of Object.keys(state.customState)) {
-            const teams = state.customState[choiceId];
-            const choice = this.choices.get(choiceId);
-            if(teams && choice) {
-                for(const team of Object.keys(teams)) {
-                    choice.selectedBy.add(team as TeamColor);
-                }
+        for(const team of Object.keys(state.additionalData) as [TeamColor]) {
+            const choiceId = state.additionalData[team];
+            const choice = choiceId ? this.choices.get(choiceId) : undefined;
+            if(choice) {
+                choice.selectedBy.add(team);
             }
         }
     }
@@ -176,7 +179,7 @@ export class ImageMultipleChoiceQuestion extends TextMultipleChoiceQuestion impl
         return QuestionType.IMAGE_MULTIPLE_CHOICE;
     }
 
-    public exportJsonQuestionContent(): JsonQuestionContent {
+    public exportStaticQuestionData(): JsonStaticQuestionData {
         return {
             type: QuestionType.IMAGE_MULTIPLE_CHOICE,
             pointsForCompletion: this.pointsForCompletion,

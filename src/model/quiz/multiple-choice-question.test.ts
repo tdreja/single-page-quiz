@@ -1,8 +1,9 @@
 import {emptyGame, Game, GameSection} from "../game/game.ts";
 import {Question} from "./question.ts";
-import {exportStaticContent, JsonQuiz, updateJsonQuizAtGame} from "./json.ts";
+import {exportStaticContent, updateJsonQuizAtGame} from "./json.ts";
 import {ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion} from "./multiple-choice-question.ts";
 import {TeamColor} from "../game/team.ts";
+import {JsonStaticGameData} from "../game/json/game.ts";
 
 describe('TextMultipleChoiceQuestion', () => {
     const sId = 'Test';
@@ -31,7 +32,7 @@ describe('TextMultipleChoiceQuestion', () => {
         const jsonString = JSON.stringify(exportedQuiz);
 
         // Parse the JSON string back to a JsonQuiz object
-        const parsedQuiz: JsonQuiz = JSON.parse(jsonString);
+        const parsedQuiz: JsonStaticGameData = JSON.parse(jsonString);
 
         // Update the game with the parsed JsonQuiz
         updateJsonQuizAtGame(game, parsedQuiz);
@@ -76,7 +77,7 @@ describe('ImageMultipleChoiceQuestion', () => {
         const jsonString = JSON.stringify(exportedQuiz);
 
         // Parse the JSON string back to a JsonQuiz object
-        const parsedQuiz: JsonQuiz = JSON.parse(jsonString);
+        const parsedQuiz: JsonStaticGameData = JSON.parse(jsonString);
 
         // Update the game with the parsed JsonQuiz
         updateJsonQuizAtGame(game, parsedQuiz);

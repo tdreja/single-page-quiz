@@ -1,5 +1,5 @@
 import { Team, TeamColor } from "../game/team";
-import { JsonMutableState, JsonQuestionContent } from "./json";
+import {IndexedByColor, JsonDynamicQuestionData, JsonStaticQuestionData} from "./json";
 import { addPointsToTeam, QuestionType, TextQuestion } from "./question";
 
 export class ActionQuestion implements TextQuestion {
@@ -57,7 +57,7 @@ export class ActionQuestion implements TextQuestion {
         this._completed = true;
     }
     
-    public exportJsonQuestionContent(): JsonQuestionContent {
+    public exportStaticQuestionData(): JsonStaticQuestionData {
         return {
             type: QuestionType.ACTION,
             pointsForCompletion: this.pointsForCompletion,
@@ -65,16 +65,20 @@ export class ActionQuestion implements TextQuestion {
         }
     }
 
-    public exportJsonMutableState(): JsonMutableState {
+    public exportDynamicQuestionData(): JsonDynamicQuestionData {
+        const data: IndexedByColor = {};
+        for(const color of this._alreadyAttempted) {
+            data[color] = true;
+        }
         return {
             questionId: this._questionId,
             completed: this._completed,
             completedBy: Array.from(this._completedBy),
-            customState: Array.from(this._alreadyAttempted)
+            additionalData: data,
         };
     }
 
-    public importJsonMutableState(state: JsonMutableState) {
+    public importDynamicQuestionData(state: JsonDynamicQuestionData) {
         if(this._questionId !== state.questionId) {
             return;
         }
@@ -84,8 +88,8 @@ export class ActionQuestion implements TextQuestion {
             state.completedBy.forEach((t) => this._completedBy.add(t));
         }
         this._alreadyAttempted.clear();
-        if(state.customState) {
-            for(const key of Object.keys(state.customState)) {
+        if(state.additionalData) {
+            for(const key of Object.keys(state.additionalData)) {
                 this._alreadyAttempted.add(key as TeamColor);
             }
         }

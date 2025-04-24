@@ -6,7 +6,7 @@ import { EventType, GameEvent } from "./events/common-events";
 import { renderQuestion } from "./renderer/question-renderer";
 import { renderTeams } from "./renderer/teams-renderer";
 import { Game, GameState } from './model/game/game';
-import { JsonGame, restoreGame, storeGame } from './model/game/json/game';
+import { JsonUpdatableGameData, restoreGame, storeGame } from './model/game/json/game';
 
 const game: Game = {
     sections: new Map(),
@@ -21,7 +21,7 @@ const game: Game = {
 
 const previousGame = window.localStorage.getItem('game');
 if(previousGame) {
-    const json = JSON.parse(previousGame) as JsonGame;
+    const json = JSON.parse(previousGame) as JsonUpdatableGameData;
     console.log('We have a previous game. Trying to restore it', json);
     restoreGame(game, json);
 } else {

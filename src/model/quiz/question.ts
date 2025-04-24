@@ -1,5 +1,5 @@
 import { Team, TeamColor } from "../game/team"
-import { JsonMutableState, JsonQuestionContent } from "./json"
+import {JsonDynamicQuestionData, JsonStaticQuestionData} from "./json"
 
 export enum QuestionType {
     TEXT_MULTIPLE_CHOICE = 'text-multiple-choice',
@@ -18,9 +18,9 @@ export interface Question {
     readonly completedBy: Set<TeamColor>,
     readonly completed: boolean,
     completeQuestion: (teams: Array<Team>) => void,
-    exportJsonQuestionContent: () => JsonQuestionContent,
-    exportJsonMutableState: () => JsonMutableState,
-    importJsonMutableState: (state: JsonMutableState) => void,
+    exportStaticQuestionData: () => JsonStaticQuestionData,
+    exportDynamicQuestionData: () => JsonDynamicQuestionData,
+    importDynamicQuestionData: (state: JsonDynamicQuestionData) => void,
 }
 
 /**

@@ -1,5 +1,5 @@
 import { Team, TeamColor } from "../game/team";
-import { JsonMutableState, JsonQuestionContent } from "./json";
+import {IndexedByColor, JsonDynamicQuestionData, JsonStaticQuestionData} from "./json";
 import { addPointsToTeam, QuestionType, TextQuestion } from "./question";
 
 /**
@@ -70,7 +70,7 @@ export class EstimateQuestion implements TextQuestion {
         this._completed = true;
     }
     
-    public exportJsonQuestionContent(): JsonQuestionContent {
+    public exportStaticQuestionData(): JsonStaticQuestionData {
         return {
             type: QuestionType.ESTIMATE,
             pointsForCompletion: this.pointsForCompletion,
@@ -79,8 +79,8 @@ export class EstimateQuestion implements TextQuestion {
         }
     }
 
-    public exportJsonMutableState(): JsonMutableState {
-        const data: any = {};
+    public exportDynamicQuestionData(): JsonDynamicQuestionData {
+        const data: IndexedByColor = {};
         for(const [team,estimate] of this.estimates) {
             data[team] = estimate;
         }
@@ -88,11 +88,11 @@ export class EstimateQuestion implements TextQuestion {
             questionId: this._questionId,
             completed: this._completed,
             completedBy: Array.from(this._completedBy),
-            customState: data
+            additionalData: data
         };
     }
 
-    public importJsonMutableState(state: JsonMutableState) {
+    public importDynamicQuestionData(state: JsonDynamicQuestionData) {
         if(this._questionId !== state.questionId) {
             return;
         }
@@ -102,13 +102,13 @@ export class EstimateQuestion implements TextQuestion {
             state.completedBy.forEach((t) => this._completedBy.add(t));
         }
         this._estimates.clear();
-        if(!state.customState) {
+        if(!state.additionalData) {
             return;
         }
-        for(const team of Object.keys(state.customState)) {
-            const estimate = Number(state.customState[team]);
+        for(const team of Object.keys(state.additionalData) as [TeamColor]) {
+            const estimate = Number(state.additionalData[team]);
             if(!isNaN(estimate)) {
-                this._estimates.set(team as TeamColor, estimate);
+                this._estimates.set(team, estimate);
             }
         }
     }

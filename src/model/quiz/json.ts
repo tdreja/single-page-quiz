@@ -5,59 +5,47 @@ import { ActionQuestion } from "./action-question";
 import { EstimateQuestion } from "./estimate-question";
 import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from "./multiple-choice-question";
 import { Question, QuestionType } from "./question";
+import {JsonStaticGameData, JsonStaticSectionData} from "../game/json/game.ts";
 
-/**
- * Static data for a complete quiz with all sections
- * @see Game
-*/
-export interface JsonQuiz {
-    sections?: Array<JsonQuizSection>
-}
-
-/**
- * Named Group/section of questions
- * @see GameSection
- */
-export interface JsonQuizSection {
-    sectionName?: string,
-    questions?: Array<JsonQuestionContent>
-}
 
 /**
  * Static content of a question in the game
  * @see Question
 */
-export interface JsonQuestionContent {
+export interface JsonStaticQuestionData {
     type?: QuestionType,
     pointsForCompletion?: number,
     text?: string,
     imageBase64?: string,
-    choices?: Array<JsonChoice>,
+    choices?: Array<JsonStaticChoiceData>,
     estimateTarget?: number,
 }
 
 /**
  * Static content for choices of a multiple-choice question
 */
-export interface JsonChoice {
+export interface JsonStaticChoiceData {
     choiceId?: string,
     correct?: boolean,
     text?: string
 }
 
+export type IndexedByColor = {
+    [color in TeamColor]?: any;
+}
+
 /**
- * Mutable content of the question that can be changed by the teams submitting their answers
-*/
-export interface JsonMutableState {
-    sectionName?: string,
+ * Updatable content of the question for the game
+ */
+export interface JsonDynamicQuestionData {
     questionId?: string,
     completedBy?: Array<TeamColor>,
     completed?: boolean,
-    customState?: any
+    additionalData?: IndexedByColor
 }
 
-export function exportStaticContent(game: Game): JsonQuiz {
-    const sections: Array<JsonQuizSection> = [];
+export function exportStaticContent(game: Game): JsonStaticGameData {
+    const sections: Array<JsonStaticSectionData> = [];
     for(const section of game.sections.values()) {
         sections.push(exportStaticSectionContent(section));
     }
@@ -66,7 +54,7 @@ export function exportStaticContent(game: Game): JsonQuiz {
     };
 }
 
-export function updateJsonQuizAtGame(game: Game, quiz?: JsonQuiz) {
+export function updateJsonQuizAtGame(game: Game, quiz?: JsonStaticGameData) {
     game.sections.clear();
     if(!quiz || !quiz.sections) {
         return;
@@ -79,14 +67,14 @@ export function updateJsonQuizAtGame(game: Game, quiz?: JsonQuiz) {
     }
 }
 
-function exportStaticSectionContent(section: GameSection): JsonQuizSection {
+function exportStaticSectionContent(section: GameSection): JsonStaticSectionData {
     return {
         sectionName: section.sectionName,
-        questions: Array.from(section.questions.values()).map((q) => q.exportJsonQuestionContent())
+        questions: Array.from(section.questions.values()).map((q) => q.exportStaticQuestionData())
     }
 }
 
-function jsonQuizSectionToGameSection(json?: JsonQuizSection): GameSection | null {
+function jsonQuizSectionToGameSection(json?: JsonStaticSectionData): GameSection | null {
     if(!json || !json.sectionName) {
         return null;
     }
@@ -106,7 +94,7 @@ function jsonQuizSectionToGameSection(json?: JsonQuizSection): GameSection | nul
     return section;
 }
 
-export function jsonContentToQuestion(sectionName?: string, json?: JsonQuestionContent): Question | null {
+export function jsonContentToQuestion(sectionName?: string, json?: JsonStaticQuestionData): Question | null {
     if(!sectionName || !json || !json.type || !json.pointsForCompletion) {
         return null;
     }
@@ -125,7 +113,7 @@ export function jsonContentToQuestion(sectionName?: string, json?: JsonQuestionC
     }
 }
 
-function getTextChoices(json: JsonQuestionContent): Map<string, TextChoice> {
+function getTextChoices(json: JsonStaticQuestionData): Map<string, TextChoice> {
     if(!json.choices) {
         return new Map(); 
     }
