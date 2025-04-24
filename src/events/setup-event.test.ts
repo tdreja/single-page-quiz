@@ -4,7 +4,6 @@ import { Team, TeamColor } from "../model/game/team";
 import { EventChange } from "./common-events";
 import { game, newTestSetup, playerBlueDuck, playerRedCamel, teamBlue, teamRed } from "./data.test";
 import { AddPlayerEvent, AddTeamEvent, findSmallestTeam, RemovePlayerEvent, RemoveTeamEvent, RenamePlayerEvent, ReRollEmojiEvent, ShuffleTeamsEvent } from "./setup-events";
-import {clear} from "../model/game/key-value.ts";
 
 
 beforeEach(() => {
@@ -35,11 +34,11 @@ test('findSmallestTeam', () => {
         points: 0,
         team: TeamColor.RED
     }
-    teamRed.players.CAT = playerRed2;
+    teamRed.players.set(Emoji.CAT, playerRed2);
     expect(findSmallestTeam(game.teams)).toBe(teamBlue);
 
     // Remove all players
-    clear(teamRed.players);
+    teamRed.players.clear();
     expect(findSmallestTeam(game.teams)).toBe(teamRed);
 });
 

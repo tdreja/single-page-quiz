@@ -50,10 +50,9 @@ export function newTestSetup() {
     teamBlue = {
         color: TeamColor.BLUE,
         points: 0,
-        players: {
-            DUCK: playerBlueDuck
-        }
+        players: new Map()
     }
+    teamBlue.players.set(Emoji.DUCK, playerBlueDuck);
 
     // Team Red
     playerRedCamel = {
@@ -65,28 +64,26 @@ export function newTestSetup() {
     teamRed = {
         color: TeamColor.RED,
         points: 0,
-        players: {
-            CAMEL: playerRedCamel
-        }
+        players: new Map()
     }
+    teamRed.players.set(Emoji.CAMEL, playerRedCamel);
 
     // Question, Round and Section
     section = {
         sectionName: sectionId,
-        questions: {
-            questionId: questionMultiChoice,
-            questionEstimateId: questionEstimate
-        }
+        questions: new Map()
     }
+    section.questions.set(questionMultiChoice.questionId, questionMultiChoice);
+    section.questions.set(questionEstimate.questionId, questionEstimate);
 
     // Game
     game = emptyGame();
     game.state = GameState.GAME_ACTIVE;
-    game.sections[sectionId] = section;
-    game.teams.BLUE = teamBlue;
-    game.players.DUCK = playerBlueDuck;
-    game.teams.RED = teamRed;
-    game.players.CAMEL = playerRedCamel;
+    game.sections.set(sectionId, section);
+    game.teams.set(TeamColor.BLUE, teamBlue);
+    game.players.set(Emoji.DUCK, playerBlueDuck);
+    game.teams.set(TeamColor.RED, teamRed);
+    game.players.set(Emoji.CAMEL, playerRedCamel);
 }
 
 // Just to ensure that we are valid

@@ -18,11 +18,11 @@ export function prepareGame(game : Game) {
 
   const maxTeams = 5;
   for (const color of Object.keys(TeamColor)) {
-    if (Object.keys(game).length === maxTeams) {
+    if (game.teams.size === maxTeams) {
       continue;
     }
     new AddTeamEvent(color).updateGame(game);
-    const team = game.teams[color as TeamColor];
+    const team = game.teams.get(color as TeamColor);
     if (team) {
       team.points = Math.floor((5000 * Math.random()) / 100) * 100;
     }
@@ -82,10 +82,10 @@ export function prepareGame(game : Game) {
   ];
 
   for (const _ of Object.keys(Emoji)) {
-    new AddPlayerEvent(names[Object.keys(game.players).length]).updateGame(game);
+    new AddPlayerEvent(names[game.players.size]).updateGame(game);
   }
   for (const emoji of Object.keys(Emoji)) {
-    const player = game.players[emoji as Emoji];
+    const player = game.players.get(emoji as Emoji);
     if (player) {
       player.points = Math.floor((3000 * Math.random()) / 100) * 100;
     }
@@ -136,10 +136,9 @@ export function prepareGame(game : Game) {
   };
   const section: GameSection = {
     sectionName: "common",
-    questions: {
-      'q1': textQuestion
-    },
+    questions: new Map(),
   };
-  game.sections[section.sectionName] = section;
+  section.questions.set(textQuestion.questionId, textQuestion);
+  game.sections.set(section.sectionName, section);
   game.round = round;
 }
