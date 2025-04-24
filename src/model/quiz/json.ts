@@ -1,4 +1,3 @@
-import { questionId } from "../../events/data.test";
 import { shuffleArray } from "../common";
 import { Game, GameSection } from "../game/game";
 import { TeamColor } from "../game/team";
@@ -67,11 +66,44 @@ export function exportStaticContent(game: Game): JsonQuiz {
     };
 }
 
+export function updateJsonQuizAtGame(game: Game, quiz?: JsonQuiz) {
+    game.sections.clear();
+    if(!quiz || !quiz.sections) {
+        return;
+    }
+    for(const section of quiz.sections) {
+        const gameSection = jsonQuizSectionToGameSection(section);
+        if(gameSection) {
+            game.sections.set(gameSection.sectionName, gameSection);
+        }
+    }
+}
+
 function exportStaticSectionContent(section: GameSection): JsonQuizSection {
     return {
         sectionName: section.sectionName,
         questions: Array.from(section.questions.values()).map((q) => q.exportJsonQuestionContent())
     }
+}
+
+function jsonQuizSectionToGameSection(json?: JsonQuizSection): GameSection | null {
+    if(!json || !json.sectionName) {
+        return null;
+    }
+    const section: GameSection = {
+        sectionName: json.sectionName,
+        questions: new Map<string, Question>()
+    };
+    if(!json.questions) {
+        return section;
+    }
+    for(const jsonQuestion of json.questions) {
+        const gameQuestion = jsonContentToQuestion(json.sectionName, jsonQuestion);
+        if(gameQuestion) {
+            section.questions.set(gameQuestion.questionId, gameQuestion);
+        }
+    }
+    return section;
 }
 
 export function jsonContentToQuestion(sectionName?: string, json?: JsonQuestionContent): Question | null {
@@ -87,9 +119,9 @@ export function jsonContentToQuestion(sectionName?: string, json?: JsonQuestionC
             return new ImageMultipleChoiceQuestion(id, json.pointsForCompletion, 
                 json.text || '', json.imageBase64 || '', getTextChoices(json));
         case QuestionType.ESTIMATE:
-            return new EstimateQuestion(questionId, json.pointsForCompletion, json.text || '', json.estimateTarget || 0);
+            return new EstimateQuestion(id, json.pointsForCompletion, json.text || '', json.estimateTarget || 0);
         case QuestionType.ACTION:
-            return new ActionQuestion(questionId, json.pointsForCompletion, json.text || '');
+            return new ActionQuestion(id, json.pointsForCompletion, json.text || '');
     }
 }
 

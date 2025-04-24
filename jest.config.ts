@@ -5,7 +5,7 @@ const config: JestConfigWithTsJest = {
   testEnvironment: "node",
   testRegex:  "(/__tests__/.*|(\\.|/)(test|spec))\\.[t]sx?$",
   transform: {
-    "^.+\.tsx?$": ["ts-jest",{}]
+    "^.+\.tsx?$": ["ts-jest",{ diagnostics: { ignoreCodes: ['TS151001'] } }]
   }
 };
 
