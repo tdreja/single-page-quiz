@@ -1,8 +1,8 @@
 import {emptyGame, Game, GameSection} from "../game/game.ts";
+import {Question} from "./question.ts";
 import {exportStaticContent, JsonQuiz, updateJsonQuizAtGame} from "./json.ts";
 import {ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion} from "./multiple-choice-question.ts";
 import {TeamColor} from "../game/team.ts";
-import {clear} from "../game/key-value.ts";
 
 describe('TextMultipleChoiceQuestion', () => {
     const sId = 'Test';
@@ -15,18 +15,17 @@ describe('TextMultipleChoiceQuestion', () => {
     const textMultipleChoiceQuestion: TextMultipleChoiceQuestion = new TextMultipleChoiceQuestion(qId, points, "Test question text", choices);
     const gameSection: GameSection = {
         sectionName: sId,
-        questions: {},
+        questions: new Map<string, Question>(),
     };
-    gameSection.questions[qId] = textMultipleChoiceQuestion;
+    gameSection.questions.set(qId, textMultipleChoiceQuestion);
 
     const game: Game = emptyGame();
-    game.sections[sId] = gameSection;
+    game.sections.set(sId, gameSection);
 
 
     test('Export and re-import question via JSON', () => {
         // Export the game to JsonQuiz
         const exportedQuiz = exportStaticContent(game);
-        clear(game.sections);
 
         // Convert the JsonQuiz to a JSON string
         const jsonString = JSON.stringify(exportedQuiz);
@@ -39,10 +38,10 @@ describe('TextMultipleChoiceQuestion', () => {
 
         // Assertions to verify the game state after re-import
         expect(game.sections.size).toBe(1);
-        const section = game.sections[sId];
+        const section = game.sections.get(sId);
         expect(section).toBeDefined();
         expect(section?.questions.size).toBe(1);
-        const question = section?.questions[qId];
+        const question = section?.questions.get(qId);
         expect(question).toBeDefined();
         expect(question?.questionId).toBe(qId);
         expect(question).toEqual(textMultipleChoiceQuestion);
@@ -61,17 +60,17 @@ describe('ImageMultipleChoiceQuestion', () => {
     const imageMultipleChoiceQuestion: ImageMultipleChoiceQuestion = new ImageMultipleChoiceQuestion(qId, points, "Test question text", imageBase64, choices);
     const gameSection: GameSection = {
         sectionName: sId,
-        questions: {},
+        questions: new Map<string, Question>(),
     };
-    gameSection.questions[qId] = imageMultipleChoiceQuestion;
+    gameSection.questions.set(qId, imageMultipleChoiceQuestion);
 
     const game: Game = emptyGame();
-    game.sections[sId] = gameSection;
+    game.sections.set(sId, gameSection);
 
     test('Export and re-import question via JSON', () => {
         // Export the game to JsonQuiz
         const exportedQuiz = exportStaticContent(game);
-        clear(game.sections);
+        game.sections.clear();
 
         // Convert the JsonQuiz to a JSON string
         const jsonString = JSON.stringify(exportedQuiz);
@@ -84,10 +83,10 @@ describe('ImageMultipleChoiceQuestion', () => {
 
         // Assertions to verify the game state after re-import
         expect(game.sections.size).toBe(1);
-        const section = game.sections[sId];
+        const section = game.sections.get(sId);
         expect(section).toBeDefined();
         expect(section?.questions.size).toBe(1);
-        const question = section?.questions[qId];
+        const question = section?.questions.get(qId);
         expect(question).toBeDefined();
         expect(question?.questionId).toBe(qId);
         expect(question).toEqual(imageMultipleChoiceQuestion);

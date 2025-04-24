@@ -1,12 +1,3 @@
-export function deleteAll(value?: object) {
-    if(!value) {
-        return;
-    }
-    for(const key of Object.keys(value)) {
-        delete (value as any)[key];
-    }
-}
-
 export function asSet<VALUE>(value?: VALUE, ...others: Array<VALUE>): Set<VALUE> {
     const result: Set<VALUE> = new Set<VALUE>();
     if(value) {

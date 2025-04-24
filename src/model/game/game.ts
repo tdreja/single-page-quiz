@@ -1,8 +1,6 @@
 import {Team, TeamColor} from "./team";
 import {Emoji, Player} from "./player";
 import { Question } from "../quiz/question";
-import {ByColor, ByEmoji, ByString} from "./key-value.ts";
-
 
 export enum GameState {
     TEAM_SETUP = 'team-setup',
@@ -26,7 +24,7 @@ export enum RoundState {
  */
 export interface GameSection {
     readonly sectionName: string;
-    readonly questions: ByString<Question>;
+    readonly questions: Map<string, Question>;
 }
 
 export interface GameRound {
@@ -42,11 +40,11 @@ export interface GameRound {
  * Container with all game data
  */
 export interface Game {
-    readonly sections: ByString<GameSection>;
+    readonly sections: Map<string, GameSection>;
     readonly availableEmojis: Set<Emoji>;
     readonly availableColors: Set<TeamColor>;
-    readonly players: ByEmoji<Player>;
-    readonly teams: ByColor<Team>;
+    readonly players: Map<Emoji, Player>;
+    readonly teams: Map<TeamColor, Team>;
     round: GameRound | null;
     roundsCounter: number;
     state: GameState;
@@ -54,11 +52,11 @@ export interface Game {
 
 export function emptyGame(): Game {
     return {
-        sections: {},
+        sections: new Map(),
         availableEmojis: new Set(),
         availableColors: new Set(),
-        players: {},
-        teams: {},
+        players: new Map(),
+        teams: new Map(),
         round: null,
         roundsCounter: 0,
         state: GameState.TEAM_SETUP
@@ -71,7 +69,7 @@ export function getTeams(game: Game, colors?: Array<TeamColor> | Set<TeamColor>)
     }
     const teams: Array<Team> = [];
     for(const color of colors) {
-        const team = game.teams[color];
+        const team = game.teams.get(color);
         if(team) {
             teams.push(team);
         }

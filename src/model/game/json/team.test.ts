@@ -4,24 +4,25 @@ import { Team, TeamColor } from "../team";
 import { restoreGame } from "./game";
 import { storePlayer } from "./player";
 import { JsonTeam, restoreTeams, storeTeam } from "./team";
-import {deleteAll} from "../../common.ts";
 
 const game: Game = emptyGame();
-game.players.CAMEL = {
+const camel: Player = {
     name: Emoji.CAMEL,
     emoji: Emoji.CAMEL,
     points: 0,
     team: null
-};
-game.players.BEAVER = {
+}
+game.players.set(Emoji.CAMEL, camel);
+const beaver: Player = {
     name: Emoji.BEAVER,
     emoji: Emoji.BEAVER,
     points: 0,
     team: null
-};
+}
+game.players.set(Emoji.BEAVER, beaver);
 
 beforeEach(() => {
-    deleteAll(game.teams);
+    game.teams.clear();
     game.availableColors.clear();
     game.availableColors.add(TeamColor.BLUE);
     game.availableColors.add(TeamColor.RED);
@@ -40,45 +41,45 @@ const jsonRed: JsonTeam = {
 
 test('No teams, one from JSON', () => {
     restoreTeams(game, { teams: [jsonBlue] });
-    expect(Object.keys(game.teams)).toEqual([TeamColor.BLUE]);
+    expect(game.teams.size).toBe(1);
     expect(game.availableColors).toContain(TeamColor.RED);
     expect(game.availableColors.size).toBe(1);
-    const teamBlue = game.teams.BLUE;
+    const teamBlue = game.teams.get(TeamColor.BLUE);
     expect(teamBlue).toBeTruthy();
     expect(teamBlue?.points).toBe(100);
     const players = teamBlue?.players;
-    expect(players ? Object.keys(players) : []).toBe([Emoji.BEAVER]);
-    expect(players?.BEAVER).toBeDefined();
+    expect(players?.size).toBe(1);
+    expect(players?.get(Emoji.BEAVER)).toBe(beaver);
 });
 
 test('One team, two from JSON', () => {
     restoreTeams(game, { teams: [jsonBlue]});
-    expect(Object.keys(game.teams)).toEqual([TeamColor.BLUE]);
+    expect(game.teams.size).toBe(1);
     
     restoreTeams(game, { teams: [jsonBlue, jsonRed]});
-    expect(Object.keys(game.teams)).toEqual([TeamColor.BLUE, TeamColor.RED]);
+    expect(game.teams.size).toBe(2);
     expect(game.availableColors.size).toBe(0);
-    expect(game.teams.BLUE).toBeDefined();
+    expect(game.teams.get(TeamColor.BLUE)).toBeTruthy();
 
-    const teamRed = game.teams.RED;
+    const teamRed = game.teams.get(TeamColor.RED);
     expect(teamRed).toBeTruthy();
     expect(teamRed?.points).toBe(200);
     const players = teamRed?.players;
-    expect(players ? Object.keys(players) : []).toBe([Emoji.CAMEL]);
-    expect(players?.CAMEL).toBeDefined();
+    expect(players?.size).toBe(1);
+    expect(players?.get(Emoji.CAMEL)).toBe(camel);
 });
 
 test('Two teams, one from JSON', () => {
     restoreTeams(game, { teams: [jsonBlue, jsonRed]});
-    expect(Object.keys(game.teams)).toEqual([TeamColor.BLUE, TeamColor.RED]);
+    expect(game.teams.size).toBe(2);
 
     restoreTeams(game, { teams: [jsonRed]});
-    expect(Object.keys(game.teams)).toEqual([TeamColor.RED]);
-    expect(game.teams.BLUE).toBeUndefined();
+    expect(game.teams.size).toBe(1);
+    expect(game.teams.get(TeamColor.BLUE)).toBeUndefined();
     expect(game.availableColors.size).toBe(1);
     expect(game.availableColors).toContain(TeamColor.BLUE);
 
-    expect(game.teams.RED).toBeTruthy();
+    expect(game.teams.get(TeamColor.RED)).toBeTruthy();
 });
 
 test('Store team as JSON', () => {
@@ -91,19 +92,19 @@ test('Store team as JSON', () => {
     const team: Team = {
         color: TeamColor.GREEN,
         points: 200,
-        players: {
-            CAT: player
-        }
+        players: new Map(),
     }
+    team.players.set(Emoji.CAT, player);
 
     const jsonPlayer = storePlayer(player);
     const jsonTeam = storeTeam(team);
 
     restoreGame(game, { teams: [jsonTeam], players: [jsonPlayer]});
-    expect(Object.keys(game.players)).toEqual([Emoji.CAT]);
-    expect(Object.keys(game.teams)).toEqual([TeamColor.GREEN]);
+    expect(game.players.size).toBe(1);
+    expect(game.players.get(Emoji.CAT)).toBeTruthy();
+    expect(game.teams.size).toBe(1);
     
-    const restored = game.teams.GREEN;
-    expect(restored).toBeDefined();
+    const restored = game.teams.get(TeamColor.GREEN);
+    expect(restored).toBeTruthy();
     expect(restored).toEqual(team);
 });

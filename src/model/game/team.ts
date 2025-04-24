@@ -1,5 +1,4 @@
-import {Player} from "./player";
-import {ByEmoji} from "./key-value.ts";
+import {Emoji, Player} from "./player";
 
 export enum TeamColor {
     RED = 'RED',
@@ -15,7 +14,7 @@ export enum TeamColor {
 export interface Team {
     readonly color: TeamColor,
     points: number,
-    readonly players: ByEmoji<Player>,
+    readonly players: Map<Emoji, Player>,
     gamepad?: number
 }
 
