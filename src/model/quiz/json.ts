@@ -5,6 +5,7 @@ import { ActionQuestion } from "./action-question";
 import { EstimateQuestion } from "./estimate-question";
 import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from "./multiple-choice-question";
 import { Question, QuestionType } from "./question";
+import {clear, iteratorOf, map} from "../game/key-value.ts";
 
 /**
  * Static data for a complete quiz with all sections
@@ -58,7 +59,7 @@ export interface JsonMutableState {
 
 export function exportStaticContent(game: Game): JsonQuiz {
     const sections: Array<JsonQuizSection> = [];
-    for(const section of game.sections.values()) {
+    for(const section of iteratorOf(game.sections)) {
         sections.push(exportStaticSectionContent(section));
     }
     return {
@@ -67,14 +68,14 @@ export function exportStaticContent(game: Game): JsonQuiz {
 }
 
 export function updateJsonQuizAtGame(game: Game, quiz?: JsonQuiz) {
-    game.sections.clear();
+    clear(game.sections);
     if(!quiz || !quiz.sections) {
         return;
     }
     for(const section of quiz.sections) {
         const gameSection = jsonQuizSectionToGameSection(section);
         if(gameSection) {
-            game.sections.set(gameSection.sectionName, gameSection);
+            game.sections[gameSection.sectionName] = gameSection;
         }
     }
 }
@@ -82,7 +83,7 @@ export function updateJsonQuizAtGame(game: Game, quiz?: JsonQuiz) {
 function exportStaticSectionContent(section: GameSection): JsonQuizSection {
     return {
         sectionName: section.sectionName,
-        questions: Array.from(section.questions.values()).map((q) => q.exportJsonQuestionContent())
+        questions: map(q => q.exportJsonQuestionContent(), section.questions)
     }
 }
 
@@ -92,7 +93,7 @@ function jsonQuizSectionToGameSection(json?: JsonQuizSection): GameSection | nul
     }
     const section: GameSection = {
         sectionName: json.sectionName,
-        questions: new Map<string, Question>()
+        questions: {}
     };
     if(!json.questions) {
         return section;
@@ -100,7 +101,7 @@ function jsonQuizSectionToGameSection(json?: JsonQuizSection): GameSection | nul
     for(const jsonQuestion of json.questions) {
         const gameQuestion = jsonContentToQuestion(json.sectionName, jsonQuestion);
         if(gameQuestion) {
-            section.questions.set(gameQuestion.questionId, gameQuestion);
+            section.questions[gameQuestion.questionId] = gameQuestion;
         }
     }
     return section;
