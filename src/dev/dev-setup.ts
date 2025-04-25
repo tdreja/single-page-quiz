@@ -3,6 +3,7 @@ import {
     Game,
     GameRound,
     GameSection,
+    GameState,
     RoundState,
 } from '../model/game/game';
 import { addAllEmojisTo, Emoji } from '../model/game/player';
@@ -140,4 +141,5 @@ export function prepareGame(game: Game) {
     section.questions.set(textQuestion.questionId, textQuestion);
     game.sections.set(section.sectionName, section);
     game.round = round;
+    game.state = GameState.GAME_ACTIVE;
 }

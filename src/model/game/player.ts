@@ -47,3 +47,11 @@ export function addAllEmojisTo(set: Set<Emoji>) {
         set.add(color as Emoji);
     }
 }
+
+export function sortPlayersHighestFirst(p1: Player, p2: Player): number {
+    const sort = p2.points - p1.points;
+    if (sort != 0) {
+        return sort;
+    }
+    return p1.name.localeCompare(p2.name);
+}

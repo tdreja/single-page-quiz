@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './game.css';
-import { TeamsNav } from './components/game/TeamsNav';
+import { TeamsBottomNav } from './components/game/TeamsBottomNav';
 import React, { useCallback, useEffect, useState } from 'react';
 import { emptyGame, Game } from './model/game/game';
 import { Changes, GameEvent, restoreChanges, storeChanges } from './events/common-events';
@@ -22,7 +22,6 @@ function App() {
             if (channel) {
                 channel.postMessage(JSON.stringify(storeChanges(update.updates)));
             }
-            console.log('Send updates', update.updates);
             setGame(update.updatedGame);
         }
     }, [game]);
@@ -30,7 +29,6 @@ function App() {
     // Update the game, if another tab has changed it
     const onChannelEvent = useCallback<ChannelListener>((event: MessageEvent) => {
         const changes = restoreChanges(JSON.parse(event.data));
-        console.log('Receive updates', changes, event.data);
         const updatedGame = restoreGame(game, changes);
         setGame(updatedGame);
     }, []);
@@ -39,6 +37,7 @@ function App() {
     useEffect(() => {
         const updatedGame = restoreGame(game, [Changes.QUIZ_CONTENT, Changes.GAME_SETUP, Changes.CURRENT_ROUND]);
         if (updatedGame.players.size === 0) {
+            console.warn('No game in storage, use DEV one');
             prepareGame(updatedGame);
         }
         setGame(updatedGame);
@@ -73,7 +72,7 @@ function App() {
                         </article>
                     </div>
                 </main>
-                <TeamsNav />
+                <TeamsBottomNav />
             </GameEventContext.Provider>
         </GameContext.Provider>
     );

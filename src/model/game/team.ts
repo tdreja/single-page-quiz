@@ -23,3 +23,11 @@ export function addAllColorsTo(set: Set<TeamColor>) {
         set.add(color as TeamColor);
     }
 }
+
+export function sortTeamsHighestFirst(t1: Team, t2: Team): number {
+    const sort = t2.points - t1.points;
+    if (sort != 0) {
+        return sort;
+    }
+    return t1.color.localeCompare(t2.color);
+}
