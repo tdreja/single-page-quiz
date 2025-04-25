@@ -1,6 +1,8 @@
 import React, { ReactElement } from 'react';
 import { Team } from '../../model/game/team';
-import { getEmojiCharacter, Player } from '../../model/game/player';
+import { Player } from '../../model/game/player';
+import { EmojiView } from '../common/EmojiView';
+import { backgroundColor, textColor } from '../common/Colors';
 
 export interface TeamProps {
     team: Team,
@@ -21,7 +23,11 @@ export const TeamView = ({ team }: TeamProps): ReactElement => {
         >
             <div
                 part="team-headline"
-                className="card-header d-inline-flex flex-row gap-1 justify-content-between bg-team-color"
+                className="card-header d-inline-flex flex-row gap-1 justify-content-between"
+                style={{
+                    color: textColor[team.color],
+                    backgroundColor: backgroundColor[team.color],
+                }}
             >
                 <span part="team-name">{team.color}</span>
                 <span part="team-points">{team.points}</span>
@@ -40,12 +46,7 @@ const PlayerView = ({ player }: PlayerProps): ReactElement => {
             id={`player-${player.emoji}`}
             key={player.emoji}
         >
-            <span
-                part="emoji"
-                className="bg-body-secondary"
-                dangerouslySetInnerHTML={{ __html: getEmojiCharacter(player.emoji) }}
-            >
-            </span>
+            <EmojiView emoji={player.emoji} part="emoji" className="bg-body-secondary" />
             <span part="player-name" className="flex-grow-1">{player.name}</span>
             <span part="player-points" className="me-2">{player.points}</span>
         </div>
