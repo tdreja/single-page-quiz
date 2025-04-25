@@ -6,9 +6,10 @@ import { emptyGame, Game } from './model/game/game';
 import { Changes, GameEvent, restoreChanges, storeChanges } from './events/common-events';
 import { GameContext, GameEventContext, GameEventListener } from './components/common/GameContext';
 import { prepareGame } from './dev/dev-setup';
-import { restoreGame, storeGame } from './components/common/Storage';
+import { restoreGameFromStorage, storeGameInStorage } from './components/common/Storage';
 import { SettingsBar } from './components/common/SettingsBar';
 import { TabContext, TabSettings } from './components/common/TabContext';
+import { BroadcastJson, restoreGameFromBroadcast, toBroadcastJson } from './model/broadcast';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -27,24 +28,23 @@ function App() {
         console.log('Game Event', event);
         const update = event.updateGame(game);
         if (update.updates.length > 0) {
-            storeGame(update.updatedGame, update.updates);
             console.log('Send message to channel', update.updates);
-            channel.postMessage(JSON.stringify(storeChanges(update.updates)));
+            storeGameInStorage(update.updatedGame, update.updates);
+            channel.postMessage(JSON.stringify(toBroadcastJson(update.updatedGame, update.updates)));
             setGame(update.updatedGame);
         }
     }, [game]);
 
     // Update the game, if another tab has changed it
     const onChannelEvent = useCallback<ChannelListener>((event: MessageEvent) => {
-        const changes = restoreChanges(JSON.parse(event.data));
-        const updatedGame = restoreGame(game, changes);
-        console.log('Received message from channel', event.data);
-        setGame(updatedGame);
+        console.log('Received message from channel');
+        const json: BroadcastJson = JSON.parse(event.data);
+        setGame(restoreGameFromBroadcast(game, json));
     }, []);
 
     // Load initial state of the game
     useEffect(() => {
-        const updatedGame = restoreGame(game, [Changes.QUIZ_CONTENT, Changes.GAME_SETUP, Changes.CURRENT_ROUND]);
+        const updatedGame = restoreGameFromStorage(game, [Changes.QUIZ_CONTENT, Changes.GAME_SETUP, Changes.CURRENT_ROUND]);
         if (updatedGame.players.size === 0) {
             console.warn('No game in storage, use DEV one');
             prepareGame(updatedGame);

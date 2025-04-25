@@ -3,7 +3,7 @@ import { Game } from '../../model/game/game';
 import { exportCurrentRound, exportGame, importCurrentRound, importGame, JsonCurrentRound, JsonStaticGameData, JsonUpdatableGameData } from '../../model/game/json/game';
 import { exportStaticGameContent, importStaticGameContent } from '../../model/quiz/json';
 
-export function storeGame(game: Game, updates: Array<Changes>) {
+export function storeGameInStorage(game: Game, updates: Array<Changes>) {
     if (updates.includes(Changes.QUIZ_CONTENT)) {
         storeStaticGameData(exportStaticGameContent(game));
     }
@@ -15,7 +15,7 @@ export function storeGame(game: Game, updates: Array<Changes>) {
     }
 }
 
-export function restoreGame(original: Game, updates: Array<Changes>): Game {
+export function restoreGameFromStorage(original: Game, updates: Array<Changes>): Game {
     if (updates.length === 0) {
         return original;
     }
