@@ -1,6 +1,9 @@
 import { Game, GameRound, GameState } from '../model/game/game';
 
 export enum EventType {
+    // Global events
+    SWITCH_GAME_STATE = 'switch-game-state',
+
     // Events for each round
     START_ROUND = 'start-round',
     ACTIVATE_BUZZER = 'activate-buzzer',

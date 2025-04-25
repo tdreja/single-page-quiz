@@ -1,5 +1,5 @@
 import { nextRandom, shuffleArray } from '../model/common';
-import { Game } from '../model/game/game';
+import { Game, GameState } from '../model/game/game';
 import { Emoji, Player } from '../model/game/player';
 import { Team, TeamColor } from '../model/game/team';
 import { BasicGameEvent, Changes, EventType, GameUpdate, noUpdate, update } from './common-events';
@@ -223,5 +223,22 @@ export class ShuffleTeamsEvent extends BasicGameEvent {
             };
             game.teams.set(color, team);
         }
+    }
+}
+
+export class SwitchStateEvent extends BasicGameEvent {
+    private readonly _targetState: GameState;
+
+    public constructor(targetState: GameState) {
+        super(EventType.SWITCH_GAME_STATE);
+        this._targetState = targetState;
+    }
+
+    public updateGame(game: Game): GameUpdate {
+        if (game.state === this._targetState) {
+            return noUpdate(game);
+        }
+        game.state = this._targetState;
+        return update(game, Changes.GAME_SETUP);
     }
 }

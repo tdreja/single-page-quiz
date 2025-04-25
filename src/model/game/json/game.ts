@@ -1,7 +1,7 @@
 import { arrayAsSet } from '../../common';
 import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../../quiz/json';
 import { Question } from '../../quiz/question';
-import { Game, GameSection, RoundState } from '../game';
+import { Game, GameSection, GameState, RoundState } from '../game';
 import { TeamColor } from '../team';
 import { JsonPlayer, restorePlayers as importPlayers, storePlayer } from './player';
 import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team';
@@ -21,6 +21,7 @@ export interface JsonUpdatableGameData {
     teams?: Array<JsonTeam>,
     players?: Array<JsonPlayer>,
     sections?: Array<JsonDynamicSectionData>,
+    state?: GameState,
 }
 
 type OptionalGameSection = {
@@ -81,6 +82,7 @@ export function exportGame(game: Game): JsonUpdatableGameData {
         teams,
         players,
         sections,
+        state: game.state,
     };
 }
 
@@ -99,12 +101,16 @@ export function exportCurrentRound(game: Game): JsonCurrentRound {
 }
 
 export function importGame(game: Game, json?: JsonUpdatableGameData) {
+    console.warn('Import JSON', json);
     if (!json) {
         return;
     }
     importPlayers(game, json);
     importTeams(game, json);
     importCompletedQuestions(game, json);
+    if (json.state) {
+        game.state = json.state;
+    }
 }
 
 export function getQuestion(game: Game, sectionName?: string, questionId?: string): Question | undefined {
