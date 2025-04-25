@@ -1,8 +1,7 @@
 import js from '@eslint/js'
 import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
+import stylistic from '@stylistic/eslint-plugin'
 
 export default tseslint.config(
   { ignores: ['dist'] },
@@ -14,20 +13,11 @@ export default tseslint.config(
       globals: globals.browser,
     },
     plugins: {
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+        '@stylistic': stylistic,
     },
     rules: {
-      ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
-        "max-len": [ "warn",{ "code": 140, "ignoreComments": true, "ignoreStrings": true, "ignoreTemplateLiterals": true, "ignoreRegExpLiterals": true } ],
-        "indent": ["warn", 4, { "SwitchCase": 1 }],
-        "react/jsx-indent": ["warn", 4],
-        "react/jsx-indent-props": ["warn", 4],
-        "@typescript-eslint/indent": ["warn", 4, { "SwitchCase": 1 }],
+        ...stylistic.configs.recommended.rules,
+        "@stylistic/max-len": [ "warn",{ "code": 140, "ignoreComments": true, "ignoreStrings": true, "ignoreTemplateLiterals": true, "ignoreRegExpLiterals": true } ],
         '@typescript-eslint/no-unused-vars': ['warn', {
           "args": "all",
           "argsIgnorePattern": "^_",
@@ -36,7 +26,23 @@ export default tseslint.config(
           "destructuredArrayIgnorePattern": "^_",
           "varsIgnorePattern": "^_",
           "ignoreRestSiblings": true
-      }]
+      }],
+        "@stylistic/indent": ["warn", 4, { "SwitchCase": 1 }],
+        "@stylistic/semi": ['error', 'always'],
+        '@stylistic/comma-dangle': ['error', 'always-multiline'],
+        '@stylistic/brace-style': ['error', '1tbs'],
+        '@stylistic/arrow-parens': ['error', 'always'],
+        '@stylistic/member-delimiter-style': ['error', {
+            'multiline': {
+                'delimiter': 'comma',
+                'requireLast': true
+            },
+            'singleline': {
+                'delimiter': 'comma',
+                'requireLast': true
+            },
+            'multilineDetection': 'brackets'
+        }],
     },
   },
 )
