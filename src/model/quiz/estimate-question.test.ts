@@ -1,10 +1,11 @@
-import { emptyGame, Game, GameRound, GameSection, RoundState } from '../game/game.ts';
-import { Question } from './question.ts';
-import { exportStaticContent, updateJsonQuizAtGame } from './json.ts';
-import { EstimateQuestion } from './estimate-question.ts';
-import { JsonCurrentRound, JsonStaticGameData, restoreCurrentRound, storeCurrentRound } from '../game/json/game.ts';
-import { asSet } from '../common.ts';
-import { TeamColor } from '../game/team.ts';
+import { describe, expect, test, beforeEach } from '@jest/globals';
+import { emptyGame, Game, GameRound, GameSection, RoundState } from '../game/game';
+import { Question } from './question';
+import { exportStaticContent, updateJsonQuizAtGame } from './json';
+import { EstimateQuestion } from './estimate-question';
+import { JsonCurrentRound, JsonStaticGameData, restoreCurrentRound, storeCurrentRound } from '../game/json/game';
+import { asSet } from '../common';
+import { TeamColor } from '../game/team';
 
 describe('EstimateQuestion', () => {
     let sId: string;

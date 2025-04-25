@@ -1,3 +1,4 @@
+import { test } from '@jest/globals';
 import { emptyGame, Game, GameSection, GameState } from '../model/game/game';
 import { Emoji, Player } from '../model/game/player';
 import { Team, TeamColor } from '../model/game/team';

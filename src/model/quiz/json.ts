@@ -5,7 +5,7 @@ import { ActionQuestion } from './action-question';
 import { EstimateQuestion } from './estimate-question';
 import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question';
 import { Question, QuestionType } from './question';
-import { JsonStaticGameData, JsonStaticSectionData } from '../game/json/game.ts';
+import { JsonStaticGameData, JsonStaticSectionData } from '../game/json/game';
 
 /**
  * Static content of a question in the game

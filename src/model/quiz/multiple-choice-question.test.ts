@@ -1,10 +1,11 @@
-import { emptyGame, Game, GameRound, GameSection, RoundState } from '../game/game.ts';
-import { Question } from './question.ts';
-import { exportStaticContent, updateJsonQuizAtGame } from './json.ts';
-import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question.ts';
-import { TeamColor } from '../game/team.ts';
-import { JsonCurrentRound, JsonStaticGameData, restoreCurrentRound, storeCurrentRound } from '../game/json/game.ts';
-import { asSet } from '../common.ts';
+import { describe, expect, test, beforeEach } from '@jest/globals';
+import { emptyGame, Game, GameRound, GameSection, RoundState } from '../game/game';
+import { Question } from './question';
+import { exportStaticContent, updateJsonQuizAtGame } from './json';
+import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question';
+import { TeamColor } from '../game/team';
+import { JsonCurrentRound, JsonStaticGameData, restoreCurrentRound, storeCurrentRound } from '../game/json/game';
+import { asSet } from '../common';
 
 describe('TextMultipleChoiceQuestion', () => {
     const sId = 'Test';
