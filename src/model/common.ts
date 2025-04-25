@@ -34,7 +34,7 @@ export function nextRandom<VALUE>(values: Set<VALUE>): VALUE | null {
     }
     const randNr = Math.floor(Math.random() * values.size);
     let count = 0;
-    for(let value of values) {
+    for(const value of values) {
         if(count === randNr) {
             return value;
         }

@@ -3,7 +3,6 @@ import './game.css';
 
 import { prepareGame } from './dev/dev-setup';
 import { EventType, GameEvent } from "./events/common-events";
-import { renderQuestion } from "./renderer/question-renderer";
 import { renderTeams } from "./renderer/teams-renderer";
 import { Game, GameState } from './model/game/game';
 import { JsonUpdatableGameData, restoreGame, storeGame } from './model/game/json/game';
@@ -33,7 +32,6 @@ if(previousGame) {
 const eventListener: EventListener = (ev: Event) => {
     if(ev instanceof GameEvent && ev.updateGame(game)) {
         renderTeams(game);
-        renderQuestion(game);
     }
 }
 
@@ -44,4 +42,3 @@ for(const type of Object.values(EventType)) {
 
 // Start the game
 renderTeams(game);
-renderQuestion(game);

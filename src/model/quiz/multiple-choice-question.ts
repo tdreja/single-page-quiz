@@ -90,7 +90,7 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
     }
 
     public get choicesSorted(): Array<TextChoice> {
-        return Array.from(this._choices.values()).sort((a,b) => a.choiceId.localeCompare(a.choiceId));
+        return Array.from(this._choices.values()).sort((a,b) => a.choiceId.localeCompare(b.choiceId));
     }
 
     protected get jsonChoices(): Array<JsonStaticChoiceData> {

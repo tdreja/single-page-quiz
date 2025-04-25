@@ -31,6 +31,7 @@ export interface JsonStaticChoiceData {
 }
 
 export type IndexedByColor = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [color in TeamColor]?: any;
 }
 

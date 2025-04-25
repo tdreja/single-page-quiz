@@ -170,7 +170,7 @@ export class RemovePlayerEvent extends GameEvent {
         game.teams.delete(this._color);
         game.availableColors.add(this._color);
 
-        for(let [_, player] of team.players) {
+        for(const [_, player] of team.players) {
             addPlayerSmallestToTeam(player, game.teams);
         }
         return [EventChange.GAME];
@@ -181,9 +181,9 @@ export class RemovePlayerEvent extends GameEvent {
 
     private readonly _teamCount: number;
 
-    public constructor(teamCount: any, eventInitDict?: EventInit) {
+    public constructor(teamCount: number, eventInitDict?: EventInit) {
         super(EventType.SHUFFLE_TEAMS, eventInitDict);
-        this._teamCount = Number(teamCount);
+        this._teamCount = teamCount;
     }
 
     public updateGame(game: Game): Array<EventChange> {
@@ -200,7 +200,7 @@ export class RemovePlayerEvent extends GameEvent {
         shuffleArray(randomPlayers);
 
         // Take each player and add to the smallest team
-        for(let player of randomPlayers) {
+        for(const player of randomPlayers) {
             addPlayerSmallestToTeam(player, game.teams);
         }
         return [EventChange.GAME];

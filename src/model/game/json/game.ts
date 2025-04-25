@@ -64,7 +64,7 @@ export function storeGame(game: Game): JsonUpdatableGameData {
     // Only export already completed questions
     const sections: Array<JsonDynamicSectionData> = [];
     for(const section of game.sections.values()) {
-        let completedQuestions: Array<JsonDynamicQuestionData> = [];
+        const completedQuestions: Array<JsonDynamicQuestionData> = [];
         for(const question of section.questions.values()) {
             if(question.completed) {
                 completedQuestions.push(question.exportDynamicQuestionData());

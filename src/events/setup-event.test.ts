@@ -19,7 +19,7 @@ test('nextRandom', () => {
     expect(nextRandom(values)).toBe('First');
 
     values.add('Second');
-    let random = nextRandom(values);
+    const random = nextRandom(values);
     expect(random == 'First' || random === 'Second').toBe(true);
 });
 

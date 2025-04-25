@@ -23,6 +23,20 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+        "max-len": [ "warn",{ "code": 140, "ignoreComments": true, "ignoreStrings": true, "ignoreTemplateLiterals": true, "ignoreRegExpLiterals": true } ],
+        "indent": ["warn", 4, { "SwitchCase": 1 }],
+        "react/jsx-indent": ["warn", 4],
+        "react/jsx-indent-props": ["warn", 4],
+        "@typescript-eslint/indent": ["warn", 4, { "SwitchCase": 1 }],
+        '@typescript-eslint/no-unused-vars': ['warn', {
+          "args": "all",
+          "argsIgnorePattern": "^_",
+          "caughtErrors": "all",
+          "caughtErrorsIgnorePattern": "^_",
+          "destructuredArrayIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "ignoreRestSiblings": true
+      }]
     },
   },
 )

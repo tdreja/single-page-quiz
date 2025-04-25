@@ -58,7 +58,7 @@ export class ActivateBuzzerEvent extends GameRoundEvent {
         super(EventType.ACTIVATE_BUZZER, eventInitDict);
     }
 
-    public updateQuestionRound(game: Game, round: GameRound): Array<EventChange> {
+    public updateQuestionRound(_: Game, round: GameRound): Array<EventChange> {
         // Skip non-relevant states
         if(round.state === RoundState.SHOW_QUESTION) {
             round.state = RoundState.BUZZER_ACTIVE;
@@ -111,7 +111,7 @@ export class SkipRoundEvent extends GameRoundEvent {
         super(EventType.SKIP_ROUND, eventInitDict);
     }
 
-    public updateQuestionRound(game: Game, round: GameRound): Array<EventChange> {
+    public updateQuestionRound(_: Game, round: GameRound): Array<EventChange> {
         if(round.state === RoundState.SHOW_RESULTS) {
             return [];
         }

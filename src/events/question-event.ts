@@ -9,10 +9,10 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
     private readonly _choiceId: string;
     private readonly _overrideTeam: TeamColor | null;
 
-    public constructor(choiceId: string, overrideTeam?: string, eventInitDict?: EventInit) {
+    public constructor(choiceId: string, overrideTeam?: TeamColor, eventInitDict?: EventInit) {
         super(EventType.SELECT_FROM_MULTIPLE_CHOICE, eventInitDict);
         this._choiceId = choiceId;
-        this._overrideTeam = overrideTeam ? overrideTeam as TeamColor : null;
+        this._overrideTeam = overrideTeam || null;
     }
 
     public updateQuestionRound(game: Game, round: GameRound): Array<EventChange> {
@@ -75,10 +75,10 @@ export class SubmitEstimateEvent extends GameRoundEvent {
     private readonly _team: TeamColor;
     private readonly _estimate: number;
 
-    public constructor(team: string, estimate: any, eventInitDict?: EventInit) {
+    public constructor(team: string, estimate: number, eventInitDict?: EventInit) {
         super(EventType.SUBMIT_ESTIMATE, eventInitDict);
         this._team = team as TeamColor;
-        this._estimate = Number(estimate);
+        this._estimate = estimate;
     }
 
     public updateQuestionRound(game: Game, round: GameRound): Array<EventChange> {
@@ -99,7 +99,7 @@ export class SubmitEstimateEvent extends GameRoundEvent {
 
         let closestTeams: Array<TeamColor> = [];
         let closestDistance: number | null = null;
-        for(let [team,estimate] of question.estimates) {
+        for(const [team,estimate] of question.estimates) {
             const dist = Math.abs(question.target - estimate);
             if(closestDistance === null || closestDistance > dist) {
                 closestTeams = [team];
