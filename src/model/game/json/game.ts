@@ -1,17 +1,17 @@
-import { arrayAsSet } from "../../common";
-import {JsonDynamicQuestionData, JsonStaticQuestionData} from "../../quiz/json";
-import { Question } from "../../quiz/question";
-import {Game, GameSection, RoundState} from "../game";
-import { TeamColor } from "../team";
-import { JsonPlayer, restorePlayers, storePlayer } from "./player";
-import { JsonTeam, restoreTeams, storeTeam } from "./team";
+import { arrayAsSet } from '../../common';
+import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../../quiz/json';
+import { Question } from '../../quiz/question';
+import { Game, GameSection, RoundState } from '../game';
+import { TeamColor } from '../team';
+import { JsonPlayer, restorePlayers, storePlayer } from './player';
+import { JsonTeam, restoreTeams, storeTeam } from './team';
 
 /**
  * Static data for a complete quiz with all sections
  * @see Game
  */
 export interface JsonStaticGameData {
-    sections?: Array<JsonStaticSectionData>
+    sections?: Array<JsonStaticSectionData>,
 }
 
 /**
@@ -20,26 +20,26 @@ export interface JsonStaticGameData {
 export interface JsonUpdatableGameData {
     teams?: Array<JsonTeam>,
     players?: Array<JsonPlayer>,
-    sections?: Array<JsonDynamicSectionData>
+    sections?: Array<JsonDynamicSectionData>,
 }
 
 type OptionalGameSection = {
     [property in keyof GameSection as Exclude<property, 'questions'>]?: GameSection[property]
-}
+};
 
 /**
  * Named Group/section of questions containing static content
  * @see GameSection
  */
 export interface JsonStaticSectionData extends OptionalGameSection {
-    questions?: Array<JsonStaticQuestionData>
+    questions?: Array<JsonStaticQuestionData>,
 }
 
 /**
  * Named Group/section of questions containing updatable content
  */
 export interface JsonDynamicSectionData extends OptionalGameSection {
-    questions?: Array<JsonDynamicQuestionData>
+    questions?: Array<JsonDynamicQuestionData>,
 }
 
 /**
@@ -55,25 +55,24 @@ export interface JsonCurrentRound {
     timerStart?: string,
 }
 
-
 export function storeGame(game: Game): JsonUpdatableGameData {
     // Export all players and teams
-    const players = Array.from(game.players.values()).map(player => storePlayer(player));
-    const teams = Array.from(game.teams.values()).map(team => storeTeam(team));
+    const players = Array.from(game.players.values()).map((player) => storePlayer(player));
+    const teams = Array.from(game.teams.values()).map((team) => storeTeam(team));
 
     // Only export already completed questions
     const sections: Array<JsonDynamicSectionData> = [];
-    for(const section of game.sections.values()) {
-        let completedQuestions: Array<JsonDynamicQuestionData> = [];
-        for(const question of section.questions.values()) {
-            if(question.completed) {
+    for (const section of game.sections.values()) {
+        const completedQuestions: Array<JsonDynamicQuestionData> = [];
+        for (const question of section.questions.values()) {
+            if (question.completed) {
                 completedQuestions.push(question.exportDynamicQuestionData());
             }
         }
-        if(completedQuestions.length > 0) {
+        if (completedQuestions.length > 0) {
             sections.push({
                 sectionName: section.sectionName,
-                questions: completedQuestions
+                questions: completedQuestions,
             });
         }
     }
@@ -81,26 +80,26 @@ export function storeGame(game: Game): JsonUpdatableGameData {
     return {
         teams,
         players,
-        sections
-    }
+        sections,
+    };
 }
 
 export function storeCurrentRound(game: Game): JsonCurrentRound {
-    if(game.round) {
+    if (game.round) {
         return {
             inSectionName: game.round.inSectionName,
             question: game.round.question.exportDynamicQuestionData(),
             attemptingTeams: Array.from(game.round.attemptingTeams),
             teamsAlreadyAttempted: Array.from(game.round.teamsAlreadyAttempted),
             timerStart: game.round.timerStart ? game.round.timerStart.toJSON() : undefined,
-            state: game.round.state
-        }
+            state: game.round.state,
+        };
     }
     return {};
 }
 
 export function restoreGame(game: Game, json?: JsonUpdatableGameData) {
-    if(!json) {
+    if (!json) {
         return;
     }
     restorePlayers(game, json);
@@ -109,25 +108,25 @@ export function restoreGame(game: Game, json?: JsonUpdatableGameData) {
 }
 
 export function getQuestion(game: Game, sectionName?: string, questionId?: string): Question | undefined {
-    if(!sectionName || !questionId) {
+    if (!sectionName || !questionId) {
         return undefined;
     }
     const section = game.sections.get(sectionName);
-    if(!section) {
+    if (!section) {
         return undefined;
     }
     return section.questions.get(questionId);
 }
 
 function restoreCompletedQuestions(game: Game, json: JsonUpdatableGameData) {
-    if(!json.sections) {
+    if (!json.sections) {
         return;
     }
-    for(const section of json.sections) {
-        if(section.questions) {
-            for(const jsonQuestion of section.questions) {
+    for (const section of json.sections) {
+        if (section.questions) {
+            for (const jsonQuestion of section.questions) {
                 const question = getQuestion(game, section.sectionName, jsonQuestion.questionId);
-                if(question) {
+                if (question) {
                     question.importDynamicQuestionData(jsonQuestion);
                 }
             }
@@ -136,17 +135,17 @@ function restoreCompletedQuestions(game: Game, json: JsonUpdatableGameData) {
 }
 
 export function restoreCurrentRound(game: Game, json?: JsonCurrentRound) {
-    if(!json) {
+    if (!json) {
         return;
     }
 
-    if(!json.question || !json.inSectionName) {
+    if (!json.question || !json.inSectionName) {
         game.round = null;
         return;
     }
 
     const question = getQuestion(game, json.inSectionName, json.question.questionId);
-    if(!question) {
+    if (!question) {
         game.round = null;
         return;
     }
@@ -158,6 +157,6 @@ export function restoreCurrentRound(game: Game, json?: JsonCurrentRound) {
         state: json.state || RoundState.SHOW_QUESTION,
         teamsAlreadyAttempted: arrayAsSet(json.teamsAlreadyAttempted),
         attemptingTeams: arrayAsSet(json.attemptingTeams),
-        timerStart: json.timerStart ? new Date(json.timerStart) : null
-    }
+        timerStart: json.timerStart ? new Date(json.timerStart) : null,
+    };
 }

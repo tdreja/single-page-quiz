@@ -1,24 +1,25 @@
-import { emptyGame, Game } from "../game";
-import { Emoji, Player } from "../player";
-import { Team, TeamColor } from "../team";
-import { restoreGame } from "./game";
-import { storePlayer } from "./player";
-import { JsonTeam, restoreTeams, storeTeam } from "./team";
+import { expect, test, beforeEach } from '@jest/globals';
+import { emptyGame, Game } from '../game';
+import { Emoji, Player } from '../player';
+import { Team, TeamColor } from '../team';
+import { restoreGame } from './game';
+import { storePlayer } from './player';
+import { JsonTeam, restoreTeams, storeTeam } from './team';
 
 const game: Game = emptyGame();
 const camel: Player = {
     name: Emoji.CAMEL,
     emoji: Emoji.CAMEL,
     points: 0,
-    team: null
-}
+    team: null,
+};
 game.players.set(Emoji.CAMEL, camel);
 const beaver: Player = {
     name: Emoji.BEAVER,
     emoji: Emoji.BEAVER,
     points: 0,
-    team: null
-}
+    team: null,
+};
 game.players.set(Emoji.BEAVER, beaver);
 
 beforeEach(() => {
@@ -31,13 +32,13 @@ beforeEach(() => {
 const jsonBlue: JsonTeam = {
     color: TeamColor.BLUE,
     players: [Emoji.BEAVER],
-    points: 100
-}
+    points: 100,
+};
 const jsonRed: JsonTeam = {
     color: TeamColor.RED,
     players: [Emoji.CAMEL],
-    points: 200
-}
+    points: 200,
+};
 
 test('No teams, one from JSON', () => {
     restoreTeams(game, { teams: [jsonBlue] });
@@ -53,10 +54,10 @@ test('No teams, one from JSON', () => {
 });
 
 test('One team, two from JSON', () => {
-    restoreTeams(game, { teams: [jsonBlue]});
+    restoreTeams(game, { teams: [jsonBlue] });
     expect(game.teams.size).toBe(1);
-    
-    restoreTeams(game, { teams: [jsonBlue, jsonRed]});
+
+    restoreTeams(game, { teams: [jsonBlue, jsonRed] });
     expect(game.teams.size).toBe(2);
     expect(game.availableColors.size).toBe(0);
     expect(game.teams.get(TeamColor.BLUE)).toBeTruthy();
@@ -70,10 +71,10 @@ test('One team, two from JSON', () => {
 });
 
 test('Two teams, one from JSON', () => {
-    restoreTeams(game, { teams: [jsonBlue, jsonRed]});
+    restoreTeams(game, { teams: [jsonBlue, jsonRed] });
     expect(game.teams.size).toBe(2);
 
-    restoreTeams(game, { teams: [jsonRed]});
+    restoreTeams(game, { teams: [jsonRed] });
     expect(game.teams.size).toBe(1);
     expect(game.teams.get(TeamColor.BLUE)).toBeUndefined();
     expect(game.availableColors.size).toBe(1);
@@ -87,23 +88,23 @@ test('Store team as JSON', () => {
         name: Emoji.CAT,
         emoji: Emoji.CAT,
         points: 200,
-        team: TeamColor.GREEN
+        team: TeamColor.GREEN,
     };
     const team: Team = {
         color: TeamColor.GREEN,
         points: 200,
         players: new Map(),
-    }
+    };
     team.players.set(Emoji.CAT, player);
 
     const jsonPlayer = storePlayer(player);
     const jsonTeam = storeTeam(team);
 
-    restoreGame(game, { teams: [jsonTeam], players: [jsonPlayer]});
+    restoreGame(game, { teams: [jsonTeam], players: [jsonPlayer] });
     expect(game.players.size).toBe(1);
     expect(game.players.get(Emoji.CAT)).toBeTruthy();
     expect(game.teams.size).toBe(1);
-    
+
     const restored = game.teams.get(TeamColor.GREEN);
     expect(restored).toBeTruthy();
     expect(restored).toEqual(team);

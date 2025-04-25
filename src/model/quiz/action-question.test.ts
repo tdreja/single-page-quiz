@@ -1,10 +1,11 @@
-import {ActionQuestion} from "./action-question.ts";
-import {emptyGame, Game, GameRound, GameSection, RoundState} from "../game/game.ts";
-import {Question} from "./question.ts";
-import {exportStaticContent, updateJsonQuizAtGame} from "./json.ts";
-import {JsonCurrentRound, JsonStaticGameData, restoreCurrentRound, storeCurrentRound} from "../game/json/game.ts";
-import {asSet} from "../common.ts";
-import {TeamColor} from "../game/team.ts";
+import { describe, expect, test, beforeEach } from '@jest/globals';
+import { ActionQuestion } from './action-question';
+import { emptyGame, Game, GameRound, GameSection, RoundState } from '../game/game';
+import { Question } from './question';
+import { exportStaticContent, updateJsonQuizAtGame } from './json';
+import { JsonCurrentRound, JsonStaticGameData, restoreCurrentRound, storeCurrentRound } from '../game/json/game';
+import { asSet } from '../common';
+import { TeamColor } from '../game/team';
 
 describe('ActionQuestion', () => {
     let sId: string;
@@ -18,7 +19,7 @@ describe('ActionQuestion', () => {
         sId = 'Test';
         points = 10;
         qId = `${sId}-${points}`;
-        actionQuestion = new ActionQuestion(qId, 10, "Test question text");
+        actionQuestion = new ActionQuestion(qId, 10, 'Test question text');
         gameSection = {
             sectionName: sId,
             questions: new Map<string, Question>(),
@@ -28,7 +29,6 @@ describe('ActionQuestion', () => {
         game = emptyGame();
         game.sections.set(sId, gameSection);
     });
-
 
     test('Export and re-import question via JSON', () => {
         // Export the game to JsonQuiz
@@ -63,10 +63,9 @@ describe('ActionQuestion', () => {
             state: RoundState.SHOW_QUESTION,
             teamsAlreadyAttempted: asSet(TeamColor.GREEN),
             attemptingTeams: asSet(TeamColor.ORANGE),
-            timerStart: date
+            timerStart: date,
         };
         actionQuestion.completedBy.add(TeamColor.PURPLE);
-
 
         // Export the current round to JsonCurrentRound
         const exportedRound = storeCurrentRound(game);

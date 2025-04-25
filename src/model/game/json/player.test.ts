@@ -1,20 +1,21 @@
-import { emptyGame, Game } from "../game";
-import { Emoji, Player } from "../player";
-import { TeamColor } from "../team";
-import { restoreGame } from "./game";
-import { JsonPlayer, storePlayer } from "./player";
+import { expect, test, beforeEach } from '@jest/globals';
+import { emptyGame, Game } from '../game';
+import { Emoji, Player } from '../player';
+import { TeamColor } from '../team';
+import { restoreGame } from './game';
+import { JsonPlayer, storePlayer } from './player';
 
 const game: Game = emptyGame();
 const jsonCamel: JsonPlayer = {
-  name: Emoji.CAMEL,
-  emoji: Emoji.CAMEL,
-  points: 100,
-  team: TeamColor.BLUE,
+    name: Emoji.CAMEL,
+    emoji: Emoji.CAMEL,
+    points: 100,
+    team: TeamColor.BLUE,
 };
 const jsonBeaver: JsonPlayer = {
     name: Emoji.BEAVER,
-    emoji: Emoji.BEAVER
-}
+    emoji: Emoji.BEAVER,
+};
 
 beforeEach(() => {
     game.players.clear();
@@ -24,7 +25,7 @@ beforeEach(() => {
 });
 
 test('No players, one from JSON', () => {
-    restoreGame(game, { players: [jsonCamel]});
+    restoreGame(game, { players: [jsonCamel] });
     expect(game.players.size).toBe(1);
     expect(game.availableEmojis.size).toBe(1);
     expect(game.availableEmojis).toContain(Emoji.BEAVER);
@@ -37,15 +38,15 @@ test('No players, one from JSON', () => {
 });
 
 test('One player, two from JSON', () => {
-    restoreGame(game, { players: [jsonCamel]});
+    restoreGame(game, { players: [jsonCamel] });
     expect(game.players.size).toBe(1);
     expect(game.availableEmojis.size).toBe(1);
 
-    restoreGame(game, { players: [jsonCamel, jsonBeaver]});
+    restoreGame(game, { players: [jsonCamel, jsonBeaver] });
     expect(game.players.size).toBe(2);
     expect(game.availableEmojis.size).toBe(0);
     expect(game.players.get(Emoji.CAMEL)).toBeTruthy();
-    
+
     const playerBeaver = game.players.get(Emoji.BEAVER);
     expect(playerBeaver).toBeTruthy();
     expect(playerBeaver?.name).toBe(Emoji.BEAVER);
@@ -54,11 +55,11 @@ test('One player, two from JSON', () => {
 });
 
 test('Two players, one from JSON', () => {
-    restoreGame(game, { players: [jsonCamel, jsonBeaver]});
+    restoreGame(game, { players: [jsonCamel, jsonBeaver] });
     expect(game.players.size).toBe(2);
     expect(game.availableEmojis.size).toBe(0);
 
-    restoreGame(game, { players: [jsonBeaver]});
+    restoreGame(game, { players: [jsonBeaver] });
     expect(game.players.size).toBe(1);
     expect(game.availableEmojis.size).toBe(1);
     expect(game.availableEmojis).toContain(Emoji.CAMEL);
@@ -70,10 +71,10 @@ test('Store player as JSON', () => {
         name: Emoji.CAT,
         emoji: Emoji.CAT,
         points: 200,
-        team: TeamColor.GREEN
+        team: TeamColor.GREEN,
     };
     const json = storePlayer(player);
-    restoreGame(game, { players: [json]});
+    restoreGame(game, { players: [json] });
     expect(game.players.size).toBe(1);
     const playerRestored = game.players.get(Emoji.CAT);
     expect(playerRestored).toBeTruthy();

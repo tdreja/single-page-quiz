@@ -1,9 +1,9 @@
 export function asSet<VALUE>(value?: VALUE, ...others: Array<VALUE>): Set<VALUE> {
     const result: Set<VALUE> = new Set<VALUE>();
-    if(value) {
+    if (value) {
         result.add(value);
     }
-    for(const otherValue of others) {
+    for (const otherValue of others) {
         result.add(otherValue);
     }
     return result;
@@ -11,15 +11,14 @@ export function asSet<VALUE>(value?: VALUE, ...others: Array<VALUE>): Set<VALUE>
 
 export function arrayAsSet<VALUE>(value?: Array<VALUE>): Set<VALUE> {
     const result: Set<VALUE> = new Set<VALUE>();
-    if(!value) {
+    if (!value) {
         return result;
     }
-    for(const otherValue of value) {
+    for (const otherValue of value) {
         result.add(otherValue);
     }
     return result;
 }
-
 
 export function shuffleArray<TYPE>(array: Array<TYPE>) {
     for (let i = array.length - 1; i >= 0; i--) {
@@ -29,13 +28,13 @@ export function shuffleArray<TYPE>(array: Array<TYPE>) {
 }
 
 export function nextRandom<VALUE>(values: Set<VALUE>): VALUE | null {
-    if(values.size === 0) {
+    if (values.size === 0) {
         return null;
     }
     const randNr = Math.floor(Math.random() * values.size);
     let count = 0;
-    for(let value of values) {
-        if(count === randNr) {
+    for (const value of values) {
+        if (count === randNr) {
             return value;
         }
         count++;

@@ -1,4 +1,4 @@
-import {Emoji, Player} from "./player";
+import { Emoji, Player } from './player';
 
 export enum TeamColor {
     RED = 'RED',
@@ -8,18 +8,18 @@ export enum TeamColor {
     ORANGE = 'ORANGE',
     PURPLE = 'PURPLE',
     TURQUOISE = 'TURQUOISE',
-    WHITE = 'WHITE'
+    WHITE = 'WHITE',
 }
 
 export interface Team {
     readonly color: TeamColor,
     points: number,
     readonly players: Map<Emoji, Player>,
-    gamepad?: number
+    gamepad?: number,
 }
 
 export function addAllColorsTo(set: Set<TeamColor>) {
-    for(const color of Object.keys(TeamColor)) {
+    for (const color of Object.keys(TeamColor)) {
         set.add(color as TeamColor);
     }
 }

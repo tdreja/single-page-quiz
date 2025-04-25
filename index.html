@@ -7,29 +7,7 @@
     <title>The great price</title>
   </head>
   <body>
-    <script type="module" src="/src/main.ts"></script>
-    <nav class="navbar sticky-top bg-body-secondary">Settings</nav>
-        <main class="container-fluid d-flex flex-row flex-nowrap gap-2 pt-2">
-            <div class="col">
-                <article class="card" id="text-multiple-choice">
-                    <div class="card-header">
-                        <span part="section">Section</span>
-                        <span part="points">100</span>
-                    </div>
-                    <section class="card-body">
-                        <h3 part="question-text" class="card-title mb-4">Question?</h3>
-                        <div part="answer-choices" class="answers-grid gap-2">
-                            <div choice="template" class="answer align-items-baseline gap-2">
-                                <button part="choice-id" type="button" class="btn btn-primary btn-lg">A</button>
-                                <span part="choice-text">Test</span>
-                            </div>
-                        </div>
-                    </section>
-                </article>
-            </div>
-        </main>
-    <nav id="teams-container" class="navbar fixed-bottom bg-body-secondary">
-        <!-- Teams & players are added via Javascript -->
-    </nav>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

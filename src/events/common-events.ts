@@ -1,4 +1,4 @@
-import {Game, GameRound, GameState} from "../model/game/game";
+import { Game, GameRound, GameState } from '../model/game/game';
 
 export enum EventType {
     // Events for each round
@@ -21,26 +21,24 @@ export enum EventType {
     // Events for team setup
     ADD_TEAM = 'add-team',
     REMOVE_TEAM = 'remove-team',
-    SHUFFLE_TEAMS = 'shuffle-teams'
+    SHUFFLE_TEAMS = 'shuffle-teams',
 }
 
 export enum EventChange {
     QUIZ_CONTENT = 'quiz-content',
     GAME = 'game',
-    CURRENT_ROUND = 'current-round'
+    CURRENT_ROUND = 'current-round',
 }
 
 export abstract class GameEvent extends Event {
-
     protected constructor(type: EventType, eventInitDict?: EventInit) {
         super(type, eventInitDict);
     }
 
-    public abstract updateGame(game: Game): Array<EventChange>
+    public abstract updateGame(game: Game): Array<EventChange>;
 }
 
 export abstract class GameRoundEvent extends GameEvent {
-
     protected constructor(type: EventType, eventInitDict?: EventInit) {
         super(type, eventInitDict);
     }
@@ -55,5 +53,5 @@ export abstract class GameRoundEvent extends GameEvent {
         return [];
     }
 
-    public abstract updateQuestionRound(game: Game, round: GameRound): Array<EventChange>
+    public abstract updateQuestionRound(game: Game, round: GameRound): Array<EventChange>;
 }

@@ -1,15 +1,15 @@
 interface Changes<KEY> {
-    readonly toDelete: Array<Element>;
-    readonly toUpdate: Map<KEY, Element>;
-    readonly toCreate: Array<KEY>;
-    template: Element | null;
+    readonly toDelete: Array<Element>,
+    readonly toUpdate: Map<KEY, Element>,
+    readonly toCreate: Array<KEY>,
+    template: Element | null,
 }
 
 function checkElementForChanges<KEY, VALUE>(
     attribute: string,
     map: Map<KEY, VALUE>,
     item: Element,
-    changes: Changes<KEY>
+    changes: Changes<KEY>,
 ) {
     const attributeValue = item.getAttribute(attribute);
     if (!attributeValue) {
@@ -34,10 +34,10 @@ function checkElementForChanges<KEY, VALUE>(
     changes.toDelete.push(item);
 }
 
-function checkRequiredChanges<KEY,VALUE>(
-    html: Element, 
+function checkRequiredChanges<KEY, VALUE>(
+    html: Element,
     attribute: string,
-    map: Map<KEY, VALUE>
+    map: Map<KEY, VALUE>,
 ): Changes<KEY> {
     // Find all changes
     const changes: Changes<KEY> = {
@@ -47,10 +47,9 @@ function checkRequiredChanges<KEY,VALUE>(
         template: null,
     };
     html.querySelectorAll(`[${attribute}]`).forEach((item) =>
-        checkElementForChanges(attribute, map, item, changes)
-    );
+        checkElementForChanges(attribute, map, item, changes));
     map.forEach((_, key) => {
-        if(!changes.toUpdate.has(key)) {
+        if (!changes.toUpdate.has(key)) {
             changes.toCreate.push(key);
         }
     });
@@ -58,14 +57,15 @@ function checkRequiredChanges<KEY,VALUE>(
     return changes;
 }
 
-function updateElement<KEY,VALUE>(
+function updateElement<KEY, VALUE>(
     key: KEY,
     element: Element,
-    map: Map<KEY,VALUE>,
+    map: Map<KEY, VALUE>,
     updater: (html: Element, key: KEY, value: VALUE, newElement: boolean) => void,
-    newElement: boolean) {
+    newElement: boolean,
+) {
     const value = map.get(key);
-    if(!value) {
+    if (!value) {
         return;
     }
     updater(element, key, value, newElement);
@@ -75,29 +75,29 @@ export function updateFromMap<KEY, VALUE>(
     html: Element,
     attribute: string,
     map: Map<KEY, VALUE>,
-    updater: (html: Element, key: KEY, value: VALUE, newElement: boolean) => void
+    updater: (html: Element, key: KEY, value: VALUE, newElement: boolean) => void,
 ) {
     // Find all changes
     const changes: Changes<KEY> = checkRequiredChanges(html, attribute, map);
     const template = changes.template;
-    if(!template) {
+    if (!template) {
         console.warn('No template found!', html);
         return;
     }
     console.log('changes for', map, 'changes:', changes);
 
     // Delete unused first
-    for(const item of changes.toDelete) {
-        if(item.parentNode) {
+    for (const item of changes.toDelete) {
+        if (item.parentNode) {
             item.parentNode.removeChild(item);
         }
     }
 
     // Update existing next
-    changes.toUpdate.forEach((item,key) => updateElement(key, item, map, updater, false));
+    changes.toUpdate.forEach((item, key) => updateElement(key, item, map, updater, false));
 
     // Create the missing ones
-    for(const key of changes.toCreate) {
+    for (const key of changes.toCreate) {
         const element = template.cloneNode(true) as Element;
         element.setAttribute(attribute, `${key}`);
         html.appendChild(element);
@@ -106,9 +106,9 @@ export function updateFromMap<KEY, VALUE>(
 }
 
 export function getPart(html: Element, partName: string | null): Element | null {
-    if(partName) {
-        const atElement = html.getAttribute("part");
-        if(atElement === partName) {
+    if (partName) {
+        const atElement = html.getAttribute('part');
+        if (atElement === partName) {
             return html;
         }
         return html.querySelector(`[part=${partName}]`);
@@ -118,7 +118,7 @@ export function getPart(html: Element, partName: string | null): Element | null 
 
 export function updatePartInnerHtml(html: Element, partName: string | null, innerHtml: string) {
     const part = getPart(html, partName);
-    if(part) {
+    if (part) {
         part.innerHTML = innerHtml;
     }
 }
@@ -127,10 +127,11 @@ export function updateAttributeAtPart(
     html: Element,
     partName: string | null,
     attributeName: string,
-    value: string | null | undefined) {
+    value: string | null | undefined,
+) {
     const part = getPart(html, partName);
-    if(part) {
-        if(value === null || value === undefined) {
+    if (part) {
+        if (value === null || value === undefined) {
             part.removeAttribute(attributeName);
         } else {
             part.setAttribute(attributeName, value);
@@ -140,8 +141,8 @@ export function updateAttributeAtPart(
 
 export function updateStyleAtPart(html: Element, partName: string | null, className: string, active: boolean) {
     const part = getPart(html, partName);
-    if(part) {
-        if(active) {
+    if (part) {
+        if (active) {
             part.classList.add(className);
         } else {
             part.classList.remove(className);
@@ -151,7 +152,7 @@ export function updateStyleAtPart(html: Element, partName: string | null, classN
 
 export function addClickListenerToPart(html: Element, partName: string | null, listener: EventListener) {
     const part = getPart(html, partName);
-    if(part) {
+    if (part) {
         part.addEventListener('click', listener);
     }
 }

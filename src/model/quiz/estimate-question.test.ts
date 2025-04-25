@@ -1,10 +1,11 @@
-import {emptyGame, Game, GameRound, GameSection, RoundState} from "../game/game.ts";
-import {Question} from "./question.ts";
-import {exportStaticContent, updateJsonQuizAtGame} from "./json.ts";
-import {EstimateQuestion} from "./estimate-question.ts";
-import {JsonCurrentRound, JsonStaticGameData, restoreCurrentRound, storeCurrentRound} from "../game/json/game.ts";
-import {asSet} from "../common.ts";
-import {TeamColor} from "../game/team.ts";
+import { describe, expect, test, beforeEach } from '@jest/globals';
+import { emptyGame, Game, GameRound, GameSection, RoundState } from '../game/game';
+import { Question } from './question';
+import { exportStaticContent, updateJsonQuizAtGame } from './json';
+import { EstimateQuestion } from './estimate-question';
+import { JsonCurrentRound, JsonStaticGameData, restoreCurrentRound, storeCurrentRound } from '../game/json/game';
+import { asSet } from '../common';
+import { TeamColor } from '../game/team';
 
 describe('EstimateQuestion', () => {
     let sId: string;
@@ -18,7 +19,7 @@ describe('EstimateQuestion', () => {
         sId = 'Test';
         points = 10;
         qId = `${sId}-${points}`;
-        estimateQuestion = new EstimateQuestion(qId, 10, "Test question text", 42);
+        estimateQuestion = new EstimateQuestion(qId, 10, 'Test question text', 42);
         gameSection = {
             sectionName: sId,
             questions: new Map<string, Question>(),
@@ -28,7 +29,6 @@ describe('EstimateQuestion', () => {
         game = emptyGame();
         game.sections.set(sId, gameSection);
     });
-
 
     test('Export and re-import question via JSON', () => {
         // Export the game to JsonQuiz
@@ -55,7 +55,6 @@ describe('EstimateQuestion', () => {
         expect(question).toEqual(estimateQuestion);
     });
 
-
     test('Export and re-import current round via JSON', () => {
         estimateQuestion.estimates.set(TeamColor.BLUE, 30);
         estimateQuestion.estimates.set(TeamColor.PURPLE, 10);
@@ -68,9 +67,8 @@ describe('EstimateQuestion', () => {
             state: RoundState.SHOW_QUESTION,
             teamsAlreadyAttempted: asSet(TeamColor.GREEN),
             attemptingTeams: asSet(TeamColor.ORANGE),
-            timerStart: date
+            timerStart: date,
         };
-
 
         // Export the current round to JsonCurrentRound
         const exportedRound = storeCurrentRound(game);
@@ -103,4 +101,3 @@ describe('EstimateQuestion', () => {
         expect(estimateQuestion.completedBy.has(TeamColor.PURPLE)).toBeTruthy();
     });
 });
-

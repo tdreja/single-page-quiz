@@ -1,6 +1,7 @@
-import {RoundState} from "../model/game/game";
-import {TeamColor} from "../model/game/team";
-import { EventChange } from "./common-events";
+import { expect, test, beforeEach } from '@jest/globals';
+import { RoundState } from '../model/game/game';
+import { TeamColor } from '../model/game/team';
+import { EventChange } from './common-events';
 import {
     choiceAWrong,
     choiceBCorrect,
@@ -12,10 +13,10 @@ import {
     questionId,
     sectionId,
     teamBlue,
-    teamRed
-} from "./data.test";
-import {SelectFromMultipleChoiceEvent, SubmitEstimateEvent} from "./question-event";
-import {ActivateBuzzerEvent, RequestAttemptEvent, StartRoundEvent} from "./round-events";
+    teamRed,
+} from './data.test';
+import { SelectFromMultipleChoiceEvent, SubmitEstimateEvent } from './question-event';
+import { ActivateBuzzerEvent, RequestAttemptEvent, StartRoundEvent } from './round-events';
 
 beforeEach(() => {
     newTestSetup();
@@ -43,7 +44,8 @@ test('selectMultipleChoice', () => {
     // Team red tries
     expect(new ActivateBuzzerEvent().updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
     expect(new RequestAttemptEvent(TeamColor.RED).updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
-    expect(new SelectFromMultipleChoiceEvent(choiceBCorrect.choiceId).updateGame(game)).toEqual([EventChange.CURRENT_ROUND, EventChange.GAME]);
+    expect(new SelectFromMultipleChoiceEvent(choiceBCorrect.choiceId).updateGame(game))
+        .toEqual([EventChange.CURRENT_ROUND, EventChange.GAME]);
     expect(round?.state).toBe(RoundState.SHOW_RESULTS);
     expect(round?.teamsAlreadyAttempted).toContain(TeamColor.RED);
     expect(round?.attemptingTeams.size).toBe(0);
