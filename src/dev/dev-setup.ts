@@ -10,7 +10,7 @@ import { addAllColorsTo, TeamColor } from '../model/game/team';
 import { TextChoice, TextMultipleChoiceQuestion } from '../model/quiz/multiple-choice-question';
 
 export function prepareGame(game: Game) {
-    // region Teams & Players
+    // region TeamsNav & Players
 
     addAllColorsTo(game.availableColors);
     addAllEmojisTo(game.availableEmojis);
@@ -90,7 +90,7 @@ export function prepareGame(game: Game) {
         }
     }
 
-    // endregion Teams & Players
+    // endregion TeamsNav & Players
 
     // region Questions
 

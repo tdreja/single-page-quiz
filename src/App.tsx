@@ -1,7 +1,22 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './game.css';
+import { TeamsNav } from './components/game/TeamsNav';
+import React from 'react';
+import { Team, TeamColor } from './model/game/team';
+import { Emoji, Player } from './model/game/player';
 
 function App() {
+    const teams: Map<TeamColor, Team> = new Map();
+    const teamBlue: Team = {
+        color: TeamColor.BLUE,
+        players: new Map<Emoji, Player>(),
+        points: 120,
+    };
+    teams.set(TeamColor.BLUE, teamBlue);
+    teamBlue.players.set(Emoji.CAT, {
+        emoji: Emoji.CAT, name: 'Katze', points: 120, team: TeamColor.BLUE,
+    });
+
     return (
         <>
             <nav className="navbar sticky-top bg-body-secondary">Settings</nav>
@@ -24,8 +39,7 @@ function App() {
                     </article>
                 </div>
             </main>
-            <nav id="teams-container" className="navbar fixed-bottom bg-body-secondary">
-            </nav>
+            <TeamsNav teams={teams} />
         </>
     );
 }

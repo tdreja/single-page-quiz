@@ -41,7 +41,7 @@ export function newTestSetup() {
     questionMultiChoice = new TextMultipleChoiceQuestion(questionId, questionPoints, 'Question?', choices);
     questionEstimate = new EstimateQuestion(questionEstimateId, 200, 'Estimate', 1000);
 
-    // Team Blue
+    // TeamView Blue
     playerBlueDuck = {
         name: 'Duck',
         emoji: Emoji.DUCK,
@@ -55,7 +55,7 @@ export function newTestSetup() {
     };
     teamBlue.players.set(Emoji.DUCK, playerBlueDuck);
 
-    // Team Red
+    // TeamView Red
     playerRedCamel = {
         name: 'Camel',
         emoji: Emoji.CAMEL,
