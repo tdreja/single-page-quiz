@@ -3,52 +3,51 @@ import './game.css';
 import { TeamsNav } from './components/game/TeamsNav';
 import React, { useCallback, useEffect, useState } from 'react';
 import { emptyGame, Game } from './model/game/game';
-import { Changes, GameEvent } from './events/common-events';
+import { Changes, GameEvent, restoreChanges, storeChanges } from './events/common-events';
 import { GameContext, GameEventContext, GameEventListener } from './components/common/GameContext';
 import { prepareGame } from './dev/dev-setup';
-import { loadCurrentRound, loadStaticGameData, loadUpdatableGameData, storeCurrentRound, storeStaticGameData, storeUpdatableGameData } from './components/common/Storage';
-import { importCurrentRound, importGame, exportGame, exportCurrentRound } from './model/game/json/game';
-import { exportStaticGameContent, importStaticGameContent } from './model/quiz/json';
+import { restoreGame, storeGame } from './components/common/Storage';
+
+type ChannelListener = (event: MessageEvent) => void;
 
 function App() {
+    const [channel, setChannel] = useState<BroadcastChannel | null>(null);
     const [game, setGame] = useState<Game>(emptyGame());
+
+    // Update game when an event is received and store the new state
     const onGameEvent = useCallback<GameEventListener>((event: GameEvent) => {
         const update = event.updateGame(game);
         if (update.updates.length > 0) {
-
-            if(update.updates.includes(Changes.QUIZ_CONTENT)) {
-                storeStaticGameData(exportStaticGameContent(update.updatedGame));
+            storeGame(update.updatedGame, update.updates);
+            if (channel) {
+                channel.postMessage(JSON.stringify(storeChanges(update.updates)));
             }
-            if(update.updates.includes(Changes.GAME_SETUP)) {
-                storeUpdatableGameData(exportGame(update.updatedGame));
-            }
-            if(update.updates.includes(Changes.CURRENT_ROUND)) {
-                storeCurrentRound(exportCurrentRound(update.updatedGame));
-            }
-
+            console.log('Send updates', update.updates);
             setGame(update.updatedGame);
         }
     }, [game]);
 
+    // Update the game, if another tab has changed it
+    const onChannelEvent = useCallback<ChannelListener>((event: MessageEvent) => {
+        const changes = restoreChanges(JSON.parse(event.data));
+        console.log('Receive updates', changes, event.data);
+        const updatedGame = restoreGame(game, changes);
+        setGame(updatedGame);
+    }, []);
+
+    // Load initial state of the game
     useEffect(() => {
-        const newGame = {
-            ...game
-        };
-
-        const quiz = loadStaticGameData();
-        importStaticGameContent(newGame, quiz);
-        
-        const gameSetup = loadUpdatableGameData();
-        importGame(newGame, gameSetup);
-
-        const round = loadCurrentRound();
-        importCurrentRound(newGame, round);
-
-        if(!quiz && !gameSetup && !round) {
-            prepareGame(newGame);
+        const updatedGame = restoreGame(game, [Changes.QUIZ_CONTENT, Changes.GAME_SETUP, Changes.CURRENT_ROUND]);
+        if (updatedGame.players.size === 0) {
+            prepareGame(updatedGame);
         }
-        setGame(newGame);
-        
+        setGame(updatedGame);
+
+        if (channel == null) {
+            const newChannel = new BroadcastChannel('der-grosse-preis');
+            setChannel(newChannel);
+            newChannel.onmessage = onChannelEvent;
+        }
     }, []);
 
     return (

@@ -1,8 +1,10 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { Team } from '../../model/game/team';
 import { Player } from '../../model/game/player';
 import { EmojiView } from '../common/EmojiView';
 import { backgroundColor, textColor } from '../common/Colors';
+import { GameEventContext } from '../common/GameContext';
+import { RenamePlayerEvent } from '../../events/setup-events';
 
 export interface TeamProps {
     team: Team,
@@ -40,11 +42,13 @@ export const TeamView = ({ team }: TeamProps): ReactElement => {
 };
 
 const PlayerView = ({ player }: PlayerProps): ReactElement => {
+    const onGameEvent = useContext(GameEventContext);
     return (
         <div
             part="player"
             id={`player-${player.emoji}`}
             key={player.emoji}
+            onClick={() => onGameEvent(new RenamePlayerEvent(player.emoji, player.name + 'x'))}
         >
             <EmojiView emoji={player.emoji} part="emoji" className="bg-body-secondary" />
             <span part="player-name" className="flex-grow-1">{player.name}</span>

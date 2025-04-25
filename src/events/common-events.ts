@@ -30,6 +30,32 @@ export enum Changes {
     CURRENT_ROUND = 'current-round',
 }
 
+export type JsonChanges = {
+    [change in Changes]: boolean
+};
+
+export function storeChanges(changes: Array<Changes>): JsonChanges {
+    return {
+        'current-round': changes.includes(Changes.CURRENT_ROUND),
+        'game-setup': changes.includes(Changes.GAME_SETUP),
+        'quiz-content': changes.includes(Changes.QUIZ_CONTENT),
+    };
+}
+
+export function restoreChanges(changes: JsonChanges): Array<Changes> {
+    const result: Array<Changes> = [];
+    if (changes['current-round'] === true) {
+        result.push(Changes.CURRENT_ROUND);
+    }
+    if (changes['game-setup'] === true) {
+        result.push(Changes.GAME_SETUP);
+    }
+    if (changes['quiz-content'] === true) {
+        result.push(Changes.QUIZ_CONTENT);
+    }
+    return result;
+}
+
 export interface GameUpdate {
     updatedGame: Game,
     updates: Array<Changes>,
