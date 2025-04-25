@@ -2,7 +2,7 @@ import { expect, test, beforeEach } from '@jest/globals';
 import { emptyGame, Game } from '../game';
 import { Emoji, Player } from '../player';
 import { TeamColor } from '../team';
-import { restoreGame } from './game';
+import { importGame } from './game';
 import { JsonPlayer, storePlayer } from './player';
 
 const game: Game = emptyGame();
@@ -25,7 +25,7 @@ beforeEach(() => {
 });
 
 test('No players, one from JSON', () => {
-    restoreGame(game, { players: [jsonCamel] });
+    importGame(game, { players: [jsonCamel] });
     expect(game.players.size).toBe(1);
     expect(game.availableEmojis.size).toBe(1);
     expect(game.availableEmojis).toContain(Emoji.BEAVER);
@@ -38,11 +38,11 @@ test('No players, one from JSON', () => {
 });
 
 test('One player, two from JSON', () => {
-    restoreGame(game, { players: [jsonCamel] });
+    importGame(game, { players: [jsonCamel] });
     expect(game.players.size).toBe(1);
     expect(game.availableEmojis.size).toBe(1);
 
-    restoreGame(game, { players: [jsonCamel, jsonBeaver] });
+    importGame(game, { players: [jsonCamel, jsonBeaver] });
     expect(game.players.size).toBe(2);
     expect(game.availableEmojis.size).toBe(0);
     expect(game.players.get(Emoji.CAMEL)).toBeTruthy();
@@ -55,11 +55,11 @@ test('One player, two from JSON', () => {
 });
 
 test('Two players, one from JSON', () => {
-    restoreGame(game, { players: [jsonCamel, jsonBeaver] });
+    importGame(game, { players: [jsonCamel, jsonBeaver] });
     expect(game.players.size).toBe(2);
     expect(game.availableEmojis.size).toBe(0);
 
-    restoreGame(game, { players: [jsonBeaver] });
+    importGame(game, { players: [jsonBeaver] });
     expect(game.players.size).toBe(1);
     expect(game.availableEmojis.size).toBe(1);
     expect(game.availableEmojis).toContain(Emoji.CAMEL);
@@ -74,7 +74,7 @@ test('Store player as JSON', () => {
         team: TeamColor.GREEN,
     };
     const json = storePlayer(player);
-    restoreGame(game, { players: [json] });
+    importGame(game, { players: [json] });
     expect(game.players.size).toBe(1);
     const playerRestored = game.players.get(Emoji.CAT);
     expect(playerRestored).toBeTruthy();

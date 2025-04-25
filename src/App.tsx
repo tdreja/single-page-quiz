@@ -3,24 +3,52 @@ import './game.css';
 import { TeamsNav } from './components/game/TeamsNav';
 import React, { useCallback, useEffect, useState } from 'react';
 import { emptyGame, Game } from './model/game/game';
-import { GameEvent } from './events/common-events';
+import { Changes, GameEvent } from './events/common-events';
 import { GameContext, GameEventContext, GameEventListener } from './components/common/GameContext';
 import { prepareGame } from './dev/dev-setup';
+import { loadCurrentRound, loadStaticGameData, loadUpdatableGameData, storeCurrentRound, storeStaticGameData, storeUpdatableGameData } from './components/common/Storage';
+import { importCurrentRound, importGame, exportGame, exportCurrentRound } from './model/game/json/game';
+import { exportStaticGameContent, importStaticGameContent } from './model/quiz/json';
 
 function App() {
     const [game, setGame] = useState<Game>(emptyGame());
     const onGameEvent = useCallback<GameEventListener>((event: GameEvent) => {
         const update = event.updateGame(game);
         if (update.updates.length > 0) {
+
+            if(update.updates.includes(Changes.QUIZ_CONTENT)) {
+                storeStaticGameData(exportStaticGameContent(update.updatedGame));
+            }
+            if(update.updates.includes(Changes.GAME_SETUP)) {
+                storeUpdatableGameData(exportGame(update.updatedGame));
+            }
+            if(update.updates.includes(Changes.CURRENT_ROUND)) {
+                storeCurrentRound(exportCurrentRound(update.updatedGame));
+            }
+
             setGame(update.updatedGame);
-            // TODO Store JSON
         }
     }, [game]);
 
     useEffect(() => {
-        const copy = emptyGame();
-        prepareGame(copy);
-        setGame(copy);
+        const newGame = {
+            ...game
+        };
+
+        const quiz = loadStaticGameData();
+        importStaticGameContent(newGame, quiz);
+        
+        const gameSetup = loadUpdatableGameData();
+        importGame(newGame, gameSetup);
+
+        const round = loadCurrentRound();
+        importCurrentRound(newGame, round);
+
+        if(!quiz && !gameSetup && !round) {
+            prepareGame(newGame);
+        }
+        setGame(newGame);
+        
     }, []);
 
     return (

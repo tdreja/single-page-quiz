@@ -3,8 +3,8 @@ import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../../quiz/json
 import { Question } from '../../quiz/question';
 import { Game, GameSection, RoundState } from '../game';
 import { TeamColor } from '../team';
-import { JsonPlayer, restorePlayers, storePlayer } from './player';
-import { JsonTeam, restoreTeams, storeTeam } from './team';
+import { JsonPlayer, restorePlayers as importPlayers, storePlayer } from './player';
+import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team';
 
 /**
  * Static data for a complete quiz with all sections
@@ -55,7 +55,7 @@ export interface JsonCurrentRound {
     timerStart?: string,
 }
 
-export function storeGame(game: Game): JsonUpdatableGameData {
+export function exportGame(game: Game): JsonUpdatableGameData {
     // Export all players and teams
     const players = Array.from(game.players.values()).map((player) => storePlayer(player));
     const teams = Array.from(game.teams.values()).map((team) => storeTeam(team));
@@ -84,7 +84,7 @@ export function storeGame(game: Game): JsonUpdatableGameData {
     };
 }
 
-export function storeCurrentRound(game: Game): JsonCurrentRound {
+export function exportCurrentRound(game: Game): JsonCurrentRound {
     if (game.round) {
         return {
             inSectionName: game.round.inSectionName,
@@ -98,13 +98,13 @@ export function storeCurrentRound(game: Game): JsonCurrentRound {
     return {};
 }
 
-export function restoreGame(game: Game, json?: JsonUpdatableGameData) {
+export function importGame(game: Game, json?: JsonUpdatableGameData) {
     if (!json) {
         return;
     }
-    restorePlayers(game, json);
-    restoreTeams(game, json);
-    restoreCompletedQuestions(game, json);
+    importPlayers(game, json);
+    importTeams(game, json);
+    importCompletedQuestions(game, json);
 }
 
 export function getQuestion(game: Game, sectionName?: string, questionId?: string): Question | undefined {
@@ -118,7 +118,7 @@ export function getQuestion(game: Game, sectionName?: string, questionId?: strin
     return section.questions.get(questionId);
 }
 
-function restoreCompletedQuestions(game: Game, json: JsonUpdatableGameData) {
+function importCompletedQuestions(game: Game, json: JsonUpdatableGameData) {
     if (!json.sections) {
         return;
     }
@@ -134,7 +134,7 @@ function restoreCompletedQuestions(game: Game, json: JsonUpdatableGameData) {
     }
 }
 
-export function restoreCurrentRound(game: Game, json?: JsonCurrentRound) {
+export function importCurrentRound(game: Game, json?: JsonCurrentRound) {
     if (!json) {
         return;
     }

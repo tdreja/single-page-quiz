@@ -44,7 +44,7 @@ export interface JsonDynamicQuestionData {
     additionalData?: IndexedByColor,
 }
 
-export function exportStaticContent(game: Game): JsonStaticGameData {
+export function exportStaticGameContent(game: Game): JsonStaticGameData {
     const sections: Array<JsonStaticSectionData> = [];
     for (const section of game.sections.values()) {
         sections.push(exportStaticSectionContent(section));
@@ -54,7 +54,7 @@ export function exportStaticContent(game: Game): JsonStaticGameData {
     };
 }
 
-export function updateJsonQuizAtGame(game: Game, quiz?: JsonStaticGameData) {
+export function importStaticGameContent(game: Game, quiz?: JsonStaticGameData) {
     game.sections.clear();
     if (!quiz || !quiz.sections) {
         return;

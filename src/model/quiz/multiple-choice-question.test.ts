@@ -1,10 +1,10 @@
 import { describe, expect, test, beforeEach } from '@jest/globals';
 import { emptyGame, Game, GameRound, GameSection, RoundState } from '../game/game';
 import { Question } from './question';
-import { exportStaticContent, updateJsonQuizAtGame } from './json';
+import { exportStaticGameContent, importStaticGameContent } from './json';
 import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question';
 import { TeamColor } from '../game/team';
-import { JsonCurrentRound, JsonStaticGameData, restoreCurrentRound, storeCurrentRound } from '../game/json/game';
+import { JsonCurrentRound, JsonStaticGameData, importCurrentRound, exportCurrentRound } from '../game/json/game';
 import { asSet } from '../common';
 
 describe('TextMultipleChoiceQuestion', () => {
@@ -34,7 +34,7 @@ describe('TextMultipleChoiceQuestion', () => {
 
     test('Export and re-import question via JSON', () => {
         // Export the game to JsonQuiz
-        const exportedQuiz = exportStaticContent(game);
+        const exportedQuiz = exportStaticGameContent(game);
 
         // Convert the JsonQuiz to a JSON string
         const jsonString = JSON.stringify(exportedQuiz);
@@ -43,7 +43,7 @@ describe('TextMultipleChoiceQuestion', () => {
         const parsedQuiz: JsonStaticGameData = JSON.parse(jsonString);
 
         // Update the game with the parsed JsonQuiz
-        updateJsonQuizAtGame(game, parsedQuiz);
+        importStaticGameContent(game, parsedQuiz);
 
         // Assertions to verify the game state after re-import
         expect(game.sections.size).toBe(1);
@@ -72,7 +72,7 @@ describe('TextMultipleChoiceQuestion', () => {
         };
 
         // Export the current round to JsonCurrentRound
-        const exportedRound = storeCurrentRound(game);
+        const exportedRound = exportCurrentRound(game);
         expect(exportedRound).toBeDefined();
         game.round = null;
         textMultipleChoiceQuestion.choices.get('choice1')?.selectedBy.clear();
@@ -87,7 +87,7 @@ describe('TextMultipleChoiceQuestion', () => {
         expect(parsedRound).toBeDefined();
 
         // Restore the round with the parsed JsonCurrentRound
-        restoreCurrentRound(game, parsedRound);
+        importCurrentRound(game, parsedRound);
 
         // Assertions to verify the round state after re-import
         expect(game.round).toBeDefined();
@@ -131,7 +131,7 @@ describe('ImageMultipleChoiceQuestion', () => {
 
     test('Export and re-import question via JSON', () => {
         // Export the game to JsonQuiz
-        const exportedQuiz = exportStaticContent(game);
+        const exportedQuiz = exportStaticGameContent(game);
         game.sections.clear();
 
         // Convert the JsonQuiz to a JSON string
@@ -141,7 +141,7 @@ describe('ImageMultipleChoiceQuestion', () => {
         const parsedQuiz: JsonStaticGameData = JSON.parse(jsonString);
 
         // Update the game with the parsed JsonQuiz
-        updateJsonQuizAtGame(game, parsedQuiz);
+        importStaticGameContent(game, parsedQuiz);
 
         // Assertions to verify the game state after re-import
         expect(game.sections.size).toBe(1);
@@ -170,7 +170,7 @@ describe('ImageMultipleChoiceQuestion', () => {
         };
 
         // Export the current round to JsonCurrentRound
-        const exportedRound = storeCurrentRound(game);
+        const exportedRound = exportCurrentRound(game);
         expect(exportedRound).toBeDefined();
         game.round = null;
         imageMultipleChoiceQuestion.choices.get('choice1')?.selectedBy.clear();
@@ -185,7 +185,7 @@ describe('ImageMultipleChoiceQuestion', () => {
         expect(parsedRound).toBeDefined();
 
         // Restore the round with the parsed JsonCurrentRound
-        restoreCurrentRound(game, parsedRound);
+        importCurrentRound(game, parsedRound);
 
         // Assertions to verify the round state after re-import
         expect(game.round).toBeDefined();

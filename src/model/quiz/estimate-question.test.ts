@@ -1,9 +1,9 @@
 import { describe, expect, test, beforeEach } from '@jest/globals';
 import { emptyGame, Game, GameRound, GameSection, RoundState } from '../game/game';
 import { Question } from './question';
-import { exportStaticContent, updateJsonQuizAtGame } from './json';
+import { exportStaticGameContent, importStaticGameContent } from './json';
 import { EstimateQuestion } from './estimate-question';
-import { JsonCurrentRound, JsonStaticGameData, restoreCurrentRound, storeCurrentRound } from '../game/json/game';
+import { JsonCurrentRound, JsonStaticGameData, importCurrentRound, exportCurrentRound } from '../game/json/game';
 import { asSet } from '../common';
 import { TeamColor } from '../game/team';
 
@@ -32,7 +32,7 @@ describe('EstimateQuestion', () => {
 
     test('Export and re-import question via JSON', () => {
         // Export the game to JsonQuiz
-        const exportedQuiz = exportStaticContent(game);
+        const exportedQuiz = exportStaticGameContent(game);
         game.sections.clear();
 
         // Convert the JsonQuiz to a JSON string
@@ -42,7 +42,7 @@ describe('EstimateQuestion', () => {
         const parsedQuiz: JsonStaticGameData = JSON.parse(jsonString);
 
         // Update the game with the parsed JsonQuiz
-        updateJsonQuizAtGame(game, parsedQuiz);
+        importStaticGameContent(game, parsedQuiz);
 
         // Assertions to verify the game state after re-import
         expect(game.sections.size).toBe(1);
@@ -71,7 +71,7 @@ describe('EstimateQuestion', () => {
         };
 
         // Export the current round to JsonCurrentRound
-        const exportedRound = storeCurrentRound(game);
+        const exportedRound = exportCurrentRound(game);
         expect(exportedRound).toBeDefined();
         game.round = null;
         estimateQuestion.estimates.clear();
@@ -85,7 +85,7 @@ describe('EstimateQuestion', () => {
         expect(parsedRound).toBeDefined();
 
         // Restore the round with the parsed JsonCurrentRound
-        restoreCurrentRound(game, parsedRound);
+        importCurrentRound(game, parsedRound);
 
         // Assertions to verify the round state after re-import
         expect(game.round).toBeDefined();

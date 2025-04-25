@@ -2,7 +2,7 @@ import { expect, test, beforeEach } from '@jest/globals';
 import { emptyGame, Game } from '../game';
 import { Emoji, Player } from '../player';
 import { Team, TeamColor } from '../team';
-import { restoreGame } from './game';
+import { importGame } from './game';
 import { storePlayer } from './player';
 import { JsonTeam, restoreTeams, storeTeam } from './team';
 
@@ -100,7 +100,7 @@ test('Store team as JSON', () => {
     const jsonPlayer = storePlayer(player);
     const jsonTeam = storeTeam(team);
 
-    restoreGame(game, { teams: [jsonTeam], players: [jsonPlayer] });
+    importGame(game, { teams: [jsonTeam], players: [jsonPlayer] });
     expect(game.players.size).toBe(1);
     expect(game.players.get(Emoji.CAT)).toBeTruthy();
     expect(game.teams.size).toBe(1);
