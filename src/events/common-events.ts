@@ -24,34 +24,67 @@ export enum EventType {
     SHUFFLE_TEAMS = 'shuffle-teams',
 }
 
-export enum EventChange {
+export enum Changes {
     QUIZ_CONTENT = 'quiz-content',
-    GAME = 'game',
+    GAME_SETUP = 'game-setup',
     CURRENT_ROUND = 'current-round',
 }
 
-export abstract class GameEvent extends Event {
-    protected constructor(type: EventType, eventInitDict?: EventInit) {
-        super(type, eventInitDict);
-    }
-
-    public abstract updateGame(game: Game): Array<EventChange>;
+export interface GameUpdate {
+    updatedGame: Game,
+    updates: Array<Changes>,
 }
 
-export abstract class GameRoundEvent extends GameEvent {
-    protected constructor(type: EventType, eventInitDict?: EventInit) {
-        super(type, eventInitDict);
+export interface GameEvent {
+    readonly type: EventType,
+    updateGame: (game: Game) => GameUpdate,
+}
+
+export function noUpdate(game: Game): GameUpdate {
+    return {
+        updatedGame: game,
+        updates: [],
+    };
+}
+
+export function update(game: Game, ...updates: Array<Changes>): GameUpdate {
+    return {
+        // Create a copy of the original so that React can actually see changes!
+        updatedGame: {
+            ...game,
+        },
+        updates,
+    };
+}
+
+export abstract class BasicGameEvent implements GameEvent {
+    protected readonly _type: EventType;
+
+    protected constructor(type: EventType) {
+        this._type = type;
     }
 
-    public updateGame(game: Game): Array<EventChange> {
+    public abstract updateGame(game: Game): GameUpdate;
+
+    public get type(): EventType {
+        return this._type;
+    }
+}
+
+export abstract class GameRoundEvent extends BasicGameEvent {
+    protected constructor(type: EventType) {
+        super(type);
+    }
+
+    public updateGame(game: Game): GameUpdate {
         if (game.state !== GameState.GAME_ACTIVE) {
-            return [];
+            return noUpdate(game);
         }
         if (game.round) {
             return this.updateQuestionRound(game, game.round);
         }
-        return [];
+        return noUpdate(game);
     }
 
-    public abstract updateQuestionRound(game: Game, round: GameRound): Array<EventChange>;
+    public abstract updateQuestionRound(game: Game, round: GameRound): GameUpdate;
 }

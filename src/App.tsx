@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './game.css';
 import { TeamsNav } from './components/game/TeamsNav';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { emptyGame, Game } from './model/game/game';
 import { GameEvent } from './events/common-events';
 import { GameContext, GameEventContext, GameEventListener } from './components/common/GameContext';
@@ -9,8 +9,13 @@ import { prepareGame } from './dev/dev-setup';
 
 function App() {
     const [game, setGame] = useState<Game>(emptyGame());
-
-    const listener: GameEventListener = (_: GameEvent) => {};
+    const onGameEvent = useCallback<GameEventListener>((event: GameEvent) => {
+        const update = event.updateGame(game);
+        if (update.updates.length > 0) {
+            setGame(update.updatedGame);
+            // TODO Store JSON
+        }
+    }, [game]);
 
     useEffect(() => {
         const copy = emptyGame();
@@ -20,7 +25,7 @@ function App() {
 
     return (
         <GameContext.Provider value={game}>
-            <GameEventContext.Provider value={listener}>
+            <GameEventContext.Provider value={onGameEvent}>
                 <nav className="navbar sticky-top bg-body-secondary">Settings</nav>
                 <main className="container-fluid d-flex flex-row flex-nowrap gap-2 pt-2">
                     <div className="col">

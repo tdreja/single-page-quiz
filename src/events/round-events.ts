@@ -1,31 +1,31 @@
 import { Game, GameRound, GameState, RoundState } from '../model/game/game';
 import { getQuestion } from '../model/game/json/game';
 import { TeamColor } from '../model/game/team';
-import { EventChange, EventType, GameEvent, GameRoundEvent } from './common-events';
+import { BasicGameEvent, Changes, EventType, GameRoundEvent, GameUpdate, noUpdate, update } from './common-events';
 
 /**
  * Admin selects a new question to play
  */
-export class StartRoundEvent extends GameEvent {
+export class StartRoundEvent extends BasicGameEvent {
     private readonly _sectionName: string;
     private readonly _questionId: string;
 
-    public constructor(sectionName: string, questionId: string, eventInitDict?: EventInit) {
-        super(EventType.START_ROUND, eventInitDict);
+    public constructor(sectionName: string, questionId: string) {
+        super(EventType.START_ROUND);
         this._sectionName = sectionName;
         this._questionId = questionId;
     }
 
-    public updateGame(game: Game): Array<EventChange> {
+    public updateGame(game: Game): GameUpdate {
         if (game.state !== GameState.GAME_ACTIVE) {
-            return [];
+            return noUpdate(game);
         }
 
         // Force complete the old round
         if (game.round) {
             // We're already active?
             if (game.round.question.questionId === this._questionId) {
-                return [];
+                return noUpdate(game);
             }
             const oldQuestion = game.round.question;
             game.round = null;
@@ -34,7 +34,7 @@ export class StartRoundEvent extends GameEvent {
 
         const question = getQuestion(game, this._sectionName, this._questionId);
         if (!question || question.completed) {
-            return [];
+            return noUpdate(game);
         }
         game.round = {
             question,
@@ -44,7 +44,7 @@ export class StartRoundEvent extends GameEvent {
             state: RoundState.SHOW_QUESTION,
             timerStart: null,
         };
-        return [EventChange.CURRENT_ROUND];
+        return update(game, Changes.CURRENT_ROUND);
     }
 }
 
@@ -52,18 +52,18 @@ export class StartRoundEvent extends GameEvent {
  * Admin allows the buzzer to be pressed
  */
 export class ActivateBuzzerEvent extends GameRoundEvent {
-    public constructor(eventInitDict?: EventInit) {
-        super(EventType.ACTIVATE_BUZZER, eventInitDict);
+    public constructor() {
+        super(EventType.ACTIVATE_BUZZER);
     }
 
-    public updateQuestionRound(_: Game, round: GameRound): Array<EventChange> {
+    public updateQuestionRound(game: Game, round: GameRound): GameUpdate {
         // Skip non-relevant states
         if (round.state === RoundState.SHOW_QUESTION) {
             round.state = RoundState.BUZZER_ACTIVE;
             round.timerStart = new Date();
-            return [EventChange.CURRENT_ROUND];
+            return update(game, Changes.CURRENT_ROUND);
         }
-        return [];
+        return noUpdate(game);
     }
 }
 
@@ -73,28 +73,28 @@ export class ActivateBuzzerEvent extends GameRoundEvent {
 export class RequestAttemptEvent extends GameRoundEvent {
     private readonly _team: TeamColor;
 
-    public constructor(team: TeamColor, eventInitDict?: EventInit) {
-        super(EventType.REQUEST_ATTEMPT, eventInitDict);
+    public constructor(team: TeamColor) {
+        super(EventType.REQUEST_ATTEMPT);
         this._team = team;
     }
 
-    public updateQuestionRound(game: Game, round: GameRound): Array<EventChange> {
+    public updateQuestionRound(game: Game, round: GameRound): GameUpdate {
         // Skip non-relevant states
         if (round.state !== RoundState.BUZZER_ACTIVE) {
-            return [];
+            return noUpdate(game);
         }
         if (!game.teams.get(this._team)) {
-            return [];
+            return noUpdate(game);
         }
         if (round.teamsAlreadyAttempted.has(this._team)) {
-            return [];
+            return noUpdate(game);
         }
         round.attemptingTeams.clear();
         round.attemptingTeams.add(this._team);
         round.teamsAlreadyAttempted.add(this._team);
         round.state = RoundState.TEAM_CAN_ATTEMPT;
         round.timerStart = new Date();
-        return [EventChange.CURRENT_ROUND];
+        return update(game, Changes.CURRENT_ROUND);
     }
 }
 
@@ -102,18 +102,18 @@ export class RequestAttemptEvent extends GameRoundEvent {
  * Nobody can answer? Skip to the results
  */
 export class SkipRoundEvent extends GameRoundEvent {
-    public constructor(eventInitDict?: EventInit) {
-        super(EventType.SKIP_ROUND, eventInitDict);
+    public constructor() {
+        super(EventType.SKIP_ROUND);
     }
 
-    public updateQuestionRound(_: Game, round: GameRound): Array<EventChange> {
+    public updateQuestionRound(game: Game, round: GameRound): GameUpdate {
         if (round.state === RoundState.SHOW_RESULTS) {
-            return [];
+            return noUpdate(game);
         }
         round.state = RoundState.SHOW_RESULTS;
         round.attemptingTeams.clear();
         round.question.completeQuestion([]);
-        return [EventChange.CURRENT_ROUND];
+        return update(game, Changes.CURRENT_ROUND);
     }
 }
 
@@ -121,16 +121,16 @@ export class SkipRoundEvent extends GameRoundEvent {
  * Everybody has seen the result? Close the question and start the next round
  */
 export class CloseRoundEvent extends GameRoundEvent {
-    public constructor(eventInitDict?: EventInit) {
-        super(EventType.CLOSE_ROUND, eventInitDict);
+    public constructor() {
+        super(EventType.CLOSE_ROUND);
     }
 
-    public updateQuestionRound(game: Game, round: GameRound): Array<EventChange> {
+    public updateQuestionRound(game: Game, round: GameRound): GameUpdate {
         if (round.state !== RoundState.SHOW_RESULTS) {
-            return [];
+            return noUpdate(game);
         }
         game.round = null;
         game.roundsCounter += 1;
-        return [EventChange.CURRENT_ROUND, EventChange.GAME];
+        return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
     }
 }
