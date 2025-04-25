@@ -1,13 +1,11 @@
-import React, { ReactElement } from 'react';
-import { Team, TeamColor } from '../../model/game/team';
+import React, { ReactElement, useContext } from 'react';
 import { TeamView } from './TeamView';
+import { Game } from '../../model/game/game';
+import { GameContext } from '../common/GameContext';
 
-export interface TeamsProps {
-    teams: Map<TeamColor, Team>,
-}
-
-export const TeamsNav = ({ teams }: TeamsProps): ReactElement => {
-    const teamViews: Array<ReactElement> = Array.from(teams.values()).map((team) => TeamView({ team }));
+export const TeamsNav = (): ReactElement => {
+    const game = useContext<Game>(GameContext);
+    const teamViews: Array<ReactElement> = Array.from(game.teams.values()).map((team) => TeamView({ team }));
     return (
         <nav id="teams-container" className="navbar fixed-bottom bg-body-secondary">
             {teamViews}
