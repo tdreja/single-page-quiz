@@ -20,7 +20,7 @@ export function prepareGame(game: Game) {
         if (game.teams.size === maxTeams) {
             continue;
         }
-        new AddTeamEvent(color).updateGame(game);
+        new AddTeamEvent(color as TeamColor).updateGame(game);
         const team = game.teams.get(color as TeamColor);
         if (team) {
             team.points = Math.floor((5000 * Math.random()) / 100) * 100;

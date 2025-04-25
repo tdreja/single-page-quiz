@@ -1,9 +1,10 @@
-import { test } from '@jest/globals';
+import { expect, test } from '@jest/globals';
 import { emptyGame, Game, GameSection, GameState } from '../model/game/game';
 import { Emoji, Player } from '../model/game/player';
 import { Team, TeamColor } from '../model/game/team';
 import { EstimateQuestion } from '../model/quiz/estimate-question';
 import { TextChoice, TextMultipleChoiceQuestion } from '../model/quiz/multiple-choice-question';
+import { Changes, GameUpdate } from './common-events';
 
 export const questionId: string = 'quest';
 export const questionEstimateId: string = 'estimate';
@@ -19,9 +20,8 @@ export let playerRedCamel: Player;
 export let teamBlue: Team;
 export let teamRed: Team;
 export let section: GameSection;
-export let game: Game;
 
-export function newTestSetup() {
+export function newTestSetup(): Game {
     // Question
     choiceAWrong = {
         choiceId: 'a',
@@ -78,14 +78,29 @@ export function newTestSetup() {
     section.questions.set(questionEstimate.questionId, questionEstimate);
 
     // Game
-    game = emptyGame();
+    const game = emptyGame();
     game.state = GameState.GAME_ACTIVE;
     game.sections.set(sectionId, section);
     game.teams.set(TeamColor.BLUE, teamBlue);
     game.players.set(Emoji.DUCK, playerBlueDuck);
     game.teams.set(TeamColor.RED, teamRed);
     game.players.set(Emoji.CAMEL, playerRedCamel);
+    return game;
 }
 
 // Just to ensure that we are valid
 test('placerholder', () => {});
+
+export function expectNoUpdate(gameUpdate?: GameUpdate): Game {
+    expect(gameUpdate).toBeDefined();
+    expect(gameUpdate?.updatedGame).toBeDefined();
+    expect(gameUpdate?.updates).toEqual([]);
+    return gameUpdate?.updatedGame as unknown as Game;
+}
+
+export function expectUpdate(gameUpdate?: GameUpdate, ...changes: Array<Changes>): Game {
+    expect(gameUpdate).toBeDefined();
+    expect(gameUpdate?.updatedGame).toBeDefined();
+    expect(gameUpdate?.updates).toEqual(changes);
+    return gameUpdate?.updatedGame as unknown as Game;
+}

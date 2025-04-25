@@ -1,8 +1,7 @@
 import { expect, test, beforeEach } from '@jest/globals';
-import { RoundState } from '../model/game/game';
+import { Game, RoundState } from '../model/game/game';
 import { TeamColor } from '../model/game/team';
-import { EventChange } from './common-events';
-import { game, newTestSetup, questionId, sectionId } from './data.test';
+import { expectNoUpdate, expectUpdate, newTestSetup, questionId, sectionId } from './data.test';
 import {
     ActivateBuzzerEvent,
     CloseRoundEvent,
@@ -10,6 +9,7 @@ import {
     SkipRoundEvent,
     StartRoundEvent,
 } from './round-events';
+import { Changes } from './common-events';
 
 const startRound = new StartRoundEvent(sectionId, questionId);
 const activateBuzzer = new ActivateBuzzerEvent();
@@ -17,54 +17,55 @@ const requestAttemptBlue = new RequestAttemptEvent(TeamColor.BLUE);
 const requestAttemptRed = new RequestAttemptEvent(TeamColor.RED);
 const skipRound = new SkipRoundEvent();
 
+let game: Game;
 beforeEach(() => {
-    newTestSetup();
+    game = newTestSetup();
 });
 
 test('startRound', () => {
-    expect(startRound.updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
+    game = expectUpdate(startRound.updateGame(game), Changes.CURRENT_ROUND);
     expect(game.round).toBeTruthy();
     expect(game.round?.state).toBe(RoundState.SHOW_QUESTION);
     expect(game.round?.timerStart).toBeNull();
-    expect(startRound.updateGame(game)).toEqual([]);
+    game = expectNoUpdate(startRound.updateGame(game));
 
     // Ignore invalid IDs
-    expect(new StartRoundEvent('', '0').updateGame(game)).toEqual([]);
+    game = expectNoUpdate(new StartRoundEvent('', '0').updateGame(game));
 });
 
 test('activateBuzzer', () => {
-    expect(activateBuzzer.updateGame(game)).toEqual([]);
+    game = expectNoUpdate(activateBuzzer.updateGame(game));
 
     // Start a round, then activate buzzer
-    expect(startRound.updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
-    expect(activateBuzzer.updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
+    game = expectUpdate(startRound.updateGame(game), Changes.CURRENT_ROUND);
+    game = expectUpdate(activateBuzzer.updateGame(game), Changes.CURRENT_ROUND);
     expect(game.round?.state).toBe(RoundState.BUZZER_ACTIVE);
     expect(game.round?.timerStart).toBeTruthy();
 
     // Only once!
-    expect(activateBuzzer.updateGame(game)).toEqual([]);
+    game = expectNoUpdate(activateBuzzer.updateGame(game));
 
     // Not during attempt
     if (game.round) {
         game.round.state = RoundState.TEAM_CAN_ATTEMPT;
     }
-    expect(activateBuzzer.updateGame(game)).toEqual([]);
+    game = expectNoUpdate(activateBuzzer.updateGame(game));
 });
 
 test('requestAttempt', () => {
-    expect(requestAttemptBlue.updateGame(game)).toEqual([]);
-    expect(requestAttemptRed.updateGame(game)).toEqual([]);
+    game = expectNoUpdate(requestAttemptBlue.updateGame(game));
+    game = expectNoUpdate(requestAttemptRed.updateGame(game));
 
     // Start a new round
-    expect(startRound.updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
-    expect(requestAttemptBlue.updateGame(game)).toEqual([]);
-    expect(requestAttemptRed.updateGame(game)).toEqual([]);
+    game = expectUpdate(startRound.updateGame(game), Changes.CURRENT_ROUND);
+    game = expectNoUpdate(requestAttemptBlue.updateGame(game));
+    game = expectNoUpdate(requestAttemptRed.updateGame(game));
 
     // Activate Buzzer
-    expect(activateBuzzer.updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
+    game = expectUpdate(activateBuzzer.updateGame(game), Changes.CURRENT_ROUND);
     const s1 = game.round?.timerStart;
     expect(s1).toBeTruthy();
-    expect(requestAttemptBlue.updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
+    game = expectUpdate(requestAttemptBlue.updateGame(game), Changes.CURRENT_ROUND);
     expect(game.round?.state).toBe(RoundState.TEAM_CAN_ATTEMPT);
     expect(game.round?.attemptingTeams).toContain(TeamColor.BLUE);
     expect(game.round?.attemptingTeams.size).toBe(1);
@@ -75,17 +76,17 @@ test('requestAttempt', () => {
     expect(s1 !== s2).toBeTruthy();
 
     // Not during attempt
-    expect(requestAttemptBlue.updateGame(game)).toEqual([]);
-    expect(requestAttemptRed.updateGame(game)).toEqual([]);
+    game = expectNoUpdate(requestAttemptBlue.updateGame(game));
+    game = expectNoUpdate(requestAttemptRed.updateGame(game));
 
     // Only one attempt!
     if (game.round) {
         game.round.state = RoundState.BUZZER_ACTIVE;
     }
-    expect(requestAttemptBlue.updateGame(game)).toEqual([]);
+    game = expectNoUpdate(requestAttemptBlue.updateGame(game));
 
     // Red still can
-    expect(requestAttemptRed.updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
+    game = expectUpdate(requestAttemptRed.updateGame(game), Changes.CURRENT_ROUND);
     expect(game.round?.state).toBe(RoundState.TEAM_CAN_ATTEMPT);
     expect(game.round?.attemptingTeams).toContain(TeamColor.RED);
     expect(game.round?.attemptingTeams.size).toBe(1);
@@ -99,34 +100,34 @@ test('requestAttempt', () => {
     if (game.round) {
         game.round.state = RoundState.BUZZER_ACTIVE;
     }
-    expect(requestAttemptBlue.updateGame(game)).toEqual([]);
-    expect(requestAttemptRed.updateGame(game)).toEqual([]);
+    game = expectNoUpdate(requestAttemptBlue.updateGame(game));
+    game = expectNoUpdate(requestAttemptRed.updateGame(game));
 });
 
 test('skipRound', () => {
-    expect(skipRound.updateGame(game)).toEqual([]);
-    expect(startRound.updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
-    expect(skipRound.updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
+    game = expectNoUpdate(skipRound.updateGame(game));
+    game = expectUpdate(startRound.updateGame(game), Changes.CURRENT_ROUND);
+    game = expectUpdate(skipRound.updateGame(game), Changes.CURRENT_ROUND);
     expect(game.round?.state).toBe(RoundState.SHOW_RESULTS);
     expect(game.round?.teamsAlreadyAttempted.size).toBe(0);
     expect(game.round?.question.completedBy.size).toBe(0);
     expect(game.round?.attemptingTeams.size).toBe(0);
     expect(game.round?.timerStart).toBeNull();
 
-    expect(skipRound.updateGame(game)).toEqual([]);
+    game = expectNoUpdate(skipRound.updateGame(game));
 });
 
 test('closeRound', () => {
     const closeRound = new CloseRoundEvent();
-    expect(closeRound.updateGame(game)).toEqual([]);
-    expect(startRound.updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
-    expect(closeRound.updateGame(game)).toEqual([]);
-    expect(skipRound.updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
+    game = expectNoUpdate(closeRound.updateGame(game));
+    game = expectUpdate(startRound.updateGame(game), Changes.CURRENT_ROUND);
+    game = expectNoUpdate(closeRound.updateGame(game));
+    game = expectUpdate(skipRound.updateGame(game), Changes.CURRENT_ROUND);
     expect(game.round?.state).toBe(RoundState.SHOW_RESULTS);
     expect(game.round?.timerStart).toBeNull();
 
-    expect(closeRound.updateGame(game)).toEqual([EventChange.CURRENT_ROUND, EventChange.GAME]);
+    game = expectUpdate(closeRound.updateGame(game), Changes.GAME_SETUP, Changes.CURRENT_ROUND);
     expect(game.round).toBeNull();
     expect(game.roundsCounter).toBe(1);
-    expect(closeRound.updateGame(game)).toEqual([]);
+    game = expectNoUpdate(closeRound.updateGame(game));
 });

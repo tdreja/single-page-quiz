@@ -1,11 +1,11 @@
-import { expect, test, beforeEach } from '@jest/globals';
-import { RoundState } from '../model/game/game';
+import { beforeEach, expect, test } from '@jest/globals';
+import { Game, RoundState } from '../model/game/game';
 import { TeamColor } from '../model/game/team';
-import { EventChange } from './common-events';
 import {
     choiceAWrong,
     choiceBCorrect,
-    game,
+    expectNoUpdate,
+    expectUpdate,
     newTestSetup,
     playerRedCamel,
     questionEstimate,
@@ -17,24 +17,26 @@ import {
 } from './data.test';
 import { SelectFromMultipleChoiceEvent, SubmitEstimateEvent } from './question-event';
 import { ActivateBuzzerEvent, RequestAttemptEvent, StartRoundEvent } from './round-events';
+import { Changes } from './common-events';
 
+let game: Game;
 beforeEach(() => {
-    newTestSetup();
+    game = newTestSetup();
 });
 
 test('selectMultipleChoice', () => {
-    expect(new StartRoundEvent(sectionId, questionId).updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
+    game = expectUpdate(new StartRoundEvent(sectionId, questionId).updateGame(game), Changes.CURRENT_ROUND);
     const round = game.round;
     expect(round).toBeTruthy();
     expect(round?.state).toBe(RoundState.SHOW_QUESTION);
 
     // No team selected
-    expect(new SelectFromMultipleChoiceEvent(choiceAWrong.choiceId).updateGame(game)).toEqual([]);
+    game = expectNoUpdate(new SelectFromMultipleChoiceEvent(choiceAWrong.choiceId).updateGame(game));
 
     // TeamView blue tries
-    expect(new ActivateBuzzerEvent().updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
-    expect(new RequestAttemptEvent(TeamColor.BLUE).updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
-    expect(new SelectFromMultipleChoiceEvent(choiceAWrong.choiceId).updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
+    game = expectUpdate(new ActivateBuzzerEvent().updateGame(game), Changes.CURRENT_ROUND);
+    game = expectUpdate(new RequestAttemptEvent(TeamColor.BLUE).updateGame(game), Changes.CURRENT_ROUND);
+    game = expectUpdate(new SelectFromMultipleChoiceEvent(choiceAWrong.choiceId).updateGame(game), Changes.CURRENT_ROUND);
     expect(round?.state).toBe(RoundState.SHOW_QUESTION);
     expect(round?.teamsAlreadyAttempted).toContain(TeamColor.BLUE);
     expect(round?.attemptingTeams.size).toBe(0);
@@ -42,10 +44,13 @@ test('selectMultipleChoice', () => {
     expect(teamBlue.points).toBe(0);
 
     // TeamView red tries
-    expect(new ActivateBuzzerEvent().updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
-    expect(new RequestAttemptEvent(TeamColor.RED).updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
-    expect(new SelectFromMultipleChoiceEvent(choiceBCorrect.choiceId).updateGame(game))
-        .toEqual([EventChange.CURRENT_ROUND, EventChange.GAME]);
+    game = expectUpdate(new ActivateBuzzerEvent().updateGame(game), Changes.CURRENT_ROUND);
+    game = expectUpdate(new RequestAttemptEvent(TeamColor.RED).updateGame(game), Changes.CURRENT_ROUND);
+    game = expectUpdate(
+        new SelectFromMultipleChoiceEvent(choiceBCorrect.choiceId).updateGame(game),
+        Changes.GAME_SETUP,
+        Changes.CURRENT_ROUND,
+    );
     expect(round?.state).toBe(RoundState.SHOW_RESULTS);
     expect(round?.teamsAlreadyAttempted).toContain(TeamColor.RED);
     expect(round?.attemptingTeams.size).toBe(0);
@@ -57,29 +62,29 @@ test('selectMultipleChoice', () => {
 });
 
 test('selectEstimate', () => {
-    expect(new StartRoundEvent(sectionId, questionEstimateId).updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
+    game = expectUpdate(new StartRoundEvent(sectionId, questionEstimateId).updateGame(game), Changes.CURRENT_ROUND);
     const round = game.round;
     expect(round).toBeTruthy();
     expect(round?.state).toBe(RoundState.SHOW_QUESTION);
 
     // No valid team
-    expect(new SubmitEstimateEvent(TeamColor.ORANGE, 100).updateGame(game)).toEqual([]);
+    game = expectNoUpdate(new SubmitEstimateEvent(TeamColor.ORANGE, 100).updateGame(game));
 
     // Blue submits
-    expect(new SubmitEstimateEvent(TeamColor.BLUE, 500).updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
+    game = expectUpdate(new SubmitEstimateEvent(TeamColor.BLUE, 500).updateGame(game), Changes.CURRENT_ROUND);
     expect(questionEstimate.estimates.get(TeamColor.BLUE)).toBe(500);
     expect(questionEstimate.estimates.size).toBe(1);
     expect(round?.teamsAlreadyAttempted).toContain(TeamColor.BLUE);
     expect(round?.state).toBe(RoundState.SHOW_QUESTION);
 
     // Blue corrects
-    expect(new SubmitEstimateEvent(TeamColor.BLUE, 600).updateGame(game)).toEqual([EventChange.CURRENT_ROUND]);
+    game = expectUpdate(new SubmitEstimateEvent(TeamColor.BLUE, 600).updateGame(game), Changes.CURRENT_ROUND);
     expect(questionEstimate.estimates.get(TeamColor.BLUE)).toBe(600);
     expect(questionEstimate.estimates.size).toBe(1);
     expect(round?.state).toBe(RoundState.SHOW_QUESTION);
 
     // Red submits and wins
-    expect(new SubmitEstimateEvent(TeamColor.RED, 700).updateGame(game)).toEqual([EventChange.CURRENT_ROUND, EventChange.GAME]);
+    game = expectUpdate(new SubmitEstimateEvent(TeamColor.RED, 700).updateGame(game), Changes.GAME_SETUP, Changes.CURRENT_ROUND);
     expect(questionEstimate.estimates.get(TeamColor.RED)).toBe(700);
     expect(questionEstimate.estimates.size).toBe(2);
     expect(round?.state).toBe(RoundState.SHOW_RESULTS);
