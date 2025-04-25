@@ -1,12 +1,11 @@
-import { Team, TeamColor } from "../game/team";
-import {IndexedByColor, JsonDynamicQuestionData, JsonStaticQuestionData} from "./json";
-import { addPointsToTeam, QuestionType, TextQuestion } from "./question";
+import { Team, TeamColor } from '../game/team';
+import { IndexedByColor, JsonDynamicQuestionData, JsonStaticQuestionData } from './json';
+import { addPointsToTeam, QuestionType, TextQuestion } from './question';
 
 /**
  * Base API for estimate questions
  */
 export class EstimateQuestion implements TextQuestion {
-
     private readonly _questionId: string;
     private readonly _estimates: Map<TeamColor, number>;
     private readonly _completedBy: Set<TeamColor>;
@@ -24,20 +23,20 @@ export class EstimateQuestion implements TextQuestion {
         this._completedBy = new Set<TeamColor>();
         this._completed = false;
     }
-    
+
     public get questionId(): string {
         return this._questionId;
     }
-    
+
     public get pointsForCompletion(): number {
         return this._pointsForCompletion;
     }
-    
+
     public get text(): string {
         return this._text;
     }
-    
-    public get target() : number {
+
+    public get target(): number {
         return this._target;
     }
 
@@ -56,54 +55,54 @@ export class EstimateQuestion implements TextQuestion {
     public get completed(): boolean {
         return this._completed;
     }
-    
+
     public completeQuestion(teams: Array<Team>) {
         this._completedBy.clear();
-        for(const team of teams) {
+        for (const team of teams) {
             this._completedBy.add(team.color);
             addPointsToTeam(this.pointsForCompletion, team);
         }
         this._completed = true;
     }
-    
+
     public exportStaticQuestionData(): JsonStaticQuestionData {
         return {
             type: QuestionType.ESTIMATE,
             pointsForCompletion: this.pointsForCompletion,
             text: this.text,
             estimateTarget: this.target,
-        }
+        };
     }
 
     public exportDynamicQuestionData(): JsonDynamicQuestionData {
         const data: IndexedByColor = {};
-        for(const [team,estimate] of this.estimates) {
+        for (const [team, estimate] of this.estimates) {
             data[team] = estimate;
         }
         return {
             questionId: this._questionId,
             completed: this._completed,
             completedBy: Array.from(this._completedBy),
-            additionalData: data
+            additionalData: data,
         };
     }
 
     public importDynamicQuestionData(state: JsonDynamicQuestionData) {
-        if(this._questionId !== state.questionId) {
+        if (this._questionId !== state.questionId) {
             return;
         }
         this._completed = state.completed || false;
         this._completedBy.clear();
-        if(state.completedBy) {
+        if (state.completedBy) {
             state.completedBy.forEach((t) => this._completedBy.add(t));
         }
         this._estimates.clear();
-        if(!state.additionalData) {
+        if (!state.additionalData) {
             return;
         }
-        for(const team of Object.keys(state.additionalData) as [TeamColor]) {
+        for (const team of Object.keys(state.additionalData) as [TeamColor]) {
             const estimate = Number(state.additionalData[team]);
-            if(!isNaN(estimate)) {
+            if (!isNaN(estimate)) {
                 this._estimates.set(team, estimate);
             }
         }

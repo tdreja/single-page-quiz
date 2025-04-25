@@ -1,9 +1,8 @@
-import { Team, TeamColor } from "../game/team";
-import {JsonDynamicQuestionData, JsonStaticQuestionData} from "./json";
-import { addPointsToTeam, QuestionType, TextQuestion } from "./question";
+import { Team, TeamColor } from '../game/team';
+import { JsonDynamicQuestionData, JsonStaticQuestionData } from './json';
+import { addPointsToTeam, QuestionType, TextQuestion } from './question';
 
 export class ActionQuestion implements TextQuestion {
-
     private readonly _completedBy: Set<TeamColor>;
     private readonly _questionId: string;
     private readonly _pointsForCompletion: number;
@@ -21,11 +20,11 @@ export class ActionQuestion implements TextQuestion {
     public get questionId(): string {
         return this._questionId;
     }
-    
+
     public get pointsForCompletion(): number {
         return this._pointsForCompletion;
     }
-    
+
     public get text(): string {
         return this._text;
     }
@@ -41,22 +40,22 @@ export class ActionQuestion implements TextQuestion {
     public get completed(): boolean {
         return this._completed;
     }
-    
+
     public completeQuestion(teams: Array<Team>) {
         this._completedBy.clear();
-        for(const team of teams) {
+        for (const team of teams) {
             this._completedBy.add(team.color);
             addPointsToTeam(this.pointsForCompletion, team);
         }
         this._completed = true;
     }
-    
+
     public exportStaticQuestionData(): JsonStaticQuestionData {
         return {
             type: QuestionType.ACTION,
             pointsForCompletion: this.pointsForCompletion,
             text: this.text,
-        }
+        };
     }
 
     public exportDynamicQuestionData(): JsonDynamicQuestionData {
@@ -69,12 +68,12 @@ export class ActionQuestion implements TextQuestion {
     }
 
     public importDynamicQuestionData(state: JsonDynamicQuestionData) {
-        if(this._questionId !== state.questionId) {
+        if (this._questionId !== state.questionId) {
             return;
         }
         this._completed = state.completed || false;
         this._completedBy.clear();
-        if(state.completedBy) {
+        if (state.completedBy) {
             state.completedBy.forEach((t) => this._completedBy.add(t));
         }
     }

@@ -7,7 +7,7 @@ export default tseslint.config(
   { ignores: ['dist'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.{ts,tsx}', 'eslint.config.js'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
@@ -43,6 +43,11 @@ export default tseslint.config(
             },
             'multilineDetection': 'brackets'
         }],
+        '@stylistic/function-call-argument-newline': ['warn', 'consistent'],
+        '@stylistic/function-paren-newline': ['warn', 'consistent'],
+        '@stylistic/array-element-newline': ['warn', 'consistent'],
+        '@stylistic/operator-linebreak': ['warn', 'before'],
+        '@stylistic/jsx-wrap-multilines': ['error', { declaration: 'parens'}],
     },
   },
 )

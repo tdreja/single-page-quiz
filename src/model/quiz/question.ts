@@ -1,11 +1,11 @@
-import { Team, TeamColor } from "../game/team"
-import {JsonDynamicQuestionData, JsonStaticQuestionData} from "./json"
+import { Team, TeamColor } from '../game/team';
+import { JsonDynamicQuestionData, JsonStaticQuestionData } from './json';
 
 export enum QuestionType {
     TEXT_MULTIPLE_CHOICE = 'text-multiple-choice',
     IMAGE_MULTIPLE_CHOICE = 'image-multiple-choice',
     ESTIMATE = 'estimate',
-    ACTION = 'action'
+    ACTION = 'action',
 }
 
 /**
@@ -27,19 +27,19 @@ export interface Question {
  * Base API for text-based questions
  */
 export interface TextQuestion extends Question {
-    readonly text: string
+    readonly text: string,
 }
 
 /**
  * Base API for image-based questions
  */
 export interface ImageQuestion extends Question {
-    readonly imageBase64: string
+    readonly imageBase64: string,
 }
 
 export function addPointsToTeam(points: number, team: Team) {
     team.points += points;
-    for(const player of team.players.values()) {
+    for (const player of team.players.values()) {
         player.points += points;
     }
 }

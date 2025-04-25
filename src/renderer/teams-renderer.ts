@@ -6,16 +6,16 @@ export function renderTeams(game: Game) {
     const teamsContainer = document.getElementById('teams-container');
     if (!teamsContainer) {
         console.error(
-            'Could not render teams! No container with ID teams-container found!'
+            'Could not render teams! No container with ID teams-container found!',
         );
         return;
     }
     teamsContainer.style.setProperty('--teams-count', `${game.teams.size}`);
-    for(const child of Array.from(teamsContainer.children)) {
+    for (const child of Array.from(teamsContainer.children)) {
         teamsContainer.removeChild(child);
     }
     let newHtml = '';
-    for(const team of game.teams.values()) {
+    for (const team of game.teams.values()) {
         newHtml += renderTeam(team);
     }
     teamsContainer.innerHTML = newHtml;
@@ -23,11 +23,11 @@ export function renderTeams(game: Game) {
 
 function renderTeam(team: Team): string {
     let playersHtml = '';
-    for(const player of team.players.values()) {
+    for (const player of team.players.values()) {
         playersHtml += renderPlayer(player);
-    } 
+    }
     const colorLowerCase = team.color.toLowerCase();
-    /*html*/
+    /* html */
     return `
         <div part="team" class="card d-flex flex-grow-1" 
             team="${team.color}"
@@ -45,7 +45,7 @@ function renderTeam(team: Team): string {
 }
 
 function renderPlayer(player: Player): string {
-    /*html*/
+    /* html */
     return `
     <div part="player" 
         player="${player.emoji}" 

@@ -1,11 +1,10 @@
-import { Game, GameRound, getTeams, RoundState } from "../model/game/game";
-import { Team, TeamColor } from "../model/game/team";
-import { EstimateQuestion } from "../model/quiz/estimate-question";
-import { Choice, ImageMultipleChoiceQuestion, MultipleChoiceQuestion, TextMultipleChoiceQuestion } from "../model/quiz/multiple-choice-question";
-import { EventChange, EventType, GameRoundEvent } from "./common-events";
+import { Game, GameRound, getTeams, RoundState } from '../model/game/game';
+import { Team, TeamColor } from '../model/game/team';
+import { EstimateQuestion } from '../model/quiz/estimate-question';
+import { Choice, ImageMultipleChoiceQuestion, MultipleChoiceQuestion, TextMultipleChoiceQuestion } from '../model/quiz/multiple-choice-question';
+import { EventChange, EventType, GameRoundEvent } from './common-events';
 
 export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
-
     private readonly _choiceId: string;
     private readonly _overrideTeam: TeamColor | null;
 
@@ -18,19 +17,19 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
     public updateQuestionRound(game: Game, round: GameRound): Array<EventChange> {
         // Find the teams that attempted the answer
         const teams = this.findCurrentTeams(game, round);
-        if(teams.length === 0) {
+        if (teams.length === 0) {
             return [];
         }
-        
+
         // Find the correct question
         const question: MultipleChoiceQuestion<Choice> | null = this.findQuestion(round);
-        if(!question) {
+        if (!question) {
             return [];
         }
 
         // Find the choice
         const choice = question.choices.get(this._choiceId);
-        if(!choice) {
+        if (!choice) {
             return [];
         }
 
@@ -41,7 +40,7 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
         });
 
         // Complete round if possible
-        if(choice.correct) {
+        if (choice.correct) {
             question.completeQuestion(teams);
             round.state = RoundState.SHOW_RESULTS;
             return [EventChange.CURRENT_ROUND, EventChange.GAME];
@@ -52,26 +51,24 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
     }
 
     protected findCurrentTeams(game: Game, round: GameRound): Array<Team> {
-        if(this._overrideTeam) {
+        if (this._overrideTeam) {
             return getTeams(game, [this._overrideTeam]);
         }
         return getTeams(game, round.attemptingTeams);
     }
 
     protected findQuestion(round: GameRound): MultipleChoiceQuestion<Choice> | null {
-        if(round.question instanceof TextMultipleChoiceQuestion) {
+        if (round.question instanceof TextMultipleChoiceQuestion) {
             return round.question;
         }
-        if(round.question instanceof ImageMultipleChoiceQuestion) {
+        if (round.question instanceof ImageMultipleChoiceQuestion) {
             return round.question;
         }
         return null;
     }
-
 }
 
 export class SubmitEstimateEvent extends GameRoundEvent {
-
     private readonly _team: TeamColor;
     private readonly _estimate: number;
 
@@ -82,29 +79,29 @@ export class SubmitEstimateEvent extends GameRoundEvent {
     }
 
     public updateQuestionRound(game: Game, round: GameRound): Array<EventChange> {
-        if(!game.teams.get(this._team)) {
+        if (!game.teams.get(this._team)) {
             return [];
         }
         const question = this.findQuestion(round);
-        if(!question) {
+        if (!question) {
             return [];
         }
         question.estimates.set(this._team, this._estimate);
         round.teamsAlreadyAttempted.add(this._team);
 
         // Not everyone has estimated? Wait further
-        if(question.estimates.size !== game.teams.size) {
+        if (question.estimates.size !== game.teams.size) {
             return [EventChange.CURRENT_ROUND];
         }
 
         let closestTeams: Array<TeamColor> = [];
         let closestDistance: number | null = null;
-        for(const [team,estimate] of question.estimates) {
+        for (const [team, estimate] of question.estimates) {
             const dist = Math.abs(question.target - estimate);
-            if(closestDistance === null || closestDistance > dist) {
+            if (closestDistance === null || closestDistance > dist) {
                 closestTeams = [team];
                 closestDistance = dist;
-            } else if(closestDistance === dist) {
+            } else if (closestDistance === dist) {
                 closestTeams.push(team);
             }
         }
@@ -116,10 +113,9 @@ export class SubmitEstimateEvent extends GameRoundEvent {
     }
 
     protected findQuestion(round: GameRound): EstimateQuestion | null {
-        if(round.question instanceof EstimateQuestion) {
+        if (round.question instanceof EstimateQuestion) {
             return round.question;
         }
         return null;
     }
-    
 }

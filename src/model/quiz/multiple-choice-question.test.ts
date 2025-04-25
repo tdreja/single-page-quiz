@@ -1,10 +1,10 @@
-import {emptyGame, Game, GameRound, GameSection, RoundState} from "../game/game.ts";
-import {Question} from "./question.ts";
-import {exportStaticContent, updateJsonQuizAtGame} from "./json.ts";
-import {ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion} from "./multiple-choice-question.ts";
-import {TeamColor} from "../game/team.ts";
-import {JsonCurrentRound, JsonStaticGameData, restoreCurrentRound, storeCurrentRound} from "../game/json/game.ts";
-import {asSet} from "../common.ts";
+import { emptyGame, Game, GameRound, GameSection, RoundState } from '../game/game.ts';
+import { Question } from './question.ts';
+import { exportStaticContent, updateJsonQuizAtGame } from './json.ts';
+import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question.ts';
+import { TeamColor } from '../game/team.ts';
+import { JsonCurrentRound, JsonStaticGameData, restoreCurrentRound, storeCurrentRound } from '../game/json/game.ts';
+import { asSet } from '../common.ts';
 
 describe('TextMultipleChoiceQuestion', () => {
     const sId = 'Test';
@@ -17,10 +17,10 @@ describe('TextMultipleChoiceQuestion', () => {
 
     beforeEach(() => {
         choices = new Map<string, TextChoice>();
-        choices.set("choice1", {choiceId: "choice1", correct: true, selectedBy: new Set<TeamColor>(), text: "Choice 1"});
-        choices.set("choice2", {choiceId: "choice2", correct: false, selectedBy: new Set<TeamColor>(), text: "Choice 2"});
+        choices.set('choice1', { choiceId: 'choice1', correct: true, selectedBy: new Set<TeamColor>(), text: 'Choice 1' });
+        choices.set('choice2', { choiceId: 'choice2', correct: false, selectedBy: new Set<TeamColor>(), text: 'Choice 2' });
 
-        textMultipleChoiceQuestion = new TextMultipleChoiceQuestion(qId, points, "Test question text", choices);
+        textMultipleChoiceQuestion = new TextMultipleChoiceQuestion(qId, points, 'Test question text', choices);
         gameSection = {
             sectionName: sId,
             questions: new Map<string, Question>(),
@@ -30,7 +30,6 @@ describe('TextMultipleChoiceQuestion', () => {
         game = emptyGame();
         game.sections.set(sId, gameSection);
     });
-
 
     test('Export and re-import question via JSON', () => {
         // Export the game to JsonQuiz
@@ -57,8 +56,8 @@ describe('TextMultipleChoiceQuestion', () => {
     });
 
     test('Export and re-import current round via JSON', () => {
-        textMultipleChoiceQuestion.choices.get("choice1")?.selectedBy.add(TeamColor.BLUE);
-        textMultipleChoiceQuestion.choices.get("choice2")?.selectedBy.add(TeamColor.PURPLE);
+        textMultipleChoiceQuestion.choices.get('choice1')?.selectedBy.add(TeamColor.BLUE);
+        textMultipleChoiceQuestion.choices.get('choice2')?.selectedBy.add(TeamColor.PURPLE);
         textMultipleChoiceQuestion.completedBy.add(TeamColor.PURPLE);
 
         const date = new Date();
@@ -68,15 +67,15 @@ describe('TextMultipleChoiceQuestion', () => {
             state: RoundState.SHOW_QUESTION,
             teamsAlreadyAttempted: asSet(TeamColor.GREEN),
             attemptingTeams: asSet(TeamColor.ORANGE),
-            timerStart: date
+            timerStart: date,
         };
 
         // Export the current round to JsonCurrentRound
         const exportedRound = storeCurrentRound(game);
         expect(exportedRound).toBeDefined();
         game.round = null;
-        textMultipleChoiceQuestion.choices.get("choice1")?.selectedBy.clear();
-        textMultipleChoiceQuestion.choices.get("choice2")?.selectedBy.clear();
+        textMultipleChoiceQuestion.choices.get('choice1')?.selectedBy.clear();
+        textMultipleChoiceQuestion.choices.get('choice2')?.selectedBy.clear();
         textMultipleChoiceQuestion.completedBy.clear();
 
         // Convert the JsonCurrentRound to a JSON string
@@ -98,8 +97,8 @@ describe('TextMultipleChoiceQuestion', () => {
         expect(round.teamsAlreadyAttempted).toEqual(asSet(TeamColor.GREEN));
         expect(round.attemptingTeams).toEqual(asSet(TeamColor.ORANGE));
         expect(round.timerStart).toEqual(date);
-        expect(textMultipleChoiceQuestion.choices.get("choice1")?.selectedBy.has(TeamColor.BLUE)).toBeTruthy();
-        expect(textMultipleChoiceQuestion.choices.get("choice2")?.selectedBy.has(TeamColor.PURPLE)).toBeTruthy();
+        expect(textMultipleChoiceQuestion.choices.get('choice1')?.selectedBy.has(TeamColor.BLUE)).toBeTruthy();
+        expect(textMultipleChoiceQuestion.choices.get('choice2')?.selectedBy.has(TeamColor.PURPLE)).toBeTruthy();
         expect(textMultipleChoiceQuestion.completedBy.has(TeamColor.PURPLE)).toBeTruthy();
     });
 });
@@ -115,10 +114,10 @@ describe('ImageMultipleChoiceQuestion', () => {
 
     beforeEach(() => {
         choices = new Map<string, TextChoice>();
-        choices.set("choice1", {choiceId: "choice1", correct: true, selectedBy: new Set<TeamColor>(), text: "Choice 1"});
-        choices.set("choice2", {choiceId: "choice2", correct: false, selectedBy: new Set<TeamColor>(), text: "Choice 2"});
+        choices.set('choice1', { choiceId: 'choice1', correct: true, selectedBy: new Set<TeamColor>(), text: 'Choice 1' });
+        choices.set('choice2', { choiceId: 'choice2', correct: false, selectedBy: new Set<TeamColor>(), text: 'Choice 2' });
 
-        imageMultipleChoiceQuestion = new ImageMultipleChoiceQuestion(qId, points, "Test question text", "Test", choices);
+        imageMultipleChoiceQuestion = new ImageMultipleChoiceQuestion(qId, points, 'Test question text', 'Test', choices);
         gameSection = {
             sectionName: sId,
             questions: new Map<string, Question>(),
@@ -155,8 +154,8 @@ describe('ImageMultipleChoiceQuestion', () => {
     });
 
     test('Export and re-import current round via JSON', () => {
-        imageMultipleChoiceQuestion.choices.get("choice1")?.selectedBy.add(TeamColor.BLUE);
-        imageMultipleChoiceQuestion.choices.get("choice2")?.selectedBy.add(TeamColor.PURPLE);
+        imageMultipleChoiceQuestion.choices.get('choice1')?.selectedBy.add(TeamColor.BLUE);
+        imageMultipleChoiceQuestion.choices.get('choice2')?.selectedBy.add(TeamColor.PURPLE);
         imageMultipleChoiceQuestion.completedBy.add(TeamColor.PURPLE);
 
         const date = new Date();
@@ -166,15 +165,15 @@ describe('ImageMultipleChoiceQuestion', () => {
             state: RoundState.SHOW_QUESTION,
             teamsAlreadyAttempted: asSet(TeamColor.GREEN),
             attemptingTeams: asSet(TeamColor.ORANGE),
-            timerStart: date
+            timerStart: date,
         };
 
         // Export the current round to JsonCurrentRound
         const exportedRound = storeCurrentRound(game);
         expect(exportedRound).toBeDefined();
         game.round = null;
-        imageMultipleChoiceQuestion.choices.get("choice1")?.selectedBy.clear();
-        imageMultipleChoiceQuestion.choices.get("choice2")?.selectedBy.clear();
+        imageMultipleChoiceQuestion.choices.get('choice1')?.selectedBy.clear();
+        imageMultipleChoiceQuestion.choices.get('choice2')?.selectedBy.clear();
         imageMultipleChoiceQuestion.completedBy.clear();
 
         // Convert the JsonCurrentRound to a JSON string
@@ -196,8 +195,8 @@ describe('ImageMultipleChoiceQuestion', () => {
         expect(round.teamsAlreadyAttempted).toEqual(asSet(TeamColor.GREEN));
         expect(round.attemptingTeams).toEqual(asSet(TeamColor.ORANGE));
         expect(round.timerStart).toEqual(date);
-        expect(imageMultipleChoiceQuestion.choices.get("choice1")?.selectedBy.has(TeamColor.BLUE)).toBeTruthy();
-        expect(imageMultipleChoiceQuestion.choices.get("choice2")?.selectedBy.has(TeamColor.PURPLE)).toBeTruthy();
+        expect(imageMultipleChoiceQuestion.choices.get('choice1')?.selectedBy.has(TeamColor.BLUE)).toBeTruthy();
+        expect(imageMultipleChoiceQuestion.choices.get('choice2')?.selectedBy.has(TeamColor.PURPLE)).toBeTruthy();
         expect(imageMultipleChoiceQuestion.completedBy.has(TeamColor.PURPLE)).toBeTruthy();
     });
 });

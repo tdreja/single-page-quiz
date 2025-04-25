@@ -1,12 +1,12 @@
-import {Team, TeamColor} from "./team";
-import {Emoji, Player} from "./player";
-import { Question } from "../quiz/question";
+import { Team, TeamColor } from './team';
+import { Emoji, Player } from './player';
+import { Question } from '../quiz/question';
 
 export enum GameState {
     TEAM_SETUP = 'team-setup',
     PLAYER_SETUP = 'player-setup',
     CONTROLLER_SETUP = 'controller-setup',
-    GAME_ACTIVE = 'game-active'
+    GAME_ACTIVE = 'game-active',
 }
 
 /**
@@ -23,8 +23,8 @@ export enum RoundState {
  * Group of rounds with a name associated (e.g. category of questions)
  */
 export interface GameSection {
-    readonly sectionName: string;
-    readonly questions: Map<string, Question>;
+    readonly sectionName: string,
+    readonly questions: Map<string, Question>,
 }
 
 export interface GameRound {
@@ -40,14 +40,14 @@ export interface GameRound {
  * Container with all game data
  */
 export interface Game {
-    readonly sections: Map<string, GameSection>;
-    readonly availableEmojis: Set<Emoji>;
-    readonly availableColors: Set<TeamColor>;
-    readonly players: Map<Emoji, Player>;
-    readonly teams: Map<TeamColor, Team>;
-    round: GameRound | null;
-    roundsCounter: number;
-    state: GameState;
+    readonly sections: Map<string, GameSection>,
+    readonly availableEmojis: Set<Emoji>,
+    readonly availableColors: Set<TeamColor>,
+    readonly players: Map<Emoji, Player>,
+    readonly teams: Map<TeamColor, Team>,
+    round: GameRound | null,
+    roundsCounter: number,
+    state: GameState,
 }
 
 export function emptyGame(): Game {
@@ -59,18 +59,18 @@ export function emptyGame(): Game {
         teams: new Map(),
         round: null,
         roundsCounter: 0,
-        state: GameState.TEAM_SETUP
-    }
+        state: GameState.TEAM_SETUP,
+    };
 }
 
 export function getTeams(game: Game, colors?: Array<TeamColor> | Set<TeamColor>): Array<Team> {
-    if(!colors) {
+    if (!colors) {
         return [];
     }
     const teams: Array<Team> = [];
-    for(const color of colors) {
+    for (const color of colors) {
         const team = game.teams.get(color);
-        if(team) {
+        if (team) {
             teams.push(team);
         }
     }
