@@ -1,10 +1,9 @@
 import { Team, TeamColor } from "../game/team";
-import {IndexedByColor, JsonDynamicQuestionData, JsonStaticQuestionData} from "./json";
+import {JsonDynamicQuestionData, JsonStaticQuestionData} from "./json";
 import { addPointsToTeam, QuestionType, TextQuestion } from "./question";
 
 export class ActionQuestion implements TextQuestion {
 
-    private readonly _alreadyAttempted: Set<TeamColor>;
     private readonly _completedBy: Set<TeamColor>;
     private readonly _questionId: string;
     private readonly _pointsForCompletion: number;
@@ -16,7 +15,6 @@ export class ActionQuestion implements TextQuestion {
         this._pointsForCompletion = pointsForCompletion;
         this._text = text;
         this._completedBy = new Set<TeamColor>();
-        this._alreadyAttempted = new Set<TeamColor>();
         this._completed = false;
     }
 
@@ -43,10 +41,6 @@ export class ActionQuestion implements TextQuestion {
     public get completed(): boolean {
         return this._completed;
     }
-
-    public alreadyAttempted(team: TeamColor): boolean {
-        return this._alreadyAttempted.has(team);
-    }
     
     public completeQuestion(teams: Array<Team>) {
         this._completedBy.clear();
@@ -66,15 +60,11 @@ export class ActionQuestion implements TextQuestion {
     }
 
     public exportDynamicQuestionData(): JsonDynamicQuestionData {
-        const data: IndexedByColor = {};
-        for(const color of this._alreadyAttempted) {
-            data[color] = true;
-        }
         return {
             questionId: this._questionId,
             completed: this._completed,
             completedBy: Array.from(this._completedBy),
-            additionalData: data,
+            additionalData: {},
         };
     }
 
@@ -86,12 +76,6 @@ export class ActionQuestion implements TextQuestion {
         this._completedBy.clear();
         if(state.completedBy) {
             state.completedBy.forEach((t) => this._completedBy.add(t));
-        }
-        this._alreadyAttempted.clear();
-        if(state.additionalData) {
-            for(const key of Object.keys(state.additionalData)) {
-                this._alreadyAttempted.add(key as TeamColor);
-            }
         }
     }
 }

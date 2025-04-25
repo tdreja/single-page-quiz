@@ -1,22 +1,33 @@
 import {ActionQuestion} from "./action-question.ts";
-import {emptyGame, Game, GameSection} from "../game/game.ts";
+import {emptyGame, Game, GameRound, GameSection, RoundState} from "../game/game.ts";
 import {Question} from "./question.ts";
 import {exportStaticContent, updateJsonQuizAtGame} from "./json.ts";
-import {JsonStaticGameData} from "../game/json/game.ts";
+import {JsonCurrentRound, JsonStaticGameData, restoreCurrentRound, storeCurrentRound} from "../game/json/game.ts";
+import {asSet} from "../common.ts";
+import {TeamColor} from "../game/team.ts";
 
 describe('ActionQuestion', () => {
-    const sId = 'Test';
-    const points = 10;
-    const qId = `${sId}-${points}`;
-    const actionQuestion: ActionQuestion = new ActionQuestion(qId, 10, "Test question text");
-    const gameSection: GameSection = {
-        sectionName: sId,
-        questions: new Map<string, Question>(),
-    }
-    gameSection.questions.set(qId, actionQuestion);
+    let sId: string;
+    let points: number;
+    let qId: string;
+    let actionQuestion: ActionQuestion;
+    let gameSection: GameSection;
+    let game: Game;
 
-    const game: Game = emptyGame();
-    game.sections.set(sId, gameSection);
+    beforeEach(() => {
+        sId = 'Test';
+        points = 10;
+        qId = `${sId}-${points}`;
+        actionQuestion = new ActionQuestion(qId, 10, "Test question text");
+        gameSection = {
+            sectionName: sId,
+            questions: new Map<string, Question>(),
+        };
+        gameSection.questions.set(qId, actionQuestion);
+
+        game = emptyGame();
+        game.sections.set(sId, gameSection);
+    });
 
 
     test('Export and re-import question via JSON', () => {
@@ -42,5 +53,45 @@ describe('ActionQuestion', () => {
         expect(question).toBeDefined();
         expect(question?.questionId).toBe(qId);
         expect(question).toEqual(actionQuestion);
+    });
+
+    test('Export and re-import current round via JSON', () => {
+        const date = new Date();
+        game.round = {
+            question: actionQuestion,
+            inSectionName: sId,
+            state: RoundState.SHOW_QUESTION,
+            teamsAlreadyAttempted: asSet(TeamColor.GREEN),
+            attemptingTeams: asSet(TeamColor.ORANGE),
+            timerStart: date
+        };
+        actionQuestion.completedBy.add(TeamColor.PURPLE);
+
+
+        // Export the current round to JsonCurrentRound
+        const exportedRound = storeCurrentRound(game);
+        expect(exportedRound).toBeDefined();
+        game.round = null;
+        actionQuestion.completedBy.clear();
+
+        // Convert the JsonCurrentRound to a JSON string
+        const jsonString = JSON.stringify(exportedRound);
+
+        // Parse the JSON string back to a JsonCurrentRound object
+        const parsedRound = JSON.parse(jsonString) as JsonCurrentRound;
+        expect(parsedRound).toBeDefined();
+
+        // Restore the round with the parsed JsonCurrentRound
+        restoreCurrentRound(game, parsedRound);
+
+        // Assertions to verify the round state after re-import
+        expect(game.round).toBeDefined();
+        const round = game.round as unknown as GameRound;
+        expect(round.question).toEqual(actionQuestion);
+        expect(round.inSectionName).toBe(sId);
+        expect(round.state).toBe(RoundState.SHOW_QUESTION);
+        expect(round.teamsAlreadyAttempted).toEqual(asSet(TeamColor.GREEN));
+        expect(round.attemptingTeams).toEqual(asSet(TeamColor.ORANGE));
+        expect(round.timerStart).toEqual(date);
     });
 });

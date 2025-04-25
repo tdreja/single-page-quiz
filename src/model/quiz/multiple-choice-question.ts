@@ -80,15 +80,6 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
         return this._completed;
     }
 
-    public alreadyAttempted(team: TeamColor): boolean {
-        for(const choice of this._choices.values()) {
-            if(choice.selectedBy.has(team)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public completeQuestion(teams: Array<Team>) {
         this._completedBy.clear();
         for(const team of teams) {

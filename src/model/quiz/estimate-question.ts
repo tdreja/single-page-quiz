@@ -56,10 +56,6 @@ export class EstimateQuestion implements TextQuestion {
     public get completed(): boolean {
         return this._completed;
     }
-
-    public alreadyAttempted(team: TeamColor): boolean {
-        return this._estimates.has(team);
-    }
     
     public completeQuestion(teams: Array<Team>) {
         this._completedBy.clear();
