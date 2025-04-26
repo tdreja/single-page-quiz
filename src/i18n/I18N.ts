@@ -1,0 +1,29 @@
+import { createContext } from 'react';
+import { GameState } from '../model/game/game';
+import { TeamColor } from '../model/game/team';
+import { i18n_de } from './I18N_de';
+import { i18n_en } from './I18N_en';
+
+export interface Labels {
+    teams: TeamLabels,
+    game: GameLabels,
+}
+
+export type GameLabels = {
+    [state in GameState]: string;
+};
+
+export type TeamLabels = {
+    [color in TeamColor]: string;
+};
+
+export function i18n(): Labels {
+    const language = window.navigator.language;
+    console.log('Language?', language);
+    if (language && language.startsWith('en')) {
+        return i18n_en;
+    }
+    return i18n_de;
+}
+
+export const I18N = createContext<Labels>(i18n_de);

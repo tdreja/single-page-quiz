@@ -1,18 +1,20 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { Team } from '../../model/game/team';
 import { Player, sortPlayersHighestFirst } from '../../model/game/player';
 import { EmojiView } from '../common/EmojiView';
 import { backgroundColor, textColor } from '../common/Colors';
+import { Labels } from '../../i18n/I18N';
 
 export interface TeamProps {
     team: Team,
+    i18n: Labels,
 }
 
 interface PlayerProps {
     player: Player,
 }
 
-export const TeamView = ({ team }: TeamProps): ReactElement => {
+export const TeamView = ({ team, i18n }: TeamProps): ReactElement => {
     const players: ReactElement[] = Array.from(team.players.values())
         .sort(sortPlayersHighestFirst)
         .map((player) => PlayerView({ player }));
@@ -31,7 +33,7 @@ export const TeamView = ({ team }: TeamProps): ReactElement => {
                     backgroundColor: backgroundColor[team.color],
                 }}
             >
-                <span part="team-name">{team.color}</span>
+                <span part="team-name">{i18n.teams[team.color]}</span>
                 <span part="team-points">{team.points}</span>
             </div>
             <div part="player-list" className="card-body d-grid">
