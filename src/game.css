@@ -40,9 +40,18 @@ html {
     --color-white-text: black;
 }
 
+#top-nav {
+    max-height: 15vh;
+}
+
+#main-content {
+    max-height: 65vh;
+}
+
 /* TeamsNav */
 
 #teams-container {
+    max-height: 20vh;
     display: grid;
     gap: 0.5em;
     grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));

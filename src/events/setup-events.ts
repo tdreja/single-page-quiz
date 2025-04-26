@@ -83,7 +83,7 @@ export class RenamePlayerEvent extends BasicGameEvent {
 
     public updateGame(game: Game): GameUpdate {
         const player = game.players.get(this._emoji);
-        if (!player) {
+        if (!player || player.name === this._newName) {
             return noUpdate(game);
         }
         player.name = this._newName;

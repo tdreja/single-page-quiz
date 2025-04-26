@@ -16,7 +16,7 @@ export const SettingsBar = (): ReactElement => {
     };
 
     return (
-        <nav className="navbar sticky-top bg-body-secondary">
+        <nav id="top-nav" className="navbar sticky-top bg-body-secondary d-flex align-items-end pb-0">
             <ul className="nav nav-tabs">
                 <li className={`nav-item nav-link ${game.state === GameState.GAME_ACTIVE ? 'active' : ''}`} onClick={() => changeState(GameState.GAME_ACTIVE)}>
                     {i18n.game['game-active']}

@@ -53,5 +53,13 @@ export function sortPlayersHighestFirst(p1: Player, p2: Player): number {
     if (sort != 0) {
         return sort;
     }
-    return p1.name.localeCompare(p2.name);
+    return sortPlayersByName(p1, p2);
+}
+
+export function sortPlayersByName(p1: Player, p2: Player): number {
+    const sort = p1.name.localeCompare(p2.name);
+    if (sort != 0) {
+        return sort;
+    }
+    return p1.emoji.localeCompare(p2.emoji);
 }
