@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.5",
+    "material-symbols": "^0.31.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

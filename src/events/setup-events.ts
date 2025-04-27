@@ -95,7 +95,7 @@ export class ReRollEmojiEvent extends BasicGameEvent {
     private readonly _oldEmoji: Emoji;
 
     public constructor(oldEmoji: Emoji) {
-        super(EventType.RENAME_PLAYER);
+        super(EventType.REROLL_EMOJI);
         this._oldEmoji = oldEmoji;
     }
 
