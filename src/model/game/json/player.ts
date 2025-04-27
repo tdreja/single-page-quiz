@@ -27,7 +27,6 @@ export function restorePlayers(game: Game, json: JsonUpdatableGameData) {
             const emoji = restorePlayer(game, jsonPlayer);
             if (emoji) {
                 usedEmoji.add(emoji);
-                game.availableEmojis.delete(emoji);
             }
         }
     }
@@ -38,7 +37,6 @@ export function restorePlayers(game: Game, json: JsonUpdatableGameData) {
             continue;
         }
         game.players.delete(existingEmoji);
-        game.availableEmojis.add(existingEmoji);
     }
 }
 

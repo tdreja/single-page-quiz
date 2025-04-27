@@ -41,8 +41,6 @@ export interface GameRound {
  */
 export interface Game {
     readonly sections: Map<string, GameSection>,
-    readonly availableEmojis: Set<Emoji>,
-    readonly availableColors: Set<TeamColor>,
     readonly players: Map<Emoji, Player>,
     readonly teams: Map<TeamColor, Team>,
     round: GameRound | null,
@@ -53,8 +51,6 @@ export interface Game {
 export function emptyGame(): Game {
     return {
         sections: new Map(),
-        availableEmojis: new Set(),
-        availableColors: new Set(),
         players: new Map(),
         teams: new Map(),
         round: null,

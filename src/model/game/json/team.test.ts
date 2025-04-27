@@ -24,9 +24,6 @@ game.players.set(Emoji.BEAVER, beaver);
 
 beforeEach(() => {
     game.teams.clear();
-    game.availableColors.clear();
-    game.availableColors.add(TeamColor.BLUE);
-    game.availableColors.add(TeamColor.RED);
 });
 
 const jsonBlue: JsonTeam = {
@@ -43,8 +40,6 @@ const jsonRed: JsonTeam = {
 test('No teams, one from JSON', () => {
     restoreTeams(game, { teams: [jsonBlue] });
     expect(game.teams.size).toBe(1);
-    expect(game.availableColors).toContain(TeamColor.RED);
-    expect(game.availableColors.size).toBe(1);
     const teamBlue = game.teams.get(TeamColor.BLUE);
     expect(teamBlue).toBeTruthy();
     expect(teamBlue?.points).toBe(100);
@@ -59,7 +54,6 @@ test('One team, two from JSON', () => {
 
     restoreTeams(game, { teams: [jsonBlue, jsonRed] });
     expect(game.teams.size).toBe(2);
-    expect(game.availableColors.size).toBe(0);
     expect(game.teams.get(TeamColor.BLUE)).toBeTruthy();
 
     const teamRed = game.teams.get(TeamColor.RED);
@@ -77,8 +71,6 @@ test('Two teams, one from JSON', () => {
     restoreTeams(game, { teams: [jsonRed] });
     expect(game.teams.size).toBe(1);
     expect(game.teams.get(TeamColor.BLUE)).toBeUndefined();
-    expect(game.availableColors.size).toBe(1);
-    expect(game.availableColors).toContain(TeamColor.BLUE);
 
     expect(game.teams.get(TeamColor.RED)).toBeTruthy();
 });

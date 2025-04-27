@@ -42,10 +42,8 @@ export interface Player {
     team: TeamColor | null,
 }
 
-export function addAllEmojisTo(set: Set<Emoji>) {
-    for (const color of Object.keys(Emoji)) {
-        set.add(color as Emoji);
-    }
+export function allEmojis(): Array<Emoji> {
+    return Object.keys(Emoji) as Array<Emoji>;
 }
 
 export function sortPlayersHighestFirst(p1: Player, p2: Player): number {

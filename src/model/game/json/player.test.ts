@@ -19,16 +19,11 @@ const jsonBeaver: JsonPlayer = {
 
 beforeEach(() => {
     game.players.clear();
-    game.availableEmojis.clear();
-    game.availableEmojis.add(Emoji.BEAVER);
-    game.availableEmojis.add(Emoji.CAMEL);
 });
 
 test('No players, one from JSON', () => {
     importGame(game, { players: [jsonCamel] });
     expect(game.players.size).toBe(1);
-    expect(game.availableEmojis.size).toBe(1);
-    expect(game.availableEmojis).toContain(Emoji.BEAVER);
 
     const playerCamel = game.players.get(Emoji.CAMEL);
     expect(playerCamel).toBeTruthy();
@@ -40,11 +35,9 @@ test('No players, one from JSON', () => {
 test('One player, two from JSON', () => {
     importGame(game, { players: [jsonCamel] });
     expect(game.players.size).toBe(1);
-    expect(game.availableEmojis.size).toBe(1);
 
     importGame(game, { players: [jsonCamel, jsonBeaver] });
     expect(game.players.size).toBe(2);
-    expect(game.availableEmojis.size).toBe(0);
     expect(game.players.get(Emoji.CAMEL)).toBeTruthy();
 
     const playerBeaver = game.players.get(Emoji.BEAVER);
@@ -57,12 +50,9 @@ test('One player, two from JSON', () => {
 test('Two players, one from JSON', () => {
     importGame(game, { players: [jsonCamel, jsonBeaver] });
     expect(game.players.size).toBe(2);
-    expect(game.availableEmojis.size).toBe(0);
 
     importGame(game, { players: [jsonBeaver] });
     expect(game.players.size).toBe(1);
-    expect(game.availableEmojis.size).toBe(1);
-    expect(game.availableEmojis).toContain(Emoji.CAMEL);
     expect(game.players.get(Emoji.BEAVER)).toBeTruthy();
 });
 

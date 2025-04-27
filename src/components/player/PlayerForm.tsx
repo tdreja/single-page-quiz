@@ -6,6 +6,7 @@ import { EmojiView } from '../common/EmojiView';
 import 'material-symbols';
 import { GameEventContext } from '../common/GameContext';
 import { RemovePlayerEvent, RenamePlayerEvent, ReRollEmojiEvent } from '../../events/setup-events';
+import { backgroundColor, textColor } from '../common/Colors';
 
 export interface Props {
     player: Player,
@@ -19,13 +20,14 @@ export const PlayerForm = ({ player }: Props): ReactElement => {
     return (
         <div
             className="d-grid"
-            style={{ gridTemplateColumns: '[emoji] auto [name] auto [team] auto [delete] auto', gap: '0.5rem' }}
+            style={{ gridTemplateColumns: '[emoji] auto [name] auto [delete] auto', gap: '0.5rem' }}
         >
             <div className="input-group" style={{ gridColumn: 'emoji' }}>
                 <EmojiView className="input-group-text pt-0 pb-0" emoji={player.emoji} style={{ gridColumn: 'emoji', fontSize: '1.5em' }} />
                 <span
                     className="input-group-text btn btn-outline-secondary material-symbols-outlined"
                     onClick={() => onGameEvent(new ReRollEmojiEvent(player.emoji))}
+                    title={i18n.playerEditor.tooltipReRollEmoji}
                 >
                     cycle
                 </span>
@@ -38,18 +40,19 @@ export const PlayerForm = ({ player }: Props): ReactElement => {
                     defaultValue={name}
                     onChange={(ev) => setName(ev.target.value)}
                 />
-                <span 
-                className="input-group-text btn btn-outline-secondary material-symbols-outlined"
+                <span
+                    className="input-group-text btn btn-outline-secondary material-symbols-outlined"
                     onClick={() => onGameEvent(new RenamePlayerEvent(player.emoji, name))}
+                    title={i18n.playerEditor.tooltipRename}
                 >
                     person_edit
-                    </span>
+                </span>
             </div>
-            <p style={{ gridColumn: 'team' }}>Team</p>
             <span
                 className="btn btn-outline-danger material-symbols-outlined"
                 style={{ gridColumn: 'delete' }}
                 onClick={() => onGameEvent(new RemovePlayerEvent(player.emoji))}
+                title={i18n.playerEditor.tooltipRemove}
             >
                 person_remove
             </span>

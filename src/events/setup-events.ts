@@ -1,7 +1,7 @@
 import { nextRandom, shuffleArray } from '../model/common';
 import { Game, GameState } from '../model/game/game';
-import { Emoji, Player } from '../model/game/player';
-import { Team, TeamColor } from '../model/game/team';
+import { allEmojis, Emoji, Player } from '../model/game/player';
+import { allColors, Team, TeamColor } from '../model/game/team';
 import { BasicGameEvent, Changes, EventType, GameUpdate, noUpdate, update } from './common-events';
 
 export function findSmallestTeam(teams: Map<TeamColor, Team>): Team | null {
@@ -23,27 +23,32 @@ function addPlayerSmallestToTeam(player: Player, teams: Map<TeamColor, Team>) {
 }
 
 export class AddPlayerEvent extends BasicGameEvent {
-    private readonly _name: string;
+    private readonly _names: Array<string>;
 
-    public constructor(name: string) {
+    public constructor(names: Array<string>) {
         super(EventType.ADD_PLAYER);
-        this._name = name;
+        this._names = names;
     }
 
     public updateGame(game: Game): GameUpdate {
-        const emoji = nextRandom(game.availableEmojis);
-        if (!emoji) {
+        const availableEmojis = allEmojis().filter(emoji => !game.players.has(emoji));
+        if (availableEmojis.length === 0 || availableEmojis.length < this._names.length) {
             return noUpdate(game);
         }
-        game.availableEmojis.delete(emoji);
-        const player: Player = {
-            name: this._name,
-            emoji: emoji,
-            points: 0,
-            team: null,
-        };
-        game.players.set(emoji, player);
-        addPlayerSmallestToTeam(player, game.teams);
+        shuffleArray(availableEmojis);
+        for(let i=0; i<this._names.length; i++) {
+            const name = this._names[i];
+            const emoji = availableEmojis[i];
+
+            const player: Player = {
+                name: name,
+                emoji: emoji,
+                points: 0,
+                team: null,
+            };
+            game.players.set(emoji, player);
+            addPlayerSmallestToTeam(player, game.teams);
+        }
         return update(game, Changes.GAME_SETUP);
     }
 }
@@ -62,7 +67,6 @@ export class RemovePlayerEvent extends BasicGameEvent {
             return noUpdate(game);
         }
         game.players.delete(this._emoji);
-        game.availableEmojis.add(this._emoji);
         const team = player.team ? game.teams.get(player.team) : null;
         if (team) {
             team.players.delete(this._emoji);
@@ -105,12 +109,14 @@ export class ReRollEmojiEvent extends BasicGameEvent {
             return noUpdate(game);
         }
         // Find new available emoji
-        const newEmoji = nextRandom(game.availableEmojis);
+        const availableEmojis = allEmojis().filter(emoji => !game.players.has(emoji));
+        if(availableEmojis.length === 0) {
+            return noUpdate(game);
+        }
+        const newEmoji = nextRandom(availableEmojis);
         if (!newEmoji) {
             return noUpdate(game);
         }
-        game.availableEmojis.delete(newEmoji);
-        game.availableEmojis.add(this._oldEmoji);
 
         // Update player and teams
         player.emoji = newEmoji;
@@ -135,13 +141,13 @@ export class AddTeamEvent extends BasicGameEvent {
 
     public updateGame(game: Game): GameUpdate {
         let newColor: TeamColor | null = this._color || null;
-        if (!newColor || !game.availableColors.has(newColor)) {
-            newColor = nextRandom(game.availableColors);
+        if (!newColor) {
+            const availableColors = allColors().filter(color => !game.teams.has(color));
+            newColor = nextRandom(availableColors);
         }
         if (!newColor) {
             return noUpdate(game);
         }
-        game.availableColors.delete(newColor);
         const team: Team = {
             color: newColor,
             points: 0,
@@ -166,7 +172,6 @@ export class RemoveTeamEvent extends BasicGameEvent {
             return noUpdate(game);
         }
         game.teams.delete(this._color);
-        game.availableColors.add(this._color);
 
         for (const [_, player] of team.players) {
             addPlayerSmallestToTeam(player, game.teams);
@@ -184,13 +189,13 @@ export class ShuffleTeamsEvent extends BasicGameEvent {
     }
 
     public updateGame(game: Game): GameUpdate {
+        const availableColors = allColors();
         // Ensure that we have enough teams
         const targetCount: number = Math.max(this._teamCount, 2);
-        this.makeColorsAvailable(game);
 
         // Clear the previous teams and add empty ones
         game.teams.clear();
-        this.prepareEmptyTeams(game, Math.min(targetCount, game.availableColors.size, game.players.size));
+        this.prepareEmptyTeams(game, availableColors, Math.min(targetCount, availableColors.length, game.players.size));
 
         // Shuffle players
         const randomPlayers: Array<Player> = Array.from(game.players.values());
@@ -203,19 +208,9 @@ export class ShuffleTeamsEvent extends BasicGameEvent {
         return update(game, Changes.GAME_SETUP);
     }
 
-    protected makeColorsAvailable(game: Game): void {
-        for (const color of game.teams.keys()) {
-            game.availableColors.add(color);
-        }
-    }
-
-    protected prepareEmptyTeams(game: Game, targetCount: number): void {
+    protected prepareEmptyTeams(game: Game, availableColors: Array<TeamColor>, targetCount: number): void {
         for (let index = 0; index < targetCount; index++) {
-            const color = game.availableColors.keys().next().value;
-            if (!color) {
-                return;
-            }
-            game.availableColors.delete(color);
+            const color = availableColors[index];
             const team: Team = {
                 color: color,
                 points: 0,

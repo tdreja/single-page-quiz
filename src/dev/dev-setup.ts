@@ -6,15 +6,12 @@ import {
     GameState,
     RoundState,
 } from '../model/game/game';
-import { addAllEmojisTo, Emoji } from '../model/game/player';
-import { addAllColorsTo, TeamColor } from '../model/game/team';
+import { allEmojis, Emoji } from '../model/game/player';
+import { TeamColor } from '../model/game/team';
 import { TextChoice, TextMultipleChoiceQuestion } from '../model/quiz/multiple-choice-question';
 
 export function prepareGame(game: Game) {
     // region TeamsNav & Players
-
-    addAllColorsTo(game.availableColors);
-    addAllEmojisTo(game.availableEmojis);
 
     const maxTeams = 5;
     for (const color of Object.keys(TeamColor)) {
@@ -81,9 +78,8 @@ export function prepareGame(game: Game) {
         'Marlene',
     ];
 
-    for (const _ of Object.keys(Emoji)) {
-        new AddPlayerEvent(names[game.players.size]).updateGame(game);
-    }
+    const newNames = names.slice(0, Math.min(allEmojis().length, names.length));
+    new AddPlayerEvent(newNames).updateGame(game);
     for (const emoji of Object.keys(Emoji)) {
         const player = game.players.get(emoji as Emoji);
         if (player) {

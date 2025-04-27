@@ -19,4 +19,11 @@ export const i18n_en: Labels = {
         [GameState.CONTROLLER_SETUP]: 'Controller',
         [GameState.GAME_ACTIVE]: 'Quiz',
     },
+    playerEditor: {
+        tooltipReRollEmoji: 'New random emoji',
+        tooltipRename: 'Rename player',
+        tooltipRemove: 'Remove player',
+        tooltipAdd: 'Add players',
+        noTeam: 'No team'
+    }
 };

@@ -18,10 +18,8 @@ export interface Team {
     gamepad?: number,
 }
 
-export function addAllColorsTo(set: Set<TeamColor>) {
-    for (const color of Object.keys(TeamColor)) {
-        set.add(color as TeamColor);
-    }
+export function allColors(): Array<TeamColor> {
+    return Object.keys(TeamColor) as Array<TeamColor>;
 }
 
 export function sortTeamsHighestFirst(t1: Team, t2: Team): number {

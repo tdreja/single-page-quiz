@@ -31,7 +31,6 @@ export function restoreTeams(game: Game, json: JsonUpdatableGameData) {
             const color = restoreTeam(game, jsonTeam);
             if (color) {
                 usedColors.add(color);
-                game.availableColors.delete(color);
             }
         }
     }
@@ -41,7 +40,6 @@ export function restoreTeams(game: Game, json: JsonUpdatableGameData) {
         if (usedColors.has(existingColor)) {
             continue;
         }
-        game.availableColors.add(existingColor);
         game.teams.delete(existingColor);
     }
 }

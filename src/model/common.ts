@@ -27,17 +27,10 @@ export function shuffleArray<TYPE>(array: Array<TYPE>) {
     }
 }
 
-export function nextRandom<VALUE>(values: Set<VALUE>): VALUE | null {
-    if (values.size === 0) {
+export function nextRandom<VALUE>(values: Array<VALUE>): VALUE | null {
+    if (values.length === 0) {
         return null;
     }
-    const randNr = Math.floor(Math.random() * values.size);
-    let count = 0;
-    for (const value of values) {
-        if (count === randNr) {
-            return value;
-        }
-        count++;
-    }
-    return null;
+    const randNr = Math.floor(Math.random() * values.length);
+    return values[randNr];
 }

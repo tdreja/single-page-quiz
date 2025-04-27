@@ -7,6 +7,7 @@ import { i18n_en } from './I18N_en';
 export interface Labels {
     teams: TeamLabels,
     game: GameLabels,
+    playerEditor: PlayerEditor,
 }
 
 export type GameLabels = {
@@ -16,6 +17,14 @@ export type GameLabels = {
 export type TeamLabels = {
     [color in TeamColor]: string;
 };
+
+export interface PlayerEditor {
+    tooltipReRollEmoji: string,
+    tooltipRename: string,
+    tooltipRemove: string,
+    tooltipAdd: string,
+    noTeam: string,
+}
 
 export function i18n(): Labels {
     const language = window.navigator.language;
