@@ -55,6 +55,7 @@ export const PlayerForm = ({ player }: Props): ReactElement => {
                     className="form-control"
                     id={`input-name-${player.emoji}`}
                     value={name}
+                    size={16}
                     onChange={(ev) => setName(ev.target.value)}
                 />
                 <span
@@ -73,6 +74,7 @@ export const PlayerForm = ({ player }: Props): ReactElement => {
                     className="form-control"
                     id={`input-points-${player.emoji}`}
                     value={points}
+                    size={6}
                     onChange={(ev) => setPoints(ev.target.value)}
                 />
                 <span
