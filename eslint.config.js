@@ -3,7 +3,6 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import stylistic from '@stylistic/eslint-plugin';
 import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
 
 export default tseslint.config(
     { ignores: ['dist'] },
@@ -24,7 +23,6 @@ export default tseslint.config(
         },
         plugins: {
             react,
-            'react-hooks': reactHooks,
             '@stylistic': stylistic,
         },
         settings: {
@@ -35,7 +33,6 @@ export default tseslint.config(
         rules: {
             ...stylistic.configs.recommended.rules,
             ...react.configs.recommended.rules,
-            ...reactHooks.configs.recommended.rules,
             '@stylistic/max-len': ['warn', { code: 140, ignoreComments: true, ignoreStrings: true, ignoreTemplateLiterals: true, ignoreRegExpLiterals: true }],
             '@typescript-eslint/no-unused-vars': ['warn', {
                 args: 'all',

@@ -58,7 +58,7 @@ function App() {
         channel.removeEventListener('message', channelListener);
         channelListener = onChannelEvent;
         channel.addEventListener('message', channelListener);
-    }, [game, onChannelEvent]);
+    }, []);
 
     return (
         <GameContext.Provider value={game}>
