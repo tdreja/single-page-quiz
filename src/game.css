@@ -21,18 +21,8 @@
 
 [part=player-list] {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
-    gap: 0.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
     align-content: flex-start;
-}
-
-[player] {
-    order: var(--player-order, unset);
-    font-size: 0.8rem;
-    display: inline-grid;
-    grid-template-columns: auto 1fr 1fr;
-    align-items: center;
-    gap: 0.25rem;
 }
 
 .emoji-large, 

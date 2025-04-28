@@ -36,7 +36,7 @@ export const TeamView = ({ team, i18n }: TeamProps): ReactElement => {
                 <span part="team-name">{i18n.teams[team.color]}</span>
                 <span part="team-points">{team.points}</span>
             </div>
-            <div part="player-list" className="card-body d-grid">
+            <div part="player-list" className="card-body d-grid gap-2">
                 {players}
             </div>
         </div>
@@ -49,10 +49,14 @@ const PlayerView = ({ player }: PlayerProps): ReactElement => {
             part="player"
             id={`player-${player.emoji}`}
             key={player.emoji}
+            className="d-grid gap-1 align-items-center border border-secondary-subtle rounded ps-1 pe-1"
+            style={{
+                gridTemplateColumns: '1fr 4fr 2fr',
+            }}
         >
-            <EmojiView emoji={player.emoji} part="emoji" className="bg-body-secondary" />
-            <span part="player-name" className="flex-grow-1">{player.name}</span>
-            <span part="player-points" className="me-2">{player.points}</span>
+            <EmojiView emoji={player.emoji} style={{ fontSize: '1.5em' }} />
+            <span style={{ fontSize: '0.7em', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{player.name}</span>
+            <span style={{ fontSize: '0.7em' }}>{player.points}</span>
         </div>
     );
 };
