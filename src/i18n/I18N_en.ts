@@ -23,7 +23,8 @@ export const i18n_en: Labels = {
         tooltipReRollEmoji: 'New random emoji',
         tooltipRename: 'Rename player',
         tooltipRemove: 'Remove player',
+        tooltipPoints: 'Change points',
         tooltipAdd: 'Add players',
-        noTeam: 'No team'
-    }
+        noTeam: 'No team',
+    },
 };

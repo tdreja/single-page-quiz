@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement } from 'react';
 import { Team } from '../../model/game/team';
 import { Player, sortPlayersHighestFirst } from '../../model/game/player';
 import { EmojiView } from '../common/EmojiView';

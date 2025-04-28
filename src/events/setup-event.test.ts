@@ -1,5 +1,4 @@
 import { beforeEach, expect, test } from '@jest/globals';
-import { nextRandom } from '../model/common';
 import { Emoji, Player } from '../model/game/player';
 import { Team, TeamColor } from '../model/game/team';
 import {
@@ -14,10 +13,10 @@ import {
 import {
     AddPlayerEvent,
     AddTeamEvent,
+    ChangePlayerEvent,
     findSmallestTeam,
     RemovePlayerEvent,
     RemoveTeamEvent,
-    RenamePlayerEvent,
     ReRollEmojiEvent,
     ShuffleTeamsEvent,
 } from './setup-events';
@@ -61,10 +60,10 @@ test('removePlayer', () => {
 });
 
 test('renamePlayer', () => {
-    game = expectNoUpdate(new RenamePlayerEvent(Emoji.CROCODILE, 'Croc').updateGame(game));
+    game = expectNoUpdate(new ChangePlayerEvent(Emoji.CROCODILE, (p) => p.name = 'Croc').updateGame(game));
 
     expect(playerRedCamel.name).toBe('Camel');
-    game = expectUpdate(new RenamePlayerEvent(Emoji.CAMEL, 'RedCamel').updateGame(game), Changes.GAME_SETUP);
+    game = expectUpdate(new ChangePlayerEvent(Emoji.CAMEL, (p) => p.name = 'RedCamel').updateGame(game), Changes.GAME_SETUP);
     expect(playerRedCamel.name).toBe('RedCamel');
 });
 

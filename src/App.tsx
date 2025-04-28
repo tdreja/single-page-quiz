@@ -11,7 +11,7 @@ import { SettingsBar } from './components/common/SettingsBar';
 import { TabContext, TabSettings } from './components/common/TabContext';
 import { BroadcastJson, restoreGameFromBroadcast, toBroadcastJson } from './model/broadcast';
 import { i18n, I18N } from './i18n/I18N';
-import { PlayerSetupView } from './components/player/PlayerSetupView';
+import { PlayerEditorView } from './components/player/PlayerEditorView';
 import { MainPage } from './MainPage';
 
 type ChannelListener = (event: MessageEvent) => void;
@@ -43,7 +43,7 @@ function App() {
         console.log('Received message from channel');
         const json: BroadcastJson = JSON.parse(event.data);
         setGame(restoreGameFromBroadcast(game, json));
-    }, []);
+    }, [game]);
 
     // Load initial state of the game
     useEffect(() => {
@@ -57,7 +57,7 @@ function App() {
         channel.removeEventListener('message', channelListener);
         channelListener = onChannelEvent;
         channel.addEventListener('message', channelListener);
-    }, []);
+    }, [game, onChannelEvent]);
 
     return (
         <GameContext.Provider value={game}>
@@ -71,7 +71,7 @@ function App() {
                         <SettingsBar />
                         <MainPage
                             gameState={game.state}
-                            playerSetup={<PlayerSetupView/>}
+                            playerSetup={<PlayerEditorView />}
                         />
                         <TeamsBottomNav />
                     </I18N.Provider>

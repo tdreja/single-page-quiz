@@ -31,12 +31,12 @@ export class AddPlayerEvent extends BasicGameEvent {
     }
 
     public updateGame(game: Game): GameUpdate {
-        const availableEmojis = allEmojis().filter(emoji => !game.players.has(emoji));
+        const availableEmojis = allEmojis().filter((emoji) => !game.players.has(emoji));
         if (availableEmojis.length === 0 || availableEmojis.length < this._names.length) {
             return noUpdate(game);
         }
         shuffleArray(availableEmojis);
-        for(let i=0; i<this._names.length; i++) {
+        for (let i = 0; i < this._names.length; i++) {
             const name = this._names[i];
             const emoji = availableEmojis[i];
 
@@ -75,22 +75,22 @@ export class RemovePlayerEvent extends BasicGameEvent {
     }
 }
 
-export class RenamePlayerEvent extends BasicGameEvent {
+export class ChangePlayerEvent extends BasicGameEvent {
     private readonly _emoji: Emoji;
-    private readonly _newName: string;
+    private readonly _change: (player: Player) => void;
 
-    public constructor(emoji: Emoji, newName: string) {
+    public constructor(emoji: Emoji, change: (player: Player) => void) {
         super(EventType.RENAME_PLAYER);
         this._emoji = emoji;
-        this._newName = newName;
+        this._change = change;
     }
 
     public updateGame(game: Game): GameUpdate {
         const player = game.players.get(this._emoji);
-        if (!player || player.name === this._newName) {
+        if (!player) {
             return noUpdate(game);
         }
-        player.name = this._newName;
+        this._change(player);
         return update(game, Changes.GAME_SETUP);
     }
 }
@@ -109,8 +109,8 @@ export class ReRollEmojiEvent extends BasicGameEvent {
             return noUpdate(game);
         }
         // Find new available emoji
-        const availableEmojis = allEmojis().filter(emoji => !game.players.has(emoji));
-        if(availableEmojis.length === 0) {
+        const availableEmojis = allEmojis().filter((emoji) => !game.players.has(emoji));
+        if (availableEmojis.length === 0) {
             return noUpdate(game);
         }
         const newEmoji = nextRandom(availableEmojis);
@@ -142,7 +142,7 @@ export class AddTeamEvent extends BasicGameEvent {
     public updateGame(game: Game): GameUpdate {
         let newColor: TeamColor | null = this._color || null;
         if (!newColor) {
-            const availableColors = allColors().filter(color => !game.teams.has(color));
+            const availableColors = allColors().filter((color) => !game.teams.has(color));
             newColor = nextRandom(availableColors);
         }
         if (!newColor) {

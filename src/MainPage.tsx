@@ -1,13 +1,13 @@
-import React, { ReactElement } from "react";
-import { GameState } from "./model/game/game";
+import React, { ReactElement } from 'react';
+import { GameState } from './model/game/game';
 
 export interface Props {
     gameState: GameState,
-    playerSetup: ReactElement
+    playerSetup: ReactElement,
 }
 
 export function view(props: Props): ReactElement {
-    switch(props.gameState) {
+    switch (props.gameState) {
         case GameState.TEAM_SETUP:
             return (<p>TeamSetup</p>);
         case GameState.PLAYER_SETUP:
@@ -25,4 +25,4 @@ export const MainPage = (props: Props): ReactElement => {
             {view(props)}
         </main>
     );
-}
+};

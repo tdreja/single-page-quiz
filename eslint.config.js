@@ -24,6 +24,7 @@ export default tseslint.config(
         },
         plugins: {
             react,
+            'react-hooks': reactHooks,
             '@stylistic': stylistic,
         },
         settings: {

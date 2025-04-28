@@ -22,6 +22,7 @@ export interface PlayerEditor {
     tooltipReRollEmoji: string,
     tooltipRename: string,
     tooltipRemove: string,
+    tooltipPoints: string,
     tooltipAdd: string,
     noTeam: string,
 }
