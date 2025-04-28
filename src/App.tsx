@@ -13,6 +13,7 @@ import { BroadcastJson, restoreGameFromBroadcast, toBroadcastJson } from './mode
 import { i18n, I18N } from './i18n/I18N';
 import { PlayerEditorView } from './components/player/PlayerEditorView';
 import { MainPage } from './MainPage';
+import { PlayerOverview } from './components/player/PlayerOverview';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -71,7 +72,9 @@ function App() {
                         <SettingsBar />
                         <MainPage
                             gameState={game.state}
-                            playerSetup={<PlayerEditorView />}
+                            tabSettings={tabSettings}
+                            playerEditor={<PlayerEditorView />}
+                            playerOverview={<PlayerOverview />}
                         />
                         <TeamsBottomNav />
                     </I18N.Provider>
