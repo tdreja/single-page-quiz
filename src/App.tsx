@@ -15,9 +15,12 @@ import {
 } from './components/common/TabContext';
 import { BroadcastJson, restoreGameFromBroadcast, toBroadcastJson } from './model/broadcast';
 import { i18n, I18N } from './i18n/I18N';
-import { PlayerEditorView } from './components/player/PlayerEditorView';
+import { PlayerModerationView } from './components/player/PlayerModerationView';
 import { MainPage } from './MainPage';
-import { PlayerOverview } from './components/player/PlayerOverview';
+import { PlayerParticipantsView } from './components/player/PlayerParticipantsView';
+import { TeamModerationView } from './components/team/TeamModerationView';
+import { TeamParticipantsView } from './components/team/TeamParticipantsView';
+import { QuizView } from './components/quiz/QuizView';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -88,8 +91,11 @@ function App() {
                         <MainPage
                             gameState={game.state}
                             tabSettings={tabSettings}
-                            playerEditor={<PlayerEditorView />}
-                            playerOverview={<PlayerOverview />}
+                            playerModeration={<PlayerModerationView />}
+                            playerParticipants={<PlayerParticipantsView />}
+                            teamsModeration={<TeamModerationView />}
+                            teamsParticipants={<TeamParticipantsView />}
+                            quiz={<QuizView />}
                         />
                         <TeamsBottomNav />
                     </I18N.Provider>

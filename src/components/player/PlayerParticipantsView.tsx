@@ -17,7 +17,7 @@ const ReadOnlyPlayer = ({ player, i18n }: PlayerProps): ReactElement => {
     );
 };
 
-export const PlayerOverview = (): ReactElement => {
+export const PlayerParticipantsView = (): ReactElement => {
     const game = useContext<Game>(GameContext);
     const i18n = useContext(I18N);
 

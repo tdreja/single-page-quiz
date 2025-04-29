@@ -6,7 +6,7 @@ import { PlayerForm } from './PlayerForm';
 import { I18N } from '../../i18n/I18N';
 import { AddPlayerEvent } from '../../events/setup-events';
 
-export const PlayerEditorView = (): ReactElement | undefined => {
+export const PlayerModerationView = (): ReactElement | undefined => {
     const game = useContext<Game>(GameContext);
     const onGameEvent = useContext(GameEventContext);
     const i18n = useContext(I18N);

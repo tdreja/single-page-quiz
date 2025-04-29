@@ -5,24 +5,27 @@ import { TabSettings } from './components/common/TabContext';
 export interface Props {
     gameState: GameState,
     tabSettings: TabSettings,
-    playerEditor: ReactElement,
-    playerOverview: ReactElement,
+    playerModeration: ReactElement,
+    playerParticipants: ReactElement,
+    teamsModeration: ReactElement,
+    teamsParticipants: ReactElement,
+    quiz: ReactElement,
 }
 
-export function isPresentationOnly(settings: TabSettings): boolean {
+export function isOnlyForParticipants(settings: TabSettings): boolean {
     return settings.participants && !settings.moderation;
 }
 
 export function view(props: Props): ReactElement {
     switch (props.gameState) {
         case GameState.TEAM_SETUP:
-            return (<p>TeamSetup</p>);
+            return isOnlyForParticipants(props.tabSettings) ? props.teamsParticipants : props.teamsModeration;
         case GameState.PLAYER_SETUP:
-            return isPresentationOnly(props.tabSettings) ? props.playerOverview : props.playerEditor;
+            return isOnlyForParticipants(props.tabSettings) ? props.playerParticipants : props.playerModeration;
         case GameState.CONTROLLER_SETUP:
             return (<p>ControllerSetup</p>);
         case GameState.GAME_ACTIVE:
-            return (<p>GameActive</p>);
+            return props.quiz;
     }
 }
 
