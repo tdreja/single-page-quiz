@@ -106,7 +106,7 @@ export const SettingsBar = (): ReactElement => {
             </ul>
             <div className="d-flex mb-2 mt-2 gap-2">
                 <span
-                    className={`btn ${mode.buttonStyle} d-flex align-items-center`}
+                    className={`btn ${mode.buttonStyle} d-flex align-items-center gap-2`}
                     title={mode.tooltip(i18n)}
                     onClick={onModeClick}
                 >
