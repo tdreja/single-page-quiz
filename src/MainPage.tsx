@@ -10,7 +10,7 @@ export interface Props {
 }
 
 export function isPresentationOnly(settings: TabSettings): boolean {
-    return settings.presenter && !settings.editor;
+    return settings.participants && !settings.moderation;
 }
 
 export function view(props: Props): ReactElement {

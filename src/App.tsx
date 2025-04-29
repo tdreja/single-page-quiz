@@ -8,7 +8,11 @@ import { GameContext, GameEventContext, GameEventListener } from './components/c
 import { prepareGame } from './dev/dev-setup';
 import { restoreGameFromStorage, storeGameInStorage } from './components/common/Storage';
 import { SettingsBar } from './components/common/SettingsBar';
-import { TabContext, TabSettings } from './components/common/TabContext';
+import {
+    readSettingsFromLocation,
+    TabContext,
+    TabSettings,
+} from './components/common/TabContext';
 import { BroadcastJson, restoreGameFromBroadcast, toBroadcastJson } from './model/broadcast';
 import { i18n, I18N } from './i18n/I18N';
 import { PlayerEditorView } from './components/player/PlayerEditorView';
@@ -23,8 +27,8 @@ let channelListener: ChannelListener = () => {};
 function App() {
     const [game, setGame] = useState<Game>(initialGame);
     const [tabSettings, setTabSettings] = useState<TabSettings>({
-        editor: true,
-        presenter: false,
+        moderation: true,
+        participants: true,
     });
 
     // Update game when an event is received and store the new state
@@ -46,15 +50,26 @@ function App() {
         setGame(restoreGameFromBroadcast(game, json));
     }, [game]);
 
+    // When settings are changed, we also change the URL
+    const onChangeSettings = useCallback((settings: TabSettings) => {
+        setTabSettings(settings);
+    }, [tabSettings]);
+
     // Load initial state of the game
     useEffect(() => {
-        const updatedGame = restoreGameFromStorage(game, [Changes.QUIZ_CONTENT, Changes.GAME_SETUP, Changes.CURRENT_ROUND]);
-        if (updatedGame.players.size === 0) {
+        // Game from Storage
+        const fromStorage = restoreGameFromStorage(game, [Changes.QUIZ_CONTENT, Changes.GAME_SETUP, Changes.CURRENT_ROUND]);
+        if (fromStorage.players.size === 0) {
             console.warn('No game in storage, use DEV one');
-            prepareGame(updatedGame);
+            prepareGame(fromStorage);
         }
-        setGame(updatedGame);
+        setGame(fromStorage);
 
+        // Settings from URL
+        const settings = readSettingsFromLocation();
+        setTabSettings(settings);
+
+        // Handle messages
         channel.removeEventListener('message', channelListener);
         channelListener = onChannelEvent;
         channel.addEventListener('message', channelListener);
@@ -65,7 +80,7 @@ function App() {
             <GameEventContext.Provider value={onGameEvent}>
                 <TabContext.Provider value={{
                     settings: tabSettings,
-                    setSettings: setTabSettings,
+                    setSettings: onChangeSettings,
                 }}
                 >
                     <I18N.Provider value={i18n()}>

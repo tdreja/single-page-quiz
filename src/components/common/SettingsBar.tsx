@@ -1,22 +1,98 @@
-import React, { ReactElement, useContext } from 'react';
-import { TabContext } from './TabContext';
+import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
+import { settingsToSearch, TabContext } from './TabContext';
 import { GameContext, GameEventContext } from './GameContext';
 import { GameState } from '../../model/game/game';
 import { SwitchStateEvent } from '../../events/setup-events';
-import { I18N } from '../../i18n/I18N';
+import { I18N, Labels } from '../../i18n/I18N';
+// https://fonts.google.com/icons
+import 'material-symbols';
+
+interface Symbol {
+    symbol: string,
+    buttonStyle: string,
+    label: (i18n: Labels) => string,
+    tooltip: (i18n: Labels) => string,
+}
+const modeShared: Symbol = {
+    symbol: 'communication',
+    buttonStyle: 'btn-outline-danger',
+    label: (i18n) => i18n.settings.labelModeShared,
+    tooltip: (i18n) => i18n.settings.tooltipModeShared,
+};
+const modeModeration: Symbol = {
+    symbol: 'clinical_notes',
+    buttonStyle: 'btn-outline-secondary',
+    label: (i18n) => i18n.settings.labelModeModeration,
+    tooltip: (i18n) => i18n.settings.tooltipModeModeration,
+};
+const modeParticipants: Symbol = {
+    symbol: 'monitor',
+    buttonStyle: 'btn-outline-secondary',
+    label: (i18n) => i18n.settings.labelModeParticipants,
+    tooltip: (i18n) => i18n.settings.tooltipModeParticipants,
+};
+const actionOpenParticipants: Symbol = {
+    symbol: 'open_in_browser',
+    buttonStyle: 'btn-outline-primary',
+    label: () => '',
+    tooltip: (i18n) => i18n.settings.tooltipActionParticipants,
+};
+const actionOpenModeration: Symbol = {
+    symbol: 'clinical_notes',
+    buttonStyle: 'btn-outline-secondary',
+    label: () => '',
+    tooltip: (i18n) => i18n.settings.tooltipActionModeration,
+};
 
 export const SettingsBar = (): ReactElement => {
     const game = useContext(GameContext);
     const onGameUpdate = useContext(GameEventContext);
     const tabSettings = useContext(TabContext);
     const i18n = useContext(I18N);
+    const [mode, setMode] = useState<Symbol>(modeShared);
+    const [action, setAction] = useState<Symbol>(actionOpenParticipants);
 
     const changeState = (state: GameState): void => {
         onGameUpdate(new SwitchStateEvent(state));
     };
 
+    useEffect(() => {
+        if (tabSettings.settings.participants) {
+            if (tabSettings.settings.moderation) {
+                setMode(modeShared);
+                setAction(actionOpenParticipants);
+            } else {
+                setMode(modeParticipants);
+                setAction(actionOpenModeration);
+            }
+        } else {
+            setMode(modeModeration);
+            setAction(actionOpenParticipants);
+        }
+    }, [tabSettings]);
+
+    const onModeClick = useCallback(() => {
+        if (!tabSettings.settings.moderation) {
+            return;
+        }
+        tabSettings.setSettings({
+            moderation: true,
+            participants: !tabSettings.settings.participants,
+        });
+    }, [tabSettings]);
+
+    const onActionClick = useCallback(() => {
+        // Open Presentation
+        if (tabSettings.settings.moderation) {
+            window.open(settingsToSearch({ participants: true, moderation: false }), '_blank');
+            // Open Editor
+        } else {
+            window.open(settingsToSearch({ participants: false, moderation: true }), '_blank');
+        }
+    }, [tabSettings]);
+
     return (
-        <nav id="top-nav" className="navbar sticky-top bg-body-secondary d-flex align-items-end pb-0">
+        <nav id="top-nav" className="navbar sticky-top bg-body-secondary d-flex align-items-end pb-0 pt-0 justify-content-between ps-2 pe-2">
             <ul className="nav nav-tabs">
                 <li className={`nav-item nav-link ${game.state === GameState.GAME_ACTIVE ? 'active' : ''}`} onClick={() => changeState(GameState.GAME_ACTIVE)}>
                     {i18n.game['game-active']}
@@ -28,6 +104,25 @@ export const SettingsBar = (): ReactElement => {
                     {i18n.game['team-setup']}
                 </li>
             </ul>
+            <div className="d-flex mb-2 mt-2 gap-2">
+                <span
+                    className={`btn ${mode.buttonStyle} d-flex align-items-center`}
+                    title={mode.tooltip(i18n)}
+                    onClick={onModeClick}
+                >
+                    <span className="material-symbols-outlined">
+                        {mode.symbol}
+                    </span>
+                    {mode.label(i18n)}
+                </span>
+                <span
+                    className={`btn material-symbols-outlined ${action.buttonStyle}`}
+                    title={action.tooltip(i18n)}
+                    onClick={onActionClick}
+                >
+                    {action.symbol}
+                </span>
+            </div>
         </nav>
     );
 };

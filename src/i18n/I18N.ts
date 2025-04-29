@@ -8,6 +8,7 @@ export interface Labels {
     teams: TeamLabels,
     game: GameLabels,
     playerEditor: PlayerEditor,
+    settings: Settings,
 }
 
 export type GameLabels = {
@@ -25,6 +26,17 @@ export interface PlayerEditor {
     tooltipPoints: string,
     tooltipAdd: string,
     noTeam: string,
+}
+
+export interface Settings {
+    tooltipModeShared: string,
+    labelModeShared: string,
+    tooltipModeModeration: string,
+    labelModeModeration: string,
+    tooltipModeParticipants: string,
+    labelModeParticipants: string,
+    tooltipActionParticipants: string,
+    tooltipActionModeration: string,
 }
 
 export function i18n(): Labels {

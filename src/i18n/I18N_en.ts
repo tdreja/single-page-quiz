@@ -27,4 +27,14 @@ export const i18n_en: Labels = {
         tooltipAdd: 'Add players',
         noTeam: 'No team',
     },
+    settings: {
+        tooltipModeShared: 'Shared with participants',
+        labelModeShared: 'Shared',
+        tooltipModeModeration: 'Moderation',
+        labelModeModeration: 'Moderation only',
+        tooltipModeParticipants: 'Participants only',
+        labelModeParticipants: '',
+        tooltipActionParticipants: 'Open participant view',
+        tooltipActionModeration: 'Open moderation view',
+    },
 };
