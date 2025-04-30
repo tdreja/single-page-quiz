@@ -22,6 +22,8 @@ export interface JsonUpdatableGameData {
     players?: Array<JsonPlayer>,
     sections?: Array<JsonDynamicSectionData>,
     state?: GameState,
+    roundsCounter?: number,
+    teamNavExpanded?: boolean,
 }
 
 type OptionalGameSection = {
@@ -83,6 +85,8 @@ export function exportGame(game: Game): JsonUpdatableGameData {
         players,
         sections,
         state: game.state,
+        roundsCounter: game.roundsCounter,
+        teamNavExpanded: game.teamNavExpanded,
     };
 }
 
@@ -111,6 +115,10 @@ export function importGame(game: Game, json?: JsonUpdatableGameData) {
     if (json.state) {
         game.state = json.state;
     }
+    if (json.roundsCounter) {
+        game.roundsCounter = json.roundsCounter;
+    }
+    game.teamNavExpanded = !!json.teamNavExpanded;
 }
 
 export function getQuestion(game: Game, sectionName?: string, questionId?: string): Question | undefined {

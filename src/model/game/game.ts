@@ -46,6 +46,7 @@ export interface Game {
     round: GameRound | null,
     roundsCounter: number,
     state: GameState,
+    teamNavExpanded: boolean,
 }
 
 export function emptyGame(): Game {
@@ -56,6 +57,7 @@ export function emptyGame(): Game {
         round: null,
         roundsCounter: 0,
         state: GameState.TEAM_SETUP,
+        teamNavExpanded: false,
     };
 }
 

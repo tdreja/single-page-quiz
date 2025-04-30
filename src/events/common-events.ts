@@ -3,6 +3,7 @@ import { Game, GameRound, GameState } from '../model/game/game';
 export enum EventType {
     // Global events
     SWITCH_GAME_STATE = 'switch-game-state',
+    EXPAND_TEAM_NAV = 'expand-team-nav',
 
     // Events for each round
     START_ROUND = 'start-round',

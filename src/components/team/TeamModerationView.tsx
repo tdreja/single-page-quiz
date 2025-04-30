@@ -1,7 +1,7 @@
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { Game } from '../../model/game/game';
 import { GameContext } from '../common/GameContext';
-import { allColors, sortTeamsByColor, TeamColor } from '../../model/game/team';
+import { allColors, sortTeamsHighestFirst, TeamColor } from '../../model/game/team';
 import { TeamForm } from './TeamForm';
 
 export const TeamModerationView = (): ReactElement => {
@@ -19,7 +19,7 @@ export const TeamModerationView = (): ReactElement => {
 
     return (
         <div className="d-grid grid-columns-xl" style={{ gap: '0.75rem 1rem' }}>
-            {Array.from(game.teams.values()).sort(sortTeamsByColor)
+            {Array.from(game.teams.values()).sort(sortTeamsHighestFirst)
                 .map((team) => (
                     <TeamForm
                         key={`form-${team.color}`}

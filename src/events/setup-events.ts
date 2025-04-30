@@ -299,3 +299,20 @@ export class SwitchStateEvent extends BasicGameEvent {
         return update(game, Changes.GAME_SETUP);
     }
 }
+
+export class ExpandTeamNavEvent extends BasicGameEvent {
+    private readonly _expanded: boolean;
+
+    constructor(expanded: boolean) {
+        super(EventType.EXPAND_TEAM_NAV);
+        this._expanded = expanded;
+    }
+
+    public updateGame(game: Game): GameUpdate {
+        if (game.teamNavExpanded === this._expanded) {
+            return noUpdate(game);
+        }
+        game.teamNavExpanded = this._expanded;
+        return update(game, Changes.GAME_SETUP);
+    }
+}

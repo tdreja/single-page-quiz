@@ -7,10 +7,11 @@ import { SmallPlayerView } from '../common/SmallPlayerView';
 
 export interface TeamProps {
     team: Team,
+    expanded: boolean,
     i18n: Labels,
 }
 
-export const TeamView = ({ team, i18n }: TeamProps): ReactElement => {
+export const TeamView = ({ team, expanded, i18n }: TeamProps): ReactElement => {
     return (
         <div
             part="team"
@@ -29,17 +30,21 @@ export const TeamView = ({ team, i18n }: TeamProps): ReactElement => {
                 <span part="team-name">{i18n.teams[team.color]}</span>
                 <span part="team-points">{team.points}</span>
             </div>
-            <div part="player-list" className="card-body d-grid gap-2 grid-columns-md">
-                {
-                    Array.from(team.players.values()).sort(sortPlayersHighestFirst)
-                        .map((player) => (
-                            <SmallPlayerView
-                                key={`bottom-team-${team.color}-player-${player.emoji}`}
-                                player={player}
-                            />
-                        ))
-                }
-            </div>
+            {
+                expanded && (
+                    <div part="player-list" className="card-body d-grid gap-2 grid-columns-md">
+                        {
+                            Array.from(team.players.values()).sort(sortPlayersHighestFirst)
+                                .map((player) => (
+                                    <SmallPlayerView
+                                        key={`bottom-team-${team.color}-player-${player.emoji}`}
+                                        player={player}
+                                    />
+                                ))
+                        }
+                    </div>
+                )
+            }
         </div>
     );
 };
