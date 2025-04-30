@@ -1,0 +1,14 @@
+{
+  "name": "Der große Preis",
+  "short_name": "Großer Preis",
+  "start_url": "./",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "./trophy.svg",
+      "type": "image/svg",
+      "sizes": "150x150 any",
+      "purpose": "any"
+    }
+  ]
+}
