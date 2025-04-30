@@ -1,28 +1,21 @@
 import React, { ReactElement } from 'react';
 import { Team } from '../../model/game/team';
-import { Player, sortPlayersHighestFirst } from '../../model/game/player';
-import { EmojiView } from '../common/EmojiView';
+import { sortPlayersHighestFirst } from '../../model/game/player';
 import { backgroundColor, textColor } from '../common/Colors';
 import { Labels } from '../../i18n/I18N';
+import { SmallPlayerView } from '../common/SmallPlayerView';
 
 export interface TeamProps {
     team: Team,
     i18n: Labels,
 }
 
-interface PlayerProps {
-    player: Player,
-}
-
 export const TeamView = ({ team, i18n }: TeamProps): ReactElement => {
-    const players: ReactElement[] = Array.from(team.players.values())
-        .sort(sortPlayersHighestFirst)
-        .map((player) => PlayerView({ player }));
     return (
         <div
             part="team"
             className="card d-flex flex-grow-1"
-            id={`team-${team.color}`}
+            id={`bottom-team-${team.color}`}
             key={team.color}
         >
             <div
@@ -36,27 +29,17 @@ export const TeamView = ({ team, i18n }: TeamProps): ReactElement => {
                 <span part="team-name">{i18n.teams[team.color]}</span>
                 <span part="team-points">{team.points}</span>
             </div>
-            <div part="player-list" className="card-body d-grid gap-2">
-                {players}
+            <div part="player-list" className="card-body d-grid gap-2 grid-columns-md">
+                {
+                    Array.from(team.players.values()).sort(sortPlayersHighestFirst)
+                        .map((player) => (
+                            <SmallPlayerView
+                                key={`bottom-team-${team.color}-player-${player.emoji}`}
+                                player={player}
+                            />
+                        ))
+                }
             </div>
-        </div>
-    );
-};
-
-const PlayerView = ({ player }: PlayerProps): ReactElement => {
-    return (
-        <div
-            part="player"
-            id={`player-${player.emoji}`}
-            key={player.emoji}
-            className="d-grid gap-1 align-items-center border border-secondary-subtle rounded ps-1 pe-1"
-            style={{
-                gridTemplateColumns: '1fr 4fr 2fr',
-            }}
-        >
-            <EmojiView emoji={player.emoji} style={{ fontSize: '1.5em' }} />
-            <span style={{ fontSize: '0.7em', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{player.name}</span>
-            <span style={{ fontSize: '0.7em' }}>{player.points}</span>
         </div>
     );
 };

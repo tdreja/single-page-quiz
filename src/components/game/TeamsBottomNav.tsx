@@ -8,17 +8,18 @@ import { I18N } from '../../i18n/I18N';
 export const TeamsBottomNav = (): ReactElement | undefined => {
     const i18n = useContext(I18N);
     const game = useContext<Game>(GameContext);
-    const teamViews: Array<ReactElement> = Array.from(game.teams.values())
-        .sort(sortTeamsHighestFirst)
-        .map((team) => TeamView({ team, i18n }));
-
-    /* if (game.state !== GameState.GAME_ACTIVE) {
-        return undefined;
-    } */
 
     return (
-        <nav id="teams-container" className="navbar fixed-bottom bg-body-secondary">
-            {teamViews}
+        <nav id="teams-container" className="navbar fixed-bottom bg-body-secondary grid-columns-lg">
+            { Array.from(game.teams.values())
+                .sort(sortTeamsHighestFirst)
+                .map((team) => (
+                    <TeamView
+                        key={`bottom-team-${team.color}`}
+                        team={team}
+                        i18n={i18n}
+                    />
+                ))}
         </nav>
     );
 };

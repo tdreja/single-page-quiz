@@ -7,13 +7,30 @@
     overflow-x: scroll;
 }
 
-/* TeamsNav */
+#main-content > * {
+    flex-grow: 1;
+}
+
+.grid-columns-xl {
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+}
+
+.grid-columns-lg {
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+}
+
+.grid-columns-md {
+    grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+}
+
+.grid-columns-sm {
+    grid-template-columns: repeat(auto-fit, minmax(4rem, 1fr));
+}
 
 #teams-container {
     max-height: 20vh;
     display: grid;
     gap: 0.5em;
-    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
     padding-left: 0.5em;
     padding-right: 0.5em;
     align-items: stretch;
@@ -21,7 +38,6 @@
 
 [part=player-list] {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
     align-content: flex-start;
 }
 

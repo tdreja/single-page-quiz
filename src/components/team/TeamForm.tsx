@@ -4,13 +4,18 @@ import { I18N } from '../../i18n/I18N';
 import { GameEventContext } from '../common/GameContext';
 import { backgroundColor, textColor } from '../common/Colors';
 import { ChangeTeamColorEvent } from '../../events/setup-events';
+import { sortPlayersByName } from '../../model/game/player';
+import { PlayerInTeamForm } from './PlayerInTeamForm';
+import { ColorChangeButton } from '../common/ColorChangeButton';
+import { SmallPlayerView } from '../common/SmallPlayerView';
 
-export interface Props {
+interface Props {
     team: Team,
     availableColors: Array<TeamColor>,
+    usedColors: Array<TeamColor>,
 }
 
-function changeColorStyle(color: TeamColor): React.CSSProperties {
+export function changeColorStyle(color: TeamColor): React.CSSProperties {
     return {
         '--bs-btn-color': backgroundColor[color],
         '--bs-btn-border-color': backgroundColor[color],
@@ -20,14 +25,19 @@ function changeColorStyle(color: TeamColor): React.CSSProperties {
     } as React.CSSProperties;
 }
 
-export const TeamForm = ({ team, availableColors }: Props): ReactElement => {
+export const TeamForm = ({ team, availableColors, usedColors }: Props): ReactElement => {
     const i18n = useContext(I18N);
     const onGameEvent = useContext(GameEventContext);
     const [points, setPoints] = useState<string>(`${team.points}`);
+    const [otherTeams, setOtherTeams] = useState<Array<TeamColor>>([]);
 
     const changeColor = useCallback((color: TeamColor) => {
         onGameEvent(new ChangeTeamColorEvent(team.color, color));
     }, [team]);
+
+    useEffect(() => {
+        setOtherTeams(usedColors.filter((c) => c !== team.color));
+    }, [usedColors]);
 
     return (
         <div
@@ -48,19 +58,24 @@ export const TeamForm = ({ team, availableColors }: Props): ReactElement => {
                     {
                         availableColors.map((color) =>
                             (
-                                <span
-                                    key={`switch-${team.color}-${color}`}
-                                    className="btn btn-outline-primary"
-                                    style={changeColorStyle(color)}
-                                    onClick={() => changeColor(color)}
-                                >
+                                <ColorChangeButton key={`switch-${team.color}-${color}`} color={color}>
                                     {i18n.teams[color]}
-                                </span>
+                                </ColorChangeButton>
                             ))
                     }
                 </div>
                 <p>{points}</p>
-                Team
+                <div className="d-grid gap-2 grid-columns-md">
+                    {
+                        Array.from(team.players.values()).sort(sortPlayersByName)
+                            .map((player) => (
+                                <SmallPlayerView
+                                    key={`team-${team.color}-player-${player.emoji}`}
+                                    player={player}
+                                />
+                            ))
+                    }
+                </div>
             </div>
         </div>
     );

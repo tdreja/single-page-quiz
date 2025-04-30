@@ -27,7 +27,7 @@ export const PlayerModerationView = (): ReactElement | undefined => {
     }, [newPlayersText, onGameEvent]);
 
     return (
-        <div className="d-flex flex-wrap flex-column" style={{ gap: '0.75rem 3rem' }}>
+        <div className="d-flex flex-wrap flex-row" style={{ gap: '0.75rem 3rem' }}>
             <div className="input-group">
                 <textarea
                     className="form-control"

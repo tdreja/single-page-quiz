@@ -15,6 +15,17 @@ export const backgroundColor: IndexedByColor = {
     YELLOW: 'rgb(252, 191, 73)',
 };
 
+export const hoverColor: IndexedByColor = {
+    BLUE: 'rgba(72, 149, 239, 0.5)',
+    GREEN: 'rgba(49, 87, 44, 0.5)',
+    ORANGE: 'rgba(232, 93, 4, 0.5)',
+    PURPLE: 'rgba(114, 9, 183, 0.5)',
+    RED: 'rgba(186, 24, 27, 0.5)',
+    TURQUOISE: 'rgba(0, 175, 185, 0.5)',
+    WHITE: 'rgba(211, 211, 211, 0.5)',
+    YELLOW: 'rgba(252, 191, 73, 0.5)',
+};
+
 export const textColor: IndexedByColor = {
     BLUE: 'black',
     GREEN: 'white',
