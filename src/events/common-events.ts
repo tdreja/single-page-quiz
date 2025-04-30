@@ -25,6 +25,8 @@ export enum EventType {
     ADD_TEAM = 'add-team',
     REMOVE_TEAM = 'remove-team',
     SHUFFLE_TEAMS = 'shuffle-teams',
+    MOVE_PLAYER = 'move-player',
+    CHANGE_TEAM_COLOR = 'change-team-color',
 }
 
 export enum Changes {

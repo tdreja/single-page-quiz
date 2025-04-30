@@ -14,7 +14,9 @@ import {
     AddPlayerEvent,
     AddTeamEvent,
     ChangePlayerEvent,
+    ChangeTeamColorEvent,
     findSmallestTeam,
+    MovePlayerEvent,
     RemovePlayerEvent,
     RemoveTeamEvent,
     ReRollEmojiEvent,
@@ -81,6 +83,16 @@ test('addTeam', () => {
     expect(game.teams.size).toBe(3);
 });
 
+test('movePlayer', () => {
+    game = expectNoUpdate(new MovePlayerEvent(Emoji.CAT, TeamColor.BLUE).updateGame(game));
+    game = expectNoUpdate(new MovePlayerEvent(Emoji.DUCK, TeamColor.BLUE).updateGame(game));
+    game = expectUpdate(new MovePlayerEvent(Emoji.DUCK, TeamColor.RED).updateGame(game), Changes.GAME_SETUP);
+    expect(playerBlueDuck.team).toBe(TeamColor.RED);
+    expect(teamRed.players.size).toBe(2);
+    expect(teamRed.players.has(Emoji.CAMEL)).toBeTruthy();
+    expect(teamRed.players.has(Emoji.DUCK)).toBeTruthy();
+});
+
 test('removeTeam', () => {
     game = expectNoUpdate(new RemoveTeamEvent(TeamColor.ORANGE).updateGame(game));
     game = expectUpdate(new AddTeamEvent(TeamColor.ORANGE).updateGame(game), Changes.GAME_SETUP);
@@ -127,4 +139,18 @@ test('shuffleTeams', () => {
     expect(camelTeam.players.size).toBe(1);
     expect(camelTeam !== teamRed).toBeTruthy();
     expect(duckTeam !== camelTeam).toBeTruthy();
+});
+
+test('changeTeamColor', () => {
+    game = expectNoUpdate(new ChangeTeamColorEvent(TeamColor.ORANGE, TeamColor.TURQUOISE).updateGame(game));
+    game = expectNoUpdate(new ChangeTeamColorEvent(TeamColor.BLUE, TeamColor.BLUE).updateGame(game));
+    game = expectUpdate(new ChangeTeamColorEvent(TeamColor.BLUE, TeamColor.ORANGE).updateGame(game), Changes.GAME_SETUP);
+    expect(playerBlueDuck.team).toBe(TeamColor.ORANGE);
+    expect(game.teams.has(TeamColor.BLUE)).toBeFalsy();
+    expect(game.teams.has(TeamColor.ORANGE)).toBeTruthy();
+    const orangeTeam = game.teams.get(TeamColor.ORANGE);
+    expect(orangeTeam).toBeDefined();
+    expect(orangeTeam?.color).toBe(TeamColor.ORANGE);
+    expect(orangeTeam?.points).toBe(teamBlue.points);
+    expect(orangeTeam?.players?.size).toBe(1);
 });

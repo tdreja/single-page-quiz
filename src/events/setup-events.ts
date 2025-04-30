@@ -95,6 +95,36 @@ export class ChangePlayerEvent extends BasicGameEvent {
     }
 }
 
+export class MovePlayerEvent extends BasicGameEvent {
+    private readonly _emoji: Emoji;
+    private readonly _newTeam: TeamColor;
+
+    public constructor(emoji: Emoji, newTeam: TeamColor) {
+        super(EventType.MOVE_PLAYER);
+        this._emoji = emoji;
+        this._newTeam = newTeam;
+    }
+
+    public updateGame(game: Game): GameUpdate {
+        const player = game.players.get(this._emoji);
+        if (!player || player.team === this._newTeam) {
+            return noUpdate(game);
+        }
+        const newTeam = game.teams.get(this._newTeam);
+        if (!newTeam) {
+            return noUpdate(game);
+        }
+
+        const oldTeam = player.team ? game.teams.get(player.team) : undefined;
+        if (oldTeam) {
+            oldTeam.players.delete(player.emoji);
+        }
+        player.team = this._newTeam;
+        newTeam.players.set(player.emoji, player);
+        return update(game, Changes.GAME_SETUP);
+    }
+}
+
 export class ReRollEmojiEvent extends BasicGameEvent {
     private readonly _oldEmoji: Emoji;
 
@@ -218,6 +248,38 @@ export class ShuffleTeamsEvent extends BasicGameEvent {
             };
             game.teams.set(color, team);
         }
+    }
+}
+
+export class ChangeTeamColorEvent extends BasicGameEvent {
+    private readonly _from: TeamColor;
+    private readonly _to: TeamColor;
+
+    public constructor(from: TeamColor, to: TeamColor) {
+        super(EventType.CHANGE_TEAM_COLOR);
+        this._from = from;
+        this._to = to;
+    }
+
+    public updateGame(game: Game): GameUpdate {
+        // No movement? No change
+        if (this._from === this._to) {
+            return noUpdate(game);
+        }
+        // From must exist, but to must not
+        const teamFrom = game.teams.get(this._from);
+        if (!teamFrom || game.teams.has(this._to)) {
+            return noUpdate(game);
+        }
+        // Copy into new team with new color
+        game.teams.delete(this._from);
+        const newTeam: Team = {
+            ...teamFrom,
+            color: this._to,
+        };
+        newTeam.players.values().forEach((player) => player.team = this._to);
+        game.teams.set(this._to, newTeam);
+        return update(game, Changes.GAME_SETUP);
     }
 }
 
