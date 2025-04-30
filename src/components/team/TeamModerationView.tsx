@@ -5,7 +5,7 @@ import { allColors, sortTeamsHighestFirst, TeamColor } from '../../model/game/te
 import { TeamForm } from './TeamForm';
 import { I18N } from '../../i18n/I18N';
 import { TeamColorButton } from '../common/TeamColorButton';
-import { AddTeamEvent, ShuffleTeamsEvent } from '../../events/setup-events';
+import { AddTeamEvent, RemoveTeamEvent, ShuffleTeamsEvent } from '../../events/setup-events';
 
 export const TeamModerationView = (): ReactElement => {
     const i18n = useContext(I18N);
@@ -52,11 +52,25 @@ export const TeamModerationView = (): ReactElement => {
                         </label>
                         <div id="shuffle-teams">
                             <span
-                                className="btn btn-outline-danger material-symbols-outlined"
+                                className="btn btn-outline-primary material-symbols-outlined"
                                 title={i18n.teamEditor.tooltipShuffle}
-                                onClick={() => onGameEvent(new ShuffleTeamsEvent(game.teams.size))}
+                                onClick={() => onGameEvent(new ShuffleTeamsEvent(Array.from(game.teams.keys())))}
                             >
                                 shuffle
+                            </span>
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="clear-teams" className="form-label">
+                            {i18n.teamEditor.labelClear}
+                        </label>
+                        <div id="clear-teams">
+                            <span
+                                className="btn btn-outline-danger material-symbols-outlined"
+                                title={i18n.teamEditor.tooltipClear}
+                                onClick={() => onGameEvent(new RemoveTeamEvent(Array.from(game.teams.keys())))}
+                            >
+                                delete
                             </span>
                         </div>
                     </div>

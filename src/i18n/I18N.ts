@@ -41,6 +41,8 @@ export interface TeamEditor {
     labelPoints: string,
     labelSwitchColor: string,
     labelShuffle: string,
+    labelClear: string,
+    tooltipClear: string,
     tooltipRemove: string,
     tooltipPoints: string,
     tooltipAdd: string,

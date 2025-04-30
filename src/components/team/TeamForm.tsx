@@ -97,7 +97,7 @@ export const TeamForm = ({ team, availableColors }: Props): ReactElement => {
                     <div id={`team-actions-${team.color}`}>
                         <span
                             className="btn btn-outline-danger material-symbols-outlined"
-                            onClick={() => onGameEvent(new RemoveTeamEvent(team.color))}
+                            onClick={() => onGameEvent(new RemoveTeamEvent([team.color]))}
                             title={i18n.teamEditor.tooltipRemove}
                         >
                             group_remove

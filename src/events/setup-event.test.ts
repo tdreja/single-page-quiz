@@ -94,7 +94,7 @@ test('movePlayer', () => {
 });
 
 test('removeTeam', () => {
-    game = expectNoUpdate(new RemoveTeamEvent(TeamColor.ORANGE).updateGame(game));
+    game = expectNoUpdate(new RemoveTeamEvent([TeamColor.ORANGE]).updateGame(game));
     game = expectUpdate(new AddTeamEvent(TeamColor.ORANGE).updateGame(game), Changes.GAME_SETUP);
     const teamOrange = game.teams.get(TeamColor.ORANGE);
     expect(teamOrange).toBeTruthy();
@@ -103,7 +103,7 @@ test('removeTeam', () => {
     }
     expect(game.teams.size).toBe(3);
 
-    game = expectUpdate(new RemoveTeamEvent(TeamColor.BLUE).updateGame(game), Changes.GAME_SETUP);
+    game = expectUpdate(new RemoveTeamEvent([TeamColor.BLUE]).updateGame(game), Changes.GAME_SETUP);
     expect(game.teams.size).toBe(2);
     expect(game.teams.get(TeamColor.RED)).toBe(teamRed);
     expect(game.teams.get(TeamColor.ORANGE)).toBe(teamOrange);
@@ -116,7 +116,7 @@ test('removeTeam', () => {
 test('shuffleTeams', () => {
     expect(game.teams.size).toBe(2);
 
-    game = expectUpdate(new ShuffleTeamsEvent(2).updateGame(game), Changes.GAME_SETUP);
+    game = expectUpdate(new ShuffleTeamsEvent([TeamColor.BLUE, TeamColor.RED]).updateGame(game), Changes.GAME_SETUP);
     expect(game.teams.size).toBe(2);
 
     expect(playerBlueDuck.team).toBeTruthy();

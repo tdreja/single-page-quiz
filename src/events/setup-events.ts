@@ -189,43 +189,60 @@ export class AddTeamEvent extends BasicGameEvent {
 }
 
 export class RemoveTeamEvent extends BasicGameEvent {
-    private readonly _color: TeamColor;
+    private readonly _colors: Array<TeamColor>;
 
-    public constructor(color: string) {
+    public constructor(colors: Array<TeamColor>) {
         super(EventType.REMOVE_TEAM);
-        this._color = color as TeamColor;
+        this._colors = colors;
     }
 
     public updateGame(game: Game): GameUpdate {
-        const team = game.teams.get(this._color);
-        if (!team) {
-            return noUpdate(game);
+        let anyChanges = false;
+        const orphanedPlayers: Array<Player> = [];
+        for (const color of this._colors) {
+            const team = game.teams.get(color);
+            if (team) {
+                game.teams.delete(color);
+                anyChanges = true;
+                team.players.values().forEach((player) => orphanedPlayers.push(player));
+            }
         }
-        game.teams.delete(this._color);
 
-        for (const [_, player] of team.players) {
-            addPlayerSmallestToTeam(player, game.teams);
+        // Do we still have other teams?
+        if (game.teams.size !== 0) {
+            for (const player of orphanedPlayers) {
+                addPlayerSmallestToTeam(player, game.teams);
+            }
         }
-        return update(game, Changes.GAME_SETUP);
+
+        // Return possible changes
+        return anyChanges ? update(game, Changes.GAME_SETUP) : noUpdate(game);
     }
 }
 
 export class ShuffleTeamsEvent extends BasicGameEvent {
-    private readonly _teamCount: number;
+    private readonly _colors: Array<TeamColor>;
 
-    public constructor(teamCount: number) {
+    public constructor(colors: Array<TeamColor>) {
         super(EventType.SHUFFLE_TEAMS);
-        this._teamCount = teamCount;
+        this._colors = colors;
     }
 
     public updateGame(game: Game): GameUpdate {
-        const availableColors = allColors();
-        // Ensure that we have enough teams
-        const targetCount: number = Math.max(this._teamCount, 2);
+        if (this._colors.length === 0) {
+            return noUpdate(game);
+        }
 
         // Clear the previous teams and add empty ones
         game.teams.clear();
-        this.prepareEmptyTeams(game, availableColors, Math.min(targetCount, availableColors.length, game.players.size));
+        for (const color of this._colors) {
+            const team: Team = {
+                color,
+                points: 0,
+                players: new Map(),
+            };
+            game.teams.set(color, team);
+        }
 
         // Shuffle players
         const randomPlayers: Array<Player> = Array.from(game.players.values());
@@ -236,18 +253,6 @@ export class ShuffleTeamsEvent extends BasicGameEvent {
             addPlayerSmallestToTeam(player, game.teams);
         }
         return update(game, Changes.GAME_SETUP);
-    }
-
-    protected prepareEmptyTeams(game: Game, availableColors: Array<TeamColor>, targetCount: number): void {
-        for (let index = 0; index < targetCount; index++) {
-            const color = availableColors[index];
-            const team: Team = {
-                color: color,
-                points: 0,
-                players: new Map(),
-            };
-            game.teams.set(color, team);
-        }
     }
 }
 
