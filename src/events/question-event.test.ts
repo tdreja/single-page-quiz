@@ -33,7 +33,7 @@ test('selectMultipleChoice', () => {
     // No team selected
     game = expectNoUpdate(new SelectFromMultipleChoiceEvent(choiceAWrong.choiceId).updateGame(game));
 
-    // TeamView blue tries
+    // TeamViewExpanded blue tries
     game = expectUpdate(new ActivateBuzzerEvent().updateGame(game), Changes.CURRENT_ROUND);
     game = expectUpdate(new RequestAttemptEvent(TeamColor.BLUE).updateGame(game), Changes.CURRENT_ROUND);
     game = expectUpdate(new SelectFromMultipleChoiceEvent(choiceAWrong.choiceId).updateGame(game), Changes.CURRENT_ROUND);
@@ -43,7 +43,7 @@ test('selectMultipleChoice', () => {
     expect(choiceAWrong.selectedBy).toContain(TeamColor.BLUE);
     expect(teamBlue.points).toBe(0);
 
-    // TeamView red tries
+    // TeamViewExpanded red tries
     game = expectUpdate(new ActivateBuzzerEvent().updateGame(game), Changes.CURRENT_ROUND);
     game = expectUpdate(new RequestAttemptEvent(TeamColor.RED).updateGame(game), Changes.CURRENT_ROUND);
     game = expectUpdate(

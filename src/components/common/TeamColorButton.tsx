@@ -19,7 +19,7 @@ function changeColorStyle(color: TeamColor): React.CSSProperties {
     } as React.CSSProperties;
 }
 
-export const ColorChangeButton = (props: ColorChangeProps): ReactElement => {
+export const TeamColorButton = (props: ColorChangeProps): ReactElement => {
     return (
         <span
             {...props}

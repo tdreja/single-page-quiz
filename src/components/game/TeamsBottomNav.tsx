@@ -1,10 +1,11 @@
 import React, { ReactElement, useContext } from 'react';
-import { TeamView } from './TeamView';
+import { TeamViewExpanded } from './TeamViewExpanded';
 import { Game } from '../../model/game/game';
 import { GameContext, GameEventContext } from '../common/GameContext';
 import { sortTeamsHighestFirst } from '../../model/game/team';
 import { I18N } from '../../i18n/I18N';
 import { ExpandTeamNavEvent } from '../../events/setup-events';
+import { TeamViewCollapsed } from './TeamViewCollapsed';
 
 export const TeamsBottomNav = (): ReactElement | undefined => {
     const i18n = useContext(I18N);
@@ -25,14 +26,19 @@ export const TeamsBottomNav = (): ReactElement | undefined => {
             <div className="d-grid grid-columns-lg flex-grow-1 gap-2">
                 { Array.from(game.teams.values())
                     .sort(sortTeamsHighestFirst)
-                    .map((team) => (
-                        <TeamView
-                            key={`bottom-team-${team.color}`}
-                            team={team}
-                            i18n={i18n}
-                            expanded={game.teamNavExpanded}
-                        />
-                    ))}
+                    .map((team) => game.teamNavExpanded
+                        ? (
+                            <TeamViewExpanded
+                                key={`bottom-team-${team.color}`}
+                                team={team}
+                            />
+                        )
+                        : (
+                            <TeamViewCollapsed
+                                key={`bottom-team-${team.color}`}
+                                team={team}
+                            />
+                        ))}
             </div>
         </nav>
     );

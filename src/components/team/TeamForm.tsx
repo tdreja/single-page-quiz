@@ -6,7 +6,7 @@ import { backgroundColor, textColor } from '../common/Colors';
 import { ChangeTeamColorEvent } from '../../events/setup-events';
 import { sortPlayersByName } from '../../model/game/player';
 import { PlayerInTeamForm } from './PlayerInTeamForm';
-import { ColorChangeButton } from '../common/ColorChangeButton';
+import { TeamColorButton } from '../common/TeamColorButton';
 import { SmallPlayerView } from '../common/SmallPlayerView';
 
 interface Props {
@@ -50,7 +50,7 @@ export const TeamForm = ({ team, availableColors, usedColors }: Props): ReactEle
                     backgroundColor: backgroundColor[team.color],
                 }}
             >
-                <h4>{i18n.teams[team.color]}</h4>
+                <span className="rounded-pill text-bg-light ps-2 pe-2 fw-bold fs-5">{i18n.teams[team.color]}</span>
             </div>
             <div className="card-body">
                 <div className="input-group">
@@ -58,13 +58,13 @@ export const TeamForm = ({ team, availableColors, usedColors }: Props): ReactEle
                     {
                         availableColors.map((color) =>
                             (
-                                <ColorChangeButton
+                                <TeamColorButton
                                     key={`switch-${team.color}-${color}`}
                                     color={color}
                                     onClick={() => changeColor(color)}
                                 >
                                     {i18n.teams[color]}
-                                </ColorChangeButton>
+                                </TeamColorButton>
                             ))
                     }
                 </div>
