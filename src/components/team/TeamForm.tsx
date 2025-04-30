@@ -1,35 +1,22 @@
-import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
+import React, { ReactElement, useCallback, useContext, useState } from 'react';
 import { Team, TeamColor } from '../../model/game/team';
 import { I18N } from '../../i18n/I18N';
 import { GameEventContext } from '../common/GameContext';
 import { backgroundColor, textColor } from '../common/Colors';
-import { ChangePlayerEvent, ChangeTeamColorEvent, RemovePlayerEvent, RemoveTeamEvent } from '../../events/setup-events';
+import { ChangeTeamColorEvent, RemoveTeamEvent } from '../../events/setup-events';
 import { sortPlayersByName } from '../../model/game/player';
-import { PlayerInTeamForm } from './PlayerInTeamForm';
 import { TeamColorButton } from '../common/TeamColorButton';
 import { SmallPlayerView } from '../common/SmallPlayerView';
 
 interface Props {
     team: Team,
     availableColors: Array<TeamColor>,
-    usedColors: Array<TeamColor>,
 }
 
-export function changeColorStyle(color: TeamColor): React.CSSProperties {
-    return {
-        '--bs-btn-color': backgroundColor[color],
-        '--bs-btn-border-color': backgroundColor[color],
-        '--bs-btn-hover-bg': backgroundColor[color],
-        '--bs-btn-hover-border-color': backgroundColor[color],
-        '--bs-btn-hover-color': textColor[color],
-    } as React.CSSProperties;
-}
-
-export const TeamForm = ({ team, availableColors, usedColors }: Props): ReactElement => {
+export const TeamForm = ({ team, availableColors }: Props): ReactElement => {
     const i18n = useContext(I18N);
     const onGameEvent = useContext(GameEventContext);
     const [points, setPoints] = useState<string>(`${team.points}`);
-    const [otherTeams, setOtherTeams] = useState<Array<TeamColor>>([]);
 
     const changeColor = useCallback((color: TeamColor) => {
         onGameEvent(new ChangeTeamColorEvent(team.color, color));
@@ -44,13 +31,9 @@ export const TeamForm = ({ team, availableColors, usedColors }: Props): ReactEle
         setPoints(`${number}`);
     }, [team.color, points, onGameEvent]);
 
-    useEffect(() => {
-        setOtherTeams(usedColors.filter((c) => c !== team.color));
-    }, [usedColors]);
-
     return (
         <div
-            className="card"
+            className="card flex-grow-1"
         >
             <div
                 className="card-header"
@@ -114,7 +97,6 @@ export const TeamForm = ({ team, availableColors, usedColors }: Props): ReactEle
                     <div id={`team-actions-${team.color}`}>
                         <span
                             className="btn btn-outline-danger material-symbols-outlined"
-                            style={{ gridColumn: 'delete' }}
                             onClick={() => onGameEvent(new RemoveTeamEvent(team.color))}
                             title={i18n.teamEditor.tooltipRemove}
                         >

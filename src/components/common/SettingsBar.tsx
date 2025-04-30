@@ -4,8 +4,6 @@ import { GameContext, GameEventContext } from './GameContext';
 import { GameState } from '../../model/game/game';
 import { SwitchStateEvent } from '../../events/setup-events';
 import { I18N, Labels } from '../../i18n/I18N';
-// https://fonts.google.com/icons
-import 'material-symbols';
 
 interface Symbol {
     symbol: string,

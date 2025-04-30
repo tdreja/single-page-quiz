@@ -52,5 +52,7 @@ export const i18n_en: Labels = {
         tooltipPoints: 'Change points',
         tooltipAdd: 'Add new team',
         tooltipSwitchColor: 'Change color',
+        labelShuffle: 'Shuffle teams',
+        tooltipShuffle: 'Shuffle players into different teams',
     },
 };

@@ -21,6 +21,8 @@ import { PlayerParticipantsView } from './components/player/PlayerParticipantsVi
 import { TeamModerationView } from './components/team/TeamModerationView';
 import { TeamParticipantsView } from './components/team/TeamParticipantsView';
 import { QuizView } from './components/quiz/QuizView';
+// https://fonts.google.com/icons
+import 'material-symbols';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();

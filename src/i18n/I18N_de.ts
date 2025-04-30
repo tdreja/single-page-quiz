@@ -52,5 +52,7 @@ export const i18n_de: Labels = {
         tooltipPoints: 'Punkte ändern',
         tooltipAdd: 'Team hinzufügen',
         tooltipSwitchColor: 'Farbe ändern',
+        labelShuffle: 'Teams mischen',
+        tooltipShuffle: 'Spieler neu auf Teams aufteilen',
     },
 };

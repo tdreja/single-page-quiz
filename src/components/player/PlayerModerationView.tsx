@@ -7,8 +7,6 @@ import { AddPlayerEvent } from '../../events/setup-events';
 import { AccordionItem } from '../common/AccordionItem';
 import { EmojiView } from '../common/EmojiView';
 import { TeamColorButton } from '../common/TeamColorButton';
-// https://fonts.google.com/icons
-import 'material-symbols';
 import { PlayerForm } from './PlayerForm';
 import { TeamColor } from '../../model/game/team';
 

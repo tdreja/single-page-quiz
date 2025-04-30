@@ -6,8 +6,6 @@ import { sortTeamsHighestFirst } from '../../model/game/team';
 import { I18N } from '../../i18n/I18N';
 import { ExpandTeamNavEvent } from '../../events/setup-events';
 import { TeamViewCollapsed } from './TeamViewCollapsed';
-// https://fonts.google.com/icons
-import 'material-symbols';
 
 export const TeamsBottomNav = (): ReactElement | undefined => {
     const i18n = useContext(I18N);

@@ -2,8 +2,6 @@ import React, { ReactElement, useCallback, useContext, useState } from 'react';
 import { Player } from '../../model/game/player';
 import { I18N } from '../../i18n/I18N';
 import { EmojiView } from '../common/EmojiView';
-// https://fonts.google.com/icons
-import 'material-symbols';
 import { GameEventContext } from '../common/GameContext';
 import { ChangePlayerEvent, MovePlayerEvent, RemovePlayerEvent, ReRollEmojiEvent } from '../../events/setup-events';
 import { TeamColorButton } from '../common/TeamColorButton';
