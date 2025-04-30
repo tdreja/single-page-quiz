@@ -58,7 +58,11 @@ export const TeamForm = ({ team, availableColors, usedColors }: Props): ReactEle
                     {
                         availableColors.map((color) =>
                             (
-                                <ColorChangeButton key={`switch-${team.color}-${color}`} color={color}>
+                                <ColorChangeButton
+                                    key={`switch-${team.color}-${color}`}
+                                    color={color}
+                                    onClick={() => changeColor(color)}
+                                >
                                     {i18n.teams[color]}
                                 </ColorChangeButton>
                             ))

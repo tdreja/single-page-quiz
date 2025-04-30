@@ -32,7 +32,9 @@ export function view(props: Props): ReactElement {
 export const MainPage = (props: Props): ReactElement => {
     return (
         <main id="main-content" className="d-flex w-100 ps-3 pe-3 pt-2 pb-2">
-            {view(props)}
+            <div className="w-100">
+                {view(props)}
+            </div>
         </main>
     );
 };

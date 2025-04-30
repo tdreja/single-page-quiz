@@ -17,7 +17,7 @@ export const SmallPlayerView = ({ player }: PlayerProps): ReactElement => {
                 gridTemplateColumns: '1fr 4fr 2fr',
             }}
         >
-            <EmojiView emoji={player.emoji} style={{ fontSize: '1.5em' }} />
+            <EmojiView emoji={player.emoji} style={{ fontSize: '1.2em' }} />
             <span style={{ fontSize: '0.7em', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{player.name}</span>
             <span style={{ fontSize: '0.7em' }}>{player.points}</span>
         </div>

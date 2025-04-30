@@ -10,7 +10,7 @@ export const TeamsBottomNav = (): ReactElement | undefined => {
     const game = useContext<Game>(GameContext);
 
     return (
-        <nav id="teams-container" className="navbar fixed-bottom bg-body-secondary grid-columns-lg">
+        <nav id="teams-container" className="navbar sticky-bottom bg-body-secondary grid-columns-lg">
             { Array.from(game.teams.values())
                 .sort(sortTeamsHighestFirst)
                 .map((team) => (
