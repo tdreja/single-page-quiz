@@ -1,6 +1,7 @@
 import { Emoji, Player } from './player';
 
 export enum TeamColor {
+    // noinspection JSUnusedGlobalSymbols
     RED = 'RED',
     BLUE = 'BLUE',
     GREEN = 'GREEN',

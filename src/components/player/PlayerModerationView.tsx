@@ -1,7 +1,7 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
 import { Game } from '../../model/game/game';
 import { GameContext, GameEventContext } from '../common/GameContext';
-import { Emoji, sortPlayersByName } from '../../model/game/player';
+import { Emoji, Player, sortPlayersByName } from '../../model/game/player';
 import { I18N } from '../../i18n/I18N';
 import { AddPlayerEvent } from '../../events/setup-events';
 import { AccordionItem } from '../common/AccordionItem';
@@ -9,13 +9,14 @@ import { EmojiView } from '../common/EmojiView';
 import { TeamColorButton } from '../common/TeamColorButton';
 import { PlayerForm } from './PlayerForm';
 import { TeamColor } from '../../model/game/team';
+import { Expanded } from './expanded';
 
 export const PlayerModerationView = (): ReactElement | undefined => {
     const game = useContext<Game>(GameContext);
     const onGameEvent = useContext(GameEventContext);
     const i18n = useContext(I18N);
     const [newPlayersText, setNewPlayersText] = useState<string>('');
-    const [expanded, setExpanded] = useState<Emoji | null>(null);
+    const [expanded, setExpanded] = useState<Expanded | null>(null);
     const [availableTeams, setAvailableTeams] = useState<Array<TeamColor>>(Array.from(game.teams.keys()));
 
     const addNewPlayers = useCallback(() => {
@@ -32,13 +33,20 @@ export const PlayerModerationView = (): ReactElement | undefined => {
         setNewPlayersText('');
     }, [newPlayersText, onGameEvent]);
 
-    const toggle = useCallback((emoji: Emoji) => {
-        if (expanded === emoji) {
+    const toggle = useCallback((emoji: Emoji, name: string) => {
+        if (expanded && (expanded.emoji === emoji || expanded.name === name)) {
             setExpanded(null);
         } else {
-            setExpanded(emoji);
+            setExpanded({ emoji, name });
         }
     }, [expanded]);
+
+    const isExpanded = (player: Player): boolean => {
+        if (!expanded) {
+            return false;
+        }
+        return expanded.emoji === player.emoji || expanded.name === player.name;
+    };
 
     useEffect(() => {
         setAvailableTeams(Array.from(game.teams.keys()));
@@ -80,8 +88,8 @@ export const PlayerModerationView = (): ReactElement | undefined => {
                     (
                         <AccordionItem
                             key={`player-${player.emoji}`}
-                            isExpanded={() => expanded === player.emoji}
-                            toggle={() => toggle(player.emoji)}
+                            isExpanded={() => isExpanded(player)}
+                            toggle={() => toggle(player.emoji, player.name)}
                             style={{ minWidth: '20rem' }}
                             headerChildren={
                                 <div
