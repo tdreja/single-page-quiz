@@ -1,8 +1,6 @@
 import React, { ReactElement } from 'react';
 import { TeamColor } from '../../model/game/team';
 import { backgroundColor, hoverColor, textColor } from './Colors';
-// https://fonts.google.com/icons
-import 'material-symbols';
 
 interface ColorChangeProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement> {
     color: TeamColor,

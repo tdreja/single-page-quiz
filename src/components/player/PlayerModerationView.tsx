@@ -1,16 +1,21 @@
 import React, { ReactElement, useCallback, useContext, useState } from 'react';
 import { Game } from '../../model/game/game';
 import { GameContext, GameEventContext } from '../common/GameContext';
-import { sortPlayersByName } from '../../model/game/player';
-import { PlayerForm } from './PlayerForm';
+import { Emoji, sortPlayersByName } from '../../model/game/player';
 import { I18N } from '../../i18n/I18N';
 import { AddPlayerEvent } from '../../events/setup-events';
+import { AccordionItem } from '../common/AccordionItem';
+import { EmojiView } from '../common/EmojiView';
+import { TeamColorButton } from '../common/TeamColorButton';
+// https://fonts.google.com/icons
+import 'material-symbols';
 
 export const PlayerModerationView = (): ReactElement | undefined => {
     const game = useContext<Game>(GameContext);
     const onGameEvent = useContext(GameEventContext);
     const i18n = useContext(I18N);
     const [newPlayersText, setNewPlayersText] = useState<string>('');
+    const [expanded, setExpanded] = useState<Emoji | null>(null);
 
     const addNewPlayers = useCallback(() => {
         const input = newPlayersText.trim();
@@ -26,25 +31,67 @@ export const PlayerModerationView = (): ReactElement | undefined => {
         setNewPlayersText('');
     }, [newPlayersText, onGameEvent]);
 
+    const toggle = useCallback((emoji: Emoji) => {
+        if (expanded === emoji) {
+            setExpanded(null);
+        } else {
+            setExpanded(emoji);
+        }
+    }, [expanded]);
+
     return (
-        <div className="d-flex flex-wrap flex-row" style={{ gap: '0.75rem 3rem' }}>
-            <div className="input-group">
-                <textarea
-                    className="form-control"
-                    value={newPlayersText}
-                    onChange={(ev) => setNewPlayersText(ev.target.value)}
-                />
-                <span
-                    className="input-group-text btn btn-outline-primary material-symbols-outlined"
-                    title={i18n.playerEditor.tooltipAdd}
-                    onClick={addNewPlayers}
-                >
-                    person_add
-                </span>
+        <div
+            className="accordion accordion-flush d-flex flex-column flex-wrap border-top rounded-top column-gap-3 justify-content-start align-content-start"
+            style={{ maxHeight: 'calc(100vh - 8rem)' }}
+        >
+            <div
+                className="accordion-item border-top-0 border-start border-end border-bottom"
+                style={{ minWidth: '20rem' }}
+            >
+                <div className="accordion-body">
+                    <h5>Test</h5>
+                    <div className="input-group">
+                        <textarea
+                            className="form-control"
+                            value={newPlayersText}
+                            onChange={(ev) => setNewPlayersText(ev.target.value)}
+                        />
+                        <span
+                            className="input-group-text btn btn-outline-primary material-symbols-outlined"
+                            title={i18n.playerEditor.tooltipAdd}
+                            onClick={addNewPlayers}
+                        >
+                            person_add
+                        </span>
+                    </div>
+                </div>
             </div>
             {
                 Array.from(game.players.values()).sort(sortPlayersByName).map((player) =>
-                    <PlayerForm key={`form-${player.emoji}`} player={player} />)
+                    (
+                        <AccordionItem
+                            key={`player-${player.emoji}`}
+                            isExpanded={() => expanded === player.emoji}
+                            toggle={() => toggle(player.emoji)}
+                            style={{ minWidth: '20rem' }}
+                            headerChildren={
+                                <div
+                                    className="d-inline-grid gap-2 w-100 me-3"
+                                    style={{ gridTemplateColumns: 'auto 2fr 1fr auto', alignItems: 'center' }}
+                                >
+                                    <EmojiView
+                                        emoji={player.emoji}
+                                        style={{ fontSize: '1.5em' }}
+                                    />
+                                    <span>{player.name}</span>
+                                    <span>{player.points}</span>
+                                    {player.team && <TeamColorButton color={player.team} />}
+                                </div>
+                            }
+                        >
+                            Hallo Welt
+                        </AccordionItem>
+                    ))
             }
         </div>
     );
