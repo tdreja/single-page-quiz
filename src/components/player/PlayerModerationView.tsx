@@ -56,20 +56,24 @@ export const PlayerModerationView = (): ReactElement | undefined => {
                 style={{ minWidth: '20rem' }}
             >
                 <div className="accordion-body">
-                    <h5>Test</h5>
-                    <div className="input-group">
-                        <textarea
-                            className="form-control"
-                            value={newPlayersText}
-                            onChange={(ev) => setNewPlayersText(ev.target.value)}
-                        />
-                        <span
-                            className="input-group-text btn btn-outline-primary material-symbols-outlined"
-                            title={i18n.playerEditor.tooltipAdd}
-                            onClick={addNewPlayers}
-                        >
-                            person_add
-                        </span>
+                    <div className="mb-3">
+                        <label htmlFor="add-new-players" className="form-label">
+                            {i18n.playerEditor.labelAdd}
+                        </label>
+                        <div className="input-group">
+                            <textarea
+                                className="form-control"
+                                value={newPlayersText}
+                                onChange={(ev) => setNewPlayersText(ev.target.value)}
+                            />
+                            <span
+                                className="input-group-text btn btn-outline-primary material-symbols-outlined"
+                                title={i18n.playerEditor.tooltipAdd}
+                                onClick={addNewPlayers}
+                            >
+                                person_add
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>

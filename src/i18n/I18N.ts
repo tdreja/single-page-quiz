@@ -20,6 +20,7 @@ export type TeamLabels = {
 };
 
 export interface PlayerEditor {
+    labelAdd: string,
     labelName: string,
     labelPoints: string,
     labelEmoji: string,

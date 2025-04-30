@@ -27,6 +27,7 @@ export const i18n_de: Labels = {
         tooltipAdd: 'Spieler hinzufügen',
         tooltipSwitchTeam: 'Team wechseln',
         noTeam: 'Kein Team',
+        labelAdd: 'Neue Spieler hinzufügen',
         labelTeam: 'Team',
         labelName: 'Name',
         labelPoints: 'Punkte',
