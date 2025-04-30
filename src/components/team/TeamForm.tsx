@@ -3,7 +3,7 @@ import { Team, TeamColor } from '../../model/game/team';
 import { I18N } from '../../i18n/I18N';
 import { GameEventContext } from '../common/GameContext';
 import { backgroundColor, textColor } from '../common/Colors';
-import { ChangeTeamColorEvent } from '../../events/setup-events';
+import { ChangePlayerEvent, ChangeTeamColorEvent, RemovePlayerEvent, RemoveTeamEvent } from '../../events/setup-events';
 import { sortPlayersByName } from '../../model/game/player';
 import { PlayerInTeamForm } from './PlayerInTeamForm';
 import { TeamColorButton } from '../common/TeamColorButton';
@@ -35,6 +35,15 @@ export const TeamForm = ({ team, availableColors, usedColors }: Props): ReactEle
         onGameEvent(new ChangeTeamColorEvent(team.color, color));
     }, [team]);
 
+    const onChangePoints = useCallback(() => {
+        const number = Number(points);
+        if (Number.isNaN(number)) {
+            setPoints('0');
+            return;
+        }
+        setPoints(`${number}`);
+    }, [team.color, points, onGameEvent]);
+
     useEffect(() => {
         setOtherTeams(usedColors.filter((c) => c !== team.color));
     }, [usedColors]);
@@ -53,33 +62,77 @@ export const TeamForm = ({ team, availableColors, usedColors }: Props): ReactEle
                 <span className="rounded-pill text-bg-light ps-2 pe-2 fw-bold fs-5">{i18n.teams[team.color]}</span>
             </div>
             <div className="card-body">
-                <div className="input-group">
-                    <span className="input-group-text">Farbe ändern</span>
-                    {
-                        availableColors.map((color) =>
-                            (
-                                <TeamColorButton
-                                    key={`switch-${team.color}-${color}`}
-                                    color={color}
-                                    onClick={() => changeColor(color)}
-                                >
-                                    {i18n.teams[color]}
-                                </TeamColorButton>
-                            ))
-                    }
+                <div className="mb-3">
+                    <label htmlFor={`team-points-${team.color}`} className="form-label">
+                        {i18n.teamEditor.labelPoints}
+                    </label>
+                    <div className="input-group">
+                        <input
+                            autoComplete="off"
+                            type="number"
+                            min="0"
+                            max="100000"
+                            className="form-control"
+                            id={`team-points-${team.color}`}
+                            value={points}
+                            onChange={(ev) => setPoints(ev.target.value)}
+                        />
+                        <span
+                            className="input-group-text btn btn-outline-secondary material-symbols-outlined"
+                            onClick={onChangePoints}
+                            title={i18n.teamEditor.tooltipPoints}
+                        >
+                            scoreboard
+                        </span>
+                    </div>
                 </div>
-                <p>{points}</p>
-                <div className="d-grid gap-2 grid-columns-md">
-                    {
-                        Array.from(team.players.values()).sort(sortPlayersByName)
-                            .map((player) => (
-                                <SmallPlayerView
-                                    key={`team-${team.color}-player-${player.emoji}`}
-                                    player={player}
-                                />
-                            ))
-                    }
+                <div className="mb-3">
+                    <label htmlFor={`team-colors-${team.color}`} className="form-label">
+                        {i18n.teamEditor.labelSwitchColor}
+                    </label>
+                    <div id={`team-colors-${team.color}`}>
+                        <div className="btn-group">
+                            {
+                                availableColors.map((color) => (
+                                    <TeamColorButton
+                                        key={`team-${team.color}-team-${color}`}
+                                        color={color}
+                                        title={i18n.teamEditor.tooltipSwitchColor}
+                                        onClick={() => changeColor(color)}
+                                    >
+                                        {i18n.teams[color]}
+                                    </TeamColorButton>
+                                ))
+                            }
+                        </div>
+                    </div>
                 </div>
+                <div className="mb-3">
+                    <label htmlFor={`team-actions-${team.color}`} className="form-label">
+                        {i18n.teamEditor.labelActions}
+                    </label>
+                    <div id={`team-actions-${team.color}`}>
+                        <span
+                            className="btn btn-outline-danger material-symbols-outlined"
+                            style={{ gridColumn: 'delete' }}
+                            onClick={() => onGameEvent(new RemoveTeamEvent(team.color))}
+                            title={i18n.teamEditor.tooltipRemove}
+                        >
+                            group_remove
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div className="card-footer d-grid gap-2 grid-columns-md">
+                {
+                    Array.from(team.players.values()).sort(sortPlayersByName)
+                        .map((player) => (
+                            <SmallPlayerView
+                                key={`team-${team.color}-player-${player.emoji}`}
+                                player={player}
+                            />
+                        ))
+                }
             </div>
         </div>
     );

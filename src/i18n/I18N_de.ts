@@ -44,4 +44,13 @@ export const i18n_de: Labels = {
         tooltipActionParticipants: 'Öffne Teilnehmeransicht',
         tooltipActionModeration: 'Öffne Moderationsansicht',
     },
+    teamEditor: {
+        labelActions: 'Aktionen',
+        labelPoints: 'Punkte',
+        labelSwitchColor: 'Farbe ändern',
+        tooltipRemove: 'Team löschen',
+        tooltipPoints: 'Punkte ändern',
+        tooltipAdd: 'Team hinzufügen',
+        tooltipSwitchColor: 'Farbe ändern',
+    },
 };

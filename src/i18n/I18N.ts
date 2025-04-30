@@ -8,6 +8,7 @@ export interface Labels {
     teams: TeamLabels,
     game: GameLabels,
     playerEditor: PlayerEditor,
+    teamEditor: TeamEditor,
     settings: Settings,
 }
 
@@ -33,6 +34,16 @@ export interface PlayerEditor {
     tooltipAdd: string,
     tooltipSwitchTeam: string,
     noTeam: string,
+}
+
+export interface TeamEditor {
+    labelActions: string,
+    labelPoints: string,
+    labelSwitchColor: string,
+    tooltipRemove: string,
+    tooltipPoints: string,
+    tooltipAdd: string,
+    tooltipSwitchColor: string,
 }
 
 export interface Settings {

@@ -25,7 +25,7 @@ export const i18n_en: Labels = {
         tooltipRemove: 'Remove player',
         tooltipPoints: 'Change points',
         tooltipAdd: 'Add players',
-        tooltipSwitchTeam: 'Team wechseln',
+        tooltipSwitchTeam: 'Change team',
         noTeam: 'No team',
         labelAdd: 'Add new players',
         labelTeam: 'Team',
@@ -43,5 +43,14 @@ export const i18n_en: Labels = {
         labelModeParticipants: '',
         tooltipActionParticipants: 'Open participant view',
         tooltipActionModeration: 'Open moderation view',
+    },
+    teamEditor: {
+        labelActions: 'Actions',
+        labelPoints: 'Points',
+        labelSwitchColor: 'Change color',
+        tooltipRemove: 'Remove team',
+        tooltipPoints: 'Change points',
+        tooltipAdd: 'Add new team',
+        tooltipSwitchColor: 'Change color',
     },
 };

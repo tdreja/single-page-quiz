@@ -108,10 +108,10 @@ export const PlayerForm = ({ player, availableTeams }: Props): ReactElement => {
                 </div>
             </div>
             <div className="mb-3">
-                <label htmlFor={`player-actions-${player.emoji}`} className="form-label">
+                <label htmlFor={`player-team-${player.emoji}`} className="form-label">
                     {i18n.playerEditor.labelTeam}
                 </label>
-                <div id={`player-actions-${player.emoji}`}>
+                <div id={`player-team-${player.emoji}`}>
                     <div className="btn-group">
                         {
                             availableTeams.map((team) => (
