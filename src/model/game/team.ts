@@ -18,8 +18,10 @@ export interface Team {
     gamepad?: number,
 }
 
+const allColorsArray: Array<TeamColor> = Object.keys(TeamColor) as Array<TeamColor>;
+
 export function allColors(): Array<TeamColor> {
-    return Object.keys(TeamColor) as Array<TeamColor>;
+    return Array.from(allColorsArray);
 }
 
 export function sortTeamsHighestFirst(t1: Team, t2: Team): number {
@@ -27,5 +29,9 @@ export function sortTeamsHighestFirst(t1: Team, t2: Team): number {
     if (sort != 0) {
         return sort;
     }
-    return t1.color.localeCompare(t2.color);
+    return sortTeamsByColor(t1, t2);
+}
+
+export function sortTeamsByColor(t1: Team, t2: Team): number {
+    return allColorsArray.indexOf(t1.color) - allColorsArray.indexOf(t2.color);
 }

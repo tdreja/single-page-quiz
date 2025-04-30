@@ -42,8 +42,10 @@ export interface Player {
     team: TeamColor | null,
 }
 
+const allEmojiArray: Array<Emoji> = Object.keys(Emoji) as Array<Emoji>;
+
 export function allEmojis(): Array<Emoji> {
-    return Object.keys(Emoji) as Array<Emoji>;
+    return Array.from(allEmojiArray);
 }
 
 export function sortPlayersHighestFirst(p1: Player, p2: Player): number {
@@ -59,5 +61,5 @@ export function sortPlayersByName(p1: Player, p2: Player): number {
     if (sort != 0) {
         return sort;
     }
-    return p1.emoji.localeCompare(p2.emoji);
+    return allEmojiArray.indexOf(p1.emoji) - allEmojiArray.indexOf(p2.emoji);
 }
