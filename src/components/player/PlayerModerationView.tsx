@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useContext, useState } from 'react';
+import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
 import { Game } from '../../model/game/game';
 import { GameContext, GameEventContext } from '../common/GameContext';
 import { Emoji, sortPlayersByName } from '../../model/game/player';
@@ -9,6 +9,8 @@ import { EmojiView } from '../common/EmojiView';
 import { TeamColorButton } from '../common/TeamColorButton';
 // https://fonts.google.com/icons
 import 'material-symbols';
+import { PlayerForm } from './PlayerForm';
+import { TeamColor } from '../../model/game/team';
 
 export const PlayerModerationView = (): ReactElement | undefined => {
     const game = useContext<Game>(GameContext);
@@ -16,6 +18,7 @@ export const PlayerModerationView = (): ReactElement | undefined => {
     const i18n = useContext(I18N);
     const [newPlayersText, setNewPlayersText] = useState<string>('');
     const [expanded, setExpanded] = useState<Emoji | null>(null);
+    const [availableTeams, setAvailableTeams] = useState<Array<TeamColor>>(Array.from(game.teams.keys()));
 
     const addNewPlayers = useCallback(() => {
         const input = newPlayersText.trim();
@@ -38,6 +41,10 @@ export const PlayerModerationView = (): ReactElement | undefined => {
             setExpanded(emoji);
         }
     }, [expanded]);
+
+    useEffect(() => {
+        setAvailableTeams(Array.from(game.teams.keys()));
+    }, [game]);
 
     return (
         <div
@@ -89,7 +96,7 @@ export const PlayerModerationView = (): ReactElement | undefined => {
                                 </div>
                             }
                         >
-                            Hallo Welt
+                            <PlayerForm player={player} availableTeams={availableTeams} />
                         </AccordionItem>
                     ))
             }

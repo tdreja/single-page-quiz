@@ -20,11 +20,17 @@ export type TeamLabels = {
 };
 
 export interface PlayerEditor {
+    labelName: string,
+    labelPoints: string,
+    labelEmoji: string,
+    labelActions: string,
+    labelTeam: string,
     tooltipReRollEmoji: string,
     tooltipRename: string,
     tooltipRemove: string,
     tooltipPoints: string,
     tooltipAdd: string,
+    tooltipSwitchTeam: string,
     noTeam: string,
 }
 

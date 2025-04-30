@@ -25,7 +25,13 @@ export const i18n_de: Labels = {
         tooltipRemove: 'Spieler entfernen',
         tooltipPoints: 'Punkte ändern',
         tooltipAdd: 'Spieler hinzufügen',
+        tooltipSwitchTeam: 'Team wechseln',
         noTeam: 'Kein Team',
+        labelTeam: 'Team',
+        labelName: 'Name',
+        labelPoints: 'Punkte',
+        labelEmoji: 'Emoji',
+        labelActions: 'Aktionen',
     },
     settings: {
         tooltipModeShared: 'Geteilt mit Teilnehmern',

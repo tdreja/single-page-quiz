@@ -5,13 +5,16 @@ import { EmojiView } from '../common/EmojiView';
 // https://fonts.google.com/icons
 import 'material-symbols';
 import { GameEventContext } from '../common/GameContext';
-import { RemovePlayerEvent, ChangePlayerEvent, ReRollEmojiEvent } from '../../events/setup-events';
+import { ChangePlayerEvent, MovePlayerEvent, RemovePlayerEvent, ReRollEmojiEvent } from '../../events/setup-events';
+import { TeamColorButton } from '../common/TeamColorButton';
+import { TeamColor } from '../../model/game/team';
 
 export interface Props {
     player: Player,
+    availableTeams: Array<TeamColor>,
 }
 
-export const PlayerForm = ({ player }: Props): ReactElement => {
+export const PlayerForm = ({ player, availableTeams }: Props): ReactElement => {
     const i18n = useContext(I18N);
     const onGameEvent = useContext(GameEventContext);
     const [name, setName] = useState<string>(player.name);
@@ -34,65 +37,114 @@ export const PlayerForm = ({ player }: Props): ReactElement => {
         setPoints(`${number}`);
     }, [player.emoji, points, onGameEvent]);
 
+    const onChangeTeam = useCallback((color: TeamColor) => {
+        if (color === player.team) {
+            return;
+        }
+        onGameEvent(new MovePlayerEvent(player.emoji, color));
+    }, [player.team, onGameEvent]);
+
     return (
-        <div
-            className="d-grid"
-            style={{ gridTemplateColumns: '[emoji] auto [name] auto [points] auto [delete] auto', gap: '0.5rem' }}
-        >
-            <div className="input-group" style={{ gridColumn: 'emoji' }}>
-                <EmojiView className="input-group-text pt-0 pb-0" emoji={player.emoji} style={{ gridColumn: 'emoji', fontSize: '1.5em' }} />
-                <span
-                    className="input-group-text btn btn-outline-secondary material-symbols-outlined"
-                    onClick={() => onGameEvent(new ReRollEmojiEvent(player.emoji))}
-                    title={i18n.playerEditor.tooltipReRollEmoji}
-                >
-                    cycle
-                </span>
+        <div>
+            <div className="mb-3">
+                <label htmlFor={`player-name-${player.emoji}`} className="form-label">
+                    {i18n.playerEditor.labelName}
+                </label>
+                <div className="input-group">
+                    <input
+                        autoComplete="off"
+                        type="text"
+                        className="form-control"
+                        id={`player-name-${player.emoji}`}
+                        value={name}
+                        onChange={(ev) => setName(ev.target.value)}
+                    />
+                    <span
+                        className="input-group-text btn btn-outline-secondary material-symbols-outlined"
+                        onClick={onChangeName}
+                        title={i18n.playerEditor.tooltipRename}
+                    >
+                        person_edit
+                    </span>
+                </div>
             </div>
-            <div className="input-group" style={{ gridColumn: 'name' }}>
-                <input
-                    type="text"
-                    className="form-control"
-                    id={`input-name-${player.emoji}`}
-                    value={name}
-                    size={16}
-                    onChange={(ev) => setName(ev.target.value)}
-                />
-                <span
-                    className="input-group-text btn btn-outline-primary material-symbols-outlined"
-                    onClick={onChangeName}
-                    title={i18n.playerEditor.tooltipRename}
-                >
-                    person_edit
-                </span>
+            <div className="mb-3">
+                <label htmlFor={`player-points-${player.emoji}`} className="form-label">
+                    {i18n.playerEditor.labelPoints}
+                </label>
+                <div className="input-group">
+                    <input
+                        autoComplete="off"
+                        type="number"
+                        min="0"
+                        max="100000"
+                        className="form-control"
+                        id={`input-points-${player.emoji}`}
+                        value={points}
+                        onChange={(ev) => setPoints(ev.target.value)}
+                    />
+                    <span
+                        className="input-group-text btn btn-outline-secondary material-symbols-outlined"
+                        onClick={onChangePoints}
+                        title={i18n.playerEditor.tooltipPoints}
+                    >
+                        scoreboard
+                    </span>
+                </div>
             </div>
-            <div className="input-group" style={{ gridColumn: 'points' }}>
-                <input
-                    type="number"
-                    min="0"
-                    max="100000"
-                    className="form-control"
-                    id={`input-points-${player.emoji}`}
-                    value={points}
-                    size={6}
-                    onChange={(ev) => setPoints(ev.target.value)}
-                />
-                <span
-                    className="input-group-text btn btn-outline-secondary material-symbols-outlined"
-                    onClick={onChangePoints}
-                    title={i18n.playerEditor.tooltipPoints}
-                >
-                    scoreboard
-                </span>
+            <div className="mb-3">
+                <label htmlFor={`player-emoji-${player.emoji}`} className="form-label">
+                    {i18n.playerEditor.labelEmoji}
+                </label>
+                <div className="input-group" id={`player-emoji-${player.emoji}`}>
+                    <EmojiView className="input-group-text pt-0 pb-0" emoji={player.emoji} style={{ gridColumn: 'emoji', fontSize: '1.5em' }} />
+                    <span
+                        className="input-group-text btn btn-outline-secondary material-symbols-outlined"
+                        onClick={() => onGameEvent(new ReRollEmojiEvent(player.emoji))}
+                        title={i18n.playerEditor.tooltipReRollEmoji}
+                    >
+                        cycle
+                    </span>
+                </div>
             </div>
-            <span
-                className="btn btn-outline-danger material-symbols-outlined"
-                style={{ gridColumn: 'delete' }}
-                onClick={() => onGameEvent(new RemovePlayerEvent(player.emoji))}
-                title={i18n.playerEditor.tooltipRemove}
-            >
-                person_remove
-            </span>
+            <div className="mb-3">
+                <label htmlFor={`player-actions-${player.emoji}`} className="form-label">
+                    {i18n.playerEditor.labelTeam}
+                </label>
+                <div id={`player-actions-${player.emoji}`}>
+                    <div className="btn-group">
+                        {
+                            availableTeams.map((team) => (
+                                <TeamColorButton
+                                    className="material-symbols-outlined"
+                                    key={`player-${player.emoji}-team-${team}`}
+                                    outlined={team !== player.team}
+                                    color={team}
+                                    title={i18n.playerEditor.tooltipSwitchTeam}
+                                    onClick={() => onChangeTeam(team)}
+                                >
+                                    {team === player.team ? 'groups' : 'face_right'}
+                                </TeamColorButton>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+            <div className="mb-3">
+                <label htmlFor={`player-actions-${player.emoji}`} className="form-label">
+                    {i18n.playerEditor.labelActions}
+                </label>
+                <div id={`player-actions-${player.emoji}`}>
+                    <span
+                        className="btn btn-outline-danger material-symbols-outlined"
+                        style={{ gridColumn: 'delete' }}
+                        onClick={() => onGameEvent(new RemovePlayerEvent(player.emoji))}
+                        title={i18n.playerEditor.tooltipRemove}
+                    >
+                        person_remove
+                    </span>
+                </div>
+            </div>
         </div>
     );
 };
