@@ -1,5 +1,6 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { Emoji } from '../../model/game/player';
+import { I18N } from '../../i18n/I18N';
 
 export interface EmojiProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement> {
     emoji: Emoji,
@@ -51,8 +52,9 @@ function emojiToInnerHtml(emoji: Emoji) {
 }
 
 export const EmojiView = (props: EmojiProps): ReactElement => {
+    const i18n = useContext(I18N);
     return (
-        <span {...props} dangerouslySetInnerHTML={emojiToInnerHtml(props.emoji)}>
+        <span {...props} dangerouslySetInnerHTML={emojiToInnerHtml(props.emoji)} title={i18n.emojis[props.emoji]}>
         </span>
     );
 };

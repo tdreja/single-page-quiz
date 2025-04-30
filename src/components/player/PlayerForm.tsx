@@ -96,6 +96,7 @@ export const PlayerForm = ({ player, availableTeams }: Props): ReactElement => {
                 </label>
                 <div className="input-group" id={`player-emoji-${player.emoji}`}>
                     <EmojiView className="input-group-text pt-0 pb-0" emoji={player.emoji} style={{ gridColumn: 'emoji', fontSize: '1.5em' }} />
+                    <span className="input-group-text">{i18n.emojis[player.emoji]}</span>
                     <span
                         className="input-group-text btn btn-outline-secondary material-symbols-outlined"
                         onClick={() => onGameEvent(new ReRollEmojiEvent(player.emoji))}

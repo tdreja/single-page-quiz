@@ -1,6 +1,7 @@
 import { GameState } from '../model/game/game';
 import { TeamColor } from '../model/game/team';
 import { Labels } from './I18N';
+import { Emoji } from '../model/game/player';
 
 export const i18n_en: Labels = {
     teams: {
@@ -18,6 +19,40 @@ export const i18n_en: Labels = {
         [GameState.PLAYER_SETUP]: 'Players',
         [GameState.CONTROLLER_SETUP]: 'Controller',
         [GameState.GAME_ACTIVE]: 'Quiz',
+    },
+    emojis: {
+        [Emoji.DUCK]: 'Duck',
+        [Emoji.SHARK]: 'Shark',
+        [Emoji.CAMEL]: 'Camel',
+        [Emoji.FLAMINGO]: 'Flamingo',
+        [Emoji.HEDGEHOG]: 'Hedgehog',
+        [Emoji.CAT]: 'Cat',
+        [Emoji.CRAB]: 'Crab',
+        [Emoji.KANGAROO]: 'Kangaroo',
+        [Emoji.HIPPOPOTAMUS]: 'Hippopotamus',
+        [Emoji.GORILLA]: 'Gorilla',
+        [Emoji.TIGER]: 'Tiger',
+        [Emoji.LEOPARD]: 'Leopard',
+        [Emoji.LAMA]: 'Lama',
+        [Emoji.RHINOCEROS]: 'Rhinoceros',
+        [Emoji.HORSE]: 'Horse',
+        [Emoji.SLOTH]: 'Sloth',
+        [Emoji.ELEFANT]: 'Elephant',
+        [Emoji.MOUSE]: 'Mouse',
+        [Emoji.RABBIT]: 'Rabbit',
+        [Emoji.BEAVER]: 'Beaver',
+        [Emoji.CROCODILE]: 'Crocodile',
+        [Emoji.TORTOISE]: 'Tortoise',
+        [Emoji.SNAKE]: 'Snake',
+        [Emoji.DOLPHIN]: 'Dolphin',
+        [Emoji.OTTER]: 'Otter',
+        [Emoji.WHALE]: 'Whale',
+        [Emoji.ROOSTER]: 'Rooster',
+        [Emoji.EAGLE]: 'Eagle',
+        [Emoji.SWAN]: 'Swan',
+        [Emoji.PARROT]: 'Parrot',
+        [Emoji.PENGUIN]: 'Penguin',
+        [Emoji.DOG]: 'Dog',
     },
     playerEditor: {
         tooltipReRollEmoji: 'New random emoji',

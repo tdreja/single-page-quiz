@@ -1,6 +1,7 @@
 import { GameState } from '../model/game/game';
 import { TeamColor } from '../model/game/team';
 import { Labels } from './I18N';
+import { Emoji } from '../model/game/player';
 
 export const i18n_de: Labels = {
     teams: {
@@ -12,6 +13,40 @@ export const i18n_de: Labels = {
         [TeamColor.PURPLE]: 'Lila',
         [TeamColor.TURQUOISE]: 'Türkis',
         [TeamColor.WHITE]: 'Weiß',
+    },
+    emojis: {
+        [Emoji.DUCK]: 'Ente',
+        [Emoji.SHARK]: 'Hai',
+        [Emoji.CAMEL]: 'Kamel',
+        [Emoji.FLAMINGO]: 'Flamingo',
+        [Emoji.HEDGEHOG]: 'Igel',
+        [Emoji.CAT]: 'Katze',
+        [Emoji.CRAB]: 'Krabbe',
+        [Emoji.KANGAROO]: 'Känguru',
+        [Emoji.HIPPOPOTAMUS]: 'Nilpferd',
+        [Emoji.GORILLA]: 'Gorilla',
+        [Emoji.TIGER]: 'Tiger',
+        [Emoji.LEOPARD]: 'Leopard',
+        [Emoji.LAMA]: 'Lama',
+        [Emoji.RHINOCEROS]: 'Nashorn',
+        [Emoji.HORSE]: 'Pferd',
+        [Emoji.SLOTH]: 'Faultier',
+        [Emoji.ELEFANT]: 'Elefant',
+        [Emoji.MOUSE]: 'Maus',
+        [Emoji.RABBIT]: 'Hase',
+        [Emoji.BEAVER]: 'Biber',
+        [Emoji.CROCODILE]: 'Krokodil',
+        [Emoji.TORTOISE]: 'Schildkröte',
+        [Emoji.SNAKE]: 'Schlange',
+        [Emoji.DOLPHIN]: 'Delfin',
+        [Emoji.OTTER]: 'Otter',
+        [Emoji.WHALE]: 'Wal',
+        [Emoji.ROOSTER]: 'Hahn',
+        [Emoji.EAGLE]: 'Adler',
+        [Emoji.SWAN]: 'Schwan',
+        [Emoji.PARROT]: 'Papagei',
+        [Emoji.PENGUIN]: 'Pinguin',
+        [Emoji.DOG]: 'Hund',
     },
     game: {
         [GameState.TEAM_SETUP]: 'Teams',

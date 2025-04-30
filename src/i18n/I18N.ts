@@ -3,9 +3,11 @@ import { GameState } from '../model/game/game';
 import { TeamColor } from '../model/game/team';
 import { i18n_de } from './I18N_de';
 import { i18n_en } from './I18N_en';
+import { Emoji } from '../model/game/player';
 
 export interface Labels {
     teams: TeamLabels,
+    emojis: EmojiLabels,
     game: GameLabels,
     playerEditor: PlayerEditor,
     teamEditor: TeamEditor,
@@ -18,6 +20,10 @@ export type GameLabels = {
 
 export type TeamLabels = {
     [color in TeamColor]: string;
+};
+
+export type EmojiLabels = {
+    [emoji in Emoji]: string;
 };
 
 export interface PlayerEditor {
