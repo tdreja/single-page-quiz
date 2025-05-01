@@ -6,7 +6,7 @@ import { backgroundColor, textColor } from '../common/Colors';
 import { ChangeTeamColorEvent, RemoveTeamEvent } from '../../events/setup-events';
 import { sortPlayersByName } from '../../model/game/player';
 import { TeamColorButton } from '../common/TeamColorButton';
-import { SmallPlayerView } from '../common/SmallPlayerView';
+import { PlayerWithPointsView } from '../common/PlayerWithPointsView';
 
 interface Props {
     team: Team,
@@ -109,9 +109,10 @@ export const TeamForm = ({ team, availableColors }: Props): ReactElement => {
                 {
                     Array.from(team.players.values()).sort(sortPlayersByName)
                         .map((player) => (
-                            <SmallPlayerView
+                            <PlayerWithPointsView
                                 key={`team-${team.color}-player-${player.emoji}`}
                                 player={player}
+                                size="small"
                             />
                         ))
                 }
