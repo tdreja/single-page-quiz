@@ -11,6 +11,7 @@ import { PlayerForm } from './PlayerForm';
 import { TeamColor } from '../../model/game/team';
 import { Expanded } from './expanded';
 import { calculatePlacementsForAll, PlacementPointsForAll } from '../../model/placement';
+import { PlayerHeader } from './PlayerHeader';
 
 export const PlayerModerationView = (): ReactElement | undefined => {
     const game = useContext<Game>(GameContext);
@@ -95,18 +96,7 @@ export const PlayerModerationView = (): ReactElement | undefined => {
                             toggle={() => toggle(player.emoji, player.name)}
                             style={{ minWidth: '20rem' }}
                             headerChildren={
-                                <div
-                                    className="d-inline-grid gap-2 w-100 me-3"
-                                    style={{ gridTemplateColumns: 'auto 2fr 1fr auto', alignItems: 'center' }}
-                                >
-                                    <EmojiView
-                                        emoji={player.emoji}
-                                        style={{ fontSize: '1.5em' }}
-                                    />
-                                    <span>{player.name}</span>
-                                    <span>{player.points}</span>
-                                    {player.team && <TeamColorButton color={player.team} />}
-                                </div>
+                                <PlayerHeader player={player} placements={placements} />
                             }
                         >
                             <PlayerForm player={player} availableTeams={availableTeams} />
