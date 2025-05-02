@@ -96,7 +96,11 @@ export const PlayerModerationView = (): ReactElement | undefined => {
                             toggle={() => toggle(player.emoji, player.name)}
                             style={{ minWidth: '20rem' }}
                             headerChildren={
-                                <PlayerHeader player={player} placements={placements} />
+                                <PlayerHeader
+                                    player={player}
+                                    placements={placements}
+                                    className="w-100"
+                                />
                             }
                         >
                             <PlayerForm player={player} availableTeams={availableTeams} />

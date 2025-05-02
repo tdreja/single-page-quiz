@@ -5,17 +5,31 @@ import { Player } from '../../model/game/player';
 import { calculateSinglePlacement, PlacementPointsForAll } from '../../model/placement';
 import { PlacementIcon } from '../common/PlacementIcon';
 
-interface Props {
+type HtmlProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+interface Props extends HtmlProps {
     player: Player,
     placements: PlacementPointsForAll,
 }
 
-export const PlayerHeader = ({ player, placements }: Props): ReactElement => {
-    const placement = calculateSinglePlacement(player.points, placements);
+export const PlayerHeader = (props: Props): ReactElement => {
+    const player = props.player;
+    const placement = calculateSinglePlacement(player.points, props.placements);
+    const html: HtmlProps = {
+        ...props,
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (html as any)['placements'];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (html as any)['player'];
+
     return (
         <div
-            className="d-inline-grid gap-2 w-100 me-3"
-            style={{ gridTemplateColumns: '[place] 1fr [emoji] auto [name] 2fr [points] 1fr [team] auto', alignItems: 'center' }}
+            {...html}
+            className={`${html.className || ''} d-inline-grid gap-2 me-3`}
+            style={{
+                ...html.style,
+                gridTemplateColumns: '[place] 1fr [emoji] auto [name] 2fr [points] 1fr [team] auto',
+                alignItems: 'center' }}
         >
             {placement ? <PlacementIcon placement={placement} style={{ gridColumn: 'place' }} /> : <span />}
             <EmojiView
