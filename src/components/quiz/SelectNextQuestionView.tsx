@@ -4,7 +4,7 @@ import { GameContext } from '../common/GameContext';
 
 interface Display {
     label: string,
-    section: string,
+    section?: string,
     pointsForCompletion?: number,
 }
 
@@ -37,7 +37,6 @@ function buildMatrix(game: Game): Display[] {
             if (!section) {
                 matrix.push({
                     label: '-',
-                    section: sectionId,
                 });
                 continue;
             }
@@ -45,7 +44,7 @@ function buildMatrix(game: Game): Display[] {
             const question = section.questions.get(questionPoints);
             matrix.push({
                 label: `${pointsLevels}`,
-                section: sectionId,
+                section: question ? sectionId : undefined,
                 pointsForCompletion: question ? questionPoints : undefined,
             });
         }
