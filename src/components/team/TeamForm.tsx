@@ -41,7 +41,7 @@ export const TeamForm = ({ team, availableColors, placements }: Props): ReactEle
             className="card flex-grow-1"
         >
             <div
-                className="card-header"
+                className="card-header d-flex align-items-center justify-content-start gap-2"
                 style={{
                     color: textColor[team.color],
                     backgroundColor: backgroundColor[team.color],

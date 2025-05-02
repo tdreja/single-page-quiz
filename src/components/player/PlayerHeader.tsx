@@ -15,16 +15,16 @@ export const PlayerHeader = ({ player, placements }: Props): ReactElement => {
     return (
         <div
             className="d-inline-grid gap-2 w-100 me-3"
-            style={{ gridTemplateColumns: `${placement ? 'auto' : ''} auto 2fr 1fr auto`, alignItems: 'center' }}
+            style={{ gridTemplateColumns: '[place] 1fr [emoji] auto [name] 2fr [points] 1fr [team] auto', alignItems: 'center' }}
         >
-            {placement && <PlacementIcon placement={placement} />}
+            {placement ? <PlacementIcon placement={placement} style={{ gridColumn: 'place' }} /> : <span />}
             <EmojiView
                 emoji={player.emoji}
-                style={{ fontSize: '1.5em' }}
+                style={{ fontSize: '1.5em', gridColumn: 'emoji' }}
             />
-            <span>{player.name}</span>
-            <span>{player.points}</span>
-            {player.team && <TeamColorButton color={player.team} />}
+            <span style={{ gridColumn: 'name' }}>{player.name}</span>
+            <span style={{ gridColumn: 'points' }}>{player.points}</span>
+            {player.team && <TeamColorButton color={player.team} style={{ gridColumn: 'team' }} />}
         </div>
     );
 };

@@ -20,14 +20,16 @@ export const TeamView = ({ team, placements }: Props): ReactElement => {
             className="card flex-grow-1"
         >
             <div
-                className="card-header d-flex justify-content-between align-items-center"
+                className="card-header d-flex align-items-center gap-2 justify-content-start"
                 style={{
                     color: textColor[team.color],
                     backgroundColor: backgroundColor[team.color],
                 }}
             >
                 {placement && <PlacementIcon placement={placement} />}
-                <span className="rounded-pill text-bg-light ps-2 pe-2 fw-bold fs-5">{i18n.teams[team.color]}</span>
+                <div className="flex-grow-1">
+                    <span className="rounded-pill text-bg-light ps-2 pe-2 fw-bold fs-5">{i18n.teams[team.color]}</span>
+                </div>
                 <span className="rounded-pill text-bg-light ps-2 pe-2">{team.points}</span>
             </div>
             <div className="card-body d-grid gap-2 grid-columns-lg">
