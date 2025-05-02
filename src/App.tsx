@@ -6,7 +6,7 @@ import { emptyGame, Game } from './model/game/game';
 import { Changes, GameEvent } from './events/common-events';
 import { GameContext, GameEventContext, GameEventListener } from './components/common/GameContext';
 import { prepareGame } from './dev/dev-setup';
-import { restoreGameFromStorage, storeGameInStorage } from './components/common/Storage';
+import { restoreGameFromStorage, storeGameInStorage, storeStaticGameData } from './components/common/Storage';
 import { SettingsBar } from './components/common/SettingsBar';
 import {
     readSettingsFromLocation,
@@ -23,6 +23,7 @@ import { TeamParticipantsView } from './components/team/TeamParticipantsView';
 import { QuizView } from './components/quiz/QuizView';
 // https://fonts.google.com/icons
 import 'material-symbols';
+import { exportStaticGameContent } from './model/quiz/json';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -67,6 +68,7 @@ function App() {
         if (fromStorage.players.size === 0) {
             console.warn('No game in storage, use DEV one');
             prepareGame(fromStorage);
+            storeStaticGameData(exportStaticGameContent(game));
         }
         setGame(fromStorage);
 

@@ -133,6 +133,7 @@ export function prepareGame(game: Game) {
     const section: GameSection = {
         sectionName: 'common',
         questions: new Map(),
+        index: 1,
     };
     section.questions.set(textQuestion.questionId, textQuestion);
     game.sections.set(section.sectionName, section);

@@ -25,6 +25,7 @@ export enum RoundState {
 export interface GameSection {
     readonly sectionName: string,
     readonly questions: Map<string, Question>,
+    readonly index: number,
 }
 
 export interface GameRound {
@@ -73,4 +74,10 @@ export function getTeams(game: Game, colors?: Array<TeamColor> | Set<TeamColor>)
         }
     }
     return teams;
+}
+
+export function sortGameSectionsByIndex(section1?: GameSection, section2?: GameSection): number {
+    const idx1 = section1 ? section1.index : -1;
+    const idx2 = section2 ? section2.index : -1;
+    return idx1 - idx2;
 }

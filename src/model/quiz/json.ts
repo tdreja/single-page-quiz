@@ -6,6 +6,7 @@ import { EstimateQuestion } from './estimate-question';
 import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question';
 import { Question, QuestionType } from './question';
 import { JsonStaticGameData, JsonStaticSectionData } from '../game/json/game';
+import { c } from 'vite/dist/node/moduleRunnerTransport.d-DJ_mE5sf';
 
 /**
  * Static content of a question in the game
@@ -59,11 +60,13 @@ export function importStaticGameContent(game: Game, quiz?: JsonStaticGameData) {
     if (!quiz || !quiz.sections) {
         return;
     }
+    let count = 0;
     for (const section of quiz.sections) {
-        const gameSection = jsonQuizSectionToGameSection(section);
+        const gameSection = jsonQuizSectionToGameSection(count, section);
         if (gameSection) {
             game.sections.set(gameSection.sectionName, gameSection);
         }
+        count++;
     }
 }
 
@@ -71,16 +74,18 @@ function exportStaticSectionContent(section: GameSection): JsonStaticSectionData
     return {
         sectionName: section.sectionName,
         questions: Array.from(section.questions.values()).map((q) => q.exportStaticQuestionData()),
+        index: section.index,
     };
 }
 
-function jsonQuizSectionToGameSection(json?: JsonStaticSectionData): GameSection | null {
+function jsonQuizSectionToGameSection(count: number, json?: JsonStaticSectionData): GameSection | null {
     if (!json || !json.sectionName) {
         return null;
     }
     const section: GameSection = {
         sectionName: json.sectionName,
         questions: new Map<string, Question>(),
+        index: json.index !== undefined ? json.index : count,
     };
     if (!json.questions) {
         return section;
