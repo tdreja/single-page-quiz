@@ -24,7 +24,7 @@ export enum RoundState {
  */
 export interface GameSection {
     readonly sectionName: string,
-    readonly questions: Map<string, Question>,
+    readonly questions: Map<number, Question>,
     readonly index: number,
 }
 

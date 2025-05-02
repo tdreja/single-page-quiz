@@ -37,13 +37,13 @@ export interface MultipleChoiceQuestion<CHOICE extends Choice> extends Question 
 export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextChoice>, TextQuestion {
     private readonly _choices: Map<string, TextChoice>;
     private readonly _completedBy: Set<TeamColor>;
-    private readonly _questionId: string;
     private readonly _pointsForCompletion: number;
+    private readonly _inSection: string;
     private readonly _text: string;
     private _completed: boolean;
 
-    public constructor(questionId: string, pointsForCompletion: number, text: string, choices: Map<string, TextChoice>) {
-        this._questionId = questionId;
+    public constructor(inSection: string, pointsForCompletion: number, text: string, choices: Map<string, TextChoice>) {
+        this._inSection = inSection;
         this._choices = choices;
         this._pointsForCompletion = pointsForCompletion;
         this._text = text;
@@ -55,12 +55,12 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
         return this._choices;
     }
 
-    public get questionId(): string {
-        return this._questionId;
-    }
-
     public get pointsForCompletion(): number {
         return this._pointsForCompletion;
+    }
+
+    public get inSection(): string {
+        return this._inSection;
     }
 
     public get text(): string {
@@ -117,7 +117,8 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
             }
         }
         return {
-            questionId: this._questionId,
+            inSection: this._inSection,
+            pointsForCompletion: this._pointsForCompletion,
             completed: this._completed,
             completedBy: Array.from(this._completedBy),
             additionalData: data,
@@ -125,7 +126,7 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
     }
 
     public importDynamicQuestionData(state: JsonDynamicQuestionData) {
-        if (this._questionId !== state.questionId) {
+        if (this._pointsForCompletion !== state.pointsForCompletion && this._inSection !== state.inSection) {
             return;
         }
         this._completed = state.completed || false;
@@ -156,13 +157,13 @@ export class ImageMultipleChoiceQuestion extends TextMultipleChoiceQuestion impl
     private readonly _imageBase64: string;
 
     public constructor(
-        questionId: string,
+        inSection: string,
         pointsForCompletion: number,
         text: string,
         imageBase64: string,
         choices: Map<string, TextChoice>,
     ) {
-        super(questionId, pointsForCompletion, text, choices);
+        super(inSection, pointsForCompletion, text, choices);
         this._imageBase64 = imageBase64;
     }
 

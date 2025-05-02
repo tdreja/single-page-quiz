@@ -10,7 +10,6 @@ import { asSet } from '../common';
 describe('TextMultipleChoiceQuestion', () => {
     const sId = 'Test';
     const points = 10;
-    const qId = `${sId}-${points}`;
     let choices: Map<string, TextChoice>;
     let textMultipleChoiceQuestion: TextMultipleChoiceQuestion;
     let gameSection: GameSection;
@@ -21,12 +20,13 @@ describe('TextMultipleChoiceQuestion', () => {
         choices.set('choice1', { choiceId: 'choice1', correct: true, selectedBy: new Set<TeamColor>(), text: 'Choice 1' });
         choices.set('choice2', { choiceId: 'choice2', correct: false, selectedBy: new Set<TeamColor>(), text: 'Choice 2' });
 
-        textMultipleChoiceQuestion = new TextMultipleChoiceQuestion(qId, points, 'Test question text', choices);
+        textMultipleChoiceQuestion = new TextMultipleChoiceQuestion(sId, points, 'Test question text', choices);
         gameSection = {
             sectionName: sId,
-            questions: new Map<string, Question>(),
+            questions: new Map<number, Question>(),
+            index: 0,
         };
-        gameSection.questions.set(qId, textMultipleChoiceQuestion);
+        gameSection.questions.set(points, textMultipleChoiceQuestion);
 
         game = emptyGame();
         game.sections.set(sId, gameSection);
@@ -50,9 +50,10 @@ describe('TextMultipleChoiceQuestion', () => {
         const section = game.sections.get(sId);
         expect(section).toBeDefined();
         expect(section?.questions.size).toBe(1);
-        const question = section?.questions.get(qId);
+        const question = section?.questions.get(points);
         expect(question).toBeDefined();
-        expect(question?.questionId).toBe(qId);
+        expect(question?.pointsForCompletion).toBe(points);
+        expect(question?.inSection).toBe(sId);
         expect(question).toEqual(textMultipleChoiceQuestion);
     });
 
@@ -107,7 +108,6 @@ describe('TextMultipleChoiceQuestion', () => {
 describe('ImageMultipleChoiceQuestion', () => {
     const sId = 'Test';
     const points = 10;
-    const qId = `${sId}-${points}`;
     let choices: Map<string, TextChoice>;
     let imageMultipleChoiceQuestion: ImageMultipleChoiceQuestion;
     let gameSection: GameSection;
@@ -118,12 +118,13 @@ describe('ImageMultipleChoiceQuestion', () => {
         choices.set('choice1', { choiceId: 'choice1', correct: true, selectedBy: new Set<TeamColor>(), text: 'Choice 1' });
         choices.set('choice2', { choiceId: 'choice2', correct: false, selectedBy: new Set<TeamColor>(), text: 'Choice 2' });
 
-        imageMultipleChoiceQuestion = new ImageMultipleChoiceQuestion(qId, points, 'Test question text', 'Test', choices);
+        imageMultipleChoiceQuestion = new ImageMultipleChoiceQuestion(sId, points, 'Test question text', 'Test', choices);
         gameSection = {
             sectionName: sId,
-            questions: new Map<string, Question>(),
+            questions: new Map<number, Question>(),
+            index: 0,
         };
-        gameSection.questions.set(qId, imageMultipleChoiceQuestion);
+        gameSection.questions.set(points, imageMultipleChoiceQuestion);
 
         game = emptyGame();
         game.sections.set(sId, gameSection);
@@ -148,9 +149,10 @@ describe('ImageMultipleChoiceQuestion', () => {
         const section = game.sections.get(sId);
         expect(section).toBeDefined();
         expect(section?.questions.size).toBe(1);
-        const question = section?.questions.get(qId);
+        const question = section?.questions.get(points);
         expect(question).toBeDefined();
-        expect(question?.questionId).toBe(qId);
+        expect(question?.inSection).toBe(sId);
+        expect(question?.pointsForCompletion).toBe(points);
         expect(question).toEqual(imageMultipleChoiceQuestion);
     });
 

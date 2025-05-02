@@ -5,7 +5,7 @@ import { GameContext } from '../common/GameContext';
 interface Display {
     label: string,
     section: string,
-    questionId?: string,
+    pointsForCompletion?: number,
 }
 
 function buildMatrix(game: Game): Display[] {
@@ -42,12 +42,11 @@ function buildMatrix(game: Game): Display[] {
                 continue;
             }
 
-            const qid = `${sectionId}-${questionPoints}`;
-            const question = section.questions.get(qid);
+            const question = section.questions.get(questionPoints);
             matrix.push({
                 label: `${pointsLevels}`,
                 section: sectionId,
-                questionId: question ? qid : undefined,
+                pointsForCompletion: question ? questionPoints : undefined,
             });
         }
     }
@@ -66,7 +65,7 @@ export const SelectNextQuestionView = (): ReactElement => {
         <div className="d-grid" style={{ gridTemplateColumns: `repeat(${game.sections.size}, 1fr)` }}>
             {
                 matrix.map((display) => (
-                    <span key={`matrix-item-${display.section}-${display.questionId || ''}`}>
+                    <span key={`matrix-item-${display.section}-${display.pointsForCompletion || ''}`}>
                         {display.label}
                     </span>))
             }

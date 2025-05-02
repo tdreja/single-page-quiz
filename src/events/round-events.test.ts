@@ -1,7 +1,7 @@
 import { expect, test, beforeEach } from '@jest/globals';
 import { Game, RoundState } from '../model/game/game';
 import { TeamColor } from '../model/game/team';
-import { expectNoUpdate, expectUpdate, newTestSetup, questionId, sectionId } from './data.test';
+import { expectNoUpdate, expectUpdate, newTestSetup, questionPoints, sectionId } from './data.test';
 import {
     ActivateBuzzerEvent,
     CloseRoundEvent,
@@ -11,7 +11,7 @@ import {
 } from './round-events';
 import { Changes } from './common-events';
 
-const startRound = new StartRoundEvent(sectionId, questionId);
+const startRound = new StartRoundEvent(sectionId, questionPoints);
 const activateBuzzer = new ActivateBuzzerEvent();
 const requestAttemptBlue = new RequestAttemptEvent(TeamColor.BLUE);
 const requestAttemptRed = new RequestAttemptEvent(TeamColor.RED);
@@ -30,7 +30,7 @@ test('startRound', () => {
     game = expectNoUpdate(startRound.updateGame(game));
 
     // Ignore invalid IDs
-    game = expectNoUpdate(new StartRoundEvent('', '0').updateGame(game));
+    game = expectNoUpdate(new StartRoundEvent('', 0).updateGame(game));
 });
 
 test('activateBuzzer', () => {

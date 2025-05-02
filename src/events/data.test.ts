@@ -6,8 +6,6 @@ import { EstimateQuestion } from '../model/quiz/estimate-question';
 import { TextChoice, TextMultipleChoiceQuestion } from '../model/quiz/multiple-choice-question';
 import { Changes, GameUpdate } from './common-events';
 
-export const questionId: string = 'quest';
-export const questionEstimateId: string = 'estimate';
 export const questionPoints: number = 100;
 export const sectionId: string = 'section';
 
@@ -38,8 +36,8 @@ export function newTestSetup(): Game {
     const choices = new Map<string, TextChoice>();
     choices.set('a', choiceAWrong);
     choices.set('b', choiceBCorrect);
-    questionMultiChoice = new TextMultipleChoiceQuestion(questionId, questionPoints, 'Question?', choices);
-    questionEstimate = new EstimateQuestion(questionEstimateId, 200, 'Estimate', 1000);
+    questionMultiChoice = new TextMultipleChoiceQuestion(sectionId, questionPoints, 'Question?', choices);
+    questionEstimate = new EstimateQuestion(sectionId, questionPoints + 100, 'Estimate', 1000);
 
     // TeamViewExpanded Blue
     playerBlueDuck = {
@@ -73,9 +71,10 @@ export function newTestSetup(): Game {
     section = {
         sectionName: sectionId,
         questions: new Map(),
+        index: 0,
     };
-    section.questions.set(questionMultiChoice.questionId, questionMultiChoice);
-    section.questions.set(questionEstimate.questionId, questionEstimate);
+    section.questions.set(questionMultiChoice.pointsForCompletion, questionMultiChoice);
+    section.questions.set(questionEstimate.pointsForCompletion, questionEstimate);
 
     // Game
     const game = emptyGame();

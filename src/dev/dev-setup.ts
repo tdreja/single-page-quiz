@@ -135,7 +135,7 @@ export function prepareGame(game: Game) {
         questions: new Map(),
         index: 1,
     };
-    section.questions.set(textQuestion.questionId, textQuestion);
+    section.questions.set(textQuestion.pointsForCompletion, textQuestion);
     game.sections.set(section.sectionName, section);
     game.round = round;
     game.state = GameState.GAME_ACTIVE;

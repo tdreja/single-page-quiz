@@ -12,8 +12,8 @@ export enum QuestionType {
  * Base API for all questions
  */
 export interface Question {
-    readonly questionId: string,
     readonly pointsForCompletion: number,
+    readonly inSection: string,
     readonly type: QuestionType,
     readonly completedBy: Set<TeamColor>,
     readonly completed: boolean,

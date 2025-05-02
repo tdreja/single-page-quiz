@@ -8,12 +8,12 @@ import { BasicGameEvent, Changes, EventType, GameRoundEvent, GameUpdate, noUpdat
  */
 export class StartRoundEvent extends BasicGameEvent {
     private readonly _sectionName: string;
-    private readonly _questionId: string;
+    private readonly _pointsForCompletion: number;
 
-    public constructor(sectionName: string, questionId: string) {
+    public constructor(sectionName: string, pointsForCompletion: number) {
         super(EventType.START_ROUND);
         this._sectionName = sectionName;
-        this._questionId = questionId;
+        this._pointsForCompletion = pointsForCompletion;
     }
 
     public updateGame(game: Game): GameUpdate {
@@ -24,7 +24,8 @@ export class StartRoundEvent extends BasicGameEvent {
         // Force complete the old round
         if (game.round) {
             // We're already active?
-            if (game.round.question.questionId === this._questionId) {
+            if (game.round.question.pointsForCompletion === this._pointsForCompletion
+              && game.round.question.inSection === this._sectionName) {
                 return noUpdate(game);
             }
             const oldQuestion = game.round.question;
@@ -32,7 +33,7 @@ export class StartRoundEvent extends BasicGameEvent {
             oldQuestion.completeQuestion([]);
         }
 
-        const question = getQuestion(game, this._sectionName, this._questionId);
+        const question = getQuestion(game, this._sectionName, this._pointsForCompletion);
         if (!question || question.completed) {
             return noUpdate(game);
         }

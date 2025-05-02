@@ -4,21 +4,21 @@ import { addPointsToTeam, QuestionType, TextQuestion } from './question';
 
 export class ActionQuestion implements TextQuestion {
     private readonly _completedBy: Set<TeamColor>;
-    private readonly _questionId: string;
+    private readonly _inSection: string;
     private readonly _pointsForCompletion: number;
     private readonly _text: string;
     private _completed: boolean;
 
-    public constructor(questionId: string, pointsForCompletion: number, text: string) {
-        this._questionId = questionId;
+    public constructor(inSection: string, pointsForCompletion: number, text: string) {
+        this._inSection = inSection;
         this._pointsForCompletion = pointsForCompletion;
         this._text = text;
         this._completedBy = new Set<TeamColor>();
         this._completed = false;
     }
 
-    public get questionId(): string {
-        return this._questionId;
+    public get inSection(): string {
+        return this._inSection;
     }
 
     public get pointsForCompletion(): number {
@@ -60,7 +60,8 @@ export class ActionQuestion implements TextQuestion {
 
     public exportDynamicQuestionData(): JsonDynamicQuestionData {
         return {
-            questionId: this._questionId,
+            inSection: this._inSection,
+            pointsForCompletion: this._pointsForCompletion,
             completed: this._completed,
             completedBy: Array.from(this._completedBy),
             additionalData: {},
@@ -68,7 +69,7 @@ export class ActionQuestion implements TextQuestion {
     }
 
     public importDynamicQuestionData(state: JsonDynamicQuestionData) {
-        if (this._questionId !== state.questionId) {
+        if (this._pointsForCompletion !== state.pointsForCompletion && this._inSection !== state.inSection) {
             return;
         }
         this._completed = state.completed || false;

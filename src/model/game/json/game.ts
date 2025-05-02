@@ -121,15 +121,15 @@ export function importGame(game: Game, json?: JsonUpdatableGameData) {
     game.teamNavExpanded = !!json.teamNavExpanded;
 }
 
-export function getQuestion(game: Game, sectionName?: string, questionId?: string): Question | undefined {
-    if (!sectionName || !questionId) {
+export function getQuestion(game: Game, sectionName?: string, pointsForCompletion?: number): Question | undefined {
+    if (!sectionName || pointsForCompletion === undefined) {
         return undefined;
     }
     const section = game.sections.get(sectionName);
     if (!section) {
         return undefined;
     }
-    return section.questions.get(questionId);
+    return section.questions.get(pointsForCompletion);
 }
 
 function importCompletedQuestions(game: Game, json: JsonUpdatableGameData) {
@@ -139,7 +139,8 @@ function importCompletedQuestions(game: Game, json: JsonUpdatableGameData) {
     for (const section of json.sections) {
         if (section.questions) {
             for (const jsonQuestion of section.questions) {
-                const question = getQuestion(game, section.sectionName, jsonQuestion.questionId);
+                const question
+                    = getQuestion(game, section.sectionName, jsonQuestion.pointsForCompletion);
                 if (question) {
                     question.importDynamicQuestionData(jsonQuestion);
                 }
@@ -158,7 +159,7 @@ export function importCurrentRound(game: Game, json?: JsonCurrentRound) {
         return;
     }
 
-    const question = getQuestion(game, json.inSectionName, json.question.questionId);
+    const question = getQuestion(game, json.inSectionName, json.question.pointsForCompletion);
     if (!question) {
         game.round = null;
         return;

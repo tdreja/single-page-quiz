@@ -18,13 +18,13 @@ describe('ActionQuestion', () => {
     beforeEach(() => {
         sId = 'Test';
         points = 10;
-        qId = `${sId}-${points}`;
-        actionQuestion = new ActionQuestion(qId, 10, 'Test question text');
+        actionQuestion = new ActionQuestion(sId, 10, 'Test question text');
         gameSection = {
             sectionName: sId,
-            questions: new Map<string, Question>(),
+            questions: new Map<number, Question>(),
+            index: 0,
         };
-        gameSection.questions.set(qId, actionQuestion);
+        gameSection.questions.set(points, actionQuestion);
 
         game = emptyGame();
         game.sections.set(sId, gameSection);
@@ -49,9 +49,10 @@ describe('ActionQuestion', () => {
         const section = game.sections.get(sId);
         expect(section).toBeDefined();
         expect(section?.questions.size).toBe(1);
-        const question = section?.questions.get(qId);
+        const question = section?.questions.get(points);
         expect(question).toBeDefined();
-        expect(question?.questionId).toBe(qId);
+        expect(question?.inSection).toBe(sId);
+        expect(question?.pointsForCompletion).toBe(points);
         expect(question).toEqual(actionQuestion);
     });
 

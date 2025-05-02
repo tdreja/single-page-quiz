@@ -6,7 +6,6 @@ import { EstimateQuestion } from './estimate-question';
 import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question';
 import { Question, QuestionType } from './question';
 import { JsonStaticGameData, JsonStaticSectionData } from '../game/json/game';
-import { c } from 'vite/dist/node/moduleRunnerTransport.d-DJ_mE5sf';
 
 /**
  * Static content of a question in the game
@@ -39,7 +38,8 @@ export type IndexedByColor = {
  * Updatable content of the question for the game
  */
 export interface JsonDynamicQuestionData {
-    questionId?: string,
+    inSection?: string,
+    pointsForCompletion?: number,
     completedBy?: Array<TeamColor>,
     completed?: boolean,
     additionalData?: IndexedByColor,
@@ -84,7 +84,7 @@ function jsonQuizSectionToGameSection(count: number, json?: JsonStaticSectionDat
     }
     const section: GameSection = {
         sectionName: json.sectionName,
-        questions: new Map<string, Question>(),
+        questions: new Map<number, Question>(),
         index: json.index !== undefined ? json.index : count,
     };
     if (!json.questions) {
@@ -93,7 +93,7 @@ function jsonQuizSectionToGameSection(count: number, json?: JsonStaticSectionDat
     for (const jsonQuestion of json.questions) {
         const gameQuestion = jsonContentToQuestion(json.sectionName, jsonQuestion);
         if (gameQuestion) {
-            section.questions.set(gameQuestion.questionId, gameQuestion);
+            section.questions.set(gameQuestion.pointsForCompletion, gameQuestion);
         }
     }
     return section;
@@ -103,16 +103,15 @@ export function jsonContentToQuestion(sectionName?: string, json?: JsonStaticQue
     if (!sectionName || !json || !json.type || !json.pointsForCompletion) {
         return null;
     }
-    const id = `${sectionName}-${json.pointsForCompletion}`;
     switch (json.type) {
         case QuestionType.TEXT_MULTIPLE_CHOICE:
-            return new TextMultipleChoiceQuestion(id, json.pointsForCompletion, json.text || '', getTextChoices(json));
+            return new TextMultipleChoiceQuestion(sectionName, json.pointsForCompletion, json.text || '', getTextChoices(json));
         case QuestionType.IMAGE_MULTIPLE_CHOICE:
-            return new ImageMultipleChoiceQuestion(id, json.pointsForCompletion, json.text || '', json.imageBase64 || '', getTextChoices(json));
+            return new ImageMultipleChoiceQuestion(sectionName, json.pointsForCompletion, json.text || '', json.imageBase64 || '', getTextChoices(json));
         case QuestionType.ESTIMATE:
-            return new EstimateQuestion(id, json.pointsForCompletion, json.text || '', json.estimateTarget || 0);
+            return new EstimateQuestion(sectionName, json.pointsForCompletion, json.text || '', json.estimateTarget || 0);
         case QuestionType.ACTION:
-            return new ActionQuestion(id, json.pointsForCompletion, json.text || '');
+            return new ActionQuestion(sectionName, json.pointsForCompletion, json.text || '');
     }
 }
 

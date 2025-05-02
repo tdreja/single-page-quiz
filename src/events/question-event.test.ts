@@ -8,9 +8,7 @@ import {
     expectUpdate,
     newTestSetup,
     playerRedCamel,
-    questionEstimate,
-    questionEstimateId,
-    questionId,
+    questionEstimate, questionPoints,
     sectionId,
     teamBlue,
     teamRed,
@@ -25,7 +23,7 @@ beforeEach(() => {
 });
 
 test('selectMultipleChoice', () => {
-    game = expectUpdate(new StartRoundEvent(sectionId, questionId).updateGame(game), Changes.CURRENT_ROUND);
+    game = expectUpdate(new StartRoundEvent(sectionId, questionPoints).updateGame(game), Changes.CURRENT_ROUND);
     const round = game.round;
     expect(round).toBeTruthy();
     expect(round?.state).toBe(RoundState.SHOW_QUESTION);
@@ -62,7 +60,7 @@ test('selectMultipleChoice', () => {
 });
 
 test('selectEstimate', () => {
-    game = expectUpdate(new StartRoundEvent(sectionId, questionEstimateId).updateGame(game), Changes.CURRENT_ROUND);
+    game = expectUpdate(new StartRoundEvent(sectionId, questionEstimate.pointsForCompletion).updateGame(game), Changes.CURRENT_ROUND);
     const round = game.round;
     expect(round).toBeTruthy();
     expect(round?.state).toBe(RoundState.SHOW_QUESTION);

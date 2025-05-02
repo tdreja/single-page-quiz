@@ -6,16 +6,16 @@ import { addPointsToTeam, QuestionType, TextQuestion } from './question';
  * Base API for estimate questions
  */
 export class EstimateQuestion implements TextQuestion {
-    private readonly _questionId: string;
+    private readonly _inSection: string;
+    private readonly _pointsForCompletion: number;
     private readonly _estimates: Map<TeamColor, number>;
     private readonly _completedBy: Set<TeamColor>;
-    private readonly _pointsForCompletion: number;
     private readonly _text: string;
     private readonly _target: number;
     private _completed: boolean;
 
-    public constructor(questionId: string, pointsForCompletion: number, text: string, target: number) {
-        this._questionId = questionId;
+    public constructor(inSection: string, pointsForCompletion: number, text: string, target: number) {
+        this._inSection = inSection;
         this._pointsForCompletion = pointsForCompletion;
         this._text = text;
         this._target = target;
@@ -24,8 +24,8 @@ export class EstimateQuestion implements TextQuestion {
         this._completed = false;
     }
 
-    public get questionId(): string {
-        return this._questionId;
+    public get inSection(): string {
+        return this._inSection;
     }
 
     public get pointsForCompletion(): number {
@@ -80,7 +80,8 @@ export class EstimateQuestion implements TextQuestion {
             data[team] = estimate;
         }
         return {
-            questionId: this._questionId,
+            inSection: this._inSection,
+            pointsForCompletion: this._pointsForCompletion,
             completed: this._completed,
             completedBy: Array.from(this._completedBy),
             additionalData: data,
@@ -88,7 +89,7 @@ export class EstimateQuestion implements TextQuestion {
     }
 
     public importDynamicQuestionData(state: JsonDynamicQuestionData) {
-        if (this._questionId !== state.questionId) {
+        if (this._pointsForCompletion !== state.pointsForCompletion && this._inSection !== state.inSection) {
             return;
         }
         this._completed = state.completed || false;
