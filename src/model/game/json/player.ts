@@ -55,7 +55,7 @@ function restorePlayer(game: Game, json: JsonPlayer): Emoji | null {
         if (json.team) {
             existing.team = json.team;
         }
-        if (json.points) {
+        if (json.points !== undefined) {
             existing.points = json.points;
         }
         return json.emoji;

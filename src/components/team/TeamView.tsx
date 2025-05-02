@@ -4,16 +4,17 @@ import { backgroundColor, textColor } from '../common/Colors';
 import { sortPlayersHighestFirst } from '../../model/game/player';
 import { PlayerWithPointsView } from '../common/PlayerWithPointsView';
 import { I18N } from '../../i18n/I18N';
-import { calculatePlacement, PlacementPoints } from '../../model/placement';
+import { calculateSinglePlacement, PlacementPointsForAll } from '../../model/placement';
+import { PlacementIcon } from '../common/PlacementIcon';
 
 interface Props {
     team: Team,
-    placements: PlacementPoints,
+    placements: PlacementPointsForAll,
 }
 
 export const TeamView = ({ team, placements }: Props): ReactElement => {
     const i18n = useContext(I18N);
-    const placement = calculatePlacement(team.points, placements);
+    const placement = calculateSinglePlacement(team.points, placements);
     return (
         <div
             className="card flex-grow-1"
@@ -25,7 +26,7 @@ export const TeamView = ({ team, placements }: Props): ReactElement => {
                     backgroundColor: backgroundColor[team.color],
                 }}
             >
-                {placement && <span>{placement}</span>}
+                {placement && <PlacementIcon placement={placement} />}
                 <span className="rounded-pill text-bg-light ps-2 pe-2 fw-bold fs-5">{i18n.teams[team.color]}</span>
                 <span className="rounded-pill text-bg-light ps-2 pe-2">{team.points}</span>
             </div>

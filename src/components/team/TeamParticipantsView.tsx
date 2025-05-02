@@ -3,15 +3,15 @@ import { sortTeamsHighestFirst } from '../../model/game/team';
 import { Game } from '../../model/game/game';
 import { GameContext } from '../common/GameContext';
 import { TeamView } from './TeamView';
-import { calculatePlacements, PlacementPoints } from '../../model/placement';
+import { calculatePlacementsForAll, PlacementPointsForAll } from '../../model/placement';
 
 export const TeamParticipantsView = (): ReactElement => {
     const game = useContext<Game>(GameContext);
-    const [placements, setPlacements] = useState<PlacementPoints>(calculatePlacements([]));
+    const [placements, setPlacements] = useState<PlacementPointsForAll>(calculatePlacementsForAll([]));
 
     useEffect(() => {
         const points = Array.from(game.teams.values()).map((team) => team.points);
-        setPlacements(calculatePlacements(points));
+        setPlacements(calculatePlacementsForAll(points));
     }, [game]);
 
     return (

@@ -56,7 +56,7 @@ function restoreTeam(game: Game, json: JsonTeam): TeamColor | null {
         if (json.gamepad) {
             existing.gamepad = json.gamepad;
         }
-        if (json.points) {
+        if (json.points !== undefined) {
             existing.points = json.points;
         }
         restorePlayersInTeam(game, existing, json.players);

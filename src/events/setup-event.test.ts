@@ -13,7 +13,7 @@ import {
 import {
     AddPlayerEvent,
     AddTeamEvent,
-    ChangePlayerEvent,
+    UpdatePlayerEvent,
     ChangeTeamColorEvent,
     findSmallestTeam,
     MovePlayerEvent,
@@ -62,10 +62,10 @@ test('removePlayer', () => {
 });
 
 test('renamePlayer', () => {
-    game = expectNoUpdate(new ChangePlayerEvent(Emoji.CROCODILE, (p) => p.name = 'Croc').updateGame(game));
+    game = expectNoUpdate(new UpdatePlayerEvent(Emoji.CROCODILE, (p) => p.name = 'Croc').updateGame(game));
 
     expect(playerRedCamel.name).toBe('Camel');
-    game = expectUpdate(new ChangePlayerEvent(Emoji.CAMEL, (p) => p.name = 'RedCamel').updateGame(game), Changes.GAME_SETUP);
+    game = expectUpdate(new UpdatePlayerEvent(Emoji.CAMEL, (p) => p.name = 'RedCamel').updateGame(game), Changes.GAME_SETUP);
     expect(playerRedCamel.name).toBe('RedCamel');
 });
 

@@ -19,7 +19,7 @@ export enum EventType {
     // Events for player setup
     ADD_PLAYER = 'add-player',
     REMOVE_PLAYER = 'remove-player',
-    RENAME_PLAYER = 'rename-player',
+    UPDATE_PLAYER = 'update-player',
     REROLL_EMOJI = 'reroll-emoji',
 
     // Events for team setup
@@ -28,6 +28,7 @@ export enum EventType {
     SHUFFLE_TEAMS = 'shuffle-teams',
     MOVE_PLAYER = 'move-player',
     CHANGE_TEAM_COLOR = 'change-team-color',
+    UPDATE_TEAM = 'update-team',
 }
 
 export enum Changes {

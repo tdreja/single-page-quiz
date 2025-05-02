@@ -10,6 +10,7 @@ import { TeamColorButton } from '../common/TeamColorButton';
 import { PlayerForm } from './PlayerForm';
 import { TeamColor } from '../../model/game/team';
 import { Expanded } from './expanded';
+import { calculatePlacementsForAll, PlacementPointsForAll } from '../../model/placement';
 
 export const PlayerModerationView = (): ReactElement | undefined => {
     const game = useContext<Game>(GameContext);
@@ -18,6 +19,7 @@ export const PlayerModerationView = (): ReactElement | undefined => {
     const [newPlayersText, setNewPlayersText] = useState<string>('');
     const [expanded, setExpanded] = useState<Expanded | null>(null);
     const [availableTeams, setAvailableTeams] = useState<Array<TeamColor>>(Array.from(game.teams.keys()));
+    const [placements, setPlacements] = useState<PlacementPointsForAll>(calculatePlacementsForAll([]));
 
     const addNewPlayers = useCallback(() => {
         const input = newPlayersText.trim();
@@ -50,6 +52,7 @@ export const PlayerModerationView = (): ReactElement | undefined => {
 
     useEffect(() => {
         setAvailableTeams(Array.from(game.teams.keys()));
+        setPlacements(calculatePlacementsForAll(Array.from(game.players.values()).map((player) => player.points)));
     }, [game]);
 
     return (

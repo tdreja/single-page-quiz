@@ -75,14 +75,14 @@ export class RemovePlayerEvent extends BasicGameEvent {
     }
 }
 
-export class ChangePlayerEvent extends BasicGameEvent {
+export class UpdatePlayerEvent extends BasicGameEvent {
     private readonly _emoji: Emoji;
-    private readonly _change: (player: Player) => void;
+    private readonly _update: (player: Player) => void;
 
-    public constructor(emoji: Emoji, change: (player: Player) => void) {
-        super(EventType.RENAME_PLAYER);
+    public constructor(emoji: Emoji, update: (player: Player) => void) {
+        super(EventType.UPDATE_PLAYER);
         this._emoji = emoji;
-        this._change = change;
+        this._update = update;
     }
 
     public updateGame(game: Game): GameUpdate {
@@ -90,7 +90,7 @@ export class ChangePlayerEvent extends BasicGameEvent {
         if (!player) {
             return noUpdate(game);
         }
-        this._change(player);
+        this._update(player);
         return update(game, Changes.GAME_SETUP);
     }
 }
@@ -284,6 +284,26 @@ export class ChangeTeamColorEvent extends BasicGameEvent {
         };
         newTeam.players.values().forEach((player) => player.team = this._to);
         game.teams.set(this._to, newTeam);
+        return update(game, Changes.GAME_SETUP);
+    }
+}
+
+export class UpdateTeamEvent extends BasicGameEvent {
+    private readonly _color: TeamColor;
+    private readonly _update: (team: Team) => void;
+
+    public constructor(color: TeamColor, update: (team: Team) => void) {
+        super(EventType.UPDATE_TEAM);
+        this._color = color;
+        this._update = update;
+    }
+
+    public updateGame(game: Game): GameUpdate {
+        const team = game.teams.get(this._color);
+        if (!team) {
+            return noUpdate(game);
+        }
+        this._update(team);
         return update(game, Changes.GAME_SETUP);
     }
 }

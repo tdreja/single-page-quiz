@@ -3,9 +3,10 @@ import { Player } from '../../model/game/player';
 import { I18N } from '../../i18n/I18N';
 import { EmojiView } from '../common/EmojiView';
 import { GameEventContext } from '../common/GameContext';
-import { ChangePlayerEvent, MovePlayerEvent, RemovePlayerEvent, ReRollEmojiEvent } from '../../events/setup-events';
+import { UpdatePlayerEvent, MovePlayerEvent, RemovePlayerEvent, ReRollEmojiEvent } from '../../events/setup-events';
 import { TeamColorButton } from '../common/TeamColorButton';
 import { TeamColor } from '../../model/game/team';
+import { calculateSinglePlacement, PlacementPointsForAll } from '../../model/placement';
 
 export interface Props {
     player: Player,
@@ -22,7 +23,7 @@ export const PlayerForm = ({ player, availableTeams }: Props): ReactElement => {
         if (player.name === name) {
             return;
         }
-        onGameEvent(new ChangePlayerEvent(player.emoji, (p) => p.name = name));
+        onGameEvent(new UpdatePlayerEvent(player.emoji, (p) => p.name = name));
     }, [player.emoji, player.name, name, onGameEvent]);
 
     const onChangePoints = useCallback(() => {
@@ -31,7 +32,7 @@ export const PlayerForm = ({ player, availableTeams }: Props): ReactElement => {
             setPoints('0');
             return;
         }
-        onGameEvent(new ChangePlayerEvent(player.emoji, (p) => p.points = number));
+        onGameEvent(new UpdatePlayerEvent(player.emoji, (p) => p.points = number));
         setPoints(`${number}`);
     }, [player.emoji, points, onGameEvent]);
 

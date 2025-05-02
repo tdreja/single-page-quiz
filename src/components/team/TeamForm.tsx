@@ -3,20 +3,24 @@ import { Team, TeamColor } from '../../model/game/team';
 import { I18N } from '../../i18n/I18N';
 import { GameEventContext } from '../common/GameContext';
 import { backgroundColor, textColor } from '../common/Colors';
-import { ChangeTeamColorEvent, RemoveTeamEvent } from '../../events/setup-events';
+import { ChangeTeamColorEvent, RemoveTeamEvent, UpdateTeamEvent } from '../../events/setup-events';
 import { sortPlayersByName } from '../../model/game/player';
 import { TeamColorButton } from '../common/TeamColorButton';
 import { PlayerWithPointsView } from '../common/PlayerWithPointsView';
+import { calculateSinglePlacement, Placement, PlacementPointsForAll } from '../../model/placement';
+import { PlacementIcon } from '../common/PlacementIcon';
 
 interface Props {
     team: Team,
     availableColors: Array<TeamColor>,
+    placements: PlacementPointsForAll,
 }
 
-export const TeamForm = ({ team, availableColors }: Props): ReactElement => {
+export const TeamForm = ({ team, availableColors, placements }: Props): ReactElement => {
     const i18n = useContext(I18N);
     const onGameEvent = useContext(GameEventContext);
     const [points, setPoints] = useState<string>(`${team.points}`);
+    const placement = calculateSinglePlacement(team.points, placements);
 
     const changeColor = useCallback((color: TeamColor) => {
         onGameEvent(new ChangeTeamColorEvent(team.color, color));
@@ -29,6 +33,7 @@ export const TeamForm = ({ team, availableColors }: Props): ReactElement => {
             return;
         }
         setPoints(`${number}`);
+        onGameEvent(new UpdateTeamEvent(team.color, (t) => t.points = number));
     }, [team.color, points, onGameEvent]);
 
     return (
@@ -42,6 +47,7 @@ export const TeamForm = ({ team, availableColors }: Props): ReactElement => {
                     backgroundColor: backgroundColor[team.color],
                 }}
             >
+                {placement && <PlacementIcon placement={placement} />}
                 <span className="rounded-pill text-bg-light ps-2 pe-2 fw-bold fs-5">{i18n.teams[team.color]}</span>
             </div>
             <div className="card-body">

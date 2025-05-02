@@ -1,10 +1,12 @@
-export interface PlacementPoints {
+import { storeUpdatableGameData } from '../components/common/Storage';
+
+export interface PlacementPointsForAll {
     goldPoints: number,
     silverPoints: number,
     bronzePoints: number,
 }
 
-export function calculatePlacements(points: Array<number>): PlacementPoints {
+export function calculatePlacementsForAll(points: Array<number>): PlacementPointsForAll {
     const sorted = points.sort((a, b) => b - a);
     return {
         goldPoints: sorted.length > 0 ? sorted[0] : -1,
@@ -19,7 +21,10 @@ export enum Placement {
     BRONZE = 'BRONZE',
 }
 
-export function calculatePlacement(points: number, placements: PlacementPoints): Placement | null {
+export function calculateSinglePlacement(points: number, placements: PlacementPointsForAll): Placement | null {
+    if (points <= 0) {
+        return null; // 0 points should not have a placement!
+    }
     if (placements.goldPoints === points) {
         return Placement.GOLD;
     }

@@ -6,16 +6,19 @@ import { TeamForm } from './TeamForm';
 import { I18N } from '../../i18n/I18N';
 import { TeamColorButton } from '../common/TeamColorButton';
 import { AddTeamEvent, RemoveTeamEvent, ShuffleTeamsEvent } from '../../events/setup-events';
+import { calculatePlacementsForAll, PlacementPointsForAll } from '../../model/placement';
 
 export const TeamModerationView = (): ReactElement => {
     const i18n = useContext(I18N);
     const game = useContext<Game>(GameContext);
     const onGameEvent = useContext(GameEventContext);
     const [availableColors, setAvailableColors] = useState<Array<TeamColor>>([]);
+    const [placements, setPlacements] = useState<PlacementPointsForAll>(calculatePlacementsForAll([]));
 
     useEffect(() => {
         const available = allColors().filter((color) => !game.teams.has(color));
         setAvailableColors(available);
+        setPlacements(calculatePlacementsForAll(Array.from(game.teams.values()).map((team) => team.points)));
     }, [game]);
 
     return (
@@ -82,6 +85,7 @@ export const TeamModerationView = (): ReactElement => {
                         key={`form-${team.color}`}
                         team={team}
                         availableColors={availableColors}
+                        placements={placements}
                     />
                 ))}
         </div>
