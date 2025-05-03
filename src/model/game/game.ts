@@ -82,3 +82,61 @@ export function sortGameSectionsByIndex(section1?: GameSection, section2?: GameS
     const idx2 = section2 ? section2.index : -1;
     return idx1 - idx2;
 }
+
+export interface QuestionMatrixItem<ITEM> {
+    label: string,
+    inSection?: string,
+    pointsForCompletion?: number,
+    item?: ITEM,
+}
+
+export function generateQuestionMatrix<ITEM>(
+    game: Game,
+    getItem: (section?: GameSection, question?: Question) => ITEM | undefined,
+): QuestionMatrixItem<ITEM>[] {
+    const sectionOrder: Array<string> = [];
+    const pointsLevels: Array<number> = [];
+    const result: QuestionMatrixItem<ITEM>[] = [];
+
+    // Headlines first
+    Array.from(game.sections.values()).sort(sortGameSectionsByIndex).map((section) => {
+        sectionOrder.push(section.sectionName);
+        result.push({
+            label: section.sectionName,
+            inSection: section.sectionName,
+            item: getItem(section),
+        });
+        // Also collect all points for each question
+        section.questions.values().forEach((question) => {
+            if (!pointsLevels.includes(question.pointsForCompletion)) {
+                pointsLevels.push(question.pointsForCompletion);
+            }
+        });
+    });
+    // Ensure that points are sorted correctly
+    pointsLevels.sort((a, b) => a - b);
+
+    // Now add the question matrix
+    for (const questionPoints of pointsLevels) {
+        for (const sectionId of sectionOrder) {
+            const section = game.sections.get(sectionId);
+            if (!section) {
+                result.push({
+                    label: '-',
+                    item: getItem(),
+                });
+                continue;
+            }
+
+            const question = section.questions.get(questionPoints);
+            result.push({
+                label: `${pointsLevels}`,
+                inSection: question ? sectionId : undefined,
+                pointsForCompletion: question ? questionPoints : undefined,
+                item: getItem(section, question),
+            });
+        }
+    }
+
+    return result;
+}

@@ -1,7 +1,7 @@
 import { arrayAsSet } from '../../common';
 import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../../quiz/json';
 import { Question } from '../../quiz/question';
-import { Game, GameSection, GameState, RoundState } from '../game';
+import { Game, GameSection, GameState, QuestionMatrixItem, RoundState } from '../game';
 import { TeamColor } from '../team';
 import { JsonPlayer, restorePlayers as importPlayers, storePlayer } from './player';
 import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team';
@@ -174,4 +174,51 @@ export function importCurrentRound(game: Game, json?: JsonCurrentRound) {
         attemptingTeams: arrayAsSet(json.attemptingTeams),
         timerStart: json.timerStart ? new Date(json.timerStart) : null,
     };
+}
+
+function compareSections(s1: JsonStaticSectionData, s2: JsonStaticSectionData): number {
+    const idx1 = s1.index || -1;
+    const idx2 = s2.index || -1;
+    return idx1 - idx2;
+}
+
+export function generateJsonQuestionMatrix<ITEM>(
+    game: JsonStaticGameData,
+    getItem: (section?: JsonStaticSectionData, question?: JsonStaticQuestionData) => ITEM | undefined,
+): Array<QuestionMatrixItem<ITEM>> {
+    const result: QuestionMatrixItem<ITEM>[] = [];
+    const sortedSections: Array<JsonStaticSectionData> = game.sections ? game.sections.sort(compareSections) : [];
+    const pointsLevels: Array<number> = [];
+
+    // Headlines and points first
+    for (const section of sortedSections) {
+        for (const question of section.questions || []) {
+            if (!question.pointsForCompletion || pointsLevels.includes(question.pointsForCompletion)) {
+                continue;
+            }
+            pointsLevels.push(question.pointsForCompletion);
+        }
+        result.push({
+            label: section.sectionName || '',
+            inSection: section.sectionName,
+            item: getItem(section),
+        });
+    }
+    // Ensure that points are sorted correctly
+    pointsLevels.sort((a, b) => a - b);
+
+    // Add questions in order of the points level
+    for (const points of pointsLevels) {
+        for (const section of sortedSections) {
+            const question = section.questions?.find((q) => q.pointsForCompletion === points);
+            result.push({
+                label: question ? `${points}` : '-',
+                inSection: question ? section.sectionName : undefined,
+                pointsForCompletion: question ? points : undefined,
+                item: getItem(section, question),
+            });
+        }
+    }
+
+    return result;
 }
