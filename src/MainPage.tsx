@@ -5,6 +5,8 @@ import { TabSettings } from './components/common/TabContext';
 export interface Props {
     gameState: GameState,
     tabSettings: TabSettings,
+    importQuizModeration: ReactElement,
+    importQuizParticipants: ReactElement,
     playerModeration: ReactElement,
     playerParticipants: ReactElement,
     teamsModeration: ReactElement,
@@ -24,7 +26,9 @@ export function view(props: Props): ReactElement {
             return isOnlyForParticipants(props.tabSettings) ? props.playerParticipants : props.playerModeration;
         case GameState.CONTROLLER_SETUP:
             return (<p>ControllerSetup</p>);
-        case GameState.GAME_ACTIVE:
+        case GameState.IMPORT_QUIZ:
+            return isOnlyForParticipants(props.tabSettings) ? props.importQuizParticipants : props.importQuizModeration;
+        default:
             return props.quiz;
     }
 }

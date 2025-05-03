@@ -24,6 +24,7 @@ import { QuizView } from './components/quiz/QuizView';
 // https://fonts.google.com/icons
 import 'material-symbols';
 import { exportStaticGameContent } from './model/quiz/json';
+import { QuizImporterView } from './components/importer/QuizImporterView';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -100,6 +101,8 @@ function App() {
                             teamsModeration={<TeamModerationView />}
                             teamsParticipants={<TeamParticipantsView />}
                             quiz={<QuizView />}
+                            importQuizModeration={<QuizImporterView />}
+                            importQuizParticipants={<QuizImporterView />}
                         />
                         <TeamsBottomNav />
                     </I18N.Provider>

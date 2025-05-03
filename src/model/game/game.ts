@@ -3,6 +3,7 @@ import { Emoji, Player } from './player';
 import { Question } from '../quiz/question';
 
 export enum GameState {
+    IMPORT_QUIZ = 'import-quiz',
     TEAM_SETUP = 'team-setup',
     PLAYER_SETUP = 'player-setup',
     CONTROLLER_SETUP = 'controller-setup',
