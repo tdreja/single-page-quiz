@@ -60,6 +60,7 @@ export const i18n_de: Labels = {
         [GameState.PLAYER_SETUP]: 'Spieler',
         [GameState.CONTROLLER_SETUP]: 'Controller',
         [GameState.GAME_ACTIVE]: 'Quiz',
+        [GameState.IMPORT_QUIZ]: 'Quizdatei importieren',
     },
     playerEditor: {
         tooltipReRollEmoji: 'Neuer zufälliger Emoji',

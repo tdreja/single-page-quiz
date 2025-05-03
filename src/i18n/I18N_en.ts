@@ -18,6 +18,7 @@ export const i18n_en: Labels = {
         [GameState.PLAYER_SETUP]: 'Players',
         [GameState.CONTROLLER_SETUP]: 'Controller',
         [GameState.GAME_ACTIVE]: 'Quiz',
+        [GameState.IMPORT_QUIZ]: 'Import quiz file',
     },
     emojis: {
         DUCK: 'Duck',

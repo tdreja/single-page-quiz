@@ -130,7 +130,7 @@ export function generateQuestionMatrix<ITEM>(
 
             const question = section.questions.get(questionPoints);
             result.push({
-                label: `${pointsLevels}`,
+                label: `${questionPoints}`,
                 inSection: question ? sectionId : undefined,
                 pointsForCompletion: question ? questionPoints : undefined,
                 item: getItem(section, question),

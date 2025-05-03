@@ -192,6 +192,7 @@ export function generateJsonQuestionMatrix<ITEM>(
 
     // Headlines and points first
     for (const section of sortedSections) {
+        // Collect all points for each question
         for (const question of section.questions || []) {
             if (!question.pointsForCompletion || pointsLevels.includes(question.pointsForCompletion)) {
                 continue;
