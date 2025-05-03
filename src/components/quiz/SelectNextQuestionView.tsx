@@ -52,6 +52,16 @@ function buildMatrix(game: Game): Display[] {
     return matrix;
 }
 
+interface Props {
+    display: Display,
+}
+
+const MatrixItem = ({ display }: Props): ReactElement => {
+    return (
+        <span>{display.label}</span>
+    );
+};
+
 export const SelectNextQuestionView = (): ReactElement => {
     const game = useContext<Game>(GameContext);
     const [matrix, setMatrix] = useState<Display[]>(buildMatrix(game));
@@ -64,9 +74,8 @@ export const SelectNextQuestionView = (): ReactElement => {
         <div className="d-grid" style={{ gridTemplateColumns: `repeat(${game.sections.size}, 1fr)` }}>
             {
                 matrix.map((display) => (
-                    <span key={`matrix-item-${display.section}-${display.pointsForCompletion || ''}`}>
-                        {display.label}
-                    </span>))
+                    <MatrixItem key={`matrix-item-${display.section || ''}-${display.pointsForCompletion || ''}`} display={display} />
+                ))
             }
         </div>
     );
