@@ -201,6 +201,7 @@ export function generateJsonQuestionMatrix<ITEM>(
         }
         result.push({
             label: section.sectionName || '',
+            key: section.sectionName || '?',
             inSection: section.sectionName,
             item: getItem(section),
         });
@@ -216,6 +217,7 @@ export function generateJsonQuestionMatrix<ITEM>(
                 label: question ? `${points}` : '-',
                 inSection: question ? section.sectionName : undefined,
                 pointsForCompletion: question ? points : undefined,
+                key: `${section}-${question ? points : '?'}`,
                 item: getItem(section, question),
             });
         }

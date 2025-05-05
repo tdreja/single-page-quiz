@@ -85,6 +85,7 @@ export function sortGameSectionsByIndex(section1?: GameSection, section2?: GameS
 
 export interface QuestionMatrixItem<ITEM> {
     label: string,
+    key: string,
     inSection?: string,
     pointsForCompletion?: number,
     item?: ITEM,
@@ -103,6 +104,7 @@ export function generateQuestionMatrix<ITEM>(
         sectionOrder.push(section.sectionName);
         result.push({
             label: section.sectionName,
+            key: section.sectionName,
             inSection: section.sectionName,
             item: getItem(section),
         });
@@ -123,6 +125,7 @@ export function generateQuestionMatrix<ITEM>(
             if (!section) {
                 result.push({
                     label: '-',
+                    key: '?',
                     item: getItem(),
                 });
                 continue;
@@ -133,6 +136,7 @@ export function generateQuestionMatrix<ITEM>(
                 label: `${questionPoints}`,
                 inSection: question ? sectionId : undefined,
                 pointsForCompletion: question ? questionPoints : undefined,
+                key: `${sectionId}-${question ? questionPoints : '?'}`,
                 item: getItem(section, question),
             });
         }

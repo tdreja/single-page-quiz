@@ -1,5 +1,6 @@
 import React, { ReactElement, useCallback, useState } from 'react';
-import { JsonStaticGameData } from '../../model/game/json/game';
+import { generateJsonQuestionMatrix, JsonStaticGameData } from '../../model/game/json/game';
+import { QuestionMatrixItem } from '../../model/game/game';
 
 async function readJson(input: HTMLInputElement): Promise<JsonStaticGameData | null> {
     const files = input.files;
@@ -26,15 +27,28 @@ async function readJson(input: HTMLInputElement): Promise<JsonStaticGameData | n
 
 export const QuizImporterView = (): ReactElement => {
     const [json, setJson] = useState<JsonStaticGameData | null>(null);
+    const [previewMatrx, setPreviewMatrx] = useState<QuestionMatrixItem<string>[]>([]);
 
     const uploadFile = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
-        setJson(await readJson(event.target));
-    }, [json]);
+        const file = await readJson(event.target);
+        setJson(file);
+        if (file) {
+            setPreviewMatrx(generateJsonQuestionMatrix(file, () => ''));
+        } else {
+            setPreviewMatrx([]);
+        }
+    }, [json, previewMatrx]);
 
     return (
         <div>
             <input type="file" accept="application/json" onChange={uploadFile} />
-            <span>{json ? JSON.stringify(json) : 'none'}</span>
+            <div className="d-grid" style={{ gridTemplateColumns: `repeat(${json?.sections?.length || 1}, 1fr)` }}>
+                {
+                    previewMatrx.map((item) => (
+                        <span key={item.key}>{item.label}</span>
+                    ))
+                }
+            </div>
         </div>
     );
 };
