@@ -52,7 +52,7 @@ export function storeUpdatableGameData(data?: JsonUpdatableGameData | null) {
 }
 
 export function storeCurrentRound(data?: JsonCurrentRound | null) {
-    store(Changes.QUIZ_CONTENT, data);
+    store(Changes.CURRENT_ROUND, data);
 }
 
 function load<OUT>(key: Changes): OUT | undefined {
