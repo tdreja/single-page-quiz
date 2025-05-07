@@ -81,7 +81,7 @@ export class RequestAttemptEvent extends GameRoundEvent {
 
     public updateQuestionRound(game: Game, round: GameRound): GameUpdate {
         // Skip non-relevant states
-        if (round.state !== RoundState.BUZZER_ACTIVE) {
+        if (round.state !== RoundState.BUZZER_ACTIVE && round.state !== RoundState.SHOW_QUESTION) {
             return noUpdate(game);
         }
         if (!game.teams.get(this._team)) {
@@ -95,6 +95,29 @@ export class RequestAttemptEvent extends GameRoundEvent {
         round.teamsAlreadyAttempted.add(this._team);
         round.state = RoundState.TEAM_CAN_ATTEMPT;
         round.timerStart = new Date();
+        return update(game, Changes.CURRENT_ROUND);
+    }
+}
+
+/**
+ * Team doesn't have any answer? Mark them as done and allow others to try
+*/
+export class SkipAttemptEvent extends GameRoundEvent {
+    public constructor() {
+        super(EventType.SKIP_ATTEMPT);
+    }
+
+    public updateQuestionRound(game: Game, round: GameRound): GameUpdate {
+        if (round.state !== RoundState.TEAM_CAN_ATTEMPT) {
+            return noUpdate(game);
+        }
+        // All teams have already answered?
+        if (round.teamsAlreadyAttempted.size === game.teams.size) {
+            round.state = RoundState.SHOW_RESULTS;
+            return update(game, Changes.CURRENT_ROUND);
+        }
+        // Otherwise back to the start
+        round.state = RoundState.SHOW_QUESTION;
         return update(game, Changes.CURRENT_ROUND);
     }
 }

@@ -9,6 +9,7 @@ export enum EventType {
     START_ROUND = 'start-round',
     ACTIVATE_BUZZER = 'activate-buzzer',
     REQUEST_ATTEMPT = 'request-attempt',
+    SKIP_ATTEMPT = 'skip-attempt',
     SKIP_ROUND = 'skip-round',
     CLOSE_ROUND = 'close-round',
 

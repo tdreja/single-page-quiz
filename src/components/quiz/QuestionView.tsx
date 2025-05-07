@@ -11,7 +11,7 @@ import { TeamColorButton } from '../common/TeamColorButton';
 import { TabContext } from '../common/TabContext';
 import { ImageMultipleChoiceView, TextMultipleChoiceView } from './MultipleChoiceView';
 import { sortTeamsByColor, Team } from '../../model/game/team';
-import { ActivateBuzzerEvent, CloseRoundEvent, RequestAttemptEvent } from '../../events/round-events';
+import { ActivateBuzzerEvent, CloseRoundEvent, RequestAttemptEvent, SkipAttemptEvent } from '../../events/round-events';
 
 interface RoundProps {
     round: GameRound,
@@ -75,9 +75,17 @@ function moderation(game: Game, round: GameRound, onGameEvent: GameEventListener
                     {
                         Array.from(round.attemptingTeams)
                             .map((team) => (
-                                <p key={`attempt-temp-${team}`}>{team}</p>
+                                <TeamColorButton
+                                    key={`attempt-temp-${team}`}
+                                    color={team}
+                                    className="material-symbols-outlined"
+                                >
+                                    group
+                                </TeamColorButton>
                             ))
                     }
+                    <h6>Skip</h6>
+                    <span className="btn btn-outline-warning" onClick={() => onGameEvent(new SkipAttemptEvent())}>Skip</span>
                 </>
             );
         case RoundState.SHOW_RESULTS:
@@ -85,6 +93,18 @@ function moderation(game: Game, round: GameRound, onGameEvent: GameEventListener
                 <>
                     <h6>Question complete</h6>
                     <span className="btn btn-primary" onClick={() => onGameEvent(new CloseRoundEvent())}>Close question</span>
+                    <h6>Winners?</h6>
+                    {
+                        Array.from(round.question.completedBy).map((team) => (
+                            <TeamColorButton
+                                key={`attempt-temp-${team}`}
+                                color={team}
+                                className="material-symbols-outlined"
+                            >
+                                group
+                            </TeamColorButton>
+                        ))
+                    }
                 </>
             );
         default:

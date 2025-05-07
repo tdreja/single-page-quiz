@@ -50,6 +50,14 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
             round.state = RoundState.SHOW_RESULTS;
             return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
         }
+
+        // Check if another team can still answer?
+        if (round.teamsAlreadyAttempted.size === game.teams.size) {
+            question.completeQuestion([]);
+            round.state = RoundState.SHOW_RESULTS;
+            return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
+        }
+
         // Otherwise wait for another attempt
         round.state = RoundState.SHOW_QUESTION;
         return update(game, Changes.CURRENT_ROUND);
