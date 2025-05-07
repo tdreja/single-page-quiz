@@ -9,70 +9,44 @@ import { SelectFromMultipleChoiceEvent } from '../../events/question-event';
 import { asReactCss } from '../common/ReactCssUtils';
 import { TeamColorButton } from '../common/TeamColorButton';
 import { TabContext } from '../common/TabContext';
+import { ImageMultipleChoiceView, TextMultipleChoiceView } from './MultipleChoiceView';
 
-interface Props {
+interface RoundProps {
     round: GameRound,
 }
 
-interface SubProps<ITEM> {
+export interface RoundAndItemProps<ITEM> {
     round: GameRound,
     item: ITEM,
 }
 
-const ChoiceView = ({ round, item }: SubProps<TextChoice>): ReactElement => {
-    const onGameEvent = useContext(GameEventContext);
-    const tabSettings = useContext(TabContext);
-
-    let choiceStyle: string = 'btn-outline-primary';
-    let badgeStyle: string = 'text-bg-primary';
-    if (tabSettings.settings.moderation && !tabSettings.settings.participants) {
-        badgeStyle = item.correct ? 'text-bg-success' : 'text-bg-danger';
-    }
-    if (round.state !== RoundState.TEAM_CAN_ATTEMPT) {
-        choiceStyle += 'disabled';
-    }
-
+const ModerationActionsView = ({ round }: RoundProps): ReactElement => {
     return (
-        <div
-            className={`d-inline-flex border rounded gap-2 p-2 btn align-items-baseline ${choiceStyle}`}
-            onClick={() => onGameEvent(new SelectFromMultipleChoiceEvent(item.choiceId))}
-            style={asReactCss({ '--bs-btn-color': '#000' })}
-        >
-            <h5 className={`badge ${badgeStyle}`}>{item.choiceId}</h5>
-            <h5>{item.text}</h5>
-            {
-                Array.from(item.selectedBy).map((team) => (
-                    <TeamColorButton key={`selected-by-${team}`} color={team} />
-                ))
-            }
-        </div>
-    );
-};
-
-const TextMultipleChoiceView = ({ round, item }: SubProps<TextMultipleChoiceQuestion>): ReactElement => {
-    return (
-        <div className="card-body">
-            <h4 className="card-title pb-2">{item.text}</h4>
-            <div className="d-grid gap-3" style={{ gridTemplateColumns: '1fr 1fr' }}>
-                {
-                    item.choicesSorted.map((choice) => (
-                        <ChoiceView key={`choice-${choice.choiceId}`} item={choice} round={round} />
-                    ))
-                }
+        <div className="card">
+            <div className="card-header">Actions</div>
+            <div className="card-body">
+                Test
             </div>
         </div>
     );
 };
 
-const ImageMultipleChoiceView = ({ round, item }: SubProps<ImageMultipleChoiceQuestion>): ReactElement => {
-    return (<p>Image</p>);
+const ParticipantsActionsView = ({ round }: RoundProps): ReactElement => {
+    return (
+        <div className="card">
+            <div className="card-header">Actions</div>
+            <div className="card-body">
+                Test
+            </div>
+        </div>
+    );
 };
 
-const EstimateView = ({ round, item }: SubProps<EstimateQuestion>): ReactElement => {
+const EstimateView = ({ round, item }: RoundAndItemProps<EstimateQuestion>): ReactElement => {
     return (<p>Estimate</p>);
 };
 
-const ActionView = ({ round, item }: SubProps<ActionQuestion>): ReactElement => {
+const ActionView = ({ round, item }: RoundAndItemProps<ActionQuestion>): ReactElement => {
     return (<p>Action</p>);
 };
 
@@ -92,13 +66,26 @@ export function questionView(round: GameRound): ReactElement {
     return (<p>Unknown question!</p>);
 }
 
-export const QuestionView = ({ round }: Props): ReactElement => {
+export const QuestionView = ({ round }: RoundProps): ReactElement => {
+    const tabSettings = useContext(TabContext);
     return (
-        <div className="card">
-            <div className="card-header">
-                {`${round.inSectionName} ${round.question.pointsForCompletion}`}
+        <div className="d-flex gap-2">
+            <div className="card flex-grow-1">
+                <div className="card-header">
+                    {`${round.inSectionName} ${round.question.pointsForCompletion}`}
+                </div>
+                {questionView(round)}
             </div>
-            {questionView(round)}
+            {
+                tabSettings.settings.moderation
+                    ? (
+                        <ModerationActionsView round={round} />
+                    )
+                    : (
+                        <ParticipantsActionsView round={round} />
+                    )
+            }
+
         </div>
     );
 };
