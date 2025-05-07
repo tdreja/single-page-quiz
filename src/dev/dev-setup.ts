@@ -115,28 +115,27 @@ export function prepareGame(game: Game) {
         selectedBy: new Set(),
         text: 'Delta',
     };
-    const choices = new Map<string, TextChoice>();
-    choices.set('A', choiceA);
-    choices.set('B', choiceB);
-    choices.set('C', choiceC);
-    choices.set('D', choiceD);
 
-    const textQuestion: TextMultipleChoiceQuestion = new TextMultipleChoiceQuestion('q1', 101, 'How much is the fish?', choices);
-    const round: GameRound = {
-        question: textQuestion,
-        inSectionName: 'common',
-        state: RoundState.BUZZER_ACTIVE,
-        attemptingTeams: new Set(),
-        teamsAlreadyAttempted: new Set(),
-        timerStart: null,
-    };
-    const section: GameSection = {
-        sectionName: 'common',
-        questions: new Map(),
-        index: 1,
-    };
-    section.questions.set(textQuestion.pointsForCompletion, textQuestion);
-    game.sections.set(section.sectionName, section);
-    game.round = round;
+    let index = 0;
+    for (const sectionId of ['Alpha', 'Beta', 'Gamma']) {
+        const section: GameSection = {
+            sectionName: sectionId,
+            questions: new Map(),
+            index,
+        };
+        game.sections.set(sectionId, section);
+
+        for (const points of [100, 200, 300, 400]) {
+            const choices = new Map<string, TextChoice>();
+            choices.set('A', choiceA);
+            choices.set('B', choiceB);
+            choices.set('C', choiceC);
+            choices.set('D', choiceD);
+
+            const textQuestion: TextMultipleChoiceQuestion = new TextMultipleChoiceQuestion(sectionId, points, 'How much is the fish?', choices);
+            section.questions.set(points, textQuestion);
+        }
+        index += 1;
+    }
     game.state = GameState.GAME_ACTIVE;
 }
