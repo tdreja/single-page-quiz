@@ -50,32 +50,72 @@ function moderation(game: Game, round: GameRound, onGameEvent: GameEventListener
         case RoundState.SHOW_QUESTION:
             return (
                 <>
-                    <h6>{i18n.question.stateShowQuestion}</h6>
-                    <span
-                        className="btn btn-primary"
-                        onClick={() => onGameEvent(new ActivateBuzzerEvent())}
-                    >
-                        {i18n.question.actionActivateBuzzer}
-                    </span>
-                    <h6>{i18n.question.headlineNextAttempt}</h6>
-                    {attemptButtons(game, round, onGameEvent)}
+                    <div className="card-body">
+                        <h6>{i18n.question.stateShowQuestion}</h6>
+                        <span
+                            className="btn btn-primary"
+                            onClick={() => onGameEvent(new ActivateBuzzerEvent())}
+                        >
+                            {i18n.question.actionActivateBuzzer}
+                        </span>
+                    </div>
+                    <div className="card-body">
+                        <h6>{i18n.question.headlineNextAttempt}</h6>
+                        {attemptButtons(game, round, onGameEvent)}
+                    </div>
                 </>
             );
         case RoundState.BUZZER_ACTIVE:
             return (
                 <>
-                    <h6>{i18n.question.stateBuzzerEnabled}</h6>
-                    <h6>{i18n.question.headlineNextAttempt}</h6>
-                    {attemptButtons(game, round, onGameEvent)}
+                    <div className="card-body">
+                        <h6>{i18n.question.stateBuzzerEnabled}</h6>
+                    </div>
+                    <div className="card-body">
+                        <h6>{i18n.question.headlineNextAttempt}</h6>
+                        {attemptButtons(game, round, onGameEvent)}
+                    </div>
                 </>
             );
         case RoundState.TEAM_CAN_ATTEMPT:
             return (
                 <>
-                    <h6>{i18n.question.stateTeamCanAttempt}</h6>
-                    {
-                        Array.from(round.attemptingTeams)
-                            .map((team) => (
+                    <div className="card-body">
+                        <h6>{i18n.question.stateTeamCanAttempt}</h6>
+                        {
+                            Array.from(round.attemptingTeams)
+                                .map((team) => (
+                                    <TeamColorButton
+                                        key={`attempt-temp-${team}`}
+                                        color={team}
+                                        className="material-symbols-outlined"
+                                    >
+                                        group
+                                    </TeamColorButton>
+                                ))
+                        }
+                    </div>
+                    <div className="card-body">
+                        <h6>{i18n.question.actionSkipAttempt}</h6>
+                        <span className="btn btn-outline-warning" onClick={() => onGameEvent(new SkipAttemptEvent())}>
+                            {i18n.question.actionSkipAttempt}
+                        </span>
+                    </div>
+                </>
+            );
+        case RoundState.SHOW_RESULTS:
+            return (
+                <>
+                    <div className="card-body">
+                        <h6>{i18n.question.stateQuestionComplete}</h6>
+                        <span className="btn btn-primary" onClick={() => onGameEvent(new CloseRoundEvent())}>
+                            {i18n.question.actionCloseQuestion}
+                        </span>
+                    </div>
+                    <div className="card-body">
+                        <h6>{round.question.completedBy.size === 0 ? i18n.question.noWinners : i18n.question.teamsWon}</h6>
+                        {
+                            Array.from(round.question.completedBy).map((team) => (
                                 <TeamColorButton
                                     key={`attempt-temp-${team}`}
                                     color={team}
@@ -84,32 +124,8 @@ function moderation(game: Game, round: GameRound, onGameEvent: GameEventListener
                                     group
                                 </TeamColorButton>
                             ))
-                    }
-                    <h6>{i18n.question.actionSkipAttempt}</h6>
-                    <span className="btn btn-outline-warning" onClick={() => onGameEvent(new SkipAttemptEvent())}>
-                        {i18n.question.actionSkipAttempt}
-                    </span>
-                </>
-            );
-        case RoundState.SHOW_RESULTS:
-            return (
-                <>
-                    <h6>{i18n.question.stateQuestionComplete}</h6>
-                    <span className="btn btn-primary" onClick={() => onGameEvent(new CloseRoundEvent())}>
-                        {i18n.question.actionCloseQuestion}
-                    </span>
-                    <h6>{i18n.question.teamsWon}</h6>
-                    {
-                        Array.from(round.question.completedBy).map((team) => (
-                            <TeamColorButton
-                                key={`attempt-temp-${team}`}
-                                color={team}
-                                className="material-symbols-outlined"
-                            >
-                                group
-                            </TeamColorButton>
-                        ))
-                    }
+                        }
+                    </div>
                 </>
             );
         default:
@@ -125,9 +141,7 @@ const ActionsView = ({ round }: RoundProps): ReactElement => {
     return (
         <div className="card">
             <div className="card-header">Actions</div>
-            <div className="card-body">
-                {tabSettings.settings.moderation ? moderation(game, round, onGameEvent, i18n) : (<p>Test</p>)}
-            </div>
+            {tabSettings.settings.moderation ? moderation(game, round, onGameEvent, i18n) : (<p>Test</p>)}
         </div>
     );
 };
