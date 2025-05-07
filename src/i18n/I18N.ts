@@ -9,6 +9,7 @@ export interface Labels {
     teams: TeamLabels,
     emojis: EmojiLabels,
     game: GameLabels,
+    question: QuestionLabels,
     playerEditor: PlayerEditor,
     teamEditor: TeamEditor,
     settings: Settings,
@@ -65,6 +66,21 @@ export interface Settings {
     labelModeParticipants: string,
     tooltipActionParticipants: string,
     tooltipActionModeration: string,
+}
+
+export interface QuestionLabels {
+    stateShowQuestion: string,
+    stateBuzzerEnabled: string,
+    stateTeamCanAttempt: string,
+    stateQuestionComplete: string,
+    actionActivateBuzzer: string,
+    actionSkipAttempt: string,
+    actionSkipQuestion: string,
+    actionCloseQuestion: string,
+    headlineNextAttempt: string,
+    headlineCurrentAttempt: string,
+    noWinners: string,
+    teamsWon: string,
 }
 
 export function i18n(): Labels {

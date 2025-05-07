@@ -12,6 +12,7 @@ import { TabContext } from '../common/TabContext';
 import { ImageMultipleChoiceView, TextMultipleChoiceView } from './MultipleChoiceView';
 import { sortTeamsByColor, Team } from '../../model/game/team';
 import { ActivateBuzzerEvent, CloseRoundEvent, RequestAttemptEvent, SkipAttemptEvent } from '../../events/round-events';
+import { I18N, Labels } from '../../i18n/I18N';
 
 interface RoundProps {
     round: GameRound,
@@ -44,34 +45,34 @@ function attemptButtons(game: Game, round: GameRound, onGameEvent: GameEventList
     );
 }
 
-function moderation(game: Game, round: GameRound, onGameEvent: GameEventListener): ReactElement {
+function moderation(game: Game, round: GameRound, onGameEvent: GameEventListener, i18n: Labels): ReactElement {
     switch (round.state) {
         case RoundState.SHOW_QUESTION:
             return (
                 <>
-                    <h6>Buzzer disabled</h6>
+                    <h6>{i18n.question.stateShowQuestion}</h6>
                     <span
                         className="btn btn-primary"
                         onClick={() => onGameEvent(new ActivateBuzzerEvent())}
                     >
-                        Activate Buzzer
+                        {i18n.question.actionActivateBuzzer}
                     </span>
-                    <h6>Which team wants to attempt?</h6>
+                    <h6>{i18n.question.headlineNextAttempt}</h6>
                     {attemptButtons(game, round, onGameEvent)}
                 </>
             );
         case RoundState.BUZZER_ACTIVE:
             return (
                 <>
-                    <h6>Buzzer active</h6>
-                    <h6>Which team wants to attempt?</h6>
+                    <h6>{i18n.question.stateBuzzerEnabled}</h6>
+                    <h6>{i18n.question.headlineNextAttempt}</h6>
                     {attemptButtons(game, round, onGameEvent)}
                 </>
             );
         case RoundState.TEAM_CAN_ATTEMPT:
             return (
                 <>
-                    <h6>Team can attempt</h6>
+                    <h6>{i18n.question.stateTeamCanAttempt}</h6>
                     {
                         Array.from(round.attemptingTeams)
                             .map((team) => (
@@ -84,16 +85,20 @@ function moderation(game: Game, round: GameRound, onGameEvent: GameEventListener
                                 </TeamColorButton>
                             ))
                     }
-                    <h6>Skip</h6>
-                    <span className="btn btn-outline-warning" onClick={() => onGameEvent(new SkipAttemptEvent())}>Skip</span>
+                    <h6>{i18n.question.actionSkipAttempt}</h6>
+                    <span className="btn btn-outline-warning" onClick={() => onGameEvent(new SkipAttemptEvent())}>
+                        {i18n.question.actionSkipAttempt}
+                    </span>
                 </>
             );
         case RoundState.SHOW_RESULTS:
             return (
                 <>
-                    <h6>Question complete</h6>
-                    <span className="btn btn-primary" onClick={() => onGameEvent(new CloseRoundEvent())}>Close question</span>
-                    <h6>Winners?</h6>
+                    <h6>{i18n.question.stateQuestionComplete}</h6>
+                    <span className="btn btn-primary" onClick={() => onGameEvent(new CloseRoundEvent())}>
+                        {i18n.question.actionCloseQuestion}
+                    </span>
+                    <h6>{i18n.question.teamsWon}</h6>
                     {
                         Array.from(round.question.completedBy).map((team) => (
                             <TeamColorButton
@@ -116,11 +121,12 @@ const ActionsView = ({ round }: RoundProps): ReactElement => {
     const tabSettings = useContext(TabContext);
     const game = useContext(GameContext);
     const onGameEvent = useContext(GameEventContext);
+    const i18n = useContext(I18N);
     return (
         <div className="card">
             <div className="card-header">Actions</div>
             <div className="card-body">
-                {tabSettings.settings.moderation ? moderation(game, round, onGameEvent) : (<p>Test</p>)}
+                {tabSettings.settings.moderation ? moderation(game, round, onGameEvent, i18n) : (<p>Test</p>)}
             </div>
         </div>
     );
