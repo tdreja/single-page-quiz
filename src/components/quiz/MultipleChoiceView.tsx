@@ -2,32 +2,47 @@ import React, { ReactElement, useCallback, useContext, useEffect, useState } fro
 import { RoundAndItemProps } from './QuestionView';
 import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from '../../model/quiz/multiple-choice-question';
 import { GameEventContext } from '../common/GameContext';
-import { TabContext } from '../common/TabContext';
-import { RoundState } from '../../model/game/game';
+import { EditTabSettings, TabContext } from '../common/TabContext';
+import { GameRound, RoundState } from '../../model/game/game';
 import { SelectFromMultipleChoiceEvent } from '../../events/question-event';
 import { asReactCss } from '../common/ReactCssUtils';
 import { TeamColorButton } from '../common/TeamColorButton';
+
+function badgeStyle(round: GameRound, item: TextChoice, tabSettings: EditTabSettings): string {
+    if (round.question.completed) {
+        return item.correct ? 'text-bg-success' : 'text-bg-danger';
+    }
+    if (item.selectedBy.size > 0) {
+        return 'text-bg-secondary';
+    }
+    if (tabSettings.settings.moderation && !tabSettings.settings.participants) {
+        return item.correct ? 'text-bg-success' : 'text-bg-danger';
+    }
+    return 'text-bg-primary';
+}
+
+function buttonStyle(round: GameRound, item: TextChoice, tabSettings: EditTabSettings): string {
+    const disabled: string = !tabSettings.settings.participants && round.state !== RoundState.TEAM_CAN_ATTEMPT ? 'disabled' : '';
+    if (round.question.completed) {
+        return `btn-outline-secondary ${disabled}`;
+    }
+    if (item.selectedBy.size > 0) {
+        return `btn-outline-secondary ${disabled}`;
+    }
+    return `btn-outline-primary ${disabled}`;
+}
 
 const ChoiceView = ({ round, item }: RoundAndItemProps<TextChoice>): ReactElement => {
     const onGameEvent = useContext(GameEventContext);
     const tabSettings = useContext(TabContext);
 
-    let choiceStyle: string = 'btn-outline-primary';
-    let badgeStyle: string = 'text-bg-primary';
-    if (tabSettings.settings.moderation && !tabSettings.settings.participants) {
-        badgeStyle = item.correct ? 'text-bg-success' : 'text-bg-danger';
-    }
-    if (round.state !== RoundState.TEAM_CAN_ATTEMPT) {
-        choiceStyle += 'disabled';
-    }
-
     return (
         <div
-            className={`d-inline-flex border rounded gap-2 p-2 btn align-items-baseline ${choiceStyle}`}
+            className={`d-inline-flex border rounded gap-2 p-2 btn align-items-baseline ${buttonStyle(round, item, tabSettings)}`}
             onClick={() => onGameEvent(new SelectFromMultipleChoiceEvent(item.choiceId))}
             style={asReactCss({ '--bs-btn-color': '#000' })}
         >
-            <h5 className={`badge mb-0 ${badgeStyle}`}>{item.choiceId}</h5>
+            <h5 className={`badge mb-0 ${badgeStyle(round, item, tabSettings)}`}>{item.choiceId}</h5>
             <h5 className="mb-0">{item.text}</h5>
             {
                 Array.from(item.selectedBy).map((team) => (

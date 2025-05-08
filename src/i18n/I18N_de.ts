@@ -80,7 +80,7 @@ export const i18n_de: Labels = {
     question: {
         stateShowQuestion: 'Warte auf Buzzer',
         stateBuzzerEnabled: 'Buzzer freigegeben',
-        stateTeamCanAttempt: 'Warte auf ANtwort',
+        stateTeamCanAttempt: 'Warte auf Antwort',
         stateQuestionComplete: 'Frage abgeschlossen',
         actionActivateBuzzer: 'Aktiviere Buzzer',
         actionSkipAttempt: 'Überspringe Team',

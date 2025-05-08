@@ -133,6 +133,47 @@ function moderation(game: Game, round: GameRound, onGameEvent: GameEventListener
     }
 }
 
+function participants(game: Game, round: GameRound, i18n: Labels): ReactElement {
+    switch (round.state) {
+        case RoundState.SHOW_QUESTION:
+            return (
+                <>
+                    <div className="card-body">
+                        <h6>{i18n.question.stateShowQuestion}</h6>
+                    </div>
+                </>
+            );
+        case RoundState.BUZZER_ACTIVE:
+            return (
+                <>
+                    <div className="card-body">
+                        <h6>{i18n.question.stateBuzzerEnabled}</h6>
+                    </div>
+                </>
+            );
+        case RoundState.TEAM_CAN_ATTEMPT:
+            return (
+                <>
+                    <div className="card-body">
+                        <h6>{i18n.question.stateTeamCanAttempt}</h6>
+                    </div>
+                </>
+            );
+        case RoundState.SHOW_RESULTS:
+            return (
+                <>
+                    <div className="card-body">
+                        <h6>{i18n.question.stateQuestionComplete}</h6>
+                    </div>
+                </>
+            );
+        default:
+            return (
+                <p>Unknown state</p>
+            );
+    }
+}
+
 const ActionsView = ({ round }: RoundProps): ReactElement => {
     const tabSettings = useContext(TabContext);
     const game = useContext(GameContext);
@@ -141,7 +182,7 @@ const ActionsView = ({ round }: RoundProps): ReactElement => {
     return (
         <div className="card">
             <div className="card-header">Actions</div>
-            {tabSettings.settings.moderation ? moderation(game, round, onGameEvent, i18n) : (<p>Test</p>)}
+            {tabSettings.settings.moderation ? moderation(game, round, onGameEvent, i18n) : participants(game, round, i18n)}
         </div>
     );
 };
