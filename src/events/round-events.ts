@@ -114,10 +114,12 @@ export class SkipAttemptEvent extends GameRoundEvent {
         // All teams have already answered?
         if (round.teamsAlreadyAttempted.size === game.teams.size) {
             round.state = RoundState.SHOW_RESULTS;
+            round.timerStart = null;
             return update(game, Changes.CURRENT_ROUND);
         }
         // Otherwise back to the start
         round.state = RoundState.SHOW_QUESTION;
+        round.timerStart = null;
         return update(game, Changes.CURRENT_ROUND);
     }
 }
@@ -137,6 +139,7 @@ export class SkipRoundEvent extends GameRoundEvent {
         round.state = RoundState.SHOW_RESULTS;
         round.attemptingTeams.clear();
         round.question.completeQuestion([]);
+        round.timerStart = null;
         return update(game, Changes.CURRENT_ROUND);
     }
 }

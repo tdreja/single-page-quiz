@@ -48,6 +48,7 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
         if (choice.correct) {
             question.completeQuestion(teams);
             round.state = RoundState.SHOW_RESULTS;
+            round.timerStart = null;
             return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
         }
 
@@ -55,11 +56,13 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
         if (round.teamsAlreadyAttempted.size === game.teams.size) {
             question.completeQuestion([]);
             round.state = RoundState.SHOW_RESULTS;
+            round.timerStart = null;
             return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
         }
 
         // Otherwise wait for another attempt
         round.state = RoundState.SHOW_QUESTION;
+        round.timerStart = null;
         return update(game, Changes.CURRENT_ROUND);
     }
 
@@ -122,6 +125,7 @@ export class SubmitEstimateEvent extends GameRoundEvent {
         const winnerTeams: Array<Team> = getTeams(game, closestTeams);
         question.completeQuestion(winnerTeams);
         round.state = RoundState.SHOW_RESULTS;
+        round.timerStart = null;
         return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
     }
 
