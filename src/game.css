@@ -69,3 +69,7 @@ body[view=moderation] {
     display: inline-flex;
     justify-content: center;
 }
+
+.time-section:not(:last-child)::after {
+    content: ':';
+}

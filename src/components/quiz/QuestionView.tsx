@@ -10,9 +10,10 @@ import { asReactCss } from '../common/ReactCssUtils';
 import { TeamColorButton } from '../common/TeamColorButton';
 import { TabContext } from '../common/TabContext';
 import { ImageMultipleChoiceView, TextMultipleChoiceView } from './MultipleChoiceView';
-import { sortTeamsByColor, Team } from '../../model/game/team';
+import { sortTeamsByColor, Team, TeamColor } from '../../model/game/team';
 import { ActivateBuzzerEvent, CloseRoundEvent, RequestAttemptEvent, SkipAttemptEvent } from '../../events/round-events';
 import { I18N, Labels } from '../../i18n/I18N';
+import { TimeInfo, Timer } from '../common/Timer';
 
 interface RoundProps {
     round: GameRound,
@@ -156,6 +157,10 @@ function participants(game: Game, round: GameRound, i18n: Labels): ReactElement 
                 <>
                     <div className="card-body">
                         <h6>{i18n.question.stateTeamCanAttempt}</h6>
+                        {
+                            Array.from(round.attemptingTeams)
+                                .map((color) => (<TeamColorButton key={color} color={color}>{i18n.teams[color]}</TeamColorButton>))
+                        }
                     </div>
                 </>
             );
@@ -164,6 +169,13 @@ function participants(game: Game, round: GameRound, i18n: Labels): ReactElement 
                 <>
                     <div className="card-body">
                         <h6>{i18n.question.stateQuestionComplete}</h6>
+                    </div>
+                    <div className="card-body">
+                        <h6>{round.question.completedBy.size === 0 ? i18n.question.noWinners : i18n.question.teamsWon}</h6>
+                        {
+                            Array.from(round.question.completedBy)
+                                .map((color) => (<TeamColorButton key={color} color={color}>{i18n.teams[color]}</TeamColorButton>))
+                        }
                     </div>
                 </>
             );
@@ -179,10 +191,29 @@ const ActionsView = ({ round }: RoundProps): ReactElement => {
     const game = useContext(GameContext);
     const onGameEvent = useContext(GameEventContext);
     const i18n = useContext(I18N);
+    const [timeInfo, setTimeInfo] = useState<TimeInfo | null>(null);
+    const [timer] = useState<Timer>(new Timer());
+
+    useEffect(() => {
+        console.log('Change timer to', round.timerStart);
+        timer.updateTimer(setTimeInfo, round.timerStart);
+    }, [round.timerStart]);
+
     return (
         <div className="card">
             <div className="card-header">Actions</div>
             {tabSettings.settings.moderation ? moderation(game, round, onGameEvent, i18n) : participants(game, round, i18n)}
+            <div className="card-footer">
+                {timeInfo && (
+                    <>
+                        <span className="me-2">Timer</span>
+                        {timeInfo.hours.length > 0 && (<span className="time-section">{timeInfo.hours}</span>)}
+                        <b className="time-section">{timeInfo.minutes}</b>
+                        <b className="time-section">{timeInfo.seconds}</b>
+                        <span className="time-section">{timeInfo.milliseconds}</span>
+                    </>
+                )}
+            </div>
         </div>
     );
 };
