@@ -1,6 +1,6 @@
 import React, { ReactElement, useCallback, useState } from 'react';
 import { generateJsonQuestionMatrix, JsonStaticGameData } from '../../model/game/json/game';
-import { QuestionMatrixItem } from '../../model/game/game';
+import { QuestionTableCell } from '../../model/game/game';
 
 async function readJson(input: HTMLInputElement): Promise<JsonStaticGameData | null> {
     const files = input.files;
@@ -27,7 +27,7 @@ async function readJson(input: HTMLInputElement): Promise<JsonStaticGameData | n
 
 export const QuizImporterView = (): ReactElement => {
     const [json, setJson] = useState<JsonStaticGameData | null>(null);
-    const [previewMatrx, setPreviewMatrx] = useState<QuestionMatrixItem<string>[]>([]);
+    const [previewMatrx, setPreviewMatrx] = useState<QuestionTableCell<string>[]>([]);
 
     const uploadFile = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = await readJson(event.target);

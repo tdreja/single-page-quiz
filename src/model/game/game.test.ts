@@ -1,6 +1,6 @@
 import { describe, expect, test, beforeEach } from '@jest/globals';
 import { Question } from '../quiz/question';
-import { emptyGame, Game, GameSection, generateQuestionMatrix } from './game';
+import { emptyGame, Game, GameSection, generateQuestionTable } from './game';
 import { ActionQuestion } from '../quiz/action-question';
 
 let game: Game;
@@ -48,7 +48,7 @@ beforeEach(() => {
 
 describe('Question matrix', () => {
     test('Sort sections by index', () => {
-        const matrix = generateQuestionMatrix(game, getItem);
+        const matrix = generateQuestionTable(game, getItem);
         expect(matrix.length).toBe(6);
         expect(matrix[0].inSection).toBe('SectionA');
         expect(matrix[0].label).toBe('SectionA');
@@ -61,7 +61,7 @@ describe('Question matrix', () => {
         expect(matrix[1].item).toBe('SectionB');
     });
     test('Points levels are in order', () => {
-        const matrix = generateQuestionMatrix(game, getItem);
+        const matrix = generateQuestionTable(game, getItem);
         expect(matrix.length).toBe(6);
         expect(matrix[2].inSection).toBe('SectionA');
         expect(matrix[2].label).toBe('100');

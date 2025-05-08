@@ -83,26 +83,31 @@ export function sortGameSectionsByIndex(section1?: GameSection, section2?: GameS
     return idx1 - idx2;
 }
 
-export interface QuestionMatrixItem<ITEM> {
-    label: string,
-    key: string,
-    inSection?: string,
-    pointsForCompletion?: number,
-    item?: ITEM,
+export interface QuestionTable<ITEM> {
+    readonly headlines: QuestionTableCell<ITEM>[],
+    readonly rows: QuestionTableCell<ITEM>[][],
 }
 
-export function generateQuestionMatrix<ITEM>(
+export interface QuestionTableCell<ITEM> {
+    readonly label: string,
+    readonly key: string,
+    readonly inSection?: string,
+    readonly pointsForCompletion?: number,
+    readonly item?: ITEM,
+}
+
+export function generateQuestionTable<ITEM>(
     game: Game,
     getItem: (section?: GameSection, question?: Question) => ITEM | undefined,
-): QuestionMatrixItem<ITEM>[] {
+): QuestionTable<ITEM> {
     const sectionOrder: Array<string> = [];
     const pointsLevels: Array<number> = [];
-    const result: QuestionMatrixItem<ITEM>[] = [];
 
     // Headlines first
+    const headlines: QuestionTableCell<ITEM>[] = [];
     Array.from(game.sections.values()).sort(sortGameSectionsByIndex).map((section) => {
         sectionOrder.push(section.sectionName);
-        result.push({
+        headlines.push({
             label: section.sectionName,
             key: section.sectionName,
             inSection: section.sectionName,
@@ -119,11 +124,14 @@ export function generateQuestionMatrix<ITEM>(
     pointsLevels.sort((a, b) => a - b);
 
     // Now add the question matrix
+    const rows: QuestionTableCell<ITEM>[][] = [];
     for (const questionPoints of pointsLevels) {
+        const row: QuestionTableCell<ITEM>[] = [];
+
         for (const sectionId of sectionOrder) {
             const section = game.sections.get(sectionId);
             if (!section) {
-                result.push({
+                row.push({
                     label: '-',
                     key: '?',
                     item: getItem(),
@@ -132,7 +140,7 @@ export function generateQuestionMatrix<ITEM>(
             }
 
             const question = section.questions.get(questionPoints);
-            result.push({
+            row.push({
                 label: `${questionPoints}`,
                 inSection: question ? sectionId : undefined,
                 pointsForCompletion: question ? questionPoints : undefined,
@@ -140,7 +148,12 @@ export function generateQuestionMatrix<ITEM>(
                 item: getItem(section, question),
             });
         }
+
+        rows.push(row);
     }
 
-    return result;
+    return {
+        headlines,
+        rows,
+    };
 }

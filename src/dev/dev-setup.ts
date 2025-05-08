@@ -117,7 +117,7 @@ export function prepareGame(game: Game) {
     };
 
     let index = 0;
-    for (const sectionId of ['Alpha', 'Beta', 'Gamma']) {
+    for (const sectionId of ['Alpha', 'Beta', 'Gamma', 'Delta']) {
         const section: GameSection = {
             sectionName: sectionId,
             questions: new Map(),

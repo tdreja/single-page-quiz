@@ -1,12 +1,12 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
-import { Game, generateQuestionMatrix, QuestionMatrixItem } from '../../model/game/game';
+import { Game, generateQuestionTable, QuestionTable, QuestionTableCell } from '../../model/game/game';
 import { GameContext, GameEventContext } from '../common/GameContext';
 import { Question } from '../../model/quiz/question';
 import { StartRoundEvent } from '../../events/round-events';
 import { TeamColorButton } from '../common/TeamColorButton';
 
 interface Props {
-    matrix: QuestionMatrixItem<Question>,
+    matrix: QuestionTableCell<Question>,
 }
 
 const MatrixItem = ({ matrix }: Props): ReactElement => {
@@ -18,40 +18,61 @@ const MatrixItem = ({ matrix }: Props): ReactElement => {
     }, [matrix, onGameEvent]);
 
     return (
-        <>
+        <div className="d-inline-flex w-100 gap-2 align-items-center">
             {
                 matrix.item
                     ? (
-                        <span className={`btn d-inline-flex justify-content-center gap-2 ${matrix.item.completed ? 'btn-outline-secondary disabled' : 'btn-primary'}`} style={{ opacity: '1' }} onClick={onStartRound}>
-                            {matrix.item.pointsForCompletion}
+                        <>
+                            <span className={`d-inline-flex justify-content-center gap-2 ${matrix.item.completed ? 'ps-2' : 'btn btn-primary'}`} style={{ opacity: '1' }} onClick={onStartRound}>
+                                {matrix.item.pointsForCompletion}
+                            </span>
                             {Array.from(matrix.item.completedBy).map((team) => (<TeamColorButton key={team} color={team} />))}
-                        </span>
+                        </>
                     )
                     : (
                         <span className="btn btn-outline-dark">{matrix.inSection}</span>
                     )
             }
-        </>
+        </div>
     );
 };
 
 export const SelectNextQuestionView = (): ReactElement => {
     const game = useContext<Game>(GameContext);
-    const [matrix, setMatrix] = useState<QuestionMatrixItem<Question>[]>(
-        generateQuestionMatrix(game, (_, question) => question),
+    const [table, setTable] = useState<QuestionTable<Question>>(
+        generateQuestionTable(game, (_, question) => question),
     );
 
     useEffect(() => {
-        setMatrix(generateQuestionMatrix(game, (_, question) => question));
+        setTable(generateQuestionTable(game, (_, question) => question));
     }, [game]);
 
     return (
-        <div className="d-grid row-gap-2 column-gap-4" style={{ gridTemplateColumns: `repeat(${game.sections.size}, 1fr)` }}>
-            {
-                matrix.map((item) => (
-                    <MatrixItem key={item.key} matrix={item} />
-                ))
-            }
-        </div>
+        <table className="table table-striped table-hover align-middle">
+            <thead>
+                <tr>
+                    {
+                        table.headlines.map((cell) => (
+                            <th key={cell.key}>{cell.label}</th>
+                        ))
+                    }
+                </tr>
+            </thead>
+            <tbody className="table-group-divider">
+                {
+                    table.rows.map((row, index) => (
+                        <tr key={`row-${index}`}>
+                            {
+                                row.map((item) => (
+                                    <td key={item.key}>
+                                        <MatrixItem matrix={item} />
+                                    </td>
+                                ))
+                            }
+                        </tr>
+                    ))
+                }
+            </tbody>
+        </table>
     );
 };

@@ -1,7 +1,7 @@
 import { arrayAsSet } from '../../common';
 import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../../quiz/json';
 import { Question } from '../../quiz/question';
-import { Game, GameSection, GameState, QuestionMatrixItem, RoundState } from '../game';
+import { Game, GameSection, GameState, QuestionTableCell, RoundState } from '../game';
 import { TeamColor } from '../team';
 import { JsonPlayer, restorePlayers as importPlayers, storePlayer } from './player';
 import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team';
@@ -185,8 +185,8 @@ function compareSections(s1: JsonStaticSectionData, s2: JsonStaticSectionData): 
 export function generateJsonQuestionMatrix<ITEM>(
     game: JsonStaticGameData,
     getItem: (section?: JsonStaticSectionData, question?: JsonStaticQuestionData) => ITEM | undefined,
-): Array<QuestionMatrixItem<ITEM>> {
-    const result: QuestionMatrixItem<ITEM>[] = [];
+): Array<QuestionTableCell<ITEM>> {
+    const result: QuestionTableCell<ITEM>[] = [];
     const sortedSections: Array<JsonStaticSectionData> = game.sections ? game.sections.sort(compareSections) : [];
     const pointsLevels: Array<number> = [];
 
