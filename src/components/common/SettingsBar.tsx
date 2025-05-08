@@ -7,37 +7,31 @@ import { I18N, Labels } from '../../i18n/I18N';
 
 interface Symbol {
     symbol: string,
-    buttonStyle: string,
     label: (i18n: Labels) => string,
     tooltip: (i18n: Labels) => string,
 }
 const modeShared: Symbol = {
     symbol: 'communication',
-    buttonStyle: 'btn-outline-danger',
     label: (i18n) => i18n.settings.labelModeShared,
     tooltip: (i18n) => i18n.settings.tooltipModeShared,
 };
 const modeModeration: Symbol = {
     symbol: 'clinical_notes',
-    buttonStyle: 'btn-outline-secondary',
     label: (i18n) => i18n.settings.labelModeModeration,
     tooltip: (i18n) => i18n.settings.tooltipModeModeration,
 };
 const modeParticipants: Symbol = {
     symbol: 'monitor',
-    buttonStyle: 'btn-outline-secondary',
     label: (i18n) => i18n.settings.labelModeParticipants,
     tooltip: (i18n) => i18n.settings.tooltipModeParticipants,
 };
 const actionOpenParticipants: Symbol = {
     symbol: 'open_in_browser',
-    buttonStyle: 'btn-outline-primary',
     label: () => '',
     tooltip: (i18n) => i18n.settings.tooltipActionParticipants,
 };
 const actionOpenModeration: Symbol = {
     symbol: 'clinical_notes',
-    buttonStyle: 'btn-outline-secondary',
     label: () => '',
     tooltip: (i18n) => i18n.settings.tooltipActionModeration,
 };
@@ -90,7 +84,7 @@ export const SettingsBar = (): ReactElement => {
     }, [tabSettings]);
 
     return (
-        <nav id="top-nav" className="navbar sticky-top bg-body-secondary d-flex align-items-end pb-0 pt-0 justify-content-between ps-2 pe-2">
+        <nav id="top-nav" className="navbar sticky-top dark-background d-flex align-items-end pb-0 pt-0 justify-content-between ps-2 pe-2">
             <ul className="nav nav-tabs">
                 <li className={`nav-item nav-link ${game.state === GameState.GAME_ACTIVE ? 'active' : ''}`} onClick={() => changeState(GameState.GAME_ACTIVE)}>
                     {i18n.game['game-active']}
@@ -107,7 +101,7 @@ export const SettingsBar = (): ReactElement => {
             </ul>
             <div className="d-flex mb-2 mt-2 gap-2">
                 <span
-                    className={`btn ${mode.buttonStyle} d-flex align-items-center gap-2`}
+                    className="btn btn-outline-light btn-outline-dark-background d-flex align-items-center gap-2"
                     title={mode.tooltip(i18n)}
                     onClick={onModeClick}
                 >
@@ -117,7 +111,7 @@ export const SettingsBar = (): ReactElement => {
                     {mode.label(i18n)}
                 </span>
                 <span
-                    className={`btn material-symbols-outlined ${action.buttonStyle}`}
+                    className="btn material-symbols-outlined btn-outline-light btn-outline-dark-background"
                     title={action.tooltip(i18n)}
                     onClick={onActionClick}
                 >

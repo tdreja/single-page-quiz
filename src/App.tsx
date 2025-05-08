@@ -60,6 +60,11 @@ function App() {
     // When settings are changed, we also change the URL
     const onChangeSettings = useCallback((settings: TabSettings) => {
         setTabSettings(settings);
+        if (settings.moderation) {
+            document.body.setAttribute('view', 'moderation');
+        } else {
+            document.body.setAttribute('view', 'participants');
+        }
     }, [tabSettings]);
 
     // Load initial state of the game
@@ -75,7 +80,7 @@ function App() {
 
         // Settings from URL
         const settings = readSettingsFromLocation();
-        setTabSettings(settings);
+        onChangeSettings(settings);
 
         // Handle messages
         channel.removeEventListener('message', channelListener);

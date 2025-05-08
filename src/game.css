@@ -1,3 +1,23 @@
+body[view=participants] {
+    --dark-background: #498467;
+}
+
+body[view=moderation] {
+    --dark-background: #003F91;
+}
+
+.dark-background {
+    background-color: var(--dark-background) !important;
+    color: #fff;
+    --bs-link-color: #fff;
+    --bs-link-hover-color: #fff;
+}
+
+.btn-outline-dark-background {
+    --bs-btn-hover-color: var(--dark-background);
+    --bs-btn-active-color: var(--dark-background);
+}
+
 #root {
     height: 100vh;
     display: flex;
@@ -11,6 +31,7 @@
 
 #main-content {
     flex-grow: 1;
+    overflow-x: scroll;
 }
 
 .grid-columns-xl {
