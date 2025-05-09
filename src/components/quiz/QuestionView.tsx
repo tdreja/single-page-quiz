@@ -195,7 +195,6 @@ const ActionsView = ({ round }: RoundProps): ReactElement => {
     const [timer] = useState<Timer>(new Timer());
 
     useEffect(() => {
-        console.log('Change timer to', round.timerStart);
         timer.updateTimer(setTimeInfo, round.timerStart);
     }, [round.timerStart]);
 

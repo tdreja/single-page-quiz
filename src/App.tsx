@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './game.css';
+import './images.css';
 import { TeamsBottomNav } from './components/game/TeamsBottomNav';
 import React, { useCallback, useEffect, useState } from 'react';
 import { emptyGame, Game } from './model/game/game';
