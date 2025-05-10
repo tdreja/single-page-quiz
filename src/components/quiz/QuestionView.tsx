@@ -168,7 +168,11 @@ function participants(game: Game, round: GameRound, i18n: Labels): ReactElement 
                         <h6>{i18n.question.stateTeamCanAttempt}</h6>
                         {
                             Array.from(round.attemptingTeams)
-                                .map((color) => (<TeamColorButton key={color} color={color}>{i18n.teams[color]}</TeamColorButton>))
+                                .map((color) => (
+                                    <TeamColorButton key={color} color={color}>
+                                        <span className="rounded-pill text-bg-light ps-2 pe-2 fw-bold ms-2 me-2">{i18n.teams[color]}</span>
+                                    </TeamColorButton>
+                                ))
                         }
                     </div>
                 </>
@@ -186,7 +190,11 @@ function participants(game: Game, round: GameRound, i18n: Labels): ReactElement 
                         <h6>{round.question.completedBy.size === 0 ? i18n.question.noWinners : i18n.question.teamsWon}</h6>
                         {
                             Array.from(round.question.completedBy)
-                                .map((color) => (<TeamColorButton key={color} color={color}>{i18n.teams[color]}</TeamColorButton>))
+                                .map((color) => (
+                                    <TeamColorButton key={color} color={color}>
+                                        <span className="rounded-pill text-bg-light ps-2 pe-2 fw-bold ms-2 me-2">{i18n.teams[color]}</span>
+                                    </TeamColorButton>
+                                ))
                         }
                     </div>
                 </>

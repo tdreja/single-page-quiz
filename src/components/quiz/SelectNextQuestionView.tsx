@@ -30,7 +30,7 @@ const MatrixItem = ({ matrix }: Props): ReactElement => {
                         </>
                     )
                     : (
-                        <span className="btn btn-outline-dark">{matrix.inSection}</span>
+                        <span className="btn btn-outline-dark ms-2">{matrix.inSection}</span>
                     )
             }
         </div>
@@ -48,31 +48,37 @@ export const SelectNextQuestionView = (): ReactElement => {
     }, [game]);
 
     return (
-        <table className="table table-striped table-hover align-middle">
-            <thead>
-                <tr>
+        <div className="d-flex flex-wrap gap-2">
+            <table className="table table-striped table-hover align-middle flex-grow-1">
+                <thead>
+                    <tr>
+                        {
+                            table.headlines.map((cell) => (
+                                <th key={cell.key} className="ps-2">{cell.label}</th>
+                            ))
+                        }
+                    </tr>
+                </thead>
+                <tbody className="table-group-divider">
                     {
-                        table.headlines.map((cell) => (
-                            <th key={cell.key}>{cell.label}</th>
+                        table.rows.map((row, index) => (
+                            <tr key={`row-${index}`}>
+                                {
+                                    row.map((item) => (
+                                        <td key={item.key}>
+                                            <MatrixItem matrix={item} />
+                                        </td>
+                                    ))
+                                }
+                            </tr>
                         ))
                     }
-                </tr>
-            </thead>
-            <tbody className="table-group-divider">
-                {
-                    table.rows.map((row, index) => (
-                        <tr key={`row-${index}`}>
-                            {
-                                row.map((item) => (
-                                    <td key={item.key}>
-                                        <MatrixItem matrix={item} />
-                                    </td>
-                                ))
-                            }
-                        </tr>
-                    ))
-                }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+            <div>
+                <h5>Next team?</h5>
+                <span>Next team!</span>
+            </div>
+        </div>
     );
 };
