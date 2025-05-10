@@ -93,8 +93,8 @@ export const i18n_en: Labels = {
     },
     settings: {
         tooltipModeShared: 'Shared with participants',
-        labelModeShared: 'Shared',
-        tooltipModeModeration: 'Moderation',
+        labelModeShared: 'Moderation & participants',
+        tooltipModeModeration: 'Moderation only',
         labelModeModeration: 'Moderation only',
         tooltipModeParticipants: 'Participants only',
         labelModeParticipants: '',

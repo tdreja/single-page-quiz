@@ -3,6 +3,10 @@ body[view=participants] {
 }
 
 body[view=moderation] {
+    --dark-background: #A40E4C;
+}
+
+body[view=shared] {
     --dark-background: #003F91;
 }
 

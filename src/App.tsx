@@ -62,7 +62,11 @@ function App() {
     const onChangeSettings = useCallback((settings: TabSettings) => {
         setTabSettings(settings);
         if (settings.moderation) {
-            document.body.setAttribute('view', 'moderation');
+            if (settings.participants) {
+                document.body.setAttribute('view', 'shared');
+            } else {
+                document.body.setAttribute('view', 'moderation');
+            }
         } else {
             document.body.setAttribute('view', 'participants');
         }
