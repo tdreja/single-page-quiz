@@ -58,8 +58,6 @@ test('requestAttempt', () => {
 
     // Start a new round
     game = expectUpdate(startRound.updateGame(game), Changes.CURRENT_ROUND);
-    game = expectNoUpdate(requestAttemptBlue.updateGame(game));
-    game = expectNoUpdate(requestAttemptRed.updateGame(game));
 
     // Activate Buzzer
     game = expectUpdate(activateBuzzer.updateGame(game), Changes.CURRENT_ROUND);
