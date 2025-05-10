@@ -77,6 +77,8 @@ export interface QuestionLabels {
     actionSkipAttempt: string,
     actionSkipQuestion: string,
     actionCloseQuestion: string,
+    headlineActions: string,
+    headlineTimer: string,
     headlineNextAttempt: string,
     headlineCurrentAttempt: string,
     noWinners: string,

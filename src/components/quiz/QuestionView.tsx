@@ -71,6 +71,9 @@ function moderation(game: Game, round: GameRound, onGameEvent: GameEventListener
                 <>
                     <div className="card-body">
                         <h6>{i18n.question.stateBuzzerEnabled}</h6>
+                        <span className="material-symbols-outlined badge rounded-pill text-bg-danger">
+                            e911_emergency
+                        </span>
                     </div>
                     <div className="card-body">
                         <h6>{i18n.question.headlineNextAttempt}</h6>
@@ -141,6 +144,9 @@ function participants(game: Game, round: GameRound, i18n: Labels): ReactElement 
                 <>
                     <div className="card-body">
                         <h6>{i18n.question.stateShowQuestion}</h6>
+                        <span className="material-symbols-outlined badge rounded-pill text-bg-primary fs-2">
+                            lock_clock
+                        </span>
                     </div>
                 </>
             );
@@ -149,6 +155,9 @@ function participants(game: Game, round: GameRound, i18n: Labels): ReactElement 
                 <>
                     <div className="card-body">
                         <h6>{i18n.question.stateBuzzerEnabled}</h6>
+                        <span className="material-symbols-outlined badge rounded-pill text-bg-danger fs-2">
+                            e911_emergency
+                        </span>
                     </div>
                 </>
             );
@@ -169,6 +178,9 @@ function participants(game: Game, round: GameRound, i18n: Labels): ReactElement 
                 <>
                     <div className="card-body">
                         <h6>{i18n.question.stateQuestionComplete}</h6>
+                        <span className="material-symbols-outlined badge rounded-pill text-bg-primary fs-2">
+                            task_alt
+                        </span>
                     </div>
                     <div className="card-body">
                         <h6>{round.question.completedBy.size === 0 ? i18n.question.noWinners : i18n.question.teamsWon}</h6>
@@ -200,14 +212,14 @@ const ActionsView = ({ round }: RoundProps): ReactElement => {
 
     return (
         <div className="card">
-            <div className="card-header">Actions</div>
+            <div className="card-header">{i18n.question.headlineActions}</div>
             {tabSettings.settings.moderation ? moderation(game, round, onGameEvent, i18n) : participants(game, round, i18n)}
             <div className="card-footer">
                 {timeInfo && (
                     <>
-                        <span className="me-2">Timer</span>
+                        <span className="me-2">{i18n.question.headlineTimer}</span>
                         {timeInfo.hours.length > 0 && (<span className="time-section">{timeInfo.hours}</span>)}
-                        <b className="time-section">{timeInfo.minutes}</b>
+                        <span className="time-section">{timeInfo.minutes}</span>
                         <b className="time-section">{timeInfo.seconds}</b>
                         <span className="time-section">{timeInfo.milliseconds}</span>
                     </>

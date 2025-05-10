@@ -71,6 +71,8 @@ export const i18n_en: Labels = {
         actionSkipAttempt: 'Skip team',
         actionSkipQuestion: 'Skip question',
         actionCloseQuestion: 'Back to overview',
+        headlineActions: 'Status',
+        headlineTimer: 'Timer',
         headlineNextAttempt: 'Next answer attempt by?',
         headlineCurrentAttempt: 'Attempting to answer:',
         noWinners: 'Receive no correct answer',

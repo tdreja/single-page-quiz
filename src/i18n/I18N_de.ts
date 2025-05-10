@@ -86,6 +86,8 @@ export const i18n_de: Labels = {
         actionSkipAttempt: 'Überspringe Team',
         actionSkipQuestion: 'Überspringe Frage',
         actionCloseQuestion: 'Zurück zur Übersicht',
+        headlineActions: 'Status',
+        headlineTimer: 'Zeit',
         headlineNextAttempt: 'Wer darf als nächstes antworten?',
         headlineCurrentAttempt: 'Es darf antworten:',
         noWinners: 'Keine korrekte Antwort erhalten',
