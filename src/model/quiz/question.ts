@@ -13,10 +13,11 @@ export enum QuestionType {
  */
 export interface Question {
     readonly pointsForCompletion: number,
-    readonly inSection: string,
+    readonly inColumn: string,
     readonly type: QuestionType,
     readonly completedBy: Set<TeamColor>,
     readonly completed: boolean,
+    readonly useBuzzer: boolean,
     completeQuestion: (teams: Array<Team>) => void,
     exportStaticQuestionData: () => JsonStaticQuestionData,
     exportDynamicQuestionData: () => JsonDynamicQuestionData,

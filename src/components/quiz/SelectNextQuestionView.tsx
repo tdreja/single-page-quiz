@@ -15,7 +15,7 @@ const MatrixItem = ({ matrix }: Props): ReactElement => {
     const onGameEvent = useContext(GameEventContext);
     const onStartRound = useCallback(() => {
         if (matrix.item && !matrix.item.completed) {
-            onGameEvent(new StartRoundEvent(matrix.item.inSection, matrix.item.pointsForCompletion));
+            onGameEvent(new StartRoundEvent(matrix.item.inColumn, matrix.item.pointsForCompletion));
         }
     }, [matrix, onGameEvent]);
 

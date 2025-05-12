@@ -38,17 +38,21 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
     private readonly _choices: Map<string, TextChoice>;
     private readonly _completedBy: Set<TeamColor>;
     private readonly _pointsForCompletion: number;
-    private readonly _inSection: string;
+    private readonly _inColumn: string;
     private readonly _text: string;
     private _completed: boolean;
 
-    public constructor(inSection: string, pointsForCompletion: number, text: string, choices: Map<string, TextChoice>) {
-        this._inSection = inSection;
+    public constructor(inColumn: string, pointsForCompletion: number, text: string, choices: Map<string, TextChoice>) {
+        this._inColumn = inColumn;
         this._choices = choices;
         this._pointsForCompletion = pointsForCompletion;
         this._text = text;
         this._completedBy = new Set<TeamColor>();
         this._completed = false;
+    }
+
+    public get useBuzzer(): boolean {
+        return true;
     }
 
     public get choices(): Map<string, TextChoice> {
@@ -59,8 +63,8 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
         return this._pointsForCompletion;
     }
 
-    public get inSection(): string {
-        return this._inSection;
+    public get inColumn(): string {
+        return this._inColumn;
     }
 
     public get text(): string {
@@ -117,7 +121,7 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
             }
         }
         return {
-            inSection: this._inSection,
+            inSection: this._inColumn,
             pointsForCompletion: this._pointsForCompletion,
             completed: this._completed,
             completedBy: Array.from(this._completedBy),
@@ -126,7 +130,7 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
     }
 
     public importDynamicQuestionData(state: JsonDynamicQuestionData) {
-        if (this._pointsForCompletion !== state.pointsForCompletion && this._inSection !== state.inSection) {
+        if (this._pointsForCompletion !== state.pointsForCompletion && this._inColumn !== state.inSection) {
             return;
         }
         this._completed = state.completed || false;

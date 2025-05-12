@@ -4,21 +4,25 @@ import { addPointsToTeam, QuestionType, TextQuestion } from './question';
 
 export class ActionQuestion implements TextQuestion {
     private readonly _completedBy: Set<TeamColor>;
-    private readonly _inSection: string;
+    private readonly _inColumn: string;
     private readonly _pointsForCompletion: number;
     private readonly _text: string;
     private _completed: boolean;
 
-    public constructor(inSection: string, pointsForCompletion: number, text: string) {
-        this._inSection = inSection;
+    public constructor(inColumn: string, pointsForCompletion: number, text: string) {
+        this._inColumn = inColumn;
         this._pointsForCompletion = pointsForCompletion;
         this._text = text;
         this._completedBy = new Set<TeamColor>();
         this._completed = false;
     }
 
-    public get inSection(): string {
-        return this._inSection;
+    public get inColumn(): string {
+        return this._inColumn;
+    }
+
+    public get useBuzzer(): boolean {
+        return false;
     }
 
     public get pointsForCompletion(): number {
@@ -60,7 +64,7 @@ export class ActionQuestion implements TextQuestion {
 
     public exportDynamicQuestionData(): JsonDynamicQuestionData {
         return {
-            inSection: this._inSection,
+            inSection: this._inColumn,
             pointsForCompletion: this._pointsForCompletion,
             completed: this._completed,
             completedBy: Array.from(this._completedBy),
@@ -69,7 +73,7 @@ export class ActionQuestion implements TextQuestion {
     }
 
     public importDynamicQuestionData(state: JsonDynamicQuestionData) {
-        if (this._pointsForCompletion !== state.pointsForCompletion && this._inSection !== state.inSection) {
+        if (this._pointsForCompletion !== state.pointsForCompletion && this._inColumn !== state.inSection) {
             return;
         }
         this._completed = state.completed || false;

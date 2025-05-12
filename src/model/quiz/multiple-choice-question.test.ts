@@ -53,7 +53,7 @@ describe('TextMultipleChoiceQuestion', () => {
         const question = section?.questions.get(points);
         expect(question).toBeDefined();
         expect(question?.pointsForCompletion).toBe(points);
-        expect(question?.inSection).toBe(sId);
+        expect(question?.inColumn).toBe(sId);
         expect(question).toEqual(textMultipleChoiceQuestion);
     });
 
@@ -151,7 +151,7 @@ describe('ImageMultipleChoiceQuestion', () => {
         expect(section?.questions.size).toBe(1);
         const question = section?.questions.get(points);
         expect(question).toBeDefined();
-        expect(question?.inSection).toBe(sId);
+        expect(question?.inColumn).toBe(sId);
         expect(question?.pointsForCompletion).toBe(points);
         expect(question).toEqual(imageMultipleChoiceQuestion);
     });

@@ -6,7 +6,7 @@ import { addPointsToTeam, QuestionType, TextQuestion } from './question';
  * Base API for estimate questions
  */
 export class EstimateQuestion implements TextQuestion {
-    private readonly _inSection: string;
+    private readonly _inColumn: string;
     private readonly _pointsForCompletion: number;
     private readonly _estimates: Map<TeamColor, number>;
     private readonly _completedBy: Set<TeamColor>;
@@ -14,8 +14,8 @@ export class EstimateQuestion implements TextQuestion {
     private readonly _target: number;
     private _completed: boolean;
 
-    public constructor(inSection: string, pointsForCompletion: number, text: string, target: number) {
-        this._inSection = inSection;
+    public constructor(inColumn: string, pointsForCompletion: number, text: string, target: number) {
+        this._inColumn = inColumn;
         this._pointsForCompletion = pointsForCompletion;
         this._text = text;
         this._target = target;
@@ -24,8 +24,12 @@ export class EstimateQuestion implements TextQuestion {
         this._completed = false;
     }
 
-    public get inSection(): string {
-        return this._inSection;
+    public get inColumn(): string {
+        return this._inColumn;
+    }
+
+    public get useBuzzer(): boolean {
+        return false;
     }
 
     public get pointsForCompletion(): number {
@@ -80,7 +84,7 @@ export class EstimateQuestion implements TextQuestion {
             data[team] = estimate;
         }
         return {
-            inSection: this._inSection,
+            inSection: this._inColumn,
             pointsForCompletion: this._pointsForCompletion,
             completed: this._completed,
             completedBy: Array.from(this._completedBy),
@@ -89,7 +93,7 @@ export class EstimateQuestion implements TextQuestion {
     }
 
     public importDynamicQuestionData(state: JsonDynamicQuestionData) {
-        if (this._pointsForCompletion !== state.pointsForCompletion && this._inSection !== state.inSection) {
+        if (this._pointsForCompletion !== state.pointsForCompletion && this._inColumn !== state.inSection) {
             return;
         }
         this._completed = state.completed || false;

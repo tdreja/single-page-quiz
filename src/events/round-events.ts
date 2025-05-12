@@ -25,7 +25,7 @@ export class StartRoundEvent extends BasicGameEvent {
         if (game.round) {
             // We're already active?
             if (game.round.question.pointsForCompletion === this._pointsForCompletion
-              && game.round.question.inSection === this._sectionName) {
+              && game.round.question.inColumn === this._sectionName) {
                 return noUpdate(game);
             }
             const oldQuestion = game.round.question;

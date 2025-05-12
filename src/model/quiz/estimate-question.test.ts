@@ -52,7 +52,7 @@ describe('EstimateQuestion', () => {
         const question = section?.questions.get(points);
         expect(question).toBeDefined();
         expect(question?.pointsForCompletion).toBe(points);
-        expect(question?.inSection).toBe(sId);
+        expect(question?.inColumn).toBe(sId);
         expect(question).toEqual(estimateQuestion);
     });
 
