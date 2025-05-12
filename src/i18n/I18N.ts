@@ -10,6 +10,7 @@ export interface Labels {
     emojis: EmojiLabels,
     game: GameLabels,
     question: QuestionLabels,
+    quiz: QuizLabels,
     playerEditor: PlayerEditor,
     teamEditor: TeamEditor,
     settings: Settings,
@@ -83,6 +84,10 @@ export interface QuestionLabels {
     headlineCurrentAttempt: string,
     noWinners: string,
     teamsWon: string,
+}
+
+export interface QuizLabels {
+    nextSelectingTeam: string,
 }
 
 export function i18n(): Labels {
