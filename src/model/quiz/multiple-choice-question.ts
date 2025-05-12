@@ -5,7 +5,7 @@ import {
     JsonDynamicQuestionData,
     IndexedByColor,
 } from './json';
-import { addPointsToTeam, ImageQuestion, Question, QuestionType, TextQuestion } from './question';
+import { addPointsToTeam, CompletionPercent, ImageQuestion, Question, QuestionType, TextQuestion } from './question';
 
 /**
  * Base API for choices selectable in multiple-choice questions
@@ -83,11 +83,14 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
         return this._completed;
     }
 
-    public completeQuestion(teams: Array<Team>) {
+    public completeQuestion(teams: Iterable<Team>, completion: CompletionPercent) {
         this._completedBy.clear();
         for (const team of teams) {
-            this._completedBy.add(team.color);
-            addPointsToTeam(this.pointsForCompletion, team);
+            const teamCompletion = completion[team.color];
+            if (teamCompletion !== undefined && teamCompletion > 0) {
+                this._completedBy.add(team.color);
+                addPointsToTeam(this.pointsForCompletion, teamCompletion, team);
+            }
         }
         this._completed = true;
     }

@@ -71,6 +71,7 @@ export interface Settings {
 
 export interface QuestionLabels {
     stateShowQuestion: string,
+    stateShowQuestionNoBuzzer: string,
     stateBuzzerEnabled: string,
     stateTeamCanAttempt: string,
     stateQuestionComplete: string,

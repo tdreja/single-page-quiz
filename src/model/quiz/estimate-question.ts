@@ -1,6 +1,6 @@
 import { Team, TeamColor } from '../game/team';
 import { IndexedByColor, JsonDynamicQuestionData, JsonStaticQuestionData } from './json';
-import { addPointsToTeam, QuestionType, TextQuestion } from './question';
+import { addPointsToTeam, CompletionPercent, QuestionType, TextQuestion } from './question';
 
 /**
  * Base API for estimate questions
@@ -60,11 +60,14 @@ export class EstimateQuestion implements TextQuestion {
         return this._completed;
     }
 
-    public completeQuestion(teams: Array<Team>) {
+    public completeQuestion(teams: Iterable<Team>, completion: CompletionPercent) {
         this._completedBy.clear();
         for (const team of teams) {
-            this._completedBy.add(team.color);
-            addPointsToTeam(this.pointsForCompletion, team);
+            const teamCompletion = completion[team.color];
+            if (teamCompletion !== undefined && teamCompletion > 0) {
+                this._completedBy.add(team.color);
+                addPointsToTeam(this.pointsForCompletion, teamCompletion, team);
+            }
         }
         this._completed = true;
     }

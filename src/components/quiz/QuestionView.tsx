@@ -11,12 +11,15 @@ import { sortTeamsByColor } from '../../model/game/team';
 import { ActivateBuzzerEvent, CloseRoundEvent, RequestAttemptEvent, SkipAttemptEvent } from '../../events/round-events';
 import { I18N, Labels } from '../../i18n/I18N';
 import { TimeInfo, Timer } from '../common/Timer';
+import { ActionQuestionView } from './ActionQuestionView';
 
 interface RoundProps {
+    game: Game,
     round: GameRound,
 }
 
 export interface RoundAndItemProps<ITEM> {
+    game: Game,
     round: GameRound,
     item: ITEM,
 }
@@ -43,26 +46,40 @@ function attemptButtons(game: Game, round: GameRound, onGameEvent: GameEventList
     );
 }
 
+function moderationShowQuestion(game: Game, round: GameRound, onGameEvent: GameEventListener, i18n: Labels): ReactElement {
+    if (round.question.useBuzzer) {
+        return (
+            <>
+                <div className="card-body">
+                    <h6>{i18n.question.stateShowQuestion}</h6>
+                    <span
+                        className="btn btn-primary"
+                        onClick={() => onGameEvent(new ActivateBuzzerEvent())}
+                    >
+                        {i18n.question.actionActivateBuzzer}
+                    </span>
+                </div>
+                <div className="card-body">
+                    <h6>{i18n.question.headlineNextAttempt}</h6>
+                    {attemptButtons(game, round, onGameEvent)}
+                </div>
+            </>
+        );
+    }
+    return (
+        <div className="card-body">
+            <h6>{i18n.question.stateShowQuestionNoBuzzer}</h6>
+            <span className="material-symbols-outlined badge rounded-pill text-bg-primary fs-2">
+                question_exchange
+            </span>
+        </div>
+    );
+}
+
 function moderation(game: Game, round: GameRound, onGameEvent: GameEventListener, i18n: Labels): ReactElement {
     switch (round.state) {
         case RoundState.SHOW_QUESTION:
-            return (
-                <>
-                    <div className="card-body">
-                        <h6>{i18n.question.stateShowQuestion}</h6>
-                        <span
-                            className="btn btn-primary"
-                            onClick={() => onGameEvent(new ActivateBuzzerEvent())}
-                        >
-                            {i18n.question.actionActivateBuzzer}
-                        </span>
-                    </div>
-                    <div className="card-body">
-                        <h6>{i18n.question.headlineNextAttempt}</h6>
-                        {attemptButtons(game, round, onGameEvent)}
-                    </div>
-                </>
-            );
+            return moderationShowQuestion(game, round, onGameEvent, i18n);
         case RoundState.BUZZER_ACTIVE:
             return (
                 <>
@@ -139,12 +156,23 @@ function participants(game: Game, round: GameRound, i18n: Labels): ReactElement 
         case RoundState.SHOW_QUESTION:
             return (
                 <>
-                    <div className="card-body">
-                        <h6>{i18n.question.stateShowQuestion}</h6>
-                        <span className="material-symbols-outlined badge rounded-pill text-bg-primary fs-2">
-                            lock_clock
-                        </span>
-                    </div>
+                    { round.question.useBuzzer
+                        ? (
+                            <div className="card-body">
+                                <h6>{i18n.question.stateShowQuestion}</h6>
+                                <span className="material-symbols-outlined badge rounded-pill text-bg-primary fs-2">
+                                    lock_clock
+                                </span>
+                            </div>
+                        )
+                        : (
+                            <div className="card-body">
+                                <h6>{i18n.question.stateShowQuestionNoBuzzer}</h6>
+                                <span className="material-symbols-outlined badge rounded-pill text-bg-primary fs-2">
+                                    question_exchange
+                                </span>
+                            </div>
+                        )}
                 </>
             );
         case RoundState.BUZZER_ACTIVE:
@@ -246,36 +274,32 @@ const EstimateView = ({ round, item }: RoundAndItemProps<EstimateQuestion>): Rea
     return (<p>Estimate</p>);
 };
 
-const ActionView = ({ round, item }: RoundAndItemProps<ActionQuestion>): ReactElement => {
-    return (<p>Action</p>);
-};
-
-function questionView(round: GameRound): ReactElement {
+function questionView(game: Game, round: GameRound): ReactElement {
     if (round.question instanceof TextMultipleChoiceQuestion) {
-        return (<TextMultipleChoiceView item={round.question} round={round} />);
+        return (<TextMultipleChoiceView game={game} item={round.question} round={round} />);
     }
     if (round.question instanceof ImageMultipleChoiceQuestion) {
-        return (<ImageMultipleChoiceView item={round.question} round={round} />);
+        return (<ImageMultipleChoiceView game={game} item={round.question} round={round} />);
     }
     if (round.question instanceof EstimateQuestion) {
-        return (<EstimateView item={round.question} round={round} />);
+        return (<EstimateView game={game} item={round.question} round={round} />);
     }
     if (round.question instanceof ActionQuestion) {
-        return (<ActionView item={round.question} round={round} />);
+        return (<ActionQuestionView game={game} item={round.question} round={round} />);
     }
     return (<p>Unknown question!</p>);
 }
 
-export const QuestionView = ({ round }: RoundProps): ReactElement => {
+export const QuestionView = ({ game, round }: RoundProps): ReactElement => {
     return (
         <div className="d-flex gap-2">
             <div className="card flex-grow-1">
                 <div className="card-header">
                     {`${round.inColumn} ${round.question.pointsForCompletion}`}
                 </div>
-                {questionView(round)}
+                {questionView(game, round)}
             </div>
-            <ActionsView round={round} />
+            <ActionsView game={game} round={round} />
         </div>
     );
 };

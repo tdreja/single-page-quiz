@@ -44,7 +44,7 @@ export class StartRoundEvent extends BasicGameEvent {
             attemptingTeams: new Set<TeamColor>(),
             teamsAlreadyAttempted: new Set<TeamColor>(),
             state: RoundState.SHOW_QUESTION,
-            timerStart: null,
+            timerStart: question.useBuzzer ? null : new Date(),
         };
         // Move the currently selecting team to the end of the order
         const current = game.selectionOrder.shift();

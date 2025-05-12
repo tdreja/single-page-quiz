@@ -64,6 +64,7 @@ export const i18n_en: Labels = {
     },
     question: {
         stateShowQuestion: 'Waiting for buzzer',
+        stateShowQuestionNoBuzzer: 'Question active',
         stateBuzzerEnabled: 'Buzzer is enabled',
         stateTeamCanAttempt: 'Team can attempt to answer',
         stateQuestionComplete: 'Question completed',

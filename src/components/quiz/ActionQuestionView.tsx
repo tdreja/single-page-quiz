@@ -1,0 +1,62 @@
+import React, { ChangeEvent, ReactElement, useCallback, useContext, useEffect, useState } from 'react';
+import { RoundAndItemProps } from './QuestionView';
+import { ActionQuestion } from '../../model/quiz/action-question';
+import { TabContext } from '../common/TabContext';
+import { CompletionPercent } from '../../model/quiz/question';
+import { Game } from '../../model/game/game';
+import { TeamColor } from '../../model/game/team';
+
+function buildInitialCompletion(game: Game): CompletionPercent {
+    const completion: CompletionPercent = {};
+    for (const color of game.teams.keys()) {
+        completion[color] = 0;
+    }
+    return completion;
+}
+
+export const ActionQuestionView = ({ game, round, item }: RoundAndItemProps<ActionQuestion>): ReactElement => {
+    const tabSettings = useContext(TabContext);
+    const [completion, setCompletion] = useState<CompletionPercent>(buildInitialCompletion(game));
+    useEffect(() => {
+        setCompletion(buildInitialCompletion(game));
+    }, [game]);
+
+    const onSliderChange = useCallback((ev: ChangeEvent<HTMLInputElement>, color: TeamColor) => {
+        const value = Number(ev.target.value);
+        if (Number.isNaN(value) || value < 0 || value > 100) {
+            return;
+        }
+        setCompletion({
+            ...completion,
+            [color]: value,
+        });
+    }, [completion]);
+
+    return (
+        <div className="card-body">
+            <h4 className="card-title pb-2">{item.text}</h4>
+            { tabSettings.settings.moderation && (
+                <div style={{ maxWidth: '60rem' }}>
+                    {
+                        game.teams.values().map((team) => (
+                            <div key={`team-input-${team.color}`}>
+                                <label htmlFor={`team-input-${team.color}`} className="form-label">{team.color}</label>
+                                <input
+                                    type="range"
+                                    className="form-range"
+                                    name={`team-input-${team.color}-slider`}
+                                    id={`team-input-${team.color}`}
+                                    value={completion[team.color]}
+                                    min={0}
+                                    max={100}
+                                    step={5}
+                                    onChange={(ev) => onSliderChange(ev, team.color)}
+                                />
+                            </div>
+                        ))
+                    }
+                </div>
+            )}
+        </div>
+    );
+};

@@ -8,7 +8,7 @@ export const QuizView = (): ReactElement => {
     const game = useContext<Game>(GameContext);
     return (
         <>
-            {game.round ? <QuestionView round={game.round} /> : <SelectNextQuestionView />}
+            {game.round ? <QuestionView game={game} round={game.round} /> : <SelectNextQuestionView />}
         </>
     );
 };

@@ -9,6 +9,14 @@ export enum QuestionType {
 }
 
 /**
+ * How many percent of the current question did each team complete?
+ * Undefined or 0 count as no completion
+ */
+export type CompletionPercent = {
+    [team in TeamColor]?: number;
+};
+
+/**
  * Base API for all questions
  */
 export interface Question {
@@ -18,7 +26,7 @@ export interface Question {
     readonly completedBy: Set<TeamColor>,
     readonly completed: boolean,
     readonly useBuzzer: boolean,
-    completeQuestion: (teams: Array<Team>) => void,
+    completeQuestion: (teams: Iterable<Team>, completion: CompletionPercent) => void,
     exportStaticQuestionData: () => JsonStaticQuestionData,
     exportDynamicQuestionData: () => JsonDynamicQuestionData,
     importDynamicQuestionData: (state: JsonDynamicQuestionData) => void,
@@ -38,7 +46,11 @@ export interface ImageQuestion extends Question {
     readonly imageBase64: string,
 }
 
-export function addPointsToTeam(points: number, team: Team) {
+export function addPointsToTeam(questionPoints: number, completion: number, team: Team) {
+    if (completion <= 0 || completion > 100) {
+        return;
+    }
+    const points = questionPoints * completion;
     team.points += points;
     for (const player of team.players.values()) {
         player.points += points;
