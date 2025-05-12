@@ -84,6 +84,7 @@ export function newTestSetup(): Game {
     game.players.set(Emoji.DUCK, playerBlueDuck);
     game.teams.set(TeamColor.RED, teamRed);
     game.players.set(Emoji.CAMEL, playerRedCamel);
+    game.selectionOrder.push(TeamColor.BLUE, TeamColor.RED);
     return game;
 }
 

@@ -27,6 +27,7 @@ test('startRound', () => {
     expect(game.round).toBeTruthy();
     expect(game.round?.state).toBe(RoundState.SHOW_QUESTION);
     expect(game.round?.timerStart).toBeNull();
+    expect(game.selectionOrder).toEqual([TeamColor.RED, TeamColor.BLUE]);
     game = expectNoUpdate(startRound.updateGame(game));
 
     // Ignore invalid IDs

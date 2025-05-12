@@ -93,6 +93,9 @@ export const i18n_de: Labels = {
         noWinners: 'Keine korrekte Antwort erhalten',
         teamsWon: 'Gewinner:',
     },
+    quiz: {
+        nextSelectingTeam: 'Nächste Frage wählt Team:',
+    },
     settings: {
         tooltipModeShared: 'Geteilt mit Teilnehmern',
         labelModeShared: 'Moderation & Teilnehmer',

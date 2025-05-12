@@ -37,6 +37,7 @@ export class StartRoundEvent extends BasicGameEvent {
         if (!question || question.completed) {
             return noUpdate(game);
         }
+        // Update the game round
         game.round = {
             question,
             inColumn: this._sectionName,
@@ -45,6 +46,11 @@ export class StartRoundEvent extends BasicGameEvent {
             state: RoundState.SHOW_QUESTION,
             timerStart: null,
         };
+        // Move the currently selecting team to the end of the order
+        const current = game.selectionOrder.shift();
+        if (current) {
+            game.selectionOrder.push(current);
+        }
         return update(game, Changes.CURRENT_ROUND);
     }
 }

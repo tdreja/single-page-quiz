@@ -78,6 +78,9 @@ export const i18n_en: Labels = {
         noWinners: 'Receive no correct answer',
         teamsWon: 'Winners:',
     },
+    quiz: {
+        nextSelectingTeam: 'Next question gets picked by team:',
+    },
     playerEditor: {
         tooltipReRollEmoji: 'New random emoji',
         tooltipRename: 'Rename player',

@@ -4,6 +4,8 @@ import { GameContext, GameEventContext } from '../common/GameContext';
 import { Question } from '../../model/quiz/question';
 import { StartRoundEvent } from '../../events/round-events';
 import { TeamColorButton } from '../common/TeamColorButton';
+import { TeamColor } from '../../model/game/team';
+import { I18N } from '../../i18n/I18N';
 
 interface Props {
     matrix: QuestionTableCell<Question>,
@@ -38,13 +40,16 @@ const MatrixItem = ({ matrix }: Props): ReactElement => {
 };
 
 export const SelectNextQuestionView = (): ReactElement => {
+    const i18n = useContext(I18N);
     const game = useContext<Game>(GameContext);
     const [table, setTable] = useState<QuestionTable<Question>>(
         generateQuestionTable(game, (_, question) => question),
     );
+    const [selectingTeam, setSelectingTeam] = useState<TeamColor | null>(game.selectionOrder.length > 0 ? game.selectionOrder[0] : null);
 
     useEffect(() => {
         setTable(generateQuestionTable(game, (_, question) => question));
+        setSelectingTeam(game.selectionOrder.length > 0 ? game.selectionOrder[0] : null);
     }, [game]);
 
     return (
@@ -76,8 +81,16 @@ export const SelectNextQuestionView = (): ReactElement => {
                 </tbody>
             </table>
             <div>
-                <h5>Next team?</h5>
-                <span>Next team!</span>
+                <h5>{i18n.quiz.nextSelectingTeam}</h5>
+                { selectingTeam && (
+                    <TeamColorButton color={selectingTeam}>
+                        <span
+                            className="rounded-pill text-bg-light ps-2 pe-2 fw-bold ms-2 me-2"
+                        >
+                            {i18n.teams[selectingTeam]}
+                        </span>
+                    </TeamColorButton>
+                )}
             </div>
         </div>
     );
