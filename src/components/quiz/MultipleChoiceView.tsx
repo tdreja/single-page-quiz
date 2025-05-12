@@ -53,14 +53,14 @@ const ChoiceView = ({ round, item }: RoundAndItemProps<TextChoice>): ReactElemen
     );
 };
 
-export const TextMultipleChoiceView = ({ round, item }: RoundAndItemProps<TextMultipleChoiceQuestion>): ReactElement => {
+export const TextMultipleChoiceView = ({ game, round, item }: RoundAndItemProps<TextMultipleChoiceQuestion>): ReactElement => {
     return (
         <div className="card-body">
             <h4 className="card-title pb-2">{item.text}</h4>
             <div className="d-grid gap-3" style={{ gridTemplateColumns: '1fr 1fr' }}>
                 {
                     item.choicesSorted.map((choice) => (
-                        <ChoiceView key={`choice-${choice.choiceId}`} item={choice} round={round} />
+                        <ChoiceView key={`choice-${choice.choiceId}`} game={game} item={choice} round={round} />
                     ))
                 }
             </div>
@@ -68,6 +68,6 @@ export const TextMultipleChoiceView = ({ round, item }: RoundAndItemProps<TextMu
     );
 };
 
-export const ImageMultipleChoiceView = ({ round, item }: RoundAndItemProps<ImageMultipleChoiceQuestion>): ReactElement => {
+export const ImageMultipleChoiceView = ({ game, round, item }: RoundAndItemProps<ImageMultipleChoiceQuestion>): ReactElement => {
     return (<p>Image</p>);
 };
