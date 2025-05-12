@@ -1,11 +1,11 @@
 import { shuffleArray } from '../common';
-import { Game, GameSection } from '../game/game';
+import { Game, GameColumn } from '../game/game';
 import { TeamColor } from '../game/team';
 import { ActionQuestion } from './action-question';
 import { EstimateQuestion } from './estimate-question';
 import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question';
 import { Question, QuestionType } from './question';
-import { JsonStaticGameData, JsonStaticSectionData } from '../game/json/game';
+import { JsonStaticGameData, JsonStaticColumnData } from '../game/json/game';
 
 /**
  * Static content of a question in the game
@@ -46,44 +46,44 @@ export interface JsonDynamicQuestionData {
 }
 
 export function exportStaticGameContent(game: Game): JsonStaticGameData {
-    const sections: Array<JsonStaticSectionData> = [];
-    for (const section of game.sections.values()) {
+    const sections: Array<JsonStaticColumnData> = [];
+    for (const section of game.columns.values()) {
         sections.push(exportStaticSectionContent(section));
     }
     return {
-        sections,
+        columns: sections,
     };
 }
 
 export function importStaticGameContent(game: Game, quiz?: JsonStaticGameData) {
-    game.sections.clear();
-    if (!quiz || !quiz.sections) {
+    game.columns.clear();
+    if (!quiz || !quiz.columns) {
         return;
     }
     let count = 0;
-    for (const section of quiz.sections) {
+    for (const section of quiz.columns) {
         const gameSection = jsonQuizSectionToGameSection(count, section);
         if (gameSection) {
-            game.sections.set(gameSection.sectionName, gameSection);
+            game.columns.set(gameSection.columnName, gameSection);
         }
         count++;
     }
 }
 
-function exportStaticSectionContent(section: GameSection): JsonStaticSectionData {
+function exportStaticSectionContent(section: GameColumn): JsonStaticColumnData {
     return {
-        sectionName: section.sectionName,
+        columnName: section.columnName,
         questions: Array.from(section.questions.values()).map((q) => q.exportStaticQuestionData()),
         index: section.index,
     };
 }
 
-function jsonQuizSectionToGameSection(count: number, json?: JsonStaticSectionData): GameSection | null {
-    if (!json || !json.sectionName) {
+function jsonQuizSectionToGameSection(count: number, json?: JsonStaticColumnData): GameColumn | null {
+    if (!json || !json.columnName) {
         return null;
     }
-    const section: GameSection = {
-        sectionName: json.sectionName,
+    const section: GameColumn = {
+        columnName: json.columnName,
         questions: new Map<number, Question>(),
         index: json.index !== undefined ? json.index : count,
     };
@@ -91,7 +91,7 @@ function jsonQuizSectionToGameSection(count: number, json?: JsonStaticSectionDat
         return section;
     }
     for (const jsonQuestion of json.questions) {
-        const gameQuestion = jsonContentToQuestion(json.sectionName, jsonQuestion);
+        const gameQuestion = jsonContentToQuestion(json.columnName, jsonQuestion);
         if (gameQuestion) {
             section.questions.set(gameQuestion.pointsForCompletion, gameQuestion);
         }

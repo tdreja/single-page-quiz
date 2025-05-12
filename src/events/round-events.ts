@@ -39,7 +39,7 @@ export class StartRoundEvent extends BasicGameEvent {
         }
         game.round = {
             question,
-            inSectionName: this._sectionName,
+            inColumn: this._sectionName,
             attemptingTeams: new Set<TeamColor>(),
             teamsAlreadyAttempted: new Set<TeamColor>(),
             state: RoundState.SHOW_QUESTION,

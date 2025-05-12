@@ -1,6 +1,8 @@
 import React, { ReactElement, useCallback, useState } from 'react';
-import { generateJsonQuestionMatrix, JsonStaticGameData } from '../../model/game/json/game';
-import { QuestionTableCell } from '../../model/game/game';
+import { generateJsonQuestionTable, JsonStaticGameData } from '../../model/game/json/game';
+import { QuestionTable } from '../../model/game/game';
+
+const toEmptyString = () => '';
 
 async function readJson(input: HTMLInputElement): Promise<JsonStaticGameData | null> {
     const files = input.files;
@@ -27,28 +29,43 @@ async function readJson(input: HTMLInputElement): Promise<JsonStaticGameData | n
 
 export const QuizImporterView = (): ReactElement => {
     const [json, setJson] = useState<JsonStaticGameData | null>(null);
-    const [previewMatrx, setPreviewMatrx] = useState<QuestionTableCell<string>[]>([]);
+    const [previewTable, setPreviewTable] = useState<QuestionTable<string>>(generateJsonQuestionTable({}, toEmptyString));
 
     const uploadFile = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = await readJson(event.target);
         setJson(file);
         if (file) {
-            setPreviewMatrx(generateJsonQuestionMatrix(file, () => ''));
+            setPreviewTable(generateJsonQuestionTable(file, toEmptyString));
         } else {
-            setPreviewMatrx([]);
+            setPreviewTable(generateJsonQuestionTable({}, toEmptyString));
         }
-    }, [json, previewMatrx]);
+    }, [json, previewTable]);
 
     return (
         <div>
             <input type="file" accept="application/json" onChange={uploadFile} />
-            <div className="d-grid" style={{ gridTemplateColumns: `repeat(${json?.sections?.length || 1}, 1fr)` }}>
-                {
-                    previewMatrx.map((item) => (
-                        <span key={item.key}>{item.label}</span>
-                    ))
-                }
-            </div>
+            <table>
+                <thead>
+                    <tr>
+                        {previewTable.headlines.map((header) => (
+                            <th key={header.key}>{header.label}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        previewTable.rows.map((row, index) => (
+                            <tr key={`row-${index}`}>
+                                {
+                                    row.map((cell) => (
+                                        <td key={cell.key}>{cell.label}</td>
+                                    ))
+                                }
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </table>
         </div>
     );
 };

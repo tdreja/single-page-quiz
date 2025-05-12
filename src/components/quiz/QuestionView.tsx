@@ -1,16 +1,13 @@
-import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { Game, GameRound, RoundState } from '../../model/game/game';
-import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from '../../model/quiz/multiple-choice-question';
-import { Question } from '../../model/quiz/question';
+import { ImageMultipleChoiceQuestion, TextMultipleChoiceQuestion } from '../../model/quiz/multiple-choice-question';
 import { ActionQuestion } from '../../model/quiz/action-question';
 import { EstimateQuestion } from '../../model/quiz/estimate-question';
 import { GameContext, GameEventContext, GameEventListener } from '../common/GameContext';
-import { SelectFromMultipleChoiceEvent } from '../../events/question-event';
-import { asReactCss } from '../common/ReactCssUtils';
 import { TeamColorButton } from '../common/TeamColorButton';
 import { TabContext } from '../common/TabContext';
 import { ImageMultipleChoiceView, TextMultipleChoiceView } from './MultipleChoiceView';
-import { sortTeamsByColor, Team, TeamColor } from '../../model/game/team';
+import { sortTeamsByColor } from '../../model/game/team';
 import { ActivateBuzzerEvent, CloseRoundEvent, RequestAttemptEvent, SkipAttemptEvent } from '../../events/round-events';
 import { I18N, Labels } from '../../i18n/I18N';
 import { TimeInfo, Timer } from '../common/Timer';
@@ -170,7 +167,11 @@ function participants(game: Game, round: GameRound, i18n: Labels): ReactElement 
                             Array.from(round.attemptingTeams)
                                 .map((color) => (
                                     <TeamColorButton key={color} color={color}>
-                                        <span className="rounded-pill text-bg-light ps-2 pe-2 fw-bold ms-2 me-2">{i18n.teams[color]}</span>
+                                        <span
+                                            className="rounded-pill text-bg-light ps-2 pe-2 fw-bold ms-2 me-2"
+                                        >
+                                            {i18n.teams[color]}
+                                        </span>
                                     </TeamColorButton>
                                 ))
                         }
@@ -192,7 +193,11 @@ function participants(game: Game, round: GameRound, i18n: Labels): ReactElement 
                             Array.from(round.question.completedBy)
                                 .map((color) => (
                                     <TeamColorButton key={color} color={color}>
-                                        <span className="rounded-pill text-bg-light ps-2 pe-2 fw-bold ms-2 me-2">{i18n.teams[color]}</span>
+                                        <span
+                                            className="rounded-pill text-bg-light ps-2 pe-2 fw-bold ms-2 me-2"
+                                        >
+                                            {i18n.teams[color]}
+                                        </span>
                                     </TeamColorButton>
                                 ))
                         }
@@ -245,7 +250,7 @@ const ActionView = ({ round, item }: RoundAndItemProps<ActionQuestion>): ReactEl
     return (<p>Action</p>);
 };
 
-export function questionView(round: GameRound): ReactElement {
+function questionView(round: GameRound): ReactElement {
     if (round.question instanceof TextMultipleChoiceQuestion) {
         return (<TextMultipleChoiceView item={round.question} round={round} />);
     }
@@ -266,7 +271,7 @@ export const QuestionView = ({ round }: RoundProps): ReactElement => {
         <div className="d-flex gap-2">
             <div className="card flex-grow-1">
                 <div className="card-header">
-                    {`${round.inSectionName} ${round.question.pointsForCompletion}`}
+                    {`${round.inColumn} ${round.question.pointsForCompletion}`}
                 </div>
                 {questionView(round)}
             </div>

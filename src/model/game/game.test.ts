@@ -1,33 +1,33 @@
 import { describe, expect, test, beforeEach } from '@jest/globals';
 import { Question } from '../quiz/question';
-import { emptyGame, Game, GameSection, generateQuestionTable } from './game';
+import { emptyGame, Game, GameColumn, generateQuestionTable } from './game';
 import { ActionQuestion } from '../quiz/action-question';
 
 let game: Game;
-let sectionA: GameSection;
-let sectionB: GameSection;
+let sectionA: GameColumn;
+let sectionB: GameColumn;
 let questionA100: Question;
 let questionA200: Question;
 let questionB100: Question;
 let questionB200: Question;
 
-function buildSection(name: string, index: number, q100: Question, q200: Question): GameSection {
+function buildColumn(name: string, index: number, q100: Question, q200: Question): GameColumn {
     const questions = new Map();
     questions.set(100, q100);
     questions.set(200, q200);
     return {
-        sectionName: name,
+        columnName: name,
         questions,
         index: index,
     };
 }
 
-function getItem(section?: GameSection, question?: Question): string {
+function getItem(section?: GameColumn, question?: Question): string {
     if (section) {
         if (question) {
-            return `${section.sectionName}${question.pointsForCompletion}`;
+            return `${section.columnName}${question.pointsForCompletion}`;
         }
-        return section.sectionName;
+        return section.columnName;
     }
     return '?';
 }
@@ -37,13 +37,13 @@ beforeEach(() => {
 
     questionA100 = new ActionQuestion('SectionA', 100, 'A100');
     questionA200 = new ActionQuestion('SectionA', 200, 'A200');
-    sectionA = buildSection('SectionA', 10, questionA100, questionA200);
-    game.sections.set('SectionA', sectionA);
+    sectionA = buildColumn('SectionA', 10, questionA100, questionA200);
+    game.columns.set('SectionA', sectionA);
 
     questionB100 = new ActionQuestion('SectionB', 100, 'B100');
     questionB200 = new ActionQuestion('SectionB', 200, 'B200');
-    sectionB = buildSection('SectionB', 20, questionB100, questionB200);
-    game.sections.set('SectionB', sectionB);
+    sectionB = buildColumn('SectionB', 20, questionB100, questionB200);
+    game.columns.set('SectionB', sectionB);
 });
 
 describe('Question matrix', () => {

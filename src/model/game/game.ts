@@ -23,14 +23,14 @@ export enum RoundState {
 /**
  * Group of rounds with a name associated (e.g. category of questions)
  */
-export interface GameSection {
-    readonly sectionName: string,
+export interface GameColumn {
+    readonly columnName: string,
     readonly questions: Map<number, Question>,
     readonly index: number,
 }
 
 export interface GameRound {
-    readonly inSectionName: string,
+    readonly inColumn: string,
     readonly question: Question,
     readonly attemptingTeams: Set<TeamColor>,
     readonly teamsAlreadyAttempted: Set<TeamColor>,
@@ -42,7 +42,7 @@ export interface GameRound {
  * Container with all game data
  */
 export interface Game {
-    readonly sections: Map<string, GameSection>,
+    readonly columns: Map<string, GameColumn>,
     readonly players: Map<Emoji, Player>,
     readonly teams: Map<TeamColor, Team>,
     round: GameRound | null,
@@ -53,7 +53,7 @@ export interface Game {
 
 export function emptyGame(): Game {
     return {
-        sections: new Map(),
+        columns: new Map(),
         players: new Map(),
         teams: new Map(),
         round: null,
@@ -77,7 +77,7 @@ export function getTeams(game: Game, colors?: Array<TeamColor> | Set<TeamColor>)
     return teams;
 }
 
-export function sortGameSectionsByIndex(section1?: GameSection, section2?: GameSection): number {
+export function sortGameSectionsByIndex(section1?: GameColumn, section2?: GameColumn): number {
     const idx1 = section1 ? section1.index : -1;
     const idx2 = section2 ? section2.index : -1;
     return idx1 - idx2;
@@ -98,23 +98,23 @@ export interface QuestionTableCell<ITEM> {
 
 export function generateQuestionTable<ITEM>(
     game: Game,
-    getItem: (section?: GameSection, question?: Question) => ITEM | undefined,
+    getItem: (column?: GameColumn, question?: Question) => ITEM | undefined,
 ): QuestionTable<ITEM> {
-    const sectionOrder: Array<string> = [];
+    const columnOrder: Array<string> = [];
     const pointsLevels: Array<number> = [];
 
     // Headlines first
     const headlines: QuestionTableCell<ITEM>[] = [];
-    Array.from(game.sections.values()).sort(sortGameSectionsByIndex).map((section) => {
-        sectionOrder.push(section.sectionName);
+    Array.from(game.columns.values()).sort(sortGameSectionsByIndex).map((column) => {
+        columnOrder.push(column.columnName);
         headlines.push({
-            label: section.sectionName,
-            key: section.sectionName,
-            inSection: section.sectionName,
-            item: getItem(section),
+            label: column.columnName,
+            key: column.columnName,
+            inSection: column.columnName,
+            item: getItem(column),
         });
         // Also collect all points for each question
-        section.questions.values().forEach((question) => {
+        column.questions.values().forEach((question) => {
             if (!pointsLevels.includes(question.pointsForCompletion)) {
                 pointsLevels.push(question.pointsForCompletion);
             }
@@ -128,9 +128,9 @@ export function generateQuestionTable<ITEM>(
     for (const questionPoints of pointsLevels) {
         const row: QuestionTableCell<ITEM>[] = [];
 
-        for (const sectionId of sectionOrder) {
-            const section = game.sections.get(sectionId);
-            if (!section) {
+        for (const columnId of columnOrder) {
+            const column = game.columns.get(columnId);
+            if (!column) {
                 row.push({
                     label: '-',
                     key: '?',
@@ -139,13 +139,13 @@ export function generateQuestionTable<ITEM>(
                 continue;
             }
 
-            const question = section.questions.get(questionPoints);
+            const question = column.questions.get(questionPoints);
             row.push({
                 label: `${questionPoints}`,
-                inSection: question ? sectionId : undefined,
+                inSection: question ? columnId : undefined,
                 pointsForCompletion: question ? questionPoints : undefined,
-                key: `${sectionId}-${question ? questionPoints : '?'}`,
-                item: getItem(section, question),
+                key: `${columnId}-${question ? questionPoints : '?'}`,
+                item: getItem(column, question),
             });
         }
 

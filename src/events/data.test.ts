@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals';
-import { emptyGame, Game, GameSection, GameState } from '../model/game/game';
+import { emptyGame, Game, GameColumn, GameState } from '../model/game/game';
 import { Emoji, Player } from '../model/game/player';
 import { Team, TeamColor } from '../model/game/team';
 import { EstimateQuestion } from '../model/quiz/estimate-question';
@@ -17,7 +17,7 @@ export let playerBlueDuck: Player;
 export let playerRedCamel: Player;
 export let teamBlue: Team;
 export let teamRed: Team;
-export let section: GameSection;
+export let section: GameColumn;
 
 export function newTestSetup(): Game {
     // Question
@@ -69,7 +69,7 @@ export function newTestSetup(): Game {
 
     // Question, Round and Section
     section = {
-        sectionName: sectionId,
+        columnName: sectionId,
         questions: new Map(),
         index: 0,
     };
@@ -79,7 +79,7 @@ export function newTestSetup(): Game {
     // Game
     const game = emptyGame();
     game.state = GameState.GAME_ACTIVE;
-    game.sections.set(sectionId, section);
+    game.columns.set(sectionId, section);
     game.teams.set(TeamColor.BLUE, teamBlue);
     game.players.set(Emoji.DUCK, playerBlueDuck);
     game.teams.set(TeamColor.RED, teamRed);

@@ -1,5 +1,5 @@
 import { describe, expect, test, beforeEach } from '@jest/globals';
-import { emptyGame, Game, GameRound, GameSection, RoundState } from '../game/game';
+import { emptyGame, Game, GameRound, GameColumn, RoundState } from '../game/game';
 import { Question } from './question';
 import { exportStaticGameContent, importStaticGameContent } from './json';
 import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question';
@@ -12,7 +12,7 @@ describe('TextMultipleChoiceQuestion', () => {
     const points = 10;
     let choices: Map<string, TextChoice>;
     let textMultipleChoiceQuestion: TextMultipleChoiceQuestion;
-    let gameSection: GameSection;
+    let gameSection: GameColumn;
     let game: Game;
 
     beforeEach(() => {
@@ -22,14 +22,14 @@ describe('TextMultipleChoiceQuestion', () => {
 
         textMultipleChoiceQuestion = new TextMultipleChoiceQuestion(sId, points, 'Test question text', choices);
         gameSection = {
-            sectionName: sId,
+            columnName: sId,
             questions: new Map<number, Question>(),
             index: 0,
         };
         gameSection.questions.set(points, textMultipleChoiceQuestion);
 
         game = emptyGame();
-        game.sections.set(sId, gameSection);
+        game.columns.set(sId, gameSection);
     });
 
     test('Export and re-import question via JSON', () => {
@@ -46,8 +46,8 @@ describe('TextMultipleChoiceQuestion', () => {
         importStaticGameContent(game, parsedQuiz);
 
         // Assertions to verify the game state after re-import
-        expect(game.sections.size).toBe(1);
-        const section = game.sections.get(sId);
+        expect(game.columns.size).toBe(1);
+        const section = game.columns.get(sId);
         expect(section).toBeDefined();
         expect(section?.questions.size).toBe(1);
         const question = section?.questions.get(points);
@@ -65,7 +65,7 @@ describe('TextMultipleChoiceQuestion', () => {
         const date = new Date();
         game.round = {
             question: textMultipleChoiceQuestion,
-            inSectionName: sId,
+            inColumn: sId,
             state: RoundState.SHOW_QUESTION,
             teamsAlreadyAttempted: asSet(TeamColor.GREEN),
             attemptingTeams: asSet(TeamColor.ORANGE),
@@ -94,7 +94,7 @@ describe('TextMultipleChoiceQuestion', () => {
         expect(game.round).toBeDefined();
         const round = game.round as unknown as GameRound;
         expect(round.question).toEqual(textMultipleChoiceQuestion);
-        expect(round.inSectionName).toBe(sId);
+        expect(round.inColumn).toBe(sId);
         expect(round.state).toBe(RoundState.SHOW_QUESTION);
         expect(round.teamsAlreadyAttempted).toEqual(asSet(TeamColor.GREEN));
         expect(round.attemptingTeams).toEqual(asSet(TeamColor.ORANGE));
@@ -110,7 +110,7 @@ describe('ImageMultipleChoiceQuestion', () => {
     const points = 10;
     let choices: Map<string, TextChoice>;
     let imageMultipleChoiceQuestion: ImageMultipleChoiceQuestion;
-    let gameSection: GameSection;
+    let gameSection: GameColumn;
     let game: Game;
 
     beforeEach(() => {
@@ -120,20 +120,20 @@ describe('ImageMultipleChoiceQuestion', () => {
 
         imageMultipleChoiceQuestion = new ImageMultipleChoiceQuestion(sId, points, 'Test question text', 'Test', choices);
         gameSection = {
-            sectionName: sId,
+            columnName: sId,
             questions: new Map<number, Question>(),
             index: 0,
         };
         gameSection.questions.set(points, imageMultipleChoiceQuestion);
 
         game = emptyGame();
-        game.sections.set(sId, gameSection);
+        game.columns.set(sId, gameSection);
     });
 
     test('Export and re-import question via JSON', () => {
         // Export the game to JsonQuiz
         const exportedQuiz = exportStaticGameContent(game);
-        game.sections.clear();
+        game.columns.clear();
 
         // Convert the JsonQuiz to a JSON string
         const jsonString = JSON.stringify(exportedQuiz);
@@ -145,8 +145,8 @@ describe('ImageMultipleChoiceQuestion', () => {
         importStaticGameContent(game, parsedQuiz);
 
         // Assertions to verify the game state after re-import
-        expect(game.sections.size).toBe(1);
-        const section = game.sections.get(sId);
+        expect(game.columns.size).toBe(1);
+        const section = game.columns.get(sId);
         expect(section).toBeDefined();
         expect(section?.questions.size).toBe(1);
         const question = section?.questions.get(points);
@@ -164,7 +164,7 @@ describe('ImageMultipleChoiceQuestion', () => {
         const date = new Date();
         game.round = {
             question: imageMultipleChoiceQuestion,
-            inSectionName: sId,
+            inColumn: sId,
             state: RoundState.SHOW_QUESTION,
             teamsAlreadyAttempted: asSet(TeamColor.GREEN),
             attemptingTeams: asSet(TeamColor.ORANGE),
@@ -193,7 +193,7 @@ describe('ImageMultipleChoiceQuestion', () => {
         expect(game.round).toBeDefined();
         const round = game.round as unknown as GameRound;
         expect(round.question).toEqual(imageMultipleChoiceQuestion);
-        expect(round.inSectionName).toBe(sId);
+        expect(round.inColumn).toBe(sId);
         expect(round.state).toBe(RoundState.SHOW_QUESTION);
         expect(round.teamsAlreadyAttempted).toEqual(asSet(TeamColor.GREEN));
         expect(round.attemptingTeams).toEqual(asSet(TeamColor.ORANGE));

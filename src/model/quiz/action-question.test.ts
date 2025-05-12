@@ -1,6 +1,6 @@
 import { describe, expect, test, beforeEach } from '@jest/globals';
 import { ActionQuestion } from './action-question';
-import { emptyGame, Game, GameRound, GameSection, RoundState } from '../game/game';
+import { emptyGame, Game, GameRound, GameColumn, RoundState } from '../game/game';
 import { Question } from './question';
 import { exportStaticGameContent, importStaticGameContent } from './json';
 import { JsonCurrentRound, JsonStaticGameData, importCurrentRound, exportCurrentRound } from '../game/json/game';
@@ -12,7 +12,7 @@ describe('ActionQuestion', () => {
     let points: number;
     let qId: string;
     let actionQuestion: ActionQuestion;
-    let gameSection: GameSection;
+    let gameSection: GameColumn;
     let game: Game;
 
     beforeEach(() => {
@@ -20,20 +20,20 @@ describe('ActionQuestion', () => {
         points = 10;
         actionQuestion = new ActionQuestion(sId, 10, 'Test question text');
         gameSection = {
-            sectionName: sId,
+            columnName: sId,
             questions: new Map<number, Question>(),
             index: 0,
         };
         gameSection.questions.set(points, actionQuestion);
 
         game = emptyGame();
-        game.sections.set(sId, gameSection);
+        game.columns.set(sId, gameSection);
     });
 
     test('Export and re-import question via JSON', () => {
         // Export the game to JsonQuiz
         const exportedQuiz = exportStaticGameContent(game);
-        game.sections.clear();
+        game.columns.clear();
 
         // Convert the JsonQuiz to a JSON string
         const jsonString = JSON.stringify(exportedQuiz);
@@ -45,8 +45,8 @@ describe('ActionQuestion', () => {
         importStaticGameContent(game, parsedQuiz);
 
         // Assertions to verify the game state after re-import
-        expect(game.sections.size).toBe(1);
-        const section = game.sections.get(sId);
+        expect(game.columns.size).toBe(1);
+        const section = game.columns.get(sId);
         expect(section).toBeDefined();
         expect(section?.questions.size).toBe(1);
         const question = section?.questions.get(points);
@@ -60,7 +60,7 @@ describe('ActionQuestion', () => {
         const date = new Date();
         game.round = {
             question: actionQuestion,
-            inSectionName: sId,
+            inColumn: sId,
             state: RoundState.SHOW_QUESTION,
             teamsAlreadyAttempted: asSet(TeamColor.GREEN),
             attemptingTeams: asSet(TeamColor.ORANGE),
@@ -88,7 +88,7 @@ describe('ActionQuestion', () => {
         expect(game.round).toBeDefined();
         const round = game.round as unknown as GameRound;
         expect(round.question).toEqual(actionQuestion);
-        expect(round.inSectionName).toBe(sId);
+        expect(round.inColumn).toBe(sId);
         expect(round.state).toBe(RoundState.SHOW_QUESTION);
         expect(round.teamsAlreadyAttempted).toEqual(asSet(TeamColor.GREEN));
         expect(round.attemptingTeams).toEqual(asSet(TeamColor.ORANGE));

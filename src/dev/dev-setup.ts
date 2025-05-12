@@ -2,7 +2,7 @@ import { AddPlayerEvent, AddTeamEvent } from '../events/setup-events';
 import {
     Game,
     GameRound,
-    GameSection,
+    GameColumn,
     GameState,
     RoundState,
 } from '../model/game/game';
@@ -118,12 +118,12 @@ export function prepareGame(game: Game) {
 
     let index = 0;
     for (const sectionId of ['Alpha', 'Beta', 'Gamma', 'Delta']) {
-        const section: GameSection = {
-            sectionName: sectionId,
+        const section: GameColumn = {
+            columnName: sectionId,
             questions: new Map(),
             index,
         };
-        game.sections.set(sectionId, section);
+        game.columns.set(sectionId, section);
 
         for (const points of [100, 200, 300, 400]) {
             const choices = new Map<string, TextChoice>();

@@ -1,7 +1,7 @@
 import { arrayAsSet } from '../../common';
 import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../../quiz/json';
 import { Question } from '../../quiz/question';
-import { Game, GameSection, GameState, QuestionTableCell, RoundState } from '../game';
+import { Game, GameColumn, GameState, QuestionTable, QuestionTableCell, RoundState } from '../game';
 import { TeamColor } from '../team';
 import { JsonPlayer, restorePlayers as importPlayers, storePlayer } from './player';
 import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team';
@@ -11,7 +11,7 @@ import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team';
  * @see Game
  */
 export interface JsonStaticGameData {
-    sections?: Array<JsonStaticSectionData>,
+    columns?: Array<JsonStaticColumnData>,
 }
 
 /**
@@ -20,28 +20,28 @@ export interface JsonStaticGameData {
 export interface JsonUpdatableGameData {
     teams?: Array<JsonTeam>,
     players?: Array<JsonPlayer>,
-    sections?: Array<JsonDynamicSectionData>,
+    columns?: Array<JsonDynamicSectionData>,
     state?: GameState,
     roundsCounter?: number,
     teamNavExpanded?: boolean,
 }
 
-type OptionalGameSection = {
-    [property in keyof GameSection as Exclude<property, 'questions'>]?: GameSection[property]
+type OptionalGameColumn = {
+    [property in keyof GameColumn as Exclude<property, 'questions'>]?: GameColumn[property]
 };
 
 /**
  * Named Group/section of questions containing static content
- * @see GameSection
+ * @see GameColumn
  */
-export interface JsonStaticSectionData extends OptionalGameSection {
+export interface JsonStaticColumnData extends OptionalGameColumn {
     questions?: Array<JsonStaticQuestionData>,
 }
 
 /**
  * Named Group/section of questions containing updatable content
  */
-export interface JsonDynamicSectionData extends OptionalGameSection {
+export interface JsonDynamicSectionData extends OptionalGameColumn {
     questions?: Array<JsonDynamicQuestionData>,
 }
 
@@ -50,7 +50,7 @@ export interface JsonDynamicSectionData extends OptionalGameSection {
  * @see GameRound
 */
 export interface JsonCurrentRound {
-    inSectionName?: string,
+    inColumn?: string,
     question?: JsonDynamicQuestionData,
     attemptingTeams?: Array<TeamColor>,
     teamsAlreadyAttempted?: Array<TeamColor>,
@@ -65,7 +65,7 @@ export function exportGame(game: Game): JsonUpdatableGameData {
 
     // Only export already completed questions
     const sections: Array<JsonDynamicSectionData> = [];
-    for (const section of game.sections.values()) {
+    for (const section of game.columns.values()) {
         const completedQuestions: Array<JsonDynamicQuestionData> = [];
         for (const question of section.questions.values()) {
             if (question.completed) {
@@ -74,7 +74,7 @@ export function exportGame(game: Game): JsonUpdatableGameData {
         }
         if (completedQuestions.length > 0) {
             sections.push({
-                sectionName: section.sectionName,
+                columnName: section.columnName,
                 questions: completedQuestions,
             });
         }
@@ -83,7 +83,7 @@ export function exportGame(game: Game): JsonUpdatableGameData {
     return {
         teams,
         players,
-        sections,
+        columns: sections,
         state: game.state,
         roundsCounter: game.roundsCounter,
         teamNavExpanded: game.teamNavExpanded,
@@ -93,7 +93,7 @@ export function exportGame(game: Game): JsonUpdatableGameData {
 export function exportCurrentRound(game: Game): JsonCurrentRound {
     if (game.round) {
         return {
-            inSectionName: game.round.inSectionName,
+            inColumn: game.round.inColumn,
             question: game.round.question.exportDynamicQuestionData(),
             attemptingTeams: Array.from(game.round.attemptingTeams),
             teamsAlreadyAttempted: Array.from(game.round.teamsAlreadyAttempted),
@@ -125,7 +125,7 @@ export function getQuestion(game: Game, sectionName?: string, pointsForCompletio
     if (!sectionName || pointsForCompletion === undefined) {
         return undefined;
     }
-    const section = game.sections.get(sectionName);
+    const section = game.columns.get(sectionName);
     if (!section) {
         return undefined;
     }
@@ -133,14 +133,14 @@ export function getQuestion(game: Game, sectionName?: string, pointsForCompletio
 }
 
 function importCompletedQuestions(game: Game, json: JsonUpdatableGameData) {
-    if (!json.sections) {
+    if (!json.columns) {
         return;
     }
-    for (const section of json.sections) {
+    for (const section of json.columns) {
         if (section.questions) {
             for (const jsonQuestion of section.questions) {
                 const question
-                    = getQuestion(game, section.sectionName, jsonQuestion.pointsForCompletion);
+                    = getQuestion(game, section.columnName, jsonQuestion.pointsForCompletion);
                 if (question) {
                     question.importDynamicQuestionData(jsonQuestion);
                 }
@@ -154,12 +154,12 @@ export function importCurrentRound(game: Game, json?: JsonCurrentRound) {
         return;
     }
 
-    if (!json.question || !json.inSectionName) {
+    if (!json.question || !json.inColumn) {
         game.round = null;
         return;
     }
 
-    const question = getQuestion(game, json.inSectionName, json.question.pointsForCompletion);
+    const question = getQuestion(game, json.inColumn, json.question.pointsForCompletion);
     if (!question) {
         game.round = null;
         return;
@@ -168,7 +168,7 @@ export function importCurrentRound(game: Game, json?: JsonCurrentRound) {
     question.importDynamicQuestionData(json.question);
     game.round = {
         question,
-        inSectionName: json.inSectionName,
+        inColumn: json.inColumn,
         state: json.state || RoundState.SHOW_QUESTION,
         teamsAlreadyAttempted: arrayAsSet(json.teamsAlreadyAttempted),
         attemptingTeams: arrayAsSet(json.attemptingTeams),
@@ -176,52 +176,58 @@ export function importCurrentRound(game: Game, json?: JsonCurrentRound) {
     };
 }
 
-function compareSections(s1: JsonStaticSectionData, s2: JsonStaticSectionData): number {
+function compareSections(s1: JsonStaticColumnData, s2: JsonStaticColumnData): number {
     const idx1 = s1.index || -1;
     const idx2 = s2.index || -1;
     return idx1 - idx2;
 }
 
-export function generateJsonQuestionMatrix<ITEM>(
+export function generateJsonQuestionTable<ITEM>(
     game: JsonStaticGameData,
-    getItem: (section?: JsonStaticSectionData, question?: JsonStaticQuestionData) => ITEM | undefined,
-): Array<QuestionTableCell<ITEM>> {
-    const result: QuestionTableCell<ITEM>[] = [];
-    const sortedSections: Array<JsonStaticSectionData> = game.sections ? game.sections.sort(compareSections) : [];
+    getItem: (column?: JsonStaticColumnData, question?: JsonStaticQuestionData) => ITEM | undefined,
+): QuestionTable<ITEM> {
+    const sortedColumns: Array<JsonStaticColumnData> = game.columns ? game.columns.sort(compareSections) : [];
+    const headlines: QuestionTableCell<ITEM>[] = [];
     const pointsLevels: Array<number> = [];
 
     // Headlines and points first
-    for (const section of sortedSections) {
+    for (const column of sortedColumns) {
         // Collect all points for each question
-        for (const question of section.questions || []) {
+        for (const question of column.questions || []) {
             if (!question.pointsForCompletion || pointsLevels.includes(question.pointsForCompletion)) {
                 continue;
             }
             pointsLevels.push(question.pointsForCompletion);
         }
-        result.push({
-            label: section.sectionName || '',
-            key: section.sectionName || '?',
-            inSection: section.sectionName,
-            item: getItem(section),
+        headlines.push({
+            label: column.columnName || '',
+            key: column.columnName || '?',
+            inSection: column.columnName,
+            item: getItem(column),
         });
     }
     // Ensure that points are sorted correctly
     pointsLevels.sort((a, b) => a - b);
 
     // Add questions in order of the points level
+    const rows: QuestionTableCell<ITEM>[][] = [];
     for (const points of pointsLevels) {
-        for (const section of sortedSections) {
-            const question = section.questions?.find((q) => q.pointsForCompletion === points);
-            result.push({
+        const row: QuestionTableCell<ITEM>[] = [];
+        for (const column of sortedColumns) {
+            const question = column.questions?.find((q) => q.pointsForCompletion === points);
+            row.push({
                 label: question ? `${points}` : '-',
-                inSection: question ? section.sectionName : undefined,
+                inSection: question ? column.columnName : undefined,
                 pointsForCompletion: question ? points : undefined,
-                key: `${section}-${question ? points : '?'}`,
-                item: getItem(section, question),
+                key: `${column.columnName}-${question ? points : '?'}`,
+                item: getItem(column, question),
             });
         }
+        rows.push(row);
     }
 
-    return result;
+    return {
+        headlines,
+        rows,
+    };
 }
