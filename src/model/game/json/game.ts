@@ -21,6 +21,7 @@ export interface JsonUpdatableGameData {
     teams?: Array<JsonTeam>,
     players?: Array<JsonPlayer>,
     columns?: Array<JsonDynamicSectionData>,
+    selectionOrder?: Array<TeamColor>,
     state?: GameState,
     roundsCounter?: number,
     teamNavExpanded?: boolean,
@@ -85,6 +86,7 @@ export function exportGame(game: Game): JsonUpdatableGameData {
         players,
         columns: sections,
         state: game.state,
+        selectionOrder: game.selectionOrder,
         roundsCounter: game.roundsCounter,
         teamNavExpanded: game.teamNavExpanded,
     };
@@ -105,7 +107,6 @@ export function exportCurrentRound(game: Game): JsonCurrentRound {
 }
 
 export function importGame(game: Game, json?: JsonUpdatableGameData) {
-    console.warn('Import JSON', json);
     if (!json) {
         return;
     }
@@ -117,6 +118,10 @@ export function importGame(game: Game, json?: JsonUpdatableGameData) {
     }
     if (json.roundsCounter) {
         game.roundsCounter = json.roundsCounter;
+    }
+    if (json.selectionOrder) {
+        game.selectionOrder.length = 0;
+        json.selectionOrder.forEach((item) => game.selectionOrder.push(item));
     }
     game.teamNavExpanded = !!json.teamNavExpanded;
 }

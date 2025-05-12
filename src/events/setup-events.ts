@@ -184,6 +184,7 @@ export class AddTeamEvent extends BasicGameEvent {
             players: new Map(),
         };
         game.teams.set(newColor, team);
+        game.selectionOrder.push(newColor);
         return update(game, Changes.GAME_SETUP);
     }
 }
@@ -199,13 +200,20 @@ export class RemoveTeamEvent extends BasicGameEvent {
     public updateGame(game: Game): GameUpdate {
         let anyChanges = false;
         const orphanedPlayers: Array<Player> = [];
+        let newSelectionOrder = Array.from(game.selectionOrder);
         for (const color of this._colors) {
             const team = game.teams.get(color);
             if (team) {
                 game.teams.delete(color);
                 anyChanges = true;
                 team.players.values().forEach((player) => orphanedPlayers.push(player));
+                newSelectionOrder = newSelectionOrder.filter((c) => c !== color);
             }
+        }
+        // Ensure that the deleted teams are no longer relevant for selecting questions
+        if (newSelectionOrder.length !== game.selectionOrder.length) {
+            game.selectionOrder.length = 0;
+            newSelectionOrder.forEach((c) => game.selectionOrder.push(c));
         }
 
         // Do we still have other teams?
@@ -252,6 +260,10 @@ export class ShuffleTeamsEvent extends BasicGameEvent {
         for (const player of randomPlayers) {
             addPlayerSmallestToTeam(player, game.teams);
         }
+        // Ensure that the new teams are part of the selection order
+        game.selectionOrder.length = 0;
+        this._colors.forEach((c) => game.selectionOrder.push(c));
+
         return update(game, Changes.GAME_SETUP);
     }
 }
@@ -284,6 +296,13 @@ export class ChangeTeamColorEvent extends BasicGameEvent {
         };
         newTeam.players.values().forEach((player) => player.team = this._to);
         game.teams.set(this._to, newTeam);
+        // Exchange the selection position of the team
+        const index = game.selectionOrder.indexOf(this._from);
+        if (index >= 0) {
+            game.selectionOrder[index] = this._to;
+        } else {
+            game.selectionOrder.push(this._to);
+        }
         return update(game, Changes.GAME_SETUP);
     }
 }

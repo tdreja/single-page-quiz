@@ -81,6 +81,7 @@ test('addTeam', () => {
     expect(teamOrange).toBeTruthy();
     expect(teamOrange ? teamOrange.color : null).toBe(TeamColor.ORANGE);
     expect(game.teams.size).toBe(3);
+    expect(game.selectionOrder).toEqual([TeamColor.BLUE, TeamColor.RED, TeamColor.ORANGE]);
 });
 
 test('movePlayer', () => {
@@ -102,6 +103,7 @@ test('removeTeam', () => {
         return;
     }
     expect(game.teams.size).toBe(3);
+    expect(game.selectionOrder).toEqual([TeamColor.BLUE, TeamColor.RED, TeamColor.ORANGE]);
 
     game = expectUpdate(new RemoveTeamEvent([TeamColor.BLUE]).updateGame(game), Changes.GAME_SETUP);
     expect(game.teams.size).toBe(2);
@@ -111,6 +113,7 @@ test('removeTeam', () => {
     expect(teamOrange.players.size).toBe(1);
     expect(teamOrange.players.get(Emoji.DUCK)).toBe(playerBlueDuck);
     expect(playerBlueDuck.team).toBe(TeamColor.ORANGE);
+    expect(game.selectionOrder).toEqual([TeamColor.RED, TeamColor.ORANGE]);
 });
 
 test('shuffleTeams', () => {
@@ -139,6 +142,7 @@ test('shuffleTeams', () => {
     expect(camelTeam.players.size).toBe(1);
     expect(camelTeam !== teamRed).toBeTruthy();
     expect(duckTeam !== camelTeam).toBeTruthy();
+    expect(game.selectionOrder).toEqual([TeamColor.BLUE, TeamColor.RED]);
 });
 
 test('changeTeamColor', () => {
@@ -153,4 +157,5 @@ test('changeTeamColor', () => {
     expect(orangeTeam?.color).toBe(TeamColor.ORANGE);
     expect(orangeTeam?.points).toBe(teamBlue.points);
     expect(orangeTeam?.players?.size).toBe(1);
+    expect(game.selectionOrder).toEqual([TeamColor.ORANGE, TeamColor.RED]);
 });
