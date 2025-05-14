@@ -16,17 +16,17 @@ import {
 } from './components/common/TabContext';
 import { BroadcastJson, restoreGameFromBroadcast, toBroadcastJson } from './model/broadcast';
 import { i18n, I18N } from './i18n/I18N';
-import { PlayerModerationView } from './components/player/PlayerModerationView';
 import { MainPage } from './pages/MainPage';
-import { PlayerParticipantsView } from './components/player/PlayerParticipantsView';
-import { TeamModerationView } from './components/team/TeamModerationView';
-import { TeamParticipantsView } from './components/team/TeamParticipantsView';
 import { QuizView } from './components/quiz/QuizView';
 // https://fonts.google.com/icons
 import 'material-symbols';
 import { exportStaticGameContent } from './model/quiz/json';
 import { QuizImporterView } from './components/importer/QuizImporterView';
 import { SwitchForParticipants } from './components/mode/SwitchForParticipants';
+import { TeamParticipantsView } from './pages/teams/TeamParticipantsView';
+import { TeamModerationView } from './pages/teams/TeamModerationView';
+import { PlayerParticipantsView } from './pages/players/PlayerParticipantsView';
+import { PlayerModerationView } from './pages/players/PlayerModerationView';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();

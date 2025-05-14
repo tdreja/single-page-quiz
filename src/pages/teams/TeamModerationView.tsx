@@ -1,12 +1,12 @@
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { Game } from '../../model/game/game';
-import { GameContext, GameEventContext } from '../common/GameContext';
 import { allColors, sortTeamsHighestFirst, TeamColor } from '../../model/game/team';
 import { TeamForm } from './TeamForm';
 import { I18N } from '../../i18n/I18N';
-import { TeamColorButton } from '../common/TeamColorButton';
 import { AddTeamEvent, RemoveTeamEvent, ShuffleTeamsEvent } from '../../events/setup-events';
 import { calculatePlacementsForAll, PlacementPointsForAll } from '../../model/placement';
+import { GameContext, GameEventContext } from '../../components/common/GameContext';
+import { TeamColorButton } from '../../components/common/TeamColorButton';
 
 export const TeamModerationView = (): ReactElement => {
     const i18n = useContext(I18N);

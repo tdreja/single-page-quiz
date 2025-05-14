@@ -1,11 +1,11 @@
 import React, { ReactElement, useContext } from 'react';
 import { Team } from '../../model/game/team';
-import { backgroundColor, textColor } from '../common/Colors';
 import { sortPlayersHighestFirst } from '../../model/game/player';
-import { PlayerWithPointsView } from '../common/PlayerWithPointsView';
 import { I18N } from '../../i18n/I18N';
 import { calculateSinglePlacement, PlacementPointsForAll } from '../../model/placement';
-import { PlacementIcon } from '../common/PlacementIcon';
+import { backgroundColor, textColor } from '../../components/common/Colors';
+import { PlacementIcon } from '../../components/common/PlacementIcon';
+import { PlayerWithPointsView } from '../../components/common/PlayerWithPointsView';
 
 interface Props {
     team: Team,

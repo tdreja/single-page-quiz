@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
-import { EmojiView } from '../common/EmojiView';
-import { TeamColorButton } from '../common/TeamColorButton';
 import { Player } from '../../model/game/player';
 import { calculateSinglePlacement, PlacementPointsForAll } from '../../model/placement';
-import { PlacementIcon } from '../common/PlacementIcon';
+import { PlacementIcon } from '../../components/common/PlacementIcon';
+import { EmojiView } from '../../components/common/EmojiView';
+import { TeamColorButton } from '../../components/common/TeamColorButton';
 
 type HtmlProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 interface Props extends HtmlProps {

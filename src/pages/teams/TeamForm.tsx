@@ -1,14 +1,14 @@
 import React, { ReactElement, useCallback, useContext, useState } from 'react';
 import { Team, TeamColor } from '../../model/game/team';
 import { I18N } from '../../i18n/I18N';
-import { GameEventContext } from '../common/GameContext';
-import { backgroundColor, textColor } from '../common/Colors';
 import { ChangeTeamColorEvent, RemoveTeamEvent, UpdateTeamEvent } from '../../events/setup-events';
 import { sortPlayersByName } from '../../model/game/player';
-import { TeamColorButton } from '../common/TeamColorButton';
-import { PlayerWithPointsView } from '../common/PlayerWithPointsView';
-import { calculateSinglePlacement, Placement, PlacementPointsForAll } from '../../model/placement';
-import { PlacementIcon } from '../common/PlacementIcon';
+import { calculateSinglePlacement, PlacementPointsForAll } from '../../model/placement';
+import { GameEventContext } from '../../components/common/GameContext';
+import { backgroundColor, textColor } from '../../components/common/Colors';
+import { PlacementIcon } from '../../components/common/PlacementIcon';
+import { TeamColorButton } from '../../components/common/TeamColorButton';
+import { PlayerWithPointsView } from '../../components/common/PlayerWithPointsView';
 
 interface Props {
     team: Team,

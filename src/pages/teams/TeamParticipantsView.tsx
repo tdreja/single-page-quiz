@@ -1,9 +1,9 @@
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { sortTeamsHighestFirst } from '../../model/game/team';
 import { Game } from '../../model/game/game';
-import { GameContext } from '../common/GameContext';
 import { TeamView } from './TeamView';
 import { calculatePlacementsForAll, PlacementPointsForAll } from '../../model/placement';
+import { GameContext } from '../../components/common/GameContext';
 
 export const TeamParticipantsView = (): ReactElement => {
     const game = useContext<Game>(GameContext);

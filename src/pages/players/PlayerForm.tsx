@@ -1,12 +1,11 @@
 import React, { ReactElement, useCallback, useContext, useState } from 'react';
 import { Player } from '../../model/game/player';
 import { I18N } from '../../i18n/I18N';
-import { EmojiView } from '../common/EmojiView';
-import { GameEventContext } from '../common/GameContext';
 import { UpdatePlayerEvent, MovePlayerEvent, RemovePlayerEvent, ReRollEmojiEvent } from '../../events/setup-events';
-import { TeamColorButton } from '../common/TeamColorButton';
 import { TeamColor } from '../../model/game/team';
-import { calculateSinglePlacement, PlacementPointsForAll } from '../../model/placement';
+import { GameEventContext } from '../../components/common/GameContext';
+import { EmojiView } from '../../components/common/EmojiView';
+import { TeamColorButton } from '../../components/common/TeamColorButton';
 
 export interface Props {
     player: Player,

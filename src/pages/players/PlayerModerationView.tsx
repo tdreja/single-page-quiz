@@ -1,17 +1,15 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
 import { Game } from '../../model/game/game';
-import { GameContext, GameEventContext } from '../common/GameContext';
 import { Emoji, Player, sortPlayersByName } from '../../model/game/player';
 import { I18N } from '../../i18n/I18N';
 import { AddPlayerEvent } from '../../events/setup-events';
-import { AccordionItem } from '../common/AccordionItem';
-import { EmojiView } from '../common/EmojiView';
-import { TeamColorButton } from '../common/TeamColorButton';
 import { PlayerForm } from './PlayerForm';
 import { TeamColor } from '../../model/game/team';
 import { Expanded } from './expanded';
 import { calculatePlacementsForAll, PlacementPointsForAll } from '../../model/placement';
 import { PlayerHeader } from './PlayerHeader';
+import { GameContext, GameEventContext } from '../../components/common/GameContext';
+import { AccordionItem } from '../../components/common/AccordionItem';
 
 export const PlayerModerationView = (): ReactElement | undefined => {
     const game = useContext<Game>(GameContext);
