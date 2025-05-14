@@ -60,7 +60,13 @@ export class Timer {
             setter(null);
             return;
         }
-        let timeDifference = new Date().getTime() - this._start.getTime();
+        const timer = this.calculateTimeInfo(this._start, new Date());
+        // console.log(timer);
+        setter(timer);
+    }
+
+    calculateTimeInfo(from: Date, to: Date): TimeInfo {
+        let timeDifference = to.getTime() - from.getTime();
 
         const days = Math.floor(timeDifference / millisInDay);
         timeDifference = timeDifference - (days * millisInDay);
@@ -74,12 +80,12 @@ export class Timer {
         const seconds = Math.floor(timeDifference / millisInSecond);
         timeDifference = timeDifference - (seconds * millisInSecond);
 
-        setter({
+        return {
             days: formatNumber(days),
-            hours: formatNumber(hours),
+            hours: formatNumber(hours, days > 0),
             minutes: formatNumber(minutes, true),
             seconds: formatNumber(seconds, true),
             milliseconds: formatNumber(Math.floor(timeDifference / 100), true),
-        });
+        };
     }
 }
