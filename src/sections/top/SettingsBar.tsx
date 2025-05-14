@@ -1,5 +1,5 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
-import { settingsToSearch, TabContext } from '../../components/common/TabContext';
+import { settingsToSearch, TabContext } from '../../components/mode/TabContext';
 import { GameContext, GameEventContext } from '../../components/common/GameContext';
 import { GameState } from '../../model/game/game';
 import { SwitchStateEvent } from '../../events/setup-events';

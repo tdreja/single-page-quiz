@@ -1,11 +1,11 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
 import { Game, generateQuestionTable, QuestionTable, QuestionTableCell } from '../../model/game/game';
-import { GameContext, GameEventContext } from '../common/GameContext';
 import { Question } from '../../model/quiz/question';
 import { StartRoundEvent } from '../../events/round-events';
-import { TeamColorButton } from '../common/TeamColorButton';
 import { TeamColor } from '../../model/game/team';
 import { I18N } from '../../i18n/I18N';
+import { GameContext, GameEventContext } from '../../components/common/GameContext';
+import { TeamColorButton } from '../../components/common/TeamColorButton';
 
 interface Props {
     matrix: QuestionTableCell<Question>,

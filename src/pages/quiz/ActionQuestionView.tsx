@@ -1,12 +1,12 @@
 import React, { ChangeEvent, ReactElement, useCallback, useContext, useEffect, useState } from 'react';
 import { RoundAndItemProps } from './QuestionView';
 import { ActionQuestion } from '../../model/quiz/action-question';
-import { TabContext } from '../common/TabContext';
 import { CompletionPercent } from '../../model/quiz/question';
 import { Game } from '../../model/game/game';
 import { TeamColor } from '../../model/game/team';
 import { I18N } from '../../i18n/I18N';
-import { TeamColorButton } from '../common/TeamColorButton';
+import { TabContext } from '../../components/mode/TabContext';
+import { TeamColorButton } from '../../components/common/TeamColorButton';
 
 function buildInitialCompletion(game: Game): CompletionPercent {
     const completion: CompletionPercent = {};

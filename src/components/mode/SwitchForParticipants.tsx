@@ -1,5 +1,5 @@
 import React, { ReactElement, useContext } from 'react';
-import { TabContext } from '../common/TabContext';
+import { TabContext } from './TabContext';
 
 interface Props {
     participants: ReactElement,

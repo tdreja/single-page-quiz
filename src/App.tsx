@@ -12,7 +12,7 @@ import {
     readSettingsFromLocation,
     TabContext,
     TabSettings,
-} from './components/common/TabContext';
+} from './components/mode/TabContext';
 import { BroadcastJson, restoreGameFromBroadcast, toBroadcastJson } from './model/broadcast';
 import { i18n, I18N } from './i18n/I18N';
 import { MainPage } from './pages/MainPage';

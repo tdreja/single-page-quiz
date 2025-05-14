@@ -1,12 +1,12 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
 import { RoundAndItemProps } from './QuestionView';
 import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from '../../model/quiz/multiple-choice-question';
-import { GameEventContext } from '../common/GameContext';
-import { EditTabSettings, TabContext } from '../common/TabContext';
 import { GameRound, RoundState } from '../../model/game/game';
 import { SelectFromMultipleChoiceEvent } from '../../events/question-event';
-import { asReactCss } from '../common/ReactCssUtils';
-import { TeamColorButton } from '../common/TeamColorButton';
+import { EditTabSettings, TabContext } from '../../components/mode/TabContext';
+import { GameEventContext } from '../../components/common/GameContext';
+import { TeamColorButton } from '../../components/common/TeamColorButton';
+import { asReactCss } from '../../components/common/ReactCssUtils';
 
 function badgeStyle(round: GameRound, item: TextChoice, tabSettings: EditTabSettings): string {
     if (round.question.completed) {

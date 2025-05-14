@@ -3,15 +3,15 @@ import { Game, GameRound, RoundState } from '../../model/game/game';
 import { ImageMultipleChoiceQuestion, TextMultipleChoiceQuestion } from '../../model/quiz/multiple-choice-question';
 import { ActionQuestion } from '../../model/quiz/action-question';
 import { EstimateQuestion } from '../../model/quiz/estimate-question';
-import { GameContext, GameEventContext, GameEventListener } from '../common/GameContext';
-import { TeamColorButton } from '../common/TeamColorButton';
-import { TabContext } from '../common/TabContext';
 import { ImageMultipleChoiceView, TextMultipleChoiceView } from './MultipleChoiceView';
 import { sortTeamsByColor } from '../../model/game/team';
 import { ActivateBuzzerEvent, CloseRoundEvent, RequestAttemptEvent, SkipAttemptEvent } from '../../events/round-events';
 import { I18N, Labels } from '../../i18n/I18N';
-import { TimeInfo, Timer } from '../common/Timer';
 import { ActionQuestionView } from './ActionQuestionView';
+import { GameContext, GameEventContext, GameEventListener } from '../../components/common/GameContext';
+import { TeamColorButton } from '../../components/common/TeamColorButton';
+import { TabContext } from '../../components/mode/TabContext';
+import { TimeInfo, Timer } from '../../components/common/Timer';
 
 interface RoundProps {
     game: Game,
