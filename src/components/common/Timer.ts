@@ -1,8 +1,10 @@
 const millisInSecond = 1000;
 const millisInMinute = 60 * millisInSecond;
 const millisInHour = 60 * millisInMinute;
+const millisInDay = 24 * millisInHour;
 
 export interface TimeInfo {
+    readonly days: string,
     readonly hours: string,
     readonly minutes: string,
     readonly seconds: string,
@@ -60,6 +62,9 @@ export class Timer {
         }
         let timeDifference = new Date().getTime() - this._start.getTime();
 
+        const days = Math.floor(timeDifference / millisInDay);
+        timeDifference = timeDifference - (days * millisInDay);
+
         const hours = Math.floor(timeDifference / millisInHour);
         timeDifference = timeDifference - (hours * millisInHour);
 
@@ -70,6 +75,7 @@ export class Timer {
         timeDifference = timeDifference - (seconds * millisInSecond);
 
         setter({
+            days: formatNumber(days),
             hours: formatNumber(hours),
             minutes: formatNumber(minutes, true),
             seconds: formatNumber(seconds, true),

@@ -259,6 +259,7 @@ const ActionsView = ({ round }: RoundProps): ReactElement => {
                 {timeInfo && (
                     <>
                         <span className="me-2">{i18n.question.headlineTimer}</span>
+                        {timeInfo.days.length > 0 && (<span className="time-section">{timeInfo.days}</span>)}
                         {timeInfo.hours.length > 0 && (<span className="time-section">{timeInfo.hours}</span>)}
                         <span className="time-section">{timeInfo.minutes}</span>
                         <b className="time-section">{timeInfo.seconds}</b>
