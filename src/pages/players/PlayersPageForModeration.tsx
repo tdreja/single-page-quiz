@@ -11,7 +11,7 @@ import { PlayerHeader } from './PlayerHeader';
 import { GameContext, GameEventContext } from '../../components/common/GameContext';
 import { AccordionItem } from '../../components/common/AccordionItem';
 
-export const PlayerModerationView = (): ReactElement | undefined => {
+export const PlayersPageForModeration = (): ReactElement | undefined => {
     const game = useContext<Game>(GameContext);
     const onGameEvent = useContext(GameEventContext);
     const i18n = useContext(I18N);

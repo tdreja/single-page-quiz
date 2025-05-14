@@ -8,7 +8,7 @@ import { calculatePlacementsForAll, PlacementPointsForAll } from '../../model/pl
 import { GameContext, GameEventContext } from '../../components/common/GameContext';
 import { TeamColorButton } from '../../components/common/TeamColorButton';
 
-export const TeamModerationView = (): ReactElement => {
+export const TeamsPageForModeration = (): ReactElement => {
     const i18n = useContext(I18N);
     const game = useContext<Game>(GameContext);
     const onGameEvent = useContext(GameEventContext);

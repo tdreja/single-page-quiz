@@ -23,10 +23,10 @@ import 'material-symbols';
 import { exportStaticGameContent } from './model/quiz/json';
 import { QuizImporterView } from './components/importer/QuizImporterView';
 import { SwitchForParticipants } from './components/mode/SwitchForParticipants';
-import { TeamParticipantsView } from './pages/teams/TeamParticipantsView';
-import { TeamModerationView } from './pages/teams/TeamModerationView';
-import { PlayerParticipantsView } from './pages/players/PlayerParticipantsView';
-import { PlayerModerationView } from './pages/players/PlayerModerationView';
+import { TeamsPageForParticipants } from './pages/teams/TeamsPageForParticipants';
+import { TeamsPageForModeration } from './pages/teams/TeamsPageForModeration';
+import { PlayersPageForParticipants } from './pages/players/PlayersPageForParticipants';
+import { PlayersPageForModeration } from './pages/players/PlayersPageForModeration';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -108,16 +108,16 @@ function App() {
                             gameState={game.state}
                             players={
                                 <SwitchForParticipants
-                                    participants={<PlayerParticipantsView />}
-                                    moderation={<PlayerModerationView />}
-                                    shared={<PlayerModerationView />}
+                                    participants={<PlayersPageForParticipants />}
+                                    moderation={<PlayersPageForModeration />}
+                                    shared={<PlayersPageForModeration />}
                                 />
                             }
                             teams={
                                 <SwitchForParticipants
-                                    participants={<TeamParticipantsView />}
-                                    moderation={<TeamModerationView />}
-                                    shared={<TeamModerationView />}
+                                    participants={<TeamsPageForParticipants />}
+                                    moderation={<TeamsPageForModeration />}
+                                    shared={<TeamsPageForModeration />}
                                 />
                             }
                             quiz={

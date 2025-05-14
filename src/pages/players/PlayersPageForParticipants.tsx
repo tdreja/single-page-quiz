@@ -5,7 +5,7 @@ import { PlayerHeader } from './PlayerHeader';
 import { calculatePlacementsForAll, PlacementPointsForAll } from '../../model/placement';
 import { GameContext } from '../../components/common/GameContext';
 
-export const PlayerParticipantsView = (): ReactElement => {
+export const PlayersPageForParticipants = (): ReactElement => {
     const game = useContext<Game>(GameContext);
     const [placements, setPlacements] = useState<PlacementPointsForAll>(calculatePlacementsForAll([]));
 

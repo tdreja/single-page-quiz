@@ -5,7 +5,7 @@ import { TeamView } from './TeamView';
 import { calculatePlacementsForAll, PlacementPointsForAll } from '../../model/placement';
 import { GameContext } from '../../components/common/GameContext';
 
-export const TeamParticipantsView = (): ReactElement => {
+export const TeamsPageForParticipants = (): ReactElement => {
     const game = useContext<Game>(GameContext);
     const [placements, setPlacements] = useState<PlacementPointsForAll>(calculatePlacementsForAll([]));
 
