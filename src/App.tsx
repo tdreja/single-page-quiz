@@ -1,14 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './game.css';
 import './images.css';
-import { TeamsBottomNav } from './components/game/TeamsBottomNav';
 import React, { useCallback, useEffect, useState } from 'react';
 import { emptyGame, Game } from './model/game/game';
 import { Changes, GameEvent } from './events/common-events';
 import { GameContext, GameEventContext, GameEventListener } from './components/common/GameContext';
 import { prepareGame } from './dev/dev-setup';
 import { restoreGameFromStorage, storeGameInStorage, storeStaticGameData } from './components/common/Storage';
-import { SettingsBar } from './components/common/SettingsBar';
+import { SettingsBar } from './sections/top/SettingsBar';
 import {
     readSettingsFromLocation,
     TabContext,
@@ -21,12 +20,13 @@ import { QuizView } from './components/quiz/QuizView';
 // https://fonts.google.com/icons
 import 'material-symbols';
 import { exportStaticGameContent } from './model/quiz/json';
-import { QuizImporterView } from './components/importer/QuizImporterView';
+import { QuizImporterView } from './pages/importer/QuizImporterView';
 import { SwitchForParticipants } from './components/mode/SwitchForParticipants';
 import { TeamsPageForParticipants } from './pages/teams/TeamsPageForParticipants';
 import { TeamsPageForModeration } from './pages/teams/TeamsPageForModeration';
 import { PlayersPageForParticipants } from './pages/players/PlayersPageForParticipants';
 import { PlayersPageForModeration } from './pages/players/PlayersPageForModeration';
+import { TeamsBottomNav } from './sections/bottom/TeamsBottomNav';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();

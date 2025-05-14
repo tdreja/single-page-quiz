@@ -1,6 +1,6 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
-import { settingsToSearch, TabContext } from './TabContext';
-import { GameContext, GameEventContext } from './GameContext';
+import { settingsToSearch, TabContext } from '../../components/common/TabContext';
+import { GameContext, GameEventContext } from '../../components/common/GameContext';
 import { GameState } from '../../model/game/game';
 import { SwitchStateEvent } from '../../events/setup-events';
 import { I18N, Labels } from '../../i18n/I18N';

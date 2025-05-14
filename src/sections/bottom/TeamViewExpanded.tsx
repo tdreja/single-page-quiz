@@ -1,9 +1,9 @@
 import React, { ReactElement, useContext } from 'react';
 import { Team } from '../../model/game/team';
 import { sortPlayersHighestFirst } from '../../model/game/player';
-import { backgroundColor, textColor } from '../common/Colors';
 import { I18N } from '../../i18n/I18N';
-import { PlayerWithPointsView } from '../common/PlayerWithPointsView';
+import { backgroundColor, textColor } from '../../components/common/Colors';
+import { PlayerWithPointsView } from '../../components/common/PlayerWithPointsView';
 
 interface TeamProps {
     team: Team,

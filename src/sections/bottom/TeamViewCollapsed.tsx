@@ -1,7 +1,7 @@
 import React, { ReactElement, useContext } from 'react';
 import { Team } from '../../model/game/team';
 import { I18N } from '../../i18n/I18N';
-import { TeamColorButton } from '../common/TeamColorButton';
+import { TeamColorButton } from '../../components/common/TeamColorButton';
 
 interface TeamProps {
     team: Team,
