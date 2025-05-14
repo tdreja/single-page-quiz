@@ -17,7 +17,7 @@ import {
 import { BroadcastJson, restoreGameFromBroadcast, toBroadcastJson } from './model/broadcast';
 import { i18n, I18N } from './i18n/I18N';
 import { PlayerModerationView } from './components/player/PlayerModerationView';
-import { MainPage } from './MainPage';
+import { MainPage } from './pages/MainPage';
 import { PlayerParticipantsView } from './components/player/PlayerParticipantsView';
 import { TeamModerationView } from './components/team/TeamModerationView';
 import { TeamParticipantsView } from './components/team/TeamParticipantsView';
@@ -26,6 +26,7 @@ import { QuizView } from './components/quiz/QuizView';
 import 'material-symbols';
 import { exportStaticGameContent } from './model/quiz/json';
 import { QuizImporterView } from './components/importer/QuizImporterView';
+import { SwitchForParticipants } from './components/mode/SwitchForParticipants';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -105,14 +106,34 @@ function App() {
                         <SettingsBar />
                         <MainPage
                             gameState={game.state}
-                            tabSettings={tabSettings}
-                            playerModeration={<PlayerModerationView />}
-                            playerParticipants={<PlayerParticipantsView />}
-                            teamsModeration={<TeamModerationView />}
-                            teamsParticipants={<TeamParticipantsView />}
-                            quiz={<QuizView />}
-                            importQuizModeration={<QuizImporterView />}
-                            importQuizParticipants={<QuizImporterView />}
+                            players={
+                                <SwitchForParticipants
+                                    participants={<PlayerParticipantsView />}
+                                    moderation={<PlayerModerationView />}
+                                    shared={<PlayerModerationView />}
+                                />
+                            }
+                            teams={
+                                <SwitchForParticipants
+                                    participants={<TeamParticipantsView />}
+                                    moderation={<TeamModerationView />}
+                                    shared={<TeamModerationView />}
+                                />
+                            }
+                            quiz={
+                                <SwitchForParticipants
+                                    participants={<QuizView />}
+                                    moderation={<QuizView />}
+                                    shared={<QuizView />}
+                                />
+                            }
+                            importQuiz={
+                                <SwitchForParticipants
+                                    participants={<QuizImporterView />}
+                                    moderation={<QuizImporterView />}
+                                    shared={<QuizImporterView />}
+                                />
+                            }
                         />
                         <TeamsBottomNav />
                     </I18N.Provider>
