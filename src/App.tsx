@@ -30,7 +30,9 @@ import { QuizView } from './pages/quiz/QuizView';
 import { QuizPage } from './pages/quiz/QuizPage';
 import { QuestionSelectionPage } from './pages/quiz/overview/QuestionSelectionPage';
 import { QuestionView } from './pages/quiz/QuestionView';
-import { QuestionPage } from './pages/quiz/questions/QuestionPage';
+import { QuestionPageForParticipants } from './pages/quiz/questions/QuestionPageForParticipants';
+import { QuestionPageForModeration } from './pages/quiz/questions/QuestionPageForModeration';
+import { QuestionPageShared } from './pages/quiz/questions/QuestionPageShared';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -136,19 +138,19 @@ function App() {
                                     participants={
                                         <QuizPage
                                             selectionPage={<QuestionSelectionPage />}
-                                            questionPage={(round) => (<QuestionPage round={round} />)}
+                                            questionPage={(round) => (<QuestionPageForParticipants round={round} />)}
                                         />
                                     }
                                     moderation={
                                         <QuizPage
                                             selectionPage={<QuestionSelectionPage />}
-                                            questionPage={(round) => (<QuestionPage round={round} />)}
+                                            questionPage={(round) => (<QuestionPageForModeration round={round} />)}
                                         />
                                     }
                                     shared={
                                         <QuizPage
                                             selectionPage={<QuestionSelectionPage />}
-                                            questionPage={(round) => (<QuestionPage round={round} />)}
+                                            questionPage={(round) => (<QuestionPageShared round={round} />)}
                                         />
                                     }
                                 />
