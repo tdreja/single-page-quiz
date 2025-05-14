@@ -1,11 +1,11 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
-import { Game, generateQuestionTable, QuestionTable, QuestionTableCell } from '../../model/game/game';
-import { Question } from '../../model/quiz/question';
-import { StartRoundEvent } from '../../events/round-events';
-import { TeamColor } from '../../model/game/team';
-import { I18N } from '../../i18n/I18N';
-import { GameContext, GameEventContext } from '../../components/common/GameContext';
-import { TeamColorButton } from '../../components/common/TeamColorButton';
+import { Game, generateQuestionTable, QuestionTable, QuestionTableCell } from '../../../model/game/game';
+import { Question } from '../../../model/quiz/question';
+import { StartRoundEvent } from '../../../events/round-events';
+import { TeamColor } from '../../../model/game/team';
+import { I18N } from '../../../i18n/I18N';
+import { GameContext, GameEventContext } from '../../../components/common/GameContext';
+import { TeamColorButton } from '../../../components/common/TeamColorButton';
 
 interface Props {
     matrix: QuestionTableCell<Question>,
@@ -39,7 +39,7 @@ const MatrixItem = ({ matrix }: Props): ReactElement => {
     );
 };
 
-export const SelectNextQuestionView = (): ReactElement => {
+export const QuestionSelectionPage = (): ReactElement => {
     const i18n = useContext(I18N);
     const game = useContext<Game>(GameContext);
     const [table, setTable] = useState<QuestionTable<Question>>(

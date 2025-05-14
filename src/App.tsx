@@ -16,7 +16,6 @@ import {
 import { BroadcastJson, restoreGameFromBroadcast, toBroadcastJson } from './model/broadcast';
 import { i18n, I18N } from './i18n/I18N';
 import { MainPage } from './pages/MainPage';
-import { QuizView } from './components/quiz/QuizView';
 // https://fonts.google.com/icons
 import 'material-symbols';
 import { exportStaticGameContent } from './model/quiz/json';
@@ -27,6 +26,11 @@ import { TeamsPageForModeration } from './pages/teams/TeamsPageForModeration';
 import { PlayersPageForParticipants } from './pages/players/PlayersPageForParticipants';
 import { PlayersPageForModeration } from './pages/players/PlayersPageForModeration';
 import { TeamsBottomNav } from './sections/bottom/TeamsBottomNav';
+import { QuizView } from './pages/quiz/QuizView';
+import { QuizPage } from './pages/quiz/QuizPage';
+import { QuestionSelectionPage } from './pages/quiz/overview/QuestionSelectionPage';
+import { QuestionView } from './pages/quiz/QuestionView';
+import { QuestionPage } from './pages/quiz/questions/QuestionPage';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -120,18 +124,33 @@ function App() {
                                     shared={<TeamsPageForModeration />}
                                 />
                             }
-                            quiz={
-                                <SwitchForParticipants
-                                    participants={<QuizView />}
-                                    moderation={<QuizView />}
-                                    shared={<QuizView />}
-                                />
-                            }
                             importQuiz={
                                 <SwitchForParticipants
                                     participants={<QuizImporterView />}
                                     moderation={<QuizImporterView />}
                                     shared={<QuizImporterView />}
+                                />
+                            }
+                            quiz={
+                                <SwitchForParticipants
+                                    participants={
+                                        <QuizPage
+                                            selectionPage={<QuestionSelectionPage />}
+                                            questionPage={(round) => (<QuestionPage round={round} />)}
+                                        />
+                                    }
+                                    moderation={
+                                        <QuizPage
+                                            selectionPage={<QuestionSelectionPage />}
+                                            questionPage={(round) => (<QuestionPage round={round} />)}
+                                        />
+                                    }
+                                    shared={
+                                        <QuizPage
+                                            selectionPage={<QuestionSelectionPage />}
+                                            questionPage={(round) => (<QuestionPage round={round} />)}
+                                        />
+                                    }
                                 />
                             }
                         />
