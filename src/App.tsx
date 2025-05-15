@@ -24,6 +24,8 @@ import { QuestionSelectionPage } from './pages/quiz/overview/QuestionSelectionPa
 import { QuestionPageForParticipants } from './pages/quiz/questions/QuestionPageForParticipants';
 import { PlayersPageForModeration } from './pages/players/PlayersPageForModeration';
 import { TeamsPageForModeration } from './pages/teams/TeamsPageForModeration';
+import { QuizParticipantsPage } from './pages/quiz/QuizParticipantsPage';
+import { QuizModerationPage } from './pages/quiz/QuizModerationPage';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -121,16 +123,13 @@ function App() {
 
                             {/* Quiz */}
                             <SubPage state={GameState.GAME_ACTIVE} tabType={[TabType.PARTICIPANTS]}>
-                                <QuizPage
-                                    selectionPage={<QuestionSelectionPage />}
-                                    questionPage={(round) => (<QuestionPageForParticipants round={round} />)}
-                                />
+                                <QuizParticipantsPage />
                             </SubPage>
-                            <SubPage state={GameState.GAME_ACTIVE} tabType={[TabType.MODERATION, TabType.SHARED]}>
-                                <QuizPage
-                                    selectionPage={<QuestionSelectionPage />}
-                                    questionPage={(round) => (<QuestionPageForParticipants round={round} />)}
-                                />
+                            <SubPage state={GameState.GAME_ACTIVE} tabType={[TabType.SHARED]}>
+                                <QuizModerationPage shared={true} />
+                            </SubPage>
+                            <SubPage state={GameState.GAME_ACTIVE} tabType={[TabType.MODERATION]}>
+                                <QuizModerationPage shared={false} />
                             </SubPage>
                         </MainPage>
                         <TeamsBottomNav />
