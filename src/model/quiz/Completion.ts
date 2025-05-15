@@ -21,7 +21,8 @@ export function recalculateCompletion(
     };
 
     // No previous inputs or max percentage?
-    if (!oldCompletion || changedPoints === maxPoints) {
+    const available = maxPoints - changedPoints;
+    if (!oldCompletion || available <= 0) {
         return newCompletion;
     }
 
@@ -31,16 +32,15 @@ export function recalculateCompletion(
     if (otherTeams.length === 0) {
         return newCompletion;
     }
-
     const sum = otherTeams
         .map((key) => oldCompletion[key] || 0)
         .reduce((a, b) => a + b);
-    const adjustment = Math.max(0, (maxPoints - changedPoints - sum) / otherTeams.length);
+    const factor = sum <= available ? 1 : available / sum;
 
     // Adjust all teams to ensure that the sum remains correct
     for (const team of otherTeams) {
         const points = oldCompletion[team] || 0;
-        const adjusted = points - adjustment;
+        const adjusted = Math.floor(points * factor);
         if (adjusted > 0) {
             newCompletion[team] = adjusted;
         }

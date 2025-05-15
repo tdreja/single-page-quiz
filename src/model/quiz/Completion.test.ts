@@ -28,3 +28,10 @@ describe('Adjust other Color', () => {
         expect(result).toEqual({ BLUE: 100 });
     });
 });
+describe('Adjust three Colors', () => {
+    const completion: Completion = { RED: 50, BLUE: 100 };
+    test('RED 50 + BLUE 50 + GREEN 50', () => {
+        const result = recalculateCompletion(completion, 150, TeamColor.GREEN, 50);
+        expect(result).toEqual({ RED: 33, BLUE: 66, GREEN: 50 });
+    });
+});
