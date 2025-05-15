@@ -11,9 +11,12 @@ export function recalculateCompletion(
     changedPoints?: number,
 ): Completion {
     // Skip any invalid inputs
-    if (!maxPoints || maxPoints < 0
-      || !changedTeam || !changedPoints
-      || Number.isNaN(changedPoints) || changedPoints < 0) {
+    if (!maxPoints
+      || maxPoints < 0
+      || !changedTeam
+      || changedPoints === undefined
+      || Number.isNaN(changedPoints)
+      || changedPoints < 0) {
         return oldCompletion || {};
     }
     const newCompletion: Completion = {

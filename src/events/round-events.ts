@@ -30,7 +30,7 @@ export class StartRoundEvent extends BasicGameEvent {
             }
             const oldQuestion = game.round.question;
             game.round = null;
-            oldQuestion.completeQuestion([]);
+            oldQuestion.completeQuestion(game.teams.values(), {});
         }
 
         const question = getQuestion(game, this._sectionName, this._pointsForCompletion);
@@ -44,7 +44,7 @@ export class StartRoundEvent extends BasicGameEvent {
             attemptingTeams: new Set<TeamColor>(),
             teamsAlreadyAttempted: new Set<TeamColor>(),
             state: RoundState.SHOW_QUESTION,
-            timerStart: question.useBuzzer ? null : new Date(),
+            timerStart: null,
         };
         // Move the currently selecting team to the end of the order
         const current = game.selectionOrder.shift();
@@ -144,7 +144,7 @@ export class SkipRoundEvent extends GameRoundEvent {
         }
         round.state = RoundState.SHOW_RESULTS;
         round.attemptingTeams.clear();
-        round.question.completeQuestion([]);
+        round.question.completeQuestion(game.teams.values(), {});
         round.timerStart = null;
         return update(game, Changes.CURRENT_ROUND);
     }
