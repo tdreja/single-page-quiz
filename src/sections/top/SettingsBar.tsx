@@ -1,5 +1,5 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
-import { settingsToSearch, TabContext } from '../../components/mode/TabContext';
+import { settingsToSearch, TabContext, TabType } from '../../components/mode/TabContext';
 import { GameContext, GameEventContext } from '../../components/common/GameContext';
 import { GameState } from '../../model/game/game';
 import { SwitchStateEvent } from '../../events/setup-events';
@@ -49,37 +49,45 @@ export const SettingsBar = (): ReactElement => {
     };
 
     useEffect(() => {
-        if (tabSettings.settings.participants) {
-            if (tabSettings.settings.moderation) {
-                setMode(modeShared);
-                setAction(actionOpenParticipants);
-            } else {
+        switch (tabSettings.tabType) {
+            case TabType.PARTICIPANTS:
                 setMode(modeParticipants);
                 setAction(actionOpenModeration);
-            }
-        } else {
-            setMode(modeModeration);
-            setAction(actionOpenParticipants);
+                break;
+            case TabType.MODERATION:
+                setMode(modeModeration);
+                setAction(actionOpenParticipants);
+                break;
+            default:
+                setMode(modeShared);
+                setAction(actionOpenParticipants);
+                break;
         }
     }, [tabSettings]);
 
     const onModeClick = useCallback(() => {
-        if (!tabSettings.settings.moderation) {
-            return;
+        switch (tabSettings.tabType) {
+            case TabType.PARTICIPANTS:
+                return;
+            case TabType.MODERATION:
+                tabSettings.setTabType(TabType.SHARED);
+                return;
+            default:
+                tabSettings.setTabType(TabType.MODERATION);
+                return;
         }
-        tabSettings.setSettings({
-            moderation: true,
-            participants: !tabSettings.settings.participants,
-        });
     }, [tabSettings]);
 
     const onActionClick = useCallback(() => {
-        // Open Presentation
-        if (tabSettings.settings.moderation) {
-            window.open(settingsToSearch({ participants: true, moderation: false }), '_blank');
+        switch (tabSettings.tabType) {
             // Open Editor
-        } else {
-            window.open(settingsToSearch({ participants: false, moderation: true }), '_blank');
+            case TabType.PARTICIPANTS:
+                window.open(settingsToSearch(TabType.MODERATION), '_blank');
+                return;
+            // Open Presentation
+            default:
+                window.open(settingsToSearch(TabType.PARTICIPANTS), '_blank');
+                return;
         }
     }, [tabSettings]);
 

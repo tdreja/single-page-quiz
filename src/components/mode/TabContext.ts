@@ -1,52 +1,43 @@
 import { Context, createContext } from 'react';
 
-export interface TabSettings {
-    moderation: boolean,
-    participants: boolean,
+export enum TabType {
+    SHARED = 'SHARED',
+    MODERATION = 'MODERATION',
+    PARTICIPANTS = 'PARTICIPANTS',
 }
 
-export type EditTabSettings = {
-    settings: TabSettings,
-    setSettings: (newSettings: TabSettings) => void,
+export type TabSettings = {
+    tabType: TabType,
+    setTabType: (newType: TabType) => void,
 };
 
-export const TabContext: Context<EditTabSettings> = createContext<EditTabSettings>({
-    settings: {
-        moderation: false,
-        participants: false,
+export const TabContext: Context<TabSettings> = createContext<TabSettings>({
+    tabType: TabType.SHARED,
+    setTabType: () => {
     },
-    setSettings: () => {},
 });
 
-export function readSettingsFromLocation(): TabSettings {
+export function readSettingsFromLocation(): TabType {
     const search = window.location.search;
     // View only seen by the participants
     if (search === '?participants') {
-        return {
-            moderation: false,
-            participants: true,
-        };
+        return TabType.PARTICIPANTS;
     }
     // View only for moderation?
     if (search === '?moderation') {
-        return {
-            moderation: true,
-            participants: false,
-        };
+        return TabType.MODERATION;
     }
     // Default is always shared with the participants
-    return {
-        moderation: true,
-        participants: true,
-    };
+    return TabType.SHARED;
 }
 
-export function settingsToSearch(settings: TabSettings): string {
-    if (settings.moderation) {
-        if (settings.participants) {
+export function settingsToSearch(type: TabType): string {
+    switch (type) {
+        case TabType.MODERATION:
+            return '?moderation';
+        case TabType.PARTICIPANTS:
+            return '?participants';
+        default:
             return '';
-        }
-        return '?moderation';
     }
-    return '?participants';
 }

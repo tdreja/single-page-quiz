@@ -1,34 +1,39 @@
-import React, { ReactElement } from 'react';
-import { GameState } from '../model/game/game';
+import React, { ReactElement, useContext } from 'react';
+import { Game, GameState } from '../model/game/game';
+import { GameContext } from '../components/common/GameContext';
+import { TabContext, TabSettings, TabType } from '../components/mode/TabContext';
 
-export interface Props {
-    gameState: GameState,
-    importQuiz: ReactElement,
-    players: ReactElement,
-    teams: ReactElement,
-    quiz: ReactElement,
+export interface SubPageProps {
+    state: GameState,
+    tabType: TabType[],
+    children?: ReactElement,
 }
 
-export function view(props: Props): ReactElement {
-    switch (props.gameState) {
-        case GameState.TEAM_SETUP:
-            return props.teams;
-        case GameState.PLAYER_SETUP:
-            return props.players;
-        case GameState.CONTROLLER_SETUP:
-            return (<p>ControllerSetup</p>);
-        case GameState.IMPORT_QUIZ:
-            return props.importQuiz;
-        default:
-            return props.quiz;
-    }
+interface MainProps {
+    children?: ReactElement<SubPageProps>[],
 }
 
-export const MainPage = (props: Props): ReactElement => {
+export const SubPage = ({ children }: SubPageProps): ReactElement => {
+    return (
+        <>
+            {children}
+        </>
+    );
+};
+
+export const MainPage = ({ children }: MainProps): ReactElement => {
+    const game = useContext<Game>(GameContext);
+    const tabSettings = useContext<TabSettings>(TabContext);
+
     return (
         <main id="main-content" className="d-flex w-100 ps-3 pe-3 pt-2 pb-2">
             <div className="w-100">
-                {view(props)}
+                {
+                    children
+                        ? children.filter((child) => child.props.state === game.state
+                          && child.props.tabType.includes(tabSettings.tabType))
+                        : undefined
+                }
             </div>
         </main>
     );
