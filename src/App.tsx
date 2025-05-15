@@ -8,7 +8,7 @@ import { GameContext, GameEventContext, GameEventListener } from './components/c
 import { prepareGame } from './dev/dev-setup';
 import { restoreGameFromStorage, storeGameInStorage, storeStaticGameData } from './components/common/Storage';
 import { SettingsBar } from './sections/top/SettingsBar';
-import { readSettingsFromLocation, TabContext, TabSettings, TabType } from './components/mode/TabContext';
+import { readSettingsFromLocation, TabContext, TabType } from './components/mode/TabContext';
 import { BroadcastJson, restoreGameFromBroadcast, toBroadcastJson } from './model/broadcast';
 import { i18n, I18N } from './i18n/I18N';
 import { MainPage, SubPage } from './pages/MainPage';
@@ -19,9 +19,6 @@ import { QuizImporterView } from './pages/importer/QuizImporterView';
 import { TeamsPageForParticipants } from './pages/teams/TeamsPageForParticipants';
 import { PlayersPageForParticipants } from './pages/players/PlayersPageForParticipants';
 import { TeamsBottomNav } from './sections/bottom/TeamsBottomNav';
-import { QuizPage } from './pages/quiz/QuizPage';
-import { QuestionSelectionPage } from './pages/quiz/overview/QuestionSelectionPage';
-import { QuestionPageForParticipants } from './pages/quiz/questions/QuestionPageForParticipants';
 import { PlayersPageForModeration } from './pages/players/PlayersPageForModeration';
 import { TeamsPageForModeration } from './pages/teams/TeamsPageForModeration';
 import { QuizParticipantsPage } from './pages/quiz/QuizParticipantsPage';

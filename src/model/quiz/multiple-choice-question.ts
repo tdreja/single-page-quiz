@@ -1,11 +1,6 @@
-import { Team, TeamColor } from '../game/team';
-import {
-    JsonStaticChoiceData,
-    JsonStaticQuestionData,
-    JsonDynamicQuestionData,
-    IndexedByColor,
-} from './json';
-import { addPointsToTeam, CompletionPercent, ImageQuestion, Question, QuestionType, TextQuestion } from './question';
+import { TeamColor } from '../game/team';
+import { IndexedByColor, JsonStaticChoiceData, JsonStaticQuestionData } from './json';
+import { BaseQuestion, ImageQuestion, Question, QuestionType, TextQuestion } from './question';
 
 /**
  * Base API for choices selectable in multiple-choice questions
@@ -18,7 +13,7 @@ export interface Choice {
 
 /**
  * Base API for a textual choice
-*/
+ */
 export interface TextChoice extends Choice {
     readonly text: string,
 }
@@ -34,37 +29,18 @@ export interface MultipleChoiceQuestion<CHOICE extends Choice> extends Question 
 /**
  * Multiple choice question with text question and text answers
  */
-export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextChoice>, TextQuestion {
+export class TextMultipleChoiceQuestion extends BaseQuestion implements MultipleChoiceQuestion<TextChoice>, TextQuestion {
     private readonly _choices: Map<string, TextChoice>;
-    private readonly _completedBy: Set<TeamColor>;
-    private readonly _pointsForCompletion: number;
-    private readonly _inColumn: string;
     private readonly _text: string;
-    private _completed: boolean;
 
     public constructor(inColumn: string, pointsForCompletion: number, text: string, choices: Map<string, TextChoice>) {
-        this._inColumn = inColumn;
+        super(inColumn, pointsForCompletion);
         this._choices = choices;
-        this._pointsForCompletion = pointsForCompletion;
         this._text = text;
-        this._completedBy = new Set<TeamColor>();
-        this._completed = false;
-    }
-
-    public get useBuzzer(): boolean {
-        return true;
     }
 
     public get choices(): Map<string, TextChoice> {
         return this._choices;
-    }
-
-    public get pointsForCompletion(): number {
-        return this._pointsForCompletion;
-    }
-
-    public get inColumn(): string {
-        return this._inColumn;
     }
 
     public get text(): string {
@@ -73,26 +49,6 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
 
     public get type(): QuestionType {
         return QuestionType.TEXT_MULTIPLE_CHOICE;
-    }
-
-    public get completedBy(): Set<TeamColor> {
-        return this._completedBy;
-    }
-
-    public get completed(): boolean {
-        return this._completed;
-    }
-
-    public completeQuestion(teams: Iterable<Team>, completion: CompletionPercent) {
-        this._completedBy.clear();
-        for (const team of teams) {
-            const teamCompletion = completion[team.color];
-            if (teamCompletion !== undefined && teamCompletion > 0) {
-                this._completedBy.add(team.color);
-                addPointsToTeam(this.pointsForCompletion, teamCompletion, team);
-            }
-        }
-        this._completed = true;
     }
 
     public get choicesSorted(): Array<TextChoice> {
@@ -116,39 +72,25 @@ export class TextMultipleChoiceQuestion implements MultipleChoiceQuestion<TextCh
         };
     }
 
-    public exportDynamicQuestionData(): JsonDynamicQuestionData {
+    protected exportAdditionalData(): IndexedByColor | undefined {
         const data: IndexedByColor = {};
         for (const choice of this._choices.values()) {
             for (const team of choice.selectedBy) {
                 data[team] = choice.choiceId;
             }
         }
-        return {
-            inSection: this._inColumn,
-            pointsForCompletion: this._pointsForCompletion,
-            completed: this._completed,
-            completedBy: Array.from(this._completedBy),
-            additionalData: data,
-        };
+        return data;
     }
 
-    public importDynamicQuestionData(state: JsonDynamicQuestionData) {
-        if (this._pointsForCompletion !== state.pointsForCompletion && this._inColumn !== state.inSection) {
-            return;
-        }
-        this._completed = state.completed || false;
-        this._completedBy.clear();
-        if (state.completedBy) {
-            state.completedBy.forEach((t) => this._completedBy.add(t));
-        }
+    protected importAdditionalData(additionalData?: IndexedByColor) {
         for (const choice of this._choices.values()) {
             choice.selectedBy.clear();
         }
-        if (!state.additionalData) {
+        if (!additionalData) {
             return;
         }
-        for (const team of Object.keys(state.additionalData) as [TeamColor]) {
-            const choiceId = state.additionalData[team];
+        for (const team of Object.keys(additionalData) as [TeamColor]) {
+            const choiceId = additionalData[team];
             const choice = choiceId ? this.choices.get(choiceId) : undefined;
             if (choice) {
                 choice.selectedBy.add(team);

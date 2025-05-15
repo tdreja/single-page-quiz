@@ -8,7 +8,7 @@ import {
     TextMultipleChoiceQuestion,
 } from '../model/quiz/multiple-choice-question';
 import { Changes, EventType, GameRoundEvent, GameUpdate, noUpdate, update } from './common-events';
-import { CompletionPercent } from '../model/quiz/question';
+import { CompletionPoints } from '../model/quiz/question';
 import { ActionQuestion } from '../model/quiz/action-question';
 
 export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
@@ -48,7 +48,7 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
 
         // Complete round if possible
         if (choice.correct) {
-            const completion: CompletionPercent = {};
+            const completion: CompletionPoints = {};
             for (const team of teams) {
                 completion[team.color] = 100;
             }
@@ -116,7 +116,7 @@ export class SubmitEstimateEvent extends GameRoundEvent {
             return update(game, Changes.CURRENT_ROUND);
         }
 
-        let completion: CompletionPercent = {};
+        let completion: CompletionPoints = {};
         let closestDistance: number | null = null;
         for (const [team, estimate] of question.estimates) {
             const dist = Math.abs(question.target - estimate);
@@ -143,9 +143,9 @@ export class SubmitEstimateEvent extends GameRoundEvent {
 }
 
 export class CompleteActionEvent extends GameRoundEvent {
-    private readonly _completion: CompletionPercent;
+    private readonly _completion: CompletionPoints;
 
-    public constructor(completion?: CompletionPercent) {
+    public constructor(completion?: CompletionPoints) {
         super(EventType.COMPLETE_ACTION);
         this._completion = completion || {};
     }

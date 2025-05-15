@@ -93,6 +93,8 @@ export const i18n_de: Labels = {
         headlineCurrentAttempt: 'Es darf antworten:',
         noWinners: 'Keine korrekte Antwort erhalten',
         teamsWon: 'Gewinner:',
+        actionCompleteQuestion: 'Frage abschließen',
+        headlineCompletionPercent: 'Punkteverteilung',
     },
     quiz: {
         nextSelectingTeam: 'Nächste Frage wählt Team:',

@@ -78,6 +78,8 @@ export const i18n_en: Labels = {
         headlineCurrentAttempt: 'Attempting to answer:',
         noWinners: 'Receive no correct answer',
         teamsWon: 'Winners:',
+        actionCompleteQuestion: 'Complete question',
+        headlineCompletionPercent: 'Allocation of points',
     },
     quiz: {
         nextSelectingTeam: 'Next question gets picked by team:',
