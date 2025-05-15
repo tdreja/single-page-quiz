@@ -11,7 +11,7 @@ import { ActionQuestionModerationView } from './action/ActionQuestionView';
 import { EstimateQuestion } from '../../../model/quiz/estimate-question';
 import { EstimateQuestionModerationView } from './estimate/EstimateQuestionView';
 
-function renderQuestion(round: GameRound, shared: boolean, question: Question): ReactElement | undefined {
+function renderQuestion(round: GameRound, shared: boolean, question: Question): ReactElement {
     if (question instanceof TextMultipleChoiceQuestion) {
         return (<TextMultipleChoiceQuestionModerationView question={question} shared={shared} round={round} />);
     }
@@ -24,7 +24,7 @@ function renderQuestion(round: GameRound, shared: boolean, question: Question): 
     if (question instanceof EstimateQuestion) {
         return (<EstimateQuestionModerationView question={question} shared={shared} round={round} />);
     }
-    return undefined;
+    return (<></>);
 }
 
 export const QuestionModerationView = ({ round, shared }: RoundProps & SharedProps): ReactElement => {

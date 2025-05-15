@@ -10,7 +10,7 @@ import { ActionQuestionParticipantsView } from './action/ActionQuestionView';
 import { EstimateQuestion } from '../../../model/quiz/estimate-question';
 import { EstimateQuestionParticipantsView } from './estimate/EstimateQuestionView';
 
-function renderQuestion(round: GameRound, question: Question): ReactElement | undefined {
+function renderQuestion(round: GameRound, question: Question): ReactElement {
     if (question instanceof TextMultipleChoiceQuestion) {
         return (<TextMultipleChoiceQuestionParticipantsView question={question} round={round} />);
     }
@@ -23,7 +23,7 @@ function renderQuestion(round: GameRound, question: Question): ReactElement | un
     if (question instanceof EstimateQuestion) {
         return (<EstimateQuestionParticipantsView question={question} round={round} />);
     }
-    return undefined;
+    return (<></>);
 }
 
 export const QuestionParticipantsView = ({ round }: RoundProps): ReactElement => {
