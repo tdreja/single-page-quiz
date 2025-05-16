@@ -4,6 +4,27 @@ export type Completion = {
     [team in TeamColor]?: number;
 };
 
+export function splitUpPoints(oldCompletion?: Completion,
+    maxPoints?: number,
+    changedTeam?: TeamColor): Completion {
+    if (!maxPoints || maxPoints < 0 || !changedTeam) {
+        return oldCompletion || {};
+    }
+    const newCompletion: Completion = {
+        [changedTeam]: maxPoints,
+    };
+    if (!oldCompletion) {
+        return newCompletion;
+    }
+    const otherTeams = Object.keys(oldCompletion)
+        .filter((key) => key !== changedTeam) as Array<TeamColor>;
+    const newPoints = Math.floor(maxPoints / (otherTeams.length + 1));
+    for (const team of otherTeams) {
+        newCompletion[team] = newPoints;
+    }
+    return newCompletion;
+}
+
 export function recalculateCompletion(
     oldCompletion?: Completion,
     maxPoints?: number,

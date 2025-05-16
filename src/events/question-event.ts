@@ -8,8 +8,8 @@ import {
     TextMultipleChoiceQuestion,
 } from '../model/quiz/multiple-choice-question';
 import { Changes, EventType, GameRoundEvent, GameUpdate, noUpdate, update } from './common-events';
-import { CompletionPoints } from '../model/quiz/question';
 import { ActionQuestion } from '../model/quiz/action-question';
+import { Completion, recalculateCompletion, splitUpPoints } from '../model/quiz/Completion';
 
 export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
     private readonly _choiceId: string;
@@ -48,7 +48,7 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
 
         // Complete round if possible
         if (choice.correct) {
-            const completion: CompletionPoints = {};
+            const completion: Completion = {};
             for (const team of teams) {
                 completion[team.color] = 100;
             }
@@ -116,15 +116,15 @@ export class SubmitEstimateEvent extends GameRoundEvent {
             return update(game, Changes.CURRENT_ROUND);
         }
 
-        let completion: CompletionPoints = {};
+        let completion: Completion = {};
         let closestDistance: number | null = null;
         for (const [team, estimate] of question.estimates) {
             const dist = Math.abs(question.target - estimate);
             if (closestDistance === null || closestDistance > dist) {
-                completion = { [team]: 100 };
+                completion = recalculateCompletion(completion, question.pointsForCompletion, team, question.pointsForCompletion);
                 closestDistance = dist;
             } else if (closestDistance === dist) {
-                completion[team] = 100;
+                completion = splitUpPoints(completion, question.pointsForCompletion, team);
             }
         }
 
@@ -143,9 +143,9 @@ export class SubmitEstimateEvent extends GameRoundEvent {
 }
 
 export class CompleteActionEvent extends GameRoundEvent {
-    private readonly _completion: CompletionPoints;
+    private readonly _completion: Completion;
 
-    public constructor(completion?: CompletionPoints) {
+    public constructor(completion?: Completion) {
         super(EventType.COMPLETE_ACTION);
         this._completion = completion || {};
     }
