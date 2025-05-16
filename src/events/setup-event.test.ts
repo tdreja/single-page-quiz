@@ -13,14 +13,15 @@ import {
 import {
     AddPlayerEvent,
     AddTeamEvent,
-    UpdatePlayerEvent,
     ChangeTeamColorEvent,
     findSmallestTeam,
     MovePlayerEvent,
     RemovePlayerEvent,
     RemoveTeamEvent,
     ReRollEmojiEvent,
+    ResetPlayersEvent,
     ShuffleTeamsEvent,
+    UpdatePlayerEvent,
 } from './setup-events';
 import { Changes } from './common-events';
 import { Game } from '../model/game/game';
@@ -56,7 +57,7 @@ test('addPlayer', () => {
 
 test('removePlayer', () => {
     expect(game.players.size).toBe(2);
-    game = expectUpdate(new RemovePlayerEvent(Emoji.DUCK).updateGame(game), Changes.GAME_SETUP);
+    game = expectUpdate(new RemovePlayerEvent([Emoji.DUCK]).updateGame(game), Changes.GAME_SETUP);
     expect(game.players.size).toBe(1);
     expect(teamBlue.players.size).toBe(0);
 });
@@ -73,6 +74,15 @@ test('reRollEmoji', () => {
     game = expectUpdate(new ReRollEmojiEvent(Emoji.DUCK).updateGame(game), Changes.GAME_SETUP);
     expect(game.players.get(Emoji.DUCK)).toBeUndefined();
     game = expectNoUpdate(new ReRollEmojiEvent(Emoji.DUCK).updateGame(game));
+});
+
+test('resetPlayers', () => {
+    playerBlueDuck.points = 100;
+    expect(playerBlueDuck.points).toBeGreaterThan(0);
+    game = expectUpdate(new ResetPlayersEvent([Emoji.DUCK]).updateGame(game), Changes.GAME_SETUP);
+    expect(game.players.get(Emoji.DUCK)).toBeDefined();
+    expect(playerBlueDuck.points).toBe(0);
+    game = expectNoUpdate(new ResetPlayersEvent([Emoji.DUCK]).updateGame(game));
 });
 
 test('addTeam', () => {

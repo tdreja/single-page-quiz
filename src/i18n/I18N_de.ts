@@ -76,6 +76,10 @@ export const i18n_de: Labels = {
         labelPoints: 'Punkte',
         labelEmoji: 'Emoji',
         labelActions: 'Aktionen',
+        labelResetAll: 'Alle Punkte zurücksetzen',
+        labelRemoveAll: 'Alle Spieler entfernen',
+        tooltipResetAll: 'Punkte aller Spieler auf 0 zurücksetzen',
+        tooltipRemoveAll: 'Alle Spieler entfernen',
     },
     question: {
         stateShowQuestion: 'Warte auf Buzzer',

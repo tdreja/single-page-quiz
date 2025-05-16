@@ -22,6 +22,7 @@ export enum EventType {
     ADD_PLAYER = 'add-player',
     REMOVE_PLAYER = 'remove-player',
     UPDATE_PLAYER = 'update-player',
+    RESET_PLAYERS = 'reset-players',
     REROLL_EMOJI = 'reroll-emoji',
 
     // Events for team setup
