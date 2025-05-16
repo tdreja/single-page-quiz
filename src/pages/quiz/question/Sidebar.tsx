@@ -31,18 +31,16 @@ export const Sidebar = ({ round, headline, className, children }: SidebarProps):
                     ? children.filter((child) => child.props.state.includes(round.state))
                     : undefined
             }
-            <div className="card-footer">
-                {timeInfo && (
-                    <>
-                        <span className="me-2">{i18n.question.headlineTimer}</span>
-                        {timeInfo.days.length > 0 && (<span className="time-section">{timeInfo.days}</span>)}
-                        {timeInfo.hours.length > 0 && (<span className="time-section">{timeInfo.hours}</span>)}
-                        <span className="time-section">{timeInfo.minutes}</span>
-                        <b className="time-section">{timeInfo.seconds}</b>
-                        <span className="time-section">{timeInfo.milliseconds}</span>
-                    </>
-                )}
-            </div>
+            {timeInfo && (
+                <div className="card-footer">
+                    <span className="me-2">{i18n.question.headlineTimer}</span>
+                    {timeInfo.days.length > 0 && (<span className="time-section">{timeInfo.days}</span>)}
+                    {timeInfo.hours.length > 0 && (<span className="time-section">{timeInfo.hours}</span>)}
+                    <span className="time-section">{timeInfo.minutes}</span>
+                    <b className="time-section">{timeInfo.seconds}</b>
+                    <span className="time-section">{timeInfo.milliseconds}</span>
+                </div>
+            )}
         </div>
     );
 };

@@ -35,7 +35,7 @@ export const TextMultipleChoiceQuestionParticipantsView = (
                 </div>
             </div>
             {/* Sidebar */}
-            <Sidebar headline={i18n.question.headlineActions} round={round}>
+            <Sidebar headline={i18n.question.headlineStatus} round={round}>
                 <ParticipantsShowQuestion state={[RoundState.SHOW_QUESTION]} />
                 <ParticipantsBuzzerActive state={[RoundState.BUZZER_ACTIVE]} />
                 <ParticipantsTeamCanAttempt state={[RoundState.TEAM_CAN_ATTEMPT]} round={round} />
@@ -61,7 +61,7 @@ export const TextMultipleChoiceQuestionModerationView = (
                 </div>
             </div>
             {/* Sidebar */}
-            <Sidebar headline={i18n.question.headlineActions} round={round}>
+            <Sidebar headline={i18n.question.headlineStatus} round={round}>
                 <ModerationShowQuestion round={round} state={[RoundState.SHOW_QUESTION]} />
                 <ModerationBuzzerActive round={round} state={[RoundState.BUZZER_ACTIVE]} />
                 <ModerationTeamCanAttempt round={round} state={[RoundState.TEAM_CAN_ATTEMPT]} />
