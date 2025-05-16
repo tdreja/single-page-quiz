@@ -8,6 +8,8 @@ import {
     TextMultipleChoiceQuestion,
 } from '../model/quiz/multiple-choice-question';
 import { Changes, EventType, GameRoundEvent, GameUpdate, noUpdate, update } from './common-events';
+import { ActionQuestion } from '../model/quiz/action-question';
+import { Completion, recalculateCompletion, splitUpPoints } from '../model/quiz/Completion';
 
 export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
     private readonly _choiceId: string;
@@ -46,7 +48,11 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
 
         // Complete round if possible
         if (choice.correct) {
-            question.completeQuestion(teams);
+            const completion: Completion = {};
+            for (const team of teams) {
+                completion[team.color] = 100;
+            }
+            question.completeQuestion(game.teams.values(), completion);
             round.state = RoundState.SHOW_RESULTS;
             round.timerStart = null;
             return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
@@ -54,7 +60,7 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
 
         // Check if another team can still answer?
         if (round.teamsAlreadyAttempted.size === game.teams.size) {
-            question.completeQuestion([]);
+            question.completeQuestion(game.teams.values(), {});
             round.state = RoundState.SHOW_RESULTS;
             round.timerStart = null;
             return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
@@ -110,20 +116,19 @@ export class SubmitEstimateEvent extends GameRoundEvent {
             return update(game, Changes.CURRENT_ROUND);
         }
 
-        let closestTeams: Array<TeamColor> = [];
+        let completion: Completion = {};
         let closestDistance: number | null = null;
         for (const [team, estimate] of question.estimates) {
             const dist = Math.abs(question.target - estimate);
             if (closestDistance === null || closestDistance > dist) {
-                closestTeams = [team];
+                completion = recalculateCompletion(completion, question.pointsForCompletion, team, question.pointsForCompletion);
                 closestDistance = dist;
             } else if (closestDistance === dist) {
-                closestTeams.push(team);
+                completion = splitUpPoints(completion, question.pointsForCompletion, team);
             }
         }
 
-        const winnerTeams: Array<Team> = getTeams(game, closestTeams);
-        question.completeQuestion(winnerTeams);
+        question.completeQuestion(game.teams.values(), completion);
         round.state = RoundState.SHOW_RESULTS;
         round.timerStart = null;
         return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
@@ -134,5 +139,24 @@ export class SubmitEstimateEvent extends GameRoundEvent {
             return round.question;
         }
         return null;
+    }
+}
+
+export class CompleteActionEvent extends GameRoundEvent {
+    private readonly _completion: Completion;
+
+    public constructor(completion?: Completion) {
+        super(EventType.COMPLETE_ACTION);
+        this._completion = completion || {};
+    }
+
+    public updateQuestionRound(game: Game, round: GameRound): GameUpdate {
+        if (!(round.question instanceof ActionQuestion)) {
+            return noUpdate(game);
+        }
+        round.question.completeQuestion(game.teams.values(), this._completion);
+        round.state = RoundState.SHOW_RESULTS;
+        round.timerStart = null;
+        return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
     }
 }

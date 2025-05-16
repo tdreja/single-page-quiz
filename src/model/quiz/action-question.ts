@@ -1,28 +1,16 @@
+import { IndexedByColor, JsonStaticQuestionData } from './json';
+import { BaseQuestion, QuestionType, TextQuestion } from './question';
 import { Team, TeamColor } from '../game/team';
-import { JsonDynamicQuestionData, JsonStaticQuestionData } from './json';
-import { addPointsToTeam, QuestionType, TextQuestion } from './question';
+import { Completion } from './Completion';
 
-export class ActionQuestion implements TextQuestion {
-    private readonly _completedBy: Set<TeamColor>;
-    private readonly _inSection: string;
-    private readonly _pointsForCompletion: number;
+export class ActionQuestion extends BaseQuestion implements TextQuestion {
     private readonly _text: string;
-    private _completed: boolean;
+    private readonly _completionPoints: Map<TeamColor, number>;
 
-    public constructor(inSection: string, pointsForCompletion: number, text: string) {
-        this._inSection = inSection;
-        this._pointsForCompletion = pointsForCompletion;
+    public constructor(inColumn: string, pointsForCompletion: number, text: string) {
+        super(inColumn, pointsForCompletion);
         this._text = text;
-        this._completedBy = new Set<TeamColor>();
-        this._completed = false;
-    }
-
-    public get inSection(): string {
-        return this._inSection;
-    }
-
-    public get pointsForCompletion(): number {
-        return this._pointsForCompletion;
+        this._completionPoints = new Map<TeamColor, number>();
     }
 
     public get text(): string {
@@ -33,21 +21,12 @@ export class ActionQuestion implements TextQuestion {
         return QuestionType.ACTION;
     }
 
-    public get completedBy(): Set<TeamColor> {
-        return this._completedBy;
+    public get completionPoints(): Map<TeamColor, number> {
+        return this._completionPoints;
     }
 
-    public get completed(): boolean {
-        return this._completed;
-    }
-
-    public completeQuestion(teams: Array<Team>) {
-        this._completedBy.clear();
-        for (const team of teams) {
-            this._completedBy.add(team.color);
-            addPointsToTeam(this.pointsForCompletion, team);
-        }
-        this._completed = true;
+    public get startTimerImmediately(): boolean {
+        return true;
     }
 
     public exportStaticQuestionData(): JsonStaticQuestionData {
@@ -58,24 +37,33 @@ export class ActionQuestion implements TextQuestion {
         };
     }
 
-    public exportDynamicQuestionData(): JsonDynamicQuestionData {
-        return {
-            inSection: this._inSection,
-            pointsForCompletion: this._pointsForCompletion,
-            completed: this._completed,
-            completedBy: Array.from(this._completedBy),
-            additionalData: {},
-        };
+    protected exportAdditionalData(): IndexedByColor | undefined {
+        const data: IndexedByColor = {};
+        for (const [color, points] of this._completionPoints) {
+            data[color] = points;
+        }
+        return data;
     }
 
-    public importDynamicQuestionData(state: JsonDynamicQuestionData) {
-        if (this._pointsForCompletion !== state.pointsForCompletion && this._inSection !== state.inSection) {
+    protected importAdditionalData(additionalData?: IndexedByColor) {
+        this._completionPoints.clear();
+        if (!additionalData) {
             return;
         }
-        this._completed = state.completed || false;
-        this._completedBy.clear();
-        if (state.completedBy) {
-            state.completedBy.forEach((t) => this._completedBy.add(t));
+        for (const team of Object.keys(additionalData) as [TeamColor]) {
+            const points = Number(additionalData[team]);
+            this._completionPoints.set(team, points);
+        }
+    }
+
+    public completeQuestion(teams: Iterable<Team>, completion: Completion) {
+        super.completeQuestion(teams, completion);
+        this._completionPoints.clear();
+        for (const team of this.completedBy) {
+            const points = completion[team];
+            if (points) {
+                this._completionPoints.set(team, points);
+            }
         }
     }
 }

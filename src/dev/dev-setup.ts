@@ -1,14 +1,49 @@
 import { AddPlayerEvent, AddTeamEvent } from '../events/setup-events';
-import {
-    Game,
-    GameRound,
-    GameColumn,
-    GameState,
-    RoundState,
-} from '../model/game/game';
+import { Game, GameColumn, GameState } from '../model/game/game';
 import { allEmojis, Emoji } from '../model/game/player';
 import { TeamColor } from '../model/game/team';
-import { TextChoice, TextMultipleChoiceQuestion } from '../model/quiz/multiple-choice-question';
+import {
+    ImageMultipleChoiceQuestion,
+    MultipleChoiceQuestion,
+    TextChoice,
+    TextMultipleChoiceQuestion,
+} from '../model/quiz/multiple-choice-question';
+import { ActionQuestion } from '../model/quiz/action-question';
+import { EstimateQuestion } from '../model/quiz/estimate-question';
+
+function buildChoices(): Map<string, TextChoice> {
+    const choiceA: TextChoice = {
+        choiceId: 'A',
+        correct: false,
+        selectedBy: new Set(),
+        text: 'Alpha',
+    };
+    const choiceB: TextChoice = {
+        choiceId: 'B',
+        correct: false,
+        selectedBy: new Set(),
+        text: 'Beta',
+    };
+    const choiceC: TextChoice = {
+        choiceId: 'C',
+        correct: true,
+        selectedBy: new Set(),
+        text: 'Gamma',
+    };
+    const choiceD: TextChoice = {
+        choiceId: 'D',
+        correct: false,
+        selectedBy: new Set(),
+        text: 'Delta',
+    };
+
+    const choices = new Map<string, TextChoice>();
+    choices.set('A', choiceA);
+    choices.set('B', choiceB);
+    choices.set('C', choiceC);
+    choices.set('D', choiceD);
+    return choices;
+}
 
 export function prepareGame(game: Game) {
     // region TeamsNav & Players
@@ -91,50 +126,23 @@ export function prepareGame(game: Game) {
 
     // region Questions
 
-    const choiceA: TextChoice = {
-        choiceId: 'A',
-        correct: false,
-        selectedBy: new Set(),
-        text: 'Alpha',
-    };
-    const choiceB: TextChoice = {
-        choiceId: 'B',
-        correct: false,
-        selectedBy: new Set(),
-        text: 'Beta',
-    };
-    const choiceC: TextChoice = {
-        choiceId: 'C',
-        correct: true,
-        selectedBy: new Set(),
-        text: 'Gamma',
-    };
-    const choiceD: TextChoice = {
-        choiceId: 'D',
-        correct: false,
-        selectedBy: new Set(),
-        text: 'Delta',
-    };
-
     let index = 0;
-    for (const sectionId of ['Alpha', 'Beta', 'Gamma', 'Delta']) {
-        const section: GameColumn = {
-            columnName: sectionId,
+    for (const columnId of ['Alpha', 'Beta', 'Gamma', 'Delta']) {
+        const column: GameColumn = {
+            columnName: columnId,
             questions: new Map(),
             index,
         };
-        game.columns.set(sectionId, section);
+        game.columns.set(columnId, column);
 
-        for (const points of [100, 200, 300, 400]) {
-            const choices = new Map<string, TextChoice>();
-            choices.set('A', choiceA);
-            choices.set('B', choiceB);
-            choices.set('C', choiceC);
-            choices.set('D', choiceD);
-
-            const textQuestion: TextMultipleChoiceQuestion = new TextMultipleChoiceQuestion(sectionId, points, 'How much is the fish?', choices);
-            section.questions.set(points, textQuestion);
-        }
+        column.questions.set(100,
+            new TextMultipleChoiceQuestion(columnId, 100, 'How much is the fish?', buildChoices()));
+        column.questions.set(200,
+            new ImageMultipleChoiceQuestion(columnId, 200, 'How much is the fish?', '', buildChoices()));
+        column.questions.set(300,
+            new ActionQuestion(columnId, 300, 'Do what you want!'));
+        column.questions.set(400,
+            new EstimateQuestion(columnId, 400, 'Do what you want!', 1000));
         index += 1;
     }
     game.state = GameState.GAME_ACTIVE;

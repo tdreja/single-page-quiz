@@ -16,6 +16,7 @@ export enum EventType {
     // Events for question types
     SELECT_FROM_MULTIPLE_CHOICE = 'select-from-multiple-choice',
     SUBMIT_ESTIMATE = 'submit-estimate',
+    COMPLETE_ACTION = 'complete-action',
 
     // Events for player setup
     ADD_PLAYER = 'add-player',
