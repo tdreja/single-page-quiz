@@ -2,7 +2,7 @@ import React, { ReactElement, useCallback, useContext, useEffect, useState } fro
 import { Game } from '../../model/game/game';
 import { Emoji, Player, sortPlayersByName } from '../../model/game/player';
 import { I18N } from '../../i18n/I18N';
-import { AddPlayerEvent } from '../../events/setup-events';
+import { AddPlayerEvent, RemovePlayerEvent, ResetPlayersEvent, ShuffleTeamsEvent } from '../../events/setup-events';
 import { PlayerForm } from './PlayerForm';
 import { TeamColor } from '../../model/game/team';
 import { Expanded } from './expanded';
@@ -29,7 +29,6 @@ export const PlayersPageForModeration = (): ReactElement | undefined => {
         if (playerNames.length === 0) {
             return;
         }
-        console.log('Input', input, 'Names', playerNames);
         onGameEvent(new AddPlayerEvent(playerNames));
         setNewPlayersText('');
     }, [newPlayersText, onGameEvent]);
@@ -68,7 +67,7 @@ export const PlayersPageForModeration = (): ReactElement | undefined => {
                         <label htmlFor="add-new-players" className="form-label">
                             {i18n.playerEditor.labelAdd}
                         </label>
-                        <div className="input-group">
+                        <div className="input-group" id="add-new-players">
                             <textarea
                                 className="form-control"
                                 value={newPlayersText}
@@ -80,6 +79,34 @@ export const PlayersPageForModeration = (): ReactElement | undefined => {
                                 onClick={addNewPlayers}
                             >
                                 person_add
+                            </span>
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="reset-all-points" className="form-label">
+                            {i18n.playerEditor.labelResetAll}
+                        </label>
+                        <div id="reset-all-points">
+                            <span
+                                className="btn btn-outline-warning material-symbols-outlined"
+                                title={i18n.playerEditor.tooltipResetAll}
+                                onClick={() => onGameEvent(new ResetPlayersEvent(Array.from(game.players.keys())))}
+                            >
+                                reset_settings
+                            </span>
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="delete-all-players" className="form-label">
+                            {i18n.playerEditor.labelRemoveAll}
+                        </label>
+                        <div id="delete-all-players">
+                            <span
+                                className="btn btn-outline-danger material-symbols-outlined"
+                                title={i18n.playerEditor.tooltipRemoveAll}
+                                onClick={() => onGameEvent(new RemovePlayerEvent(Array.from(game.players.keys())))}
+                            >
+                                group_remove
                             </span>
                         </div>
                     </div>

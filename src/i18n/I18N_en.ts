@@ -99,6 +99,10 @@ export const i18n_en: Labels = {
         labelPoints: 'Points',
         labelEmoji: 'Emoji',
         labelActions: 'Actions',
+        labelResetAll: 'Reset all points',
+        labelRemoveAll: 'Remove all players',
+        tooltipResetAll: 'Set the points of all players to 0',
+        tooltipRemoveAll: 'Remove all players',
     },
     settings: {
         tooltipModeShared: 'Shared with participants',

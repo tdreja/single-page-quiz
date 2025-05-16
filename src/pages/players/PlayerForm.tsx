@@ -137,7 +137,7 @@ export const PlayerForm = ({ player, availableTeams }: Props): ReactElement => {
                     <span
                         className="btn btn-outline-danger material-symbols-outlined"
                         style={{ gridColumn: 'delete' }}
-                        onClick={() => onGameEvent(new RemovePlayerEvent(player.emoji))}
+                        onClick={() => onGameEvent(new RemovePlayerEvent([player.emoji]))}
                         title={i18n.playerEditor.tooltipRemove}
                     >
                         person_remove

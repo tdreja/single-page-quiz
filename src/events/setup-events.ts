@@ -54,24 +54,31 @@ export class AddPlayerEvent extends BasicGameEvent {
 }
 
 export class RemovePlayerEvent extends BasicGameEvent {
-    private readonly _emoji: Emoji;
+    private readonly _emojis: Array<Emoji>;
 
-    public constructor(emoji: Emoji) {
+    public constructor(emojis: Array<Emoji>) {
         super(EventType.REMOVE_PLAYER);
-        this._emoji = emoji;
+        this._emojis = emojis;
     }
 
     public updateGame(game: Game): GameUpdate {
-        const player = game.players.get(this._emoji);
-        if (!player) {
-            return noUpdate(game);
+        let removed: boolean = false;
+        for (const emoji of this._emojis) {
+            const player = game.players.get(emoji);
+            if (!player) {
+                continue;
+            }
+            removed = true;
+            game.players.delete(emoji);
+            const team = player.team ? game.teams.get(player.team) : undefined;
+            if (team) {
+                team.players.delete(emoji);
+            }
         }
-        game.players.delete(this._emoji);
-        const team = player.team ? game.teams.get(player.team) : null;
-        if (team) {
-            team.players.delete(this._emoji);
+        if (removed) {
+            return update(game, Changes.GAME_SETUP);
         }
-        return update(game, Changes.GAME_SETUP);
+        return noUpdate(game);
     }
 }
 
@@ -122,6 +129,30 @@ export class MovePlayerEvent extends BasicGameEvent {
         player.team = this._newTeam;
         newTeam.players.set(player.emoji, player);
         return update(game, Changes.GAME_SETUP);
+    }
+}
+
+export class ResetPlayersEvent extends BasicGameEvent {
+    private readonly _emojis: Array<Emoji>;
+
+    public constructor(emojis: Array<Emoji>) {
+        super(EventType.RESET_PLAYERS);
+        this._emojis = emojis;
+    }
+
+    public updateGame(game: Game): GameUpdate {
+        let changed = false;
+        for (const emoji of this._emojis) {
+            const player = game.players.get(emoji);
+            if (player) {
+                changed = changed || player.points !== 0;
+                player.points = 0;
+            }
+        }
+        if (changed) {
+            return update(game, Changes.GAME_SETUP);
+        }
+        return noUpdate(game);
     }
 }
 
