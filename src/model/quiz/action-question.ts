@@ -25,6 +25,10 @@ export class ActionQuestion extends BaseQuestion implements TextQuestion {
         return this._completionPoints;
     }
 
+    public get startTimerImmediately(): boolean {
+        return true;
+    }
+
     public exportStaticQuestionData(): JsonStaticQuestionData {
         return {
             type: QuestionType.ACTION,

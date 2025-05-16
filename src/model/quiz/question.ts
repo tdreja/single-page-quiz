@@ -18,6 +18,7 @@ export interface Question {
     readonly type: QuestionType,
     readonly completedBy: Set<TeamColor>,
     readonly completed: boolean,
+    readonly startTimerImmediately: boolean,
     completeQuestion: (teams: Iterable<Team>, completion: Completion) => void,
     exportStaticQuestionData: () => JsonStaticQuestionData,
     exportDynamicQuestionData: () => JsonDynamicQuestionData,
@@ -68,6 +69,10 @@ export abstract class BaseQuestion implements Question {
 
     public get completed(): boolean {
         return this._completed;
+    }
+
+    public get startTimerImmediately(): boolean {
+        return false;
     }
 
     public completeQuestion(teams: Iterable<Team>, completion: Completion) {
