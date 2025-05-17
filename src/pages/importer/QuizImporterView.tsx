@@ -1,10 +1,11 @@
 import React, { ReactElement, useCallback, useState } from 'react';
 import { generateJsonQuestionTable, JsonStaticGameData } from '../../model/game/json/game';
 import { QuestionTable } from '../../model/game/game';
+import { parse } from 'yaml';
 
 const toEmptyString = () => '';
 
-async function readJson(input: HTMLInputElement): Promise<JsonStaticGameData | null> {
+async function readYaml(input: HTMLInputElement): Promise<JsonStaticGameData | null> {
     const files = input.files;
     if (!files || files.length < 1) {
         return Promise.resolve(null);
@@ -21,7 +22,7 @@ async function readJson(input: HTMLInputElement): Promise<JsonStaticGameData | n
                 resolve(null);
                 return;
             }
-            resolve(JSON.parse(raw as string) as JsonStaticGameData);
+            resolve(parse(raw as string) as JsonStaticGameData);
         };
         fileReader.readAsText(files[0]);
     });
@@ -32,7 +33,7 @@ export const QuizImporterView = (): ReactElement => {
     const [previewTable, setPreviewTable] = useState<QuestionTable<string>>(generateJsonQuestionTable({}, toEmptyString));
 
     const uploadFile = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = await readJson(event.target);
+        const file = await readYaml(event.target);
         setJson(file);
         if (file) {
             setPreviewTable(generateJsonQuestionTable(file, toEmptyString));
@@ -43,7 +44,7 @@ export const QuizImporterView = (): ReactElement => {
 
     return (
         <div>
-            <input type="file" accept="application/json" onChange={uploadFile} />
+            <input type="file" accept=".json,.yaml,.yml,application/json,application/yaml" onChange={uploadFile} />
             <table>
                 <thead>
                     <tr>
