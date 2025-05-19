@@ -1,4 +1,4 @@
-import { ReactElement, useContext, useEffect, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { Game, generateQuestionTable, QuestionTable } from '../../../model/game/game';
 import { Question } from '../../../model/quiz/question';
 import { StartRoundEvent } from '../../../events/round-events';
