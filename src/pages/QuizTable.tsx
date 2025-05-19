@@ -8,7 +8,7 @@ import { TeamColorButton } from '../components/common/TeamColorButton';
 export interface QuizTableProps<ITEM> {
     table: QuestionTable<ITEM>,
     onCellClick?: (item: ITEM) => void,
-    isCompleted: (item: ITEM) => boolean,
+    isCompleted?: (item: ITEM) => boolean,
     completedBy?: (item: ITEM) => Array<TeamColor>,
 }
 
@@ -17,7 +17,7 @@ interface QuestionCellProps<ITEM> {
     rowIndex: number,
     rowCount: number,
     onCellClick?: (item: ITEM) => void,
-    isCompleted: (item: ITEM) => boolean,
+    isCompleted?: (item: ITEM) => boolean,
     completedBy?: (item: ITEM) => Array<TeamColor>,
 }
 
@@ -119,6 +119,16 @@ function OpenQuestionCell<ITEM>({ cell, rowIndex, rowCount, onCellClick }: Quest
     );
 };
 
+function Headline<ITEM>({ cell }: QuestionCellProps<ITEM>): ReactElement {
+    return (
+        <div className="d-flex align-items-center justify-content-center">
+            <span className="rounded-pill text-bg-dark ps-3 pe-3 pb-1 pt-1 fw-bold">
+                {cell.label}
+            </span>
+        </div>
+    );
+}
+
 export function QuizTable<ITEM>({
     table, onCellClick, isCompleted, completedBy,
 }: QuizTableProps<ITEM>): ReactElement {
@@ -131,7 +141,12 @@ export function QuizTable<ITEM>({
             }}
         >
             {table.headlines.map((headline) => (
-                <span key={headline.key}>{headline.label}</span>
+                <Headline
+                    key={headline.key}
+                    cell={headline}
+                    rowIndex={0}
+                    rowCount={0}
+                />
             ))}
             {table.rows.map((row, index) => row.map((cell) => (
                 <QuestionCell

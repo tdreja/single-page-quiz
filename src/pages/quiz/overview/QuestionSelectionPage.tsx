@@ -1,13 +1,11 @@
-import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
-import { Game, generateQuestionTable, QuestionTable, QuestionTableCell } from '../../../model/game/game';
+import { ReactElement, useContext, useEffect, useState } from 'react';
+import { Game, generateQuestionTable, QuestionTable } from '../../../model/game/game';
 import { Question } from '../../../model/quiz/question';
 import { StartRoundEvent } from '../../../events/round-events';
 import { TeamColor } from '../../../model/game/team';
 import { I18N } from '../../../i18n/I18N';
 import { GameContext, GameEventContext } from '../../../components/common/GameContext';
 import { TeamColorButton } from '../../../components/common/TeamColorButton';
-import { asReactCss } from '../../../components/common/ReactCssUtils';
-import { button } from '../../../components/common/ButtonColor';
 import { QuizTable, QuizTableProps } from '../../QuizTable';
 
 export const QuestionSelectionPage = (): ReactElement => {
