@@ -2,6 +2,7 @@ import React, { ReactElement, useCallback, useState } from 'react';
 import { generateJsonQuestionTable, JsonStaticGameData } from '../../model/game/json/game';
 import { QuestionTable } from '../../model/game/game';
 import { parse } from 'yaml';
+import { QuizTable, QuizTableProps } from '../QuizTable';
 
 const toEmptyString = () => '';
 
@@ -42,31 +43,14 @@ export const QuizImporterView = (): ReactElement => {
         }
     }, [json, previewTable]);
 
+    const tableProps: QuizTableProps<string> = {
+        table: previewTable,
+    };
+
     return (
         <div>
             <input type="file" accept=".json,.yaml,.yml,application/json,application/yaml" onChange={uploadFile} />
-            <table>
-                <thead>
-                    <tr>
-                        {previewTable.headlines.map((header) => (
-                            <th key={header.key}>{header.label}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        previewTable.rows.map((row, index) => (
-                            <tr key={`row-${index}`}>
-                                {
-                                    row.map((cell) => (
-                                        <td key={cell.key}>{cell.label}</td>
-                                    ))
-                                }
-                            </tr>
-                        ))
-                    }
-                </tbody>
-            </table>
+            <QuizTable {...tableProps} />
         </div>
     );
 };
