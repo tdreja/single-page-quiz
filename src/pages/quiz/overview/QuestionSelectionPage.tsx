@@ -6,6 +6,8 @@ import { TeamColor } from '../../../model/game/team';
 import { I18N } from '../../../i18n/I18N';
 import { GameContext, GameEventContext } from '../../../components/common/GameContext';
 import { TeamColorButton } from '../../../components/common/TeamColorButton';
+import { asReactCss } from '../../../components/common/ReactCssUtils';
+import { button } from '../../../components/common/ButtonColor';
 
 interface Props {
     matrix: QuestionTableCell<Question>,
@@ -39,6 +41,44 @@ const MatrixItem = ({ matrix }: Props): ReactElement => {
     );
 };
 
+interface QuestionCellProps {
+    cell: QuestionTableCell<Question>,
+    rowIndex: number,
+    rowCount: number,
+}
+
+function questionColor(rowIndex: number, rowCount: number, outlined: boolean): React.CSSProperties {
+    const percentage = rowCount === 0 ? 0 : Math.min(100, Math.max(0, (rowIndex / rowCount) * 100));
+    return button('#fff',
+        `color-mix(in srgb, red ${percentage}%, blue)`,
+        `color-mix(in srgb, blue ${percentage}%, red)`,
+        outlined);
+}
+
+const QuestionCell = ({ cell, rowIndex, rowCount }: QuestionCellProps): ReactElement => {
+    let outlined: boolean;
+    if (cell.item) {
+        outlined = cell.item.completed;
+    } else {
+        outlined = true;
+    }
+    const completed: Array<TeamColor> = cell.item ? Array.from(cell.item.completedBy) : [];
+    return (
+        <div
+            className={`btn fw-bold d-inline-flex align-items-center justify-content-center gap-2 ${outlined ? 'btn-primary-outline' : 'btn-primary'}`}
+            style={questionColor(rowIndex, rowCount, outlined)}
+        >
+            {
+                completed.map((team) => (<TeamColorButton key={team} color={team} />))
+            }
+            {cell.label}
+            {
+                completed.map((team) => (<span key={`empty-${team}`} />))
+            }
+        </div>
+    );
+};
+
 export const QuestionSelectionPage = (): ReactElement => {
     const i18n = useContext(I18N);
     const game = useContext<Game>(GameContext);
@@ -54,6 +94,28 @@ export const QuestionSelectionPage = (): ReactElement => {
 
     return (
         <div className="d-flex flex-wrap gap-2">
+            <div
+                className="d-grid w-100 gap-2"
+                style={{
+                    ...asReactCss({ '--row-count': `${table.rows.length}` }),
+                    gridTemplateColumns: `repeat(${table.headlines.length}, 1fr)` }}
+            >
+                {
+                    table.headlines.map((headline) => (
+                        <span key={headline.key}>{headline.label}</span>
+                    ))
+                }
+                {
+                    table.rows.map((row, index) => row.map((cell) => (
+                        <QuestionCell
+                            key={cell.key}
+                            cell={cell}
+                            rowCount={table.rows.length}
+                            rowIndex={index}
+                        />
+                    )))
+                }
+            </div>
             <table className="table table-striped table-hover align-middle flex-grow-1">
                 <thead>
                     <tr>
