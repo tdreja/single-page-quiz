@@ -1,37 +1,34 @@
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
-import { Game, generateQuestionTable, QuestionTable } from '../../../model/game/game';
+import { Game, generateQuestionTable } from '../../../model/game/game';
 import { Question } from '../../../model/quiz/question';
 import { StartRoundEvent } from '../../../events/round-events';
 import { TeamColor } from '../../../model/game/team';
 import { I18N } from '../../../i18n/I18N';
 import { GameContext, GameEventContext } from '../../../components/common/GameContext';
 import { TeamColorButton } from '../../../components/common/TeamColorButton';
-import { QuizTable, QuizTableProps } from '../../QuizTable';
+import { QuizTableProps, QuizTableView } from '../../QuizTable';
+import { QuizTable } from '../../../model/base/table';
 
 export const QuestionSelectionPage = (): ReactElement => {
     const i18n = useContext(I18N);
     const game = useContext<Game>(GameContext);
     const onGameEvent = useContext(GameEventContext);
-    const [table, setTable] = useState<QuestionTable<Question>>(
-        generateQuestionTable(game, (_, question) => question),
-    );
+    const [table, setTable] = useState<QuizTable<Question>>(generateQuestionTable(game));
     const [selectingTeam, setSelectingTeam] = useState<TeamColor | null>(game.selectionOrder.length > 0 ? game.selectionOrder[0] : null);
 
     useEffect(() => {
-        setTable(generateQuestionTable(game, (_, question) => question));
+        setTable(generateQuestionTable(game));
         setSelectingTeam(game.selectionOrder.length > 0 ? game.selectionOrder[0] : null);
     }, [game]);
 
     const tableProps: QuizTableProps<Question> = {
         table,
-        isCompleted: (item) => item.completed,
-        completedBy: (item) => Array.from(item.completedBy),
         onCellClick: (item) => onGameEvent(new StartRoundEvent(item.inColumn, item.pointsForCompletion)),
     };
 
     return (
         <div className="d-flex flex-wrap gap-4">
-            <QuizTable {...tableProps} />
+            <QuizTableView {...tableProps} />
             <div>
                 <h5>{i18n.quiz.nextSelectingTeam}</h5>
                 { selectingTeam && (

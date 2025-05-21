@@ -1,24 +1,26 @@
 import React, { ReactElement, useCallback } from 'react';
-import { QuestionTable, QuestionTableCell } from '../model/game/game';
 import { asReactCss } from '../components/common/ReactCssUtils';
 import { button } from '../components/common/ButtonColor';
 import { TeamColor } from '../model/game/team';
 import { TeamColorButton } from '../components/common/TeamColorButton';
+import { QuestionCell, QuizCell, QuizTable } from '../model/base/table';
+import { OptionalQuestion } from '../model/quiz/json';
+import { BaseQuestion } from '../model/quiz/question';
 
-export interface QuizTableProps<ITEM> {
-    table: QuestionTable<ITEM>,
-    onCellClick?: (item: ITEM) => void,
-    isCompleted?: (item: ITEM) => boolean,
-    completedBy?: (item: ITEM) => Array<TeamColor>,
+export interface QuizTableProps<QUESTION extends OptionalQuestion> {
+    table: QuizTable<QUESTION>,
+    onCellClick?: (item: QUESTION) => void,
 }
 
-interface QuestionCellProps<ITEM> {
-    cell: QuestionTableCell<ITEM>,
+interface HeadlineCellProps {
+    cell: QuizCell,
+}
+
+interface QuestionCellProps<QUESTION extends OptionalQuestion> {
+    cell: QuestionCell<QUESTION>,
     rowIndex: number,
     rowCount: number,
-    onCellClick?: (item: ITEM) => void,
-    isCompleted?: (item: ITEM) => boolean,
-    completedBy?: (item: ITEM) => Array<TeamColor>,
+    onCellClick?: (item: QUESTION) => void,
 }
 
 function calcPercentage(rowIndex: number, rowCount: number) {
@@ -41,38 +43,33 @@ function pillColor(percentage: number): React.CSSProperties {
     };
 }
 
-function QuestionCell<ITEM>({
-    cell, rowIndex, rowCount, completedBy, isCompleted, onCellClick,
-}: QuestionCellProps<ITEM>): ReactElement {
-    if (cell.item && isCompleted && isCompleted(cell.item)) {
+function QuestionCellView<QUESTION extends OptionalQuestion>({
+    cell, rowIndex, rowCount, onCellClick,
+}: QuestionCellProps<QUESTION>): ReactElement {
+    if (cell.question instanceof BaseQuestion && cell.question.completed) {
         return (
-            <AnsweredQuestionCell
+            <AnsweredQuestionCellView
                 rowCount={rowCount}
                 rowIndex={rowIndex}
-                cell={cell}
-                completedBy={completedBy}
-                isCompleted={isCompleted}
-                onCellClick={onCellClick}
+                cell={cell as unknown as QuestionCell<BaseQuestion>}
             />
         );
     }
     return (
-        <OpenQuestionCell
+        <OpenQuestionCellView
             rowCount={rowCount}
             rowIndex={rowIndex}
             cell={cell}
-            completedBy={completedBy}
-            isCompleted={isCompleted}
             onCellClick={onCellClick}
         />
     );
 };
 
-function AnsweredQuestionCell<ITEM>({
-    cell, rowIndex, rowCount, completedBy,
-}: QuestionCellProps<ITEM>): ReactElement {
+function AnsweredQuestionCellView({
+    cell, rowIndex, rowCount,
+}: QuestionCellProps<BaseQuestion>): ReactElement {
     const percentage = calcPercentage(rowIndex, rowCount);
-    const completed: Array<TeamColor> = cell.item && completedBy ? completedBy(cell.item) : [];
+    const completed: Array<TeamColor> = cell.question ? Array.from(cell.question.completedBy) : [];
     return (
         <div
             className="btn disabled d-inline-grid align-items-center justify-content-between gap-2 btn-primary-outline"
@@ -98,11 +95,13 @@ function AnsweredQuestionCell<ITEM>({
     );
 };
 
-function OpenQuestionCell<ITEM>({ cell, rowIndex, rowCount, onCellClick }: QuestionCellProps<ITEM>): ReactElement {
+function OpenQuestionCellView<QUESTION extends OptionalQuestion>(
+    { cell, rowIndex, rowCount, onCellClick }: QuestionCellProps<QUESTION>,
+): ReactElement {
     const percentage = calcPercentage(rowIndex, rowCount);
     const listener = useCallback(() => {
-        if (cell.item && onCellClick) {
-            onCellClick(cell.item);
+        if (cell.question && onCellClick) {
+            onCellClick(cell.question);
         }
     }, [cell, onCellClick]);
 
@@ -119,7 +118,7 @@ function OpenQuestionCell<ITEM>({ cell, rowIndex, rowCount, onCellClick }: Quest
     );
 };
 
-function Headline<ITEM>({ cell }: QuestionCellProps<ITEM>): ReactElement {
+function HeadlineView({ cell }: HeadlineCellProps): ReactElement {
     return (
         <div className="d-flex align-items-center justify-content-center">
             <span className="rounded-pill text-bg-dark ps-3 pe-3 pb-1 pt-1 fw-bold">
@@ -129,34 +128,30 @@ function Headline<ITEM>({ cell }: QuestionCellProps<ITEM>): ReactElement {
     );
 }
 
-export function QuizTable<ITEM>({
-    table, onCellClick, isCompleted, completedBy,
-}: QuizTableProps<ITEM>): ReactElement {
+export function QuizTableView<QUESTION extends OptionalQuestion>({
+    table, onCellClick,
+}: QuizTableProps<QUESTION>): ReactElement {
     return (
         <div
             className="d-grid w-100 gap-2"
             style={{
                 ...asReactCss({ '--row-count': `${table.rows.length}` }),
-                gridTemplateColumns: `repeat(${table.headlines.length}, 1fr)`,
+                gridTemplateColumns: `repeat(${table.columnNames.length}, 1fr)`,
             }}
         >
-            {table.headlines.map((headline) => (
-                <Headline
+            {table.columnNames.map((headline) => (
+                <HeadlineView
                     key={headline.key}
                     cell={headline}
-                    rowIndex={0}
-                    rowCount={0}
                 />
             ))}
             {table.rows.map((row, index) => row.map((cell) => (
-                <QuestionCell
+                <QuestionCellView
                     key={cell.key}
                     cell={cell}
                     rowCount={table.rows.length}
                     rowIndex={index}
                     onCellClick={onCellClick}
-                    completedBy={completedBy}
-                    isCompleted={isCompleted}
                 />
             )))}
         </div>

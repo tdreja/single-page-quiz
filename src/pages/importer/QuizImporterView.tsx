@@ -1,10 +1,9 @@
 import React, { ReactElement, useCallback, useState } from 'react';
 import { generateJsonQuestionTable, JsonStaticGameData } from '../../model/game/json/game';
-import { QuestionTable } from '../../model/game/game';
 import { parse } from 'yaml';
-import { QuizTable, QuizTableProps } from '../QuizTable';
-
-const toEmptyString = () => '';
+import { QuizTableView, QuizTableProps } from '../QuizTable';
+import { QuizTable } from '../../model/base/table';
+import { JsonStaticQuestionData } from '../../model/quiz/json';
 
 async function readYaml(input: HTMLInputElement): Promise<JsonStaticGameData | null> {
     const files = input.files;
@@ -31,26 +30,26 @@ async function readYaml(input: HTMLInputElement): Promise<JsonStaticGameData | n
 
 export const QuizImporterView = (): ReactElement => {
     const [json, setJson] = useState<JsonStaticGameData | null>(null);
-    const [previewTable, setPreviewTable] = useState<QuestionTable<string>>(generateJsonQuestionTable({}, toEmptyString));
+    const [previewTable, setPreviewTable] = useState<QuizTable<JsonStaticQuestionData>>(generateJsonQuestionTable({}));
 
     const uploadFile = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = await readYaml(event.target);
         setJson(file);
         if (file) {
-            setPreviewTable(generateJsonQuestionTable(file, toEmptyString));
+            setPreviewTable(generateJsonQuestionTable(file));
         } else {
-            setPreviewTable(generateJsonQuestionTable({}, toEmptyString));
+            setPreviewTable(generateJsonQuestionTable({}));
         }
     }, [json, previewTable]);
 
-    const tableProps: QuizTableProps<string> = {
+    const tableProps: QuizTableProps<JsonStaticQuestionData> = {
         table: previewTable,
     };
 
     return (
         <div>
             <input type="file" accept=".json,.yaml,.yml,application/json,application/yaml" onChange={uploadFile} />
-            <QuizTable {...tableProps} />
+            <QuizTableView {...tableProps} />
         </div>
     );
 };

@@ -1,5 +1,5 @@
 import { Team, TeamColor } from '../game/team';
-import { IndexedByColor, JsonDynamicQuestionData, JsonStaticQuestionData } from './json';
+import { IndexedByColor, JsonDynamicQuestionData, JsonStaticQuestionData, OptionalQuestion } from './json';
 import { Completion } from './Completion';
 
 export enum QuestionType {
@@ -12,7 +12,7 @@ export enum QuestionType {
 /**
  * Base API for all questions
  */
-export interface Question {
+export interface Question extends OptionalQuestion {
     readonly pointsForCompletion: number,
     readonly inColumn: string,
     readonly type: QuestionType,
