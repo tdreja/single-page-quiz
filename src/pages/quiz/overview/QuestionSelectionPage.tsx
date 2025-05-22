@@ -8,8 +8,9 @@ import { GameContext, GameEventContext } from '../../../components/common/GameCo
 import { TeamColorButton } from '../../../components/common/TeamColorButton';
 import { QuizTableProps, QuizTableView } from '../../QuizTable';
 import { QuizTable } from '../../../model/base/table';
+import { SharedProps } from '../SharedProps';
 
-export const QuestionSelectionPage = (): ReactElement => {
+export const QuestionSelectionPage = ({ shared }: SharedProps): ReactElement => {
     const i18n = useContext(I18N);
     const game = useContext<Game>(GameContext);
     const onGameEvent = useContext(GameEventContext);
@@ -23,6 +24,7 @@ export const QuestionSelectionPage = (): ReactElement => {
 
     const tableProps: QuizTableProps<Question> = {
         table,
+        showDetails: !shared,
         onCellClick: (item) => onGameEvent(new StartRoundEvent(item.inColumn, item.pointsForCompletion)),
     };
 

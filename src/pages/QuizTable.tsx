@@ -1,15 +1,18 @@
-import React, { ReactElement, useCallback } from 'react';
+import React, { ReactElement, useCallback, useContext } from 'react';
 import { asReactCss } from '../components/common/ReactCssUtils';
 import { button } from '../components/common/ButtonColor';
 import { TeamColor } from '../model/game/team';
 import { TeamColorButton } from '../components/common/TeamColorButton';
 import { QuestionCell, QuizCell, QuizTable } from '../model/base/table';
 import { OptionalQuestion } from '../model/quiz/json';
-import { BaseQuestion } from '../model/quiz/question';
+import { BaseQuestion, QuestionType } from '../model/quiz/question';
+import { I18N } from '../i18n/I18N';
+import { QuestionTypeIcons } from '../components/common/QuestionTypeIcons';
 
 export interface QuizTableProps<QUESTION extends OptionalQuestion> {
     table: QuizTable<QUESTION>,
     onCellClick?: (item: QUESTION) => void,
+    showDetails: boolean,
 }
 
 interface HeadlineCellProps {
@@ -21,6 +24,7 @@ interface QuestionCellProps<QUESTION extends OptionalQuestion> {
     rowIndex: number,
     rowCount: number,
     onCellClick?: (item: QUESTION) => void,
+    showDetails: boolean,
 }
 
 function calcPercentage(rowIndex: number, rowCount: number) {
@@ -44,7 +48,7 @@ function pillColor(percentage: number): React.CSSProperties {
 }
 
 function QuestionCellView<QUESTION extends OptionalQuestion>({
-    cell, rowIndex, rowCount, onCellClick,
+    cell, rowIndex, rowCount, showDetails, onCellClick,
 }: QuestionCellProps<QUESTION>): ReactElement {
     if (cell.question instanceof BaseQuestion && cell.question.completed) {
         return (
@@ -52,6 +56,7 @@ function QuestionCellView<QUESTION extends OptionalQuestion>({
                 rowCount={rowCount}
                 rowIndex={rowIndex}
                 cell={cell as unknown as QuestionCell<BaseQuestion>}
+                showDetails={showDetails}
             />
         );
     }
@@ -60,16 +65,19 @@ function QuestionCellView<QUESTION extends OptionalQuestion>({
             rowCount={rowCount}
             rowIndex={rowIndex}
             cell={cell}
+            showDetails={showDetails}
             onCellClick={onCellClick}
         />
     );
 };
 
 function AnsweredQuestionCellView({
-    cell, rowIndex, rowCount,
+    cell, rowIndex, rowCount, showDetails,
 }: QuestionCellProps<BaseQuestion>): ReactElement {
+    const i18n = useContext(I18N);
     const percentage = calcPercentage(rowIndex, rowCount);
     const completed: Array<TeamColor> = cell.question ? Array.from(cell.question.completedBy) : [];
+    const questionType: QuestionType = cell.question?.type || QuestionType.TEXT_MULTIPLE_CHOICE;
     return (
         <div
             className="btn disabled d-inline-grid align-items-center justify-content-between gap-2 btn-primary-outline"
@@ -89,15 +97,23 @@ function AnsweredQuestionCellView({
                 {cell.label}
             </span>
             <div>
-
+                {showDetails && (
+                    <span
+                        className="material-symbols-outlined"
+                        title={i18n.questionTypes[questionType]}
+                    >
+                        {QuestionTypeIcons[questionType]}
+                    </span>
+                )}
             </div>
         </div>
     );
 };
 
 function OpenQuestionCellView<QUESTION extends OptionalQuestion>(
-    { cell, rowIndex, rowCount, onCellClick }: QuestionCellProps<QUESTION>,
+    { cell, rowIndex, rowCount, showDetails, onCellClick }: QuestionCellProps<QUESTION>,
 ): ReactElement {
+    const i18n = useContext(I18N);
     const percentage = calcPercentage(rowIndex, rowCount);
     const listener = useCallback(() => {
         if (cell.question && onCellClick) {
@@ -105,6 +121,7 @@ function OpenQuestionCellView<QUESTION extends OptionalQuestion>(
         }
     }, [cell, onCellClick]);
 
+    const questionType: QuestionType = cell.question?.type || QuestionType.TEXT_MULTIPLE_CHOICE;
     return (
         <div
             className="btn fw-bold d-inline-grid align-items-center justify-content-between gap-2 btn-primary"
@@ -113,7 +130,16 @@ function OpenQuestionCellView<QUESTION extends OptionalQuestion>(
         >
             <span />
             <span className="rounded-pill text-bg-light ps-3 pt-1 pb-1 pe-3">{cell.label}</span>
-            <span />
+            <div>
+                {showDetails && (
+                    <span
+                        className="material-symbols-outlined"
+                        title={i18n.questionTypes[questionType]}
+                    >
+                        {QuestionTypeIcons[questionType]}
+                    </span>
+                )}
+            </div>
         </div>
     );
 };
@@ -129,7 +155,7 @@ function HeadlineView({ cell }: HeadlineCellProps): ReactElement {
 }
 
 export function QuizTableView<QUESTION extends OptionalQuestion>({
-    table, onCellClick,
+    table, showDetails, onCellClick,
 }: QuizTableProps<QUESTION>): ReactElement {
     return (
         <div
@@ -151,6 +177,7 @@ export function QuizTableView<QUESTION extends OptionalQuestion>({
                     cell={cell}
                     rowCount={table.rows.length}
                     rowIndex={index}
+                    showDetails={showDetails}
                     onCellClick={onCellClick}
                 />
             )))}

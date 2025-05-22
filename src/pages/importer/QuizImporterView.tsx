@@ -1,9 +1,10 @@
 import React, { ReactElement, useCallback, useState } from 'react';
 import { generateJsonQuestionTable, JsonStaticGameData } from '../../model/game/json/game';
 import { parse } from 'yaml';
-import { QuizTableView, QuizTableProps } from '../QuizTable';
+import { QuizTableProps, QuizTableView } from '../QuizTable';
 import { QuizTable } from '../../model/base/table';
 import { JsonStaticQuestionData } from '../../model/quiz/json';
+import { SharedProps } from '../quiz/SharedProps';
 
 async function readYaml(input: HTMLInputElement): Promise<JsonStaticGameData | null> {
     const files = input.files;
@@ -28,7 +29,7 @@ async function readYaml(input: HTMLInputElement): Promise<JsonStaticGameData | n
     });
 }
 
-export const QuizImporterView = (): ReactElement => {
+export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
     const [json, setJson] = useState<JsonStaticGameData | null>(null);
     const [previewTable, setPreviewTable] = useState<QuizTable<JsonStaticQuestionData>>(generateJsonQuestionTable({}));
 
@@ -44,6 +45,7 @@ export const QuizImporterView = (): ReactElement => {
 
     const tableProps: QuizTableProps<JsonStaticQuestionData> = {
         table: previewTable,
+        showDetails: !shared,
     };
 
     return (

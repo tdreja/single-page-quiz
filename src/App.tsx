@@ -114,8 +114,11 @@ function App() {
                             </SubPage>
 
                             {/* Import */}
-                            <SubPage state={GameState.IMPORT_QUIZ} tabType={[TabType.MODERATION, TabType.SHARED]}>
-                                <QuizImporterView />
+                            <SubPage state={GameState.IMPORT_QUIZ} tabType={[TabType.MODERATION]}>
+                                <QuizImporterView shared={false} />
+                            </SubPage>
+                            <SubPage state={GameState.IMPORT_QUIZ} tabType={[TabType.SHARED]}>
+                                <QuizImporterView shared={true} />
                             </SubPage>
 
                             {/* Quiz */}
