@@ -9,6 +9,7 @@ export type JsonPlayer = {
 };
 
 export interface JsonPlayerData {
+    quizName?: string,
     players?: Array<JsonPlayer>,
 }
 

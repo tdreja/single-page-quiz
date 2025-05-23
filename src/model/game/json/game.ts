@@ -12,6 +12,7 @@ import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team';
  * @see Game
  */
 export interface JsonStaticGameData {
+    quizName?: string,
     columns?: Array<JsonStaticColumnData>,
 }
 
@@ -88,6 +89,7 @@ export function exportGame(game: Game): JsonUpdatableGameData {
     return {
         teams,
         players,
+        quizName: game.quizName,
         columns: sections,
         state: game.state,
         selectionOrder: game.selectionOrder,
@@ -126,6 +128,11 @@ export function importGame(game: Game, json?: JsonUpdatableGameData) {
     if (json.selectionOrder) {
         game.selectionOrder.length = 0;
         json.selectionOrder.forEach((item) => game.selectionOrder.push(item));
+    }
+    if (json.quizName) {
+        game.quizName = json.quizName;
+    } else {
+        game.quizName = `Quiz ${new Date().toLocaleDateString()}`;
     }
     game.teamNavExpanded = !!json.teamNavExpanded;
 }

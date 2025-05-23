@@ -57,6 +57,7 @@ export function exportStaticGameContent(game: Game): JsonStaticGameData {
         sections.push(exportStaticSectionContent(section));
     }
     return {
+        quizName: game.quizName,
         columns: sections,
     };
 }
@@ -73,6 +74,9 @@ export function importStaticGameContent(game: Game, quiz?: JsonStaticGameData) {
             game.columns.set(gameSection.columnName, gameSection);
         }
         count++;
+    }
+    if (quiz.quizName) {
+        game.quizName = quiz.quizName;
     }
 }
 

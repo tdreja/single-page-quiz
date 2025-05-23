@@ -8,23 +8,31 @@ import { JsonPlayer, JsonPlayerData, storePlayer } from '../../model/game/json/p
 import { JsonTeam, storeTeam } from '../../model/game/json/team';
 import { JsonTeamAndPlayerData } from '../../model/game/json/game';
 
+function downloadYaml(yaml: string, fileName: string) {
+    const href = document.createElement('a');
+    href.download = fileName;
+    const url = URL.createObjectURL(new Blob([yaml], { type: 'application/yaml' }));
+    href.href = url;
+    href.click();
+}
+
 export const ExportQuizView = (): ReactElement => {
     const i18n = useContext(I18N);
     const game = useContext<Game>(GameContext);
 
     const exportQuiz = useCallback(() => {
         const content = stringify(exportStaticGameContent(game));
-        const url = URL.createObjectURL(new Blob([content], { type: 'application/yaml' }));
-        window.open(url, '_self');
+        downloadYaml(content, `${game.quizName}.yaml`);
     }, [game]);
 
     const exportPlayers = useCallback(() => {
         const players: Array<JsonPlayer> = Array.from(game.players.values())
             .map((player) => storePlayer(player));
-        const playerList: JsonPlayerData = { players };
-        const content = stringify(playerList);
-        const url = URL.createObjectURL(new Blob([content], { type: 'application/yaml' }));
-        window.open(url, '_self');
+        const playerList: JsonPlayerData = {
+            players,
+            quizName: game.quizName,
+        };
+        downloadYaml(stringify(playerList), `Players-${game.quizName}.yaml`);
     }, [game]);
 
     const exportTeamsAndPlayers = useCallback(() => {
@@ -32,10 +40,12 @@ export const ExportQuizView = (): ReactElement => {
             .map((player) => storePlayer(player));
         const teams: Array<JsonTeam> = Array.from(game.teams.values())
             .map((team) => storeTeam(team));
-        const result: JsonTeamAndPlayerData = { players, teams };
-        const content = stringify(result);
-        const url = URL.createObjectURL(new Blob([content], { type: 'application/yaml' }));
-        window.open(url, '_self');
+        const result: JsonTeamAndPlayerData = {
+            players,
+            teams,
+            quizName: game.quizName,
+        };
+        downloadYaml(stringify(result), `Teams-Players-${game.quizName}.yaml`);
     }, [game]);
 
     return (
