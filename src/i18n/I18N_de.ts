@@ -63,6 +63,11 @@ export const i18n_de: Labels = {
         [GameState.GAME_ACTIVE]: 'Quiz',
         [GameState.IMPORT_QUIZ]: 'Quizdatei importieren',
     },
+    importer: {
+        formHeader: 'Neues Quiz importieren',
+        previewHeader: 'Vorschau',
+        noNewQuizUploaded: 'Keine Quiz-Datei hochgeladen',
+    },
     playerEditor: {
         tooltipReRollEmoji: 'Neuer zufälliger Emoji',
         tooltipRename: 'Spieler umbenennen',
@@ -110,6 +115,8 @@ export const i18n_de: Labels = {
     },
     quiz: {
         nextSelectingTeam: 'Nächste Frage wählt Team:',
+        columns: 'Kategorien',
+        nextTeamHeader: 'Wer ist dran?',
     },
     settings: {
         tooltipModeShared: 'Geteilt mit Teilnehmern',

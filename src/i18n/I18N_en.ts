@@ -21,6 +21,11 @@ export const i18n_en: Labels = {
         [GameState.GAME_ACTIVE]: 'Quiz',
         [GameState.IMPORT_QUIZ]: 'Import quiz file',
     },
+    importer: {
+        formHeader: 'Import new quiz',
+        previewHeader: 'Preview',
+        noNewQuizUploaded: 'No quiz file uploaded',
+    },
     emojis: {
         DUCK: 'Duck',
         SHARK: 'Shark',
@@ -91,6 +96,8 @@ export const i18n_en: Labels = {
     },
     quiz: {
         nextSelectingTeam: 'Next question gets picked by team:',
+        columns: 'Categories',
+        nextTeamHeader: 'Who\'s next?',
     },
     playerEditor: {
         tooltipReRollEmoji: 'New random emoji',

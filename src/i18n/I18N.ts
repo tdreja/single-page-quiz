@@ -10,6 +10,7 @@ export interface Labels {
     teams: TeamLabels,
     emojis: EmojiLabels,
     game: GameLabels,
+    importer: QuizImportLabels,
     question: QuestionLabels,
     questionTypes: QuestionTypeLabels,
     quiz: QuizLabels,
@@ -102,6 +103,14 @@ export interface QuestionLabels {
 
 export interface QuizLabels {
     nextSelectingTeam: string,
+    columns: string,
+    nextTeamHeader: string,
+}
+
+export interface QuizImportLabels {
+    formHeader: string,
+    previewHeader: string,
+    noNewQuizUploaded: string,
 }
 
 export function i18n(): Labels {
