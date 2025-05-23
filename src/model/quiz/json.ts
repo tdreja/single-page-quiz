@@ -7,11 +7,17 @@ import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } f
 import { Question, QuestionType } from './question';
 import { JsonStaticGameData, JsonStaticColumnData } from '../game/json/game';
 
+export interface OptionalQuestion {
+    pointsForCompletion?: number,
+    inColumn?: string,
+    type?: QuestionType,
+}
+
 /**
  * Static content of a question in the game
  * @see Question
 */
-export interface JsonStaticQuestionData {
+export interface JsonStaticQuestionData extends OptionalQuestion {
     type?: QuestionType,
     pointsForCompletion?: number,
     text?: string,

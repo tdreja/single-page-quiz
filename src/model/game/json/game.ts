@@ -1,7 +1,8 @@
+import { QuestionCell, QuizCell, QuizTable } from '../../base/table';
 import { arrayAsSet } from '../../common';
 import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../../quiz/json';
 import { Question } from '../../quiz/question';
-import { Game, GameColumn, GameState, QuestionTable, QuestionTableCell, RoundState } from '../game';
+import { Game, GameColumn, GameState, RoundState } from '../game';
 import { TeamColor } from '../team';
 import { JsonPlayer, restorePlayers as importPlayers, storePlayer } from './player';
 import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team';
@@ -187,12 +188,11 @@ function compareSections(s1: JsonStaticColumnData, s2: JsonStaticColumnData): nu
     return idx1 - idx2;
 }
 
-export function generateJsonQuestionTable<ITEM>(
+export function generateJsonQuestionTable(
     game: JsonStaticGameData,
-    getItem: (column?: JsonStaticColumnData, question?: JsonStaticQuestionData) => ITEM | undefined,
-): QuestionTable<ITEM> {
+): QuizTable<JsonStaticQuestionData> {
     const sortedColumns: Array<JsonStaticColumnData> = game.columns ? game.columns.sort(compareSections) : [];
-    const headlines: QuestionTableCell<ITEM>[] = [];
+    const columnNames: QuizCell[] = [];
     const pointsLevels: Array<number> = [];
 
     // Headlines and points first
@@ -204,35 +204,36 @@ export function generateJsonQuestionTable<ITEM>(
             }
             pointsLevels.push(question.pointsForCompletion);
         }
-        headlines.push({
-            label: column.columnName || '',
+        columnNames.push({
+            label: column.columnName || '-',
             key: column.columnName || '?',
-            inSection: column.columnName,
-            item: getItem(column),
+            inColumn: column.columnName || '?',
         });
     }
     // Ensure that points are sorted correctly
     pointsLevels.sort((a, b) => a - b);
 
     // Add questions in order of the points level
-    const rows: QuestionTableCell<ITEM>[][] = [];
+    const rows: QuestionCell<JsonStaticQuestionData>[][] = [];
     for (const points of pointsLevels) {
-        const row: QuestionTableCell<ITEM>[] = [];
+        const label = `${points}`;
+        const row: QuestionCell<JsonStaticQuestionData>[] = [];
         for (const column of sortedColumns) {
+            const key = `${column.columnName}-${points}`;
             const question = column.questions?.find((q) => q.pointsForCompletion === points);
             row.push({
-                label: question ? `${points}` : '-',
-                inSection: question ? column.columnName : undefined,
-                pointsForCompletion: question ? points : undefined,
-                key: `${column.columnName}-${question ? points : '?'}`,
-                item: getItem(column, question),
+                key,
+                label,
+                pointsForCompletion: points,
+                inColumn: column.columnName || '?',
+                question,
             });
         }
         rows.push(row);
     }
 
     return {
-        headlines,
+        columnNames,
         rows,
     };
 }

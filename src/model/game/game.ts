@@ -1,6 +1,7 @@
 import { Team, TeamColor } from './team';
 import { Emoji, Player } from './player';
 import { Question } from '../quiz/question';
+import { QuestionCell, QuizCell, QuizTable } from '../base/table';
 
 export enum GameState {
     IMPORT_QUIZ = 'import-quiz',
@@ -85,35 +86,20 @@ export function sortGameSectionsByIndex(section1?: GameColumn, section2?: GameCo
     return idx1 - idx2;
 }
 
-export interface QuestionTable<ITEM> {
-    readonly headlines: QuestionTableCell<ITEM>[],
-    readonly rows: QuestionTableCell<ITEM>[][],
-}
-
-export interface QuestionTableCell<ITEM> {
-    readonly label: string,
-    readonly key: string,
-    readonly inSection?: string,
-    readonly pointsForCompletion?: number,
-    readonly item?: ITEM,
-}
-
-export function generateQuestionTable<ITEM>(
+export function generateQuestionTable(
     game: Game,
-    getItem: (column?: GameColumn, question?: Question) => ITEM | undefined,
-): QuestionTable<ITEM> {
+): QuizTable<Question> {
     const columnOrder: Array<string> = [];
     const pointsLevels: Array<number> = [];
 
     // Headlines first
-    const headlines: QuestionTableCell<ITEM>[] = [];
+    const columnNames: QuizCell[] = [];
     Array.from(game.columns.values()).sort(sortGameSectionsByIndex).map((column) => {
         columnOrder.push(column.columnName);
-        headlines.push({
+        columnNames.push({
             label: column.columnName,
             key: column.columnName,
-            inSection: column.columnName,
-            item: getItem(column),
+            inColumn: column.columnName,
         });
         // Also collect all points for each question
         column.questions.values().forEach((question) => {
@@ -126,28 +112,32 @@ export function generateQuestionTable<ITEM>(
     pointsLevels.sort((a, b) => a - b);
 
     // Now add the question matrix
-    const rows: QuestionTableCell<ITEM>[][] = [];
+    const rows: QuestionCell<Question>[][] = [];
     for (const questionPoints of pointsLevels) {
-        const row: QuestionTableCell<ITEM>[] = [];
+        const row: QuestionCell<Question>[] = [];
+        const label = `${questionPoints}`;
 
         for (const columnId of columnOrder) {
+            const key = `${columnId}-${questionPoints}`;
+
             const column = game.columns.get(columnId);
             if (!column) {
                 row.push({
-                    label: '-',
-                    key: '?',
-                    item: getItem(),
+                    label,
+                    key,
+                    inColumn: columnId,
+                    pointsForCompletion: questionPoints,
                 });
                 continue;
             }
 
             const question = column.questions.get(questionPoints);
             row.push({
-                label: `${questionPoints}`,
-                inSection: question ? columnId : undefined,
-                pointsForCompletion: question ? questionPoints : undefined,
-                key: `${columnId}-${question ? questionPoints : '?'}`,
-                item: getItem(column, question),
+                label,
+                key,
+                inColumn: columnId,
+                pointsForCompletion: questionPoints,
+                question,
             });
         }
 
@@ -155,7 +145,7 @@ export function generateQuestionTable<ITEM>(
     }
 
     return {
-        headlines,
+        columnNames,
         rows,
     };
 }

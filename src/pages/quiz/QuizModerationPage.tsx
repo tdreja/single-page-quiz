@@ -9,7 +9,7 @@ export const QuizModerationPage = ({ shared }: SharedProps): ReactElement => {
     const game = useContext<Game>(GameContext);
     return (
         <>
-            {game.round ? <QuestionModerationView round={game.round} shared={shared} /> : <QuestionSelectionPage />}
+            {game.round ? <QuestionModerationView round={game.round} shared={shared} /> : <QuestionSelectionPage shared={shared} />}
         </>
     );
 };

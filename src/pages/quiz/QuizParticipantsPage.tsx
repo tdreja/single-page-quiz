@@ -8,7 +8,7 @@ export const QuizParticipantsPage = (): ReactElement => {
     const game = useContext<Game>(GameContext);
     return (
         <>
-            {game.round ? <QuestionParticipantsView round={game.round} /> : <QuestionSelectionPage />}
+            {game.round ? <QuestionParticipantsView round={game.round} /> : <QuestionSelectionPage shared={true} />}
         </>
     );
 };

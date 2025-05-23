@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import { TeamColor } from '../../model/game/team';
 import { backgroundColor, hoverColor, textColor } from './Colors';
+import { button } from './ButtonColor';
 
 type HtmlProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>;
 
@@ -10,23 +11,7 @@ interface ColorChangeProps extends HtmlProps {
 }
 
 function changeColorStyle(color: TeamColor, outlined?: boolean): React.CSSProperties {
-    if (outlined) {
-        return {
-            '--bs-btn-color': backgroundColor[color],
-            '--bs-btn-border-color': backgroundColor[color],
-            '--bs-btn-hover-bg': backgroundColor[color],
-            '--bs-btn-hover-border-color': backgroundColor[color],
-            '--bs-btn-hover-color': textColor[color],
-        } as React.CSSProperties;
-    }
-    return {
-        '--bs-btn-color': textColor[color],
-        '--bs-btn-bg': backgroundColor[color],
-        '--bs-btn-border-color': backgroundColor[color],
-        '--bs-btn-hover-bg': hoverColor[color],
-        '--bs-btn-hover-border-color': hoverColor[color],
-        '--bs-btn-hover-color': textColor[color],
-    } as React.CSSProperties;
+    return button(textColor[color], backgroundColor[color], hoverColor[color], outlined);
 }
 
 export const TeamColorButton = (props: ColorChangeProps): ReactElement => {

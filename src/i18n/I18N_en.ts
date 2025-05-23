@@ -1,6 +1,7 @@
 import { GameState } from '../model/game/game';
 import { TeamColor } from '../model/game/team';
 import { Labels } from './I18N';
+import { QuestionType } from '../model/quiz/question';
 
 export const i18n_en: Labels = {
     teams: {
@@ -81,6 +82,12 @@ export const i18n_en: Labels = {
         teamsWon: 'Winners:',
         actionCompleteQuestion: 'Complete question',
         headlineCompletionPercent: 'Allocation of points',
+    },
+    questionTypes: {
+        [QuestionType.TEXT_MULTIPLE_CHOICE]: 'Multiple choice question',
+        [QuestionType.IMAGE_MULTIPLE_CHOICE]: 'Multiple choice question (image)',
+        [QuestionType.ESTIMATE]: 'Estimate question',
+        [QuestionType.ACTION]: 'Action',
     },
     quiz: {
         nextSelectingTeam: 'Next question gets picked by team:',

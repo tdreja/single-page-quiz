@@ -10,6 +10,13 @@ body[view=shared] {
     --dark-background: #003F91;
 }
 
+body {
+    --question-matrix-start-color: rgb(32, 129, 255);
+    --question-matrix-start-color-alpha: rgba(32, 129, 255, 0.7);
+    --question-matrix-end-color: rgb(0, 42, 96);
+    --question-matrix-end-color-alpha: rgba(0, 42, 96, 0.7);
+}
+
 .dark-background {
     background-color: var(--dark-background) !important;
     color: #fff;

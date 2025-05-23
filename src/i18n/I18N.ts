@@ -4,12 +4,14 @@ import { TeamColor } from '../model/game/team';
 import { i18n_de } from './I18N_de';
 import { i18n_en } from './I18N_en';
 import { Emoji } from '../model/game/player';
+import { QuestionType } from '../model/quiz/question';
 
 export interface Labels {
     teams: TeamLabels,
     emojis: EmojiLabels,
     game: GameLabels,
     question: QuestionLabels,
+    questionTypes: QuestionTypeLabels,
     quiz: QuizLabels,
     playerEditor: PlayerEditor,
     teamEditor: TeamEditor,
@@ -26,6 +28,10 @@ export type TeamLabels = {
 
 export type EmojiLabels = {
     [emoji in Emoji]: string;
+};
+
+export type QuestionTypeLabels = {
+    [type in QuestionType]: string;
 };
 
 export interface PlayerEditor {
