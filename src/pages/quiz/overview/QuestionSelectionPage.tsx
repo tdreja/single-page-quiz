@@ -29,19 +29,21 @@ export const QuestionSelectionPage = ({ shared }: SharedProps): ReactElement => 
     };
 
     return (
-        <div className="d-flex flex-wrap gap-4">
+        <div className="d-flex flex-wrap gap-4 mt-4">
             <QuizTableView {...tableProps} />
-            <div>
-                <h5>{i18n.quiz.nextSelectingTeam}</h5>
-                { selectingTeam && (
-                    <TeamColorButton color={selectingTeam}>
-                        <span
-                            className="rounded-pill text-bg-light ps-2 pe-2 fw-bold ms-2 me-2"
-                        >
-                            {i18n.teams[selectingTeam]}
-                        </span>
-                    </TeamColorButton>
-                )}
+            <div className="card">
+                <div className="card-body d-flex flex-column align-items-center gap-2">
+                    <h5 className="card-title">{i18n.quiz.nextSelectingTeam}</h5>
+                    { selectingTeam && (
+                        <TeamColorButton color={selectingTeam}>
+                            <span
+                                className="rounded-pill text-bg-light ps-2 pe-2 fw-bold ms-2 me-2"
+                            >
+                                {i18n.teams[selectingTeam]}
+                            </span>
+                        </TeamColorButton>
+                    )}
+                </div>
             </div>
         </div>
     );
