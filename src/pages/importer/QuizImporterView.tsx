@@ -7,6 +7,7 @@ import { JsonStaticQuestionData } from '../../model/quiz/json';
 import { SharedProps } from '../quiz/SharedProps';
 import { I18N } from '../../i18n/I18N';
 import { GameEventContext } from '../../components/common/GameContext';
+import { ExportQuizView } from './ExportQuizView';
 
 async function readYaml(fileList: FileList | null): Promise<JsonStaticGameData | null> {
     if (!fileList || fileList.length < 1) {
@@ -63,7 +64,8 @@ export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
     };
 
     return (
-        <div className="d-flex flex-column align-items-baseline gap-4">
+        <div className="d-flex flex-row flex-wrap align-items-baseline gap-4">
+            <ExportQuizView />
             <div className="card">
                 <div className="card-header">{i18n.importer.formHeader}</div>
                 <div className="card-body">
@@ -77,7 +79,7 @@ export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
                     />
                 </div>
             </div>
-            <div className="card w-100">
+            <div className="card w-100 flex-grow-1">
                 <div className="card-header">{i18n.importer.previewHeader}</div>
                 { !json && (<span className="card-body">{i18n.importer.noNewQuizUploaded}</span>)}
                 { json && (

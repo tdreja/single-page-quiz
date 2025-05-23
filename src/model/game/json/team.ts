@@ -1,7 +1,7 @@
 import { Game } from '../game';
 import { Emoji } from '../player';
 import { Team, TeamColor } from '../team';
-import { JsonUpdatableGameData } from './game';
+import { JsonTeamAndPlayerData } from './game';
 
 /**
  * JSON is identical to the regular team, but only contains the Emojis as an Array
@@ -22,7 +22,7 @@ export function storeTeam(team: Team): JsonTeam {
     };
 }
 
-export function restoreTeams(game: Game, json: JsonUpdatableGameData) {
+export function restoreTeams(game: Game, json: JsonTeamAndPlayerData) {
     const usedColors: Set<TeamColor> = new Set<TeamColor>();
 
     // Add or update the teams from json

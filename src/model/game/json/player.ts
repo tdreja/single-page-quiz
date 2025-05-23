@@ -1,6 +1,5 @@
 import { Game } from '../game';
 import { Emoji, Player } from '../player';
-import { JsonUpdatableGameData } from './game';
 
 /**
  * JSON is identical to the regular player, but all fields are optional
@@ -8,6 +7,10 @@ import { JsonUpdatableGameData } from './game';
 export type JsonPlayer = {
     [property in keyof Player]?: Player[property];
 };
+
+export interface JsonPlayerData {
+    players?: Array<JsonPlayer>,
+}
 
 export function storePlayer(player: Player): JsonPlayer {
     return {
@@ -18,7 +21,7 @@ export function storePlayer(player: Player): JsonPlayer {
     };
 }
 
-export function restorePlayers(game: Game, json: JsonUpdatableGameData) {
+export function restorePlayers(game: Game, json: JsonPlayerData) {
     const usedEmoji: Set<Emoji> = new Set();
 
     // Add or update the players from json

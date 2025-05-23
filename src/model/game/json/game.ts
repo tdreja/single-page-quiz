@@ -4,7 +4,7 @@ import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../../quiz/json
 import { Question } from '../../quiz/question';
 import { Game, GameColumn, GameState, RoundState } from '../game';
 import { TeamColor } from '../team';
-import { JsonPlayer, restorePlayers as importPlayers, storePlayer } from './player';
+import { JsonPlayer, JsonPlayerData, restorePlayers as importPlayers, storePlayer } from './player';
 import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team';
 
 /**
@@ -15,12 +15,15 @@ export interface JsonStaticGameData {
     columns?: Array<JsonStaticColumnData>,
 }
 
+export interface JsonTeamAndPlayerData extends JsonPlayerData {
+    teams?: Array<JsonTeam>,
+    players?: Array<JsonPlayer>,
+}
+
 /**
  * Overall game state with players, teams and the already handled questions
 */
-export interface JsonUpdatableGameData {
-    teams?: Array<JsonTeam>,
-    players?: Array<JsonPlayer>,
+export interface JsonUpdatableGameData extends JsonTeamAndPlayerData {
     columns?: Array<JsonDynamicSectionData>,
     selectionOrder?: Array<TeamColor>,
     state?: GameState,
