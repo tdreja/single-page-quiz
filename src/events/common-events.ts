@@ -32,6 +32,11 @@ export enum EventType {
     MOVE_PLAYER = 'move-player',
     CHANGE_TEAM_COLOR = 'change-team-color',
     UPDATE_TEAM = 'update-team',
+
+    // Importer Events
+    IMPORT_QUIZ = 'import-quiz',
+    IMPORT_PLAYERS = 'import-players',
+    IMPORT_TEAMS = 'import-teams',
 }
 
 export enum Changes {
