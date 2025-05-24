@@ -28,6 +28,8 @@ export const i18n_en: Labels = {
         quizUploadedHeader: 'Preview - New quiz',
         playersUploadedHeader: 'Preview - Imported players',
         teamsUploadedHeader: 'Preview - Imported players & teams',
+        actionCancel: 'Cancel',
+        actionApply: 'Apply',
     },
     emojis: {
         DUCK: 'Duck',

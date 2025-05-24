@@ -108,6 +108,8 @@ export interface QuizLabels {
 }
 
 export interface QuizImportLabels {
+    actionCancel: string,
+    actionApply: string,
     formHeader: string,
     noFileUploadedHeader: string,
     quizUploadedHeader: string,

@@ -10,6 +10,34 @@ import { GameEventContext } from '../../components/common/GameContext';
 import { ExportQuizView } from './ExportQuizView';
 import { ImportedData, importYaml } from './YamlReader';
 
+interface ActionProps {
+    applyIcon: string,
+    onApply: () => void,
+    onCancel: () => void,
+}
+
+const ImportActions = ({ applyIcon, onApply, onCancel }: ActionProps): ReactElement => {
+    const i18n = useContext(I18N);
+    return (
+        <div className="card-body d-flex gap-2">
+            <span
+                className="btn btn-outline-primary d-inline-flex align-items-center gap-2"
+                onClick={onApply}
+            >
+                <span className="material-symbols-outlined">{applyIcon}</span>
+                {i18n.importer.actionApply}
+            </span>
+            <span
+                className="btn btn-outline-secondary d-inline-flex align-items-center gap-2"
+                onClick={onCancel}
+            >
+                <span className="material-symbols-outlined">close</span>
+                {i18n.importer.actionCancel}
+            </span>
+        </div>
+    );
+};
+
 export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
     const i18n = useContext(I18N);
     const [imported, setImported] = useState<ImportedData>({});
@@ -71,9 +99,41 @@ export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
                             <div className="card-body">
                                 <QuizTableView {...tableProps} className="card-body" />
                             </div>
+                            <ImportActions
+                                applyIcon="sync_saved_locally"
+                                onApply={() => {}}
+                                onCancel={() => setImported({})}
+                            />
+                        </>
+                    )
+                }
+                {
+                    imported.players && (
+                        <>
+                            <div className="card-header">{i18n.importer.playersUploadedHeader}</div>
                             <div className="card-body">
-                                <span className="btn btn-primary">Übernehmen</span>
+
                             </div>
+                            <ImportActions
+                                applyIcon="how_to_reg"
+                                onApply={() => {}}
+                                onCancel={() => setImported({})}
+                            />
+                        </>
+                    )
+                }
+                {
+                    imported.teams && (
+                        <>
+                            <div className="card-header">{i18n.importer.teamsUploadedHeader}</div>
+                            <div className="card-body">
+
+                            </div>
+                            <ImportActions
+                                applyIcon="reduce_capacity"
+                                onApply={() => {}}
+                                onCancel={() => setImported({})}
+                            />
                         </>
                     )
                 }

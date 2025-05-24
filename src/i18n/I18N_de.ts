@@ -70,6 +70,8 @@ export const i18n_de: Labels = {
         playersUploadedHeader: 'Vorschau - Importiere Spieler',
         teamsUploadedHeader: 'Vorschau - Importiere Spieler & Teams',
         noNewQuizUploaded: 'Keine Datei hochgeladen',
+        actionCancel: 'Abbrechen',
+        actionApply: 'Übernehmen',
     },
     playerEditor: {
         tooltipReRollEmoji: 'Neuer zufälliger Emoji',
