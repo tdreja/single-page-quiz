@@ -5,14 +5,14 @@ export type IndexedByColor = {
 };
 
 export const backgroundColor: IndexedByColor = {
+    RED: 'rgb(186, 24, 27)',
     BLUE: 'rgb(72, 149, 239)',
     GREEN: 'rgb(49, 87, 44)',
+    YELLOW: 'rgb(252, 191, 73)',
     ORANGE: 'rgb(232, 93, 4)',
     PURPLE: 'rgb(114, 9, 183)',
-    RED: 'rgb(186, 24, 27)',
     TURQUOISE: 'rgb(0, 175, 185)',
     WHITE: 'rgb(211, 211, 211)',
-    YELLOW: 'rgb(252, 191, 73)',
 };
 
 export const hoverColor: IndexedByColor = {

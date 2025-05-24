@@ -54,18 +54,29 @@ export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
                 </div>
             </div>
             <div className="card w-100 flex-grow-1">
-                <div className="card-header">{i18n.importer.previewHeader}</div>
-                { !imported.quiz && (<span className="card-body">{i18n.importer.noNewQuizUploaded}</span>)}
-                { imported.quiz && (
-                    <>
-                        <div className="card-body">
-                            <QuizTableView {...tableProps} className="card-body" />
-                        </div>
-                        <div className="card-body">
-                            <span className="btn btn-primary">Übernehmen</span>
-                        </div>
-                    </>
-                )}
+
+                {
+                    (!imported.quiz && !imported.teams && !imported.players)
+                    && (
+                        <>
+                            <div className="card-header">{i18n.importer.noFileUploadedHeader}</div>
+                            <span className="card-body">{i18n.importer.noNewQuizUploaded}</span>
+                        </>
+                    )
+                }
+                {
+                    imported.quiz && (
+                        <>
+                            <div className="card-header">{i18n.importer.quizUploadedHeader}</div>
+                            <div className="card-body">
+                                <QuizTableView {...tableProps} className="card-body" />
+                            </div>
+                            <div className="card-body">
+                                <span className="btn btn-primary">Übernehmen</span>
+                            </div>
+                        </>
+                    )
+                }
             </div>
         </div>
     );

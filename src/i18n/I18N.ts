@@ -109,7 +109,10 @@ export interface QuizLabels {
 
 export interface QuizImportLabels {
     formHeader: string,
-    previewHeader: string,
+    noFileUploadedHeader: string,
+    quizUploadedHeader: string,
+    playersUploadedHeader: string,
+    teamsUploadedHeader: string,
     noNewQuizUploaded: string,
 }
 

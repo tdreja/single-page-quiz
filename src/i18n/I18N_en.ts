@@ -5,14 +5,14 @@ import { QuestionType } from '../model/quiz/question';
 
 export const i18n_en: Labels = {
     teams: {
-        [TeamColor.RED]: 'Red',
-        [TeamColor.BLUE]: 'Blue',
-        [TeamColor.GREEN]: 'Green',
-        [TeamColor.YELLOW]: 'Yellow',
-        [TeamColor.ORANGE]: 'Orange',
-        [TeamColor.PURPLE]: 'Purple',
-        [TeamColor.TURQUOISE]: 'Torquoise',
-        [TeamColor.WHITE]: 'White',
+        [TeamColor.RED]: '1 / Red',
+        [TeamColor.BLUE]: '2 / Blue',
+        [TeamColor.GREEN]: '3 / Green',
+        [TeamColor.YELLOW]: '4 / Yellow',
+        [TeamColor.ORANGE]: '5 / Orange',
+        [TeamColor.PURPLE]: '6 / Purple',
+        [TeamColor.TURQUOISE]: '7 / Torquoise',
+        [TeamColor.WHITE]: '8 / White',
     },
     game: {
         [GameState.TEAM_SETUP]: 'Teams',
@@ -22,9 +22,12 @@ export const i18n_en: Labels = {
         [GameState.IMPORT_QUIZ]: 'Import quiz file',
     },
     importer: {
-        formHeader: 'Import new quiz',
-        previewHeader: 'Preview',
-        noNewQuizUploaded: 'No quiz file uploaded',
+        formHeader: 'Import file',
+        noFileUploadedHeader: 'Preview',
+        noNewQuizUploaded: 'No file uploaded.',
+        quizUploadedHeader: 'Preview - New quiz',
+        playersUploadedHeader: 'Preview - Imported players',
+        teamsUploadedHeader: 'Preview - Imported players & teams',
     },
     emojis: {
         DUCK: 'Duck',
