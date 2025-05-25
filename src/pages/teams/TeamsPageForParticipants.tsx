@@ -15,7 +15,7 @@ export const TeamsPageForParticipants = (): ReactElement => {
     }, [game]);
 
     return (
-        <div className="d-flex flex-row flex-wrap" style={{ gap: '0.75rem 1rem' }}>
+        <div className="d-grid gap-2 grid-columns-lg">
             {Array.from(game.teams.values()).sort(sortTeamsHighestFirst)
                 .map((team) => (
                     <TeamView

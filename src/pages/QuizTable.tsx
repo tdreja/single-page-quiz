@@ -13,6 +13,7 @@ export interface QuizTableProps<QUESTION extends OptionalQuestion> {
     table: QuizTable<QUESTION>,
     onCellClick?: (item: QUESTION) => void,
     showDetails: boolean,
+    className?: string,
 }
 
 interface HeadlineCellProps {
@@ -155,11 +156,11 @@ function HeadlineView({ cell }: HeadlineCellProps): ReactElement {
 }
 
 export function QuizTableView<QUESTION extends OptionalQuestion>({
-    table, showDetails, onCellClick,
+    table, showDetails, onCellClick, className,
 }: QuizTableProps<QUESTION>): ReactElement {
     return (
         <div
-            className="d-grid w-100 gap-2"
+            className={`d-grid w-100 gap-2 ${className || ''}`}
             style={{
                 ...asReactCss({ '--row-count': `${table.rows.length}` }),
                 gridTemplateColumns: `repeat(${table.columnNames.length}, 1fr)`,

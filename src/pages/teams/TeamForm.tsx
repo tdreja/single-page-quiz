@@ -106,7 +106,7 @@ export const TeamForm = ({ team, availableColors, placements }: Props): ReactEle
                             onClick={() => onGameEvent(new RemoveTeamEvent([team.color]))}
                             title={i18n.teamEditor.tooltipRemove}
                         >
-                            group_remove
+                            delete
                         </span>
                     </div>
                 </div>

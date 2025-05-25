@@ -1,3 +1,4 @@
+import { JsonPlayer } from './json/player';
 import { TeamColor } from './team';
 
 export enum Emoji {
@@ -57,18 +58,24 @@ export function allEmojis(): Array<Emoji> {
     return Array.from(allEmojiArray);
 }
 
-export function sortPlayersHighestFirst(p1: Player, p2: Player): number {
-    const sort = p2.points - p1.points;
+export function sortPlayersHighestFirst(p1: Player | JsonPlayer, p2: Player | JsonPlayer): number {
+    const points1 = p1.points || 0;
+    const points2 = p2.points || 0;
+    const sort = points2 - points1;
     if (sort != 0) {
         return sort;
     }
     return sortPlayersByName(p1, p2);
 }
 
-export function sortPlayersByName(p1: Player, p2: Player): number {
-    const sort = p1.name.localeCompare(p2.name);
+export function sortPlayersByName(p1: Player | JsonPlayer, p2: Player | JsonPlayer): number {
+    const name1 = p1.name || '';
+    const name2 = p2.name || '';
+    const sort = name1.localeCompare(name2);
     if (sort != 0) {
         return sort;
     }
-    return allEmojiArray.indexOf(p1.emoji) - allEmojiArray.indexOf(p2.emoji);
+    const emoji1 = p1.emoji ? allEmojiArray.indexOf(p1.emoji) : -1;
+    const emoji2 = p2.emoji ? allEmojiArray.indexOf(p2.emoji) : -1;
+    return emoji1 - emoji2;
 }

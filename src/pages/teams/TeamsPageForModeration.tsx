@@ -22,7 +22,7 @@ export const TeamsPageForModeration = (): ReactElement => {
     }, [game]);
 
     return (
-        <div className="d-flex flex-row flex-wrap" style={{ gap: '0.75rem 1rem' }}>
+        <div className="d-grid gap-2 grid-columns-xl">
             <div className="card flex-grow-1">
                 <div className="card-header">
                     {i18n.teamEditor.labelActions}
@@ -73,7 +73,7 @@ export const TeamsPageForModeration = (): ReactElement => {
                                 title={i18n.teamEditor.tooltipClear}
                                 onClick={() => onGameEvent(new RemoveTeamEvent(Array.from(game.teams.keys())))}
                             >
-                                delete
+                                delete_sweep
                             </span>
                         </div>
                     </div>

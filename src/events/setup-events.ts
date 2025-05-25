@@ -1,7 +1,11 @@
 import { nextRandom, shuffleArray } from '../model/common';
 import { Game, GameState } from '../model/game/game';
+import { JsonStaticGameData, JsonTeamAndPlayerData } from '../model/game/json/game';
+import { JsonPlayerData, restorePlayers } from '../model/game/json/player';
+import { restoreTeams } from '../model/game/json/team';
 import { allEmojis, Emoji, Player } from '../model/game/player';
 import { allColors, Team, TeamColor } from '../model/game/team';
+import { importStaticGameContent } from '../model/quiz/json';
 import { BasicGameEvent, Changes, EventType, GameUpdate, noUpdate, update } from './common-events';
 
 export function findSmallestTeam(teams: Map<TeamColor, Team>): Team | null {
@@ -389,5 +393,75 @@ export class ExpandTeamNavEvent extends BasicGameEvent {
         }
         game.teamNavExpanded = this._expanded;
         return update(game, Changes.GAME_SETUP);
+    }
+}
+
+export class ImportQuizEvent extends BasicGameEvent {
+    private readonly _quiz: JsonStaticGameData;
+
+    constructor(quiz: JsonStaticGameData) {
+        super(EventType.IMPORT_QUIZ);
+        this._quiz = quiz;
+    }
+
+    public updateGame(game: Game): GameUpdate {
+        importStaticGameContent(game, this._quiz);
+        game.round = null;
+        return update(game, Changes.QUIZ_CONTENT, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
+    }
+}
+
+export class ImportPlayersEvent extends BasicGameEvent {
+    private readonly _players: JsonPlayerData;
+
+    constructor(players: JsonPlayerData) {
+        super(EventType.IMPORT_PLAYERS);
+        this._players = players;
+    }
+
+    public updateGame(game: Game): GameUpdate {
+        // Prepare game and import players
+        game.teams.clear();
+        game.selectionOrder.length = 0;
+        game.round = null;
+        restorePlayers(game, this._players);
+
+        // Restore teams with 0 points based on player info
+        for (const player of game.players.values()) {
+            if (!player.team) {
+                continue;
+            }
+            const team = game.teams.get(player.team);
+            if (team) {
+                team.players.set(player.emoji, player);
+            } else {
+                const newTeam: Team = {
+                    color: player.team,
+                    points: 0,
+                    players: new Map(),
+                };
+                game.teams.set(newTeam.color, newTeam);
+                newTeam.players.set(player.emoji, player);
+                game.selectionOrder.push(newTeam.color);
+            }
+        }
+
+        return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
+    }
+}
+
+export class ImportTeamsEvent extends BasicGameEvent {
+    private readonly _teams: JsonTeamAndPlayerData;
+
+    constructor(teams: JsonTeamAndPlayerData) {
+        super(EventType.IMPORT_TEAMS);
+        this._teams = teams;
+    }
+
+    public updateGame(game: Game): GameUpdate {
+        restorePlayers(game, this._teams);
+        restoreTeams(game, this._teams);
+        game.round = null;
+        return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
     }
 }

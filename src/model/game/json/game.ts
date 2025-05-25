@@ -4,7 +4,7 @@ import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../../quiz/json
 import { Question } from '../../quiz/question';
 import { Game, GameColumn, GameState, RoundState } from '../game';
 import { TeamColor } from '../team';
-import { JsonPlayer, restorePlayers as importPlayers, storePlayer } from './player';
+import { JsonPlayer, JsonPlayerData, restorePlayers as importPlayers, storePlayer } from './player';
 import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team';
 
 /**
@@ -12,15 +12,19 @@ import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team';
  * @see Game
  */
 export interface JsonStaticGameData {
+    quizName?: string,
     columns?: Array<JsonStaticColumnData>,
+}
+
+export interface JsonTeamAndPlayerData extends JsonPlayerData {
+    teams?: Array<JsonTeam>,
+    players?: Array<JsonPlayer>,
 }
 
 /**
  * Overall game state with players, teams and the already handled questions
 */
-export interface JsonUpdatableGameData {
-    teams?: Array<JsonTeam>,
-    players?: Array<JsonPlayer>,
+export interface JsonUpdatableGameData extends JsonTeamAndPlayerData {
     columns?: Array<JsonDynamicSectionData>,
     selectionOrder?: Array<TeamColor>,
     state?: GameState,
@@ -85,6 +89,7 @@ export function exportGame(game: Game): JsonUpdatableGameData {
     return {
         teams,
         players,
+        quizName: game.quizName,
         columns: sections,
         state: game.state,
         selectionOrder: game.selectionOrder,
@@ -123,6 +128,11 @@ export function importGame(game: Game, json?: JsonUpdatableGameData) {
     if (json.selectionOrder) {
         game.selectionOrder.length = 0;
         json.selectionOrder.forEach((item) => game.selectionOrder.push(item));
+    }
+    if (json.quizName) {
+        game.quizName = json.quizName;
+    } else {
+        game.quizName = `Quiz ${new Date().toLocaleDateString()}`;
     }
     game.teamNavExpanded = !!json.teamNavExpanded;
 }

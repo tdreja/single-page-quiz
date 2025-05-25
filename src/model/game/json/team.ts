@@ -1,7 +1,8 @@
 import { Game } from '../game';
 import { Emoji } from '../player';
 import { Team, TeamColor } from '../team';
-import { JsonUpdatableGameData } from './game';
+import { JsonTeamAndPlayerData } from './game';
+import { JsonPlayer, JsonPlayerData } from './player';
 
 /**
  * JSON is identical to the regular team, but only contains the Emojis as an Array
@@ -13,6 +14,19 @@ export interface JsonTeam extends OptionalTeam {
     players?: Array<Emoji>,
 }
 
+export function getPlayers(team?: JsonTeam, players?: JsonPlayerData): JsonPlayer[] {
+    if (!team || !team.players || !players || !players.players) {
+        return [];
+    }
+    const result: JsonPlayer[] = [];
+    for (const player of players.players) {
+        if (player.emoji && team.players.includes(player.emoji)) {
+            result.push(player);
+        }
+    }
+    return result;
+}
+
 export function storeTeam(team: Team): JsonTeam {
     return {
         color: team.color,
@@ -22,8 +36,9 @@ export function storeTeam(team: Team): JsonTeam {
     };
 }
 
-export function restoreTeams(game: Game, json: JsonUpdatableGameData) {
+export function restoreTeams(game: Game, json: JsonTeamAndPlayerData) {
     const usedColors: Set<TeamColor> = new Set<TeamColor>();
+    game.selectionOrder.length = 0;
 
     // Add or update the teams from json
     if (json.teams) {
@@ -31,6 +46,7 @@ export function restoreTeams(game: Game, json: JsonUpdatableGameData) {
             const color = restoreTeam(game, jsonTeam);
             if (color) {
                 usedColors.add(color);
+                game.selectionOrder.push(color);
             }
         }
     }

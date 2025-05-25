@@ -28,7 +28,7 @@ const EditCompletionForTeam = ({ question, team, completion, setCompletion }: Te
         <>
             <TeamColorButton color={team.color}>
                 <span
-                    className="rounded-pill text-bg-light ps-2 pe-2 fw-bold ms-2 me-2"
+                    className="rounded-pill text-bg-light ps-2 pe-2 fw-bold ms-2 me-2 text-nowrap"
                 >
                     {i18n.teams[team.color]}
                 </span>

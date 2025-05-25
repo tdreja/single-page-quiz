@@ -15,6 +15,8 @@ import {
     AddTeamEvent,
     ChangeTeamColorEvent,
     findSmallestTeam,
+    ImportPlayersEvent,
+    ImportTeamsEvent,
     MovePlayerEvent,
     RemovePlayerEvent,
     RemoveTeamEvent,
@@ -25,6 +27,8 @@ import {
 } from './setup-events';
 import { Changes } from './common-events';
 import { Game } from '../model/game/game';
+import { JsonPlayer, JsonPlayerData } from '../model/game/json/player';
+import { JsonTeamAndPlayerData } from '../model/game/json/game';
 
 let game: Game;
 beforeEach(() => {
@@ -168,4 +172,55 @@ test('changeTeamColor', () => {
     expect(orangeTeam?.points).toBe(teamBlue.points);
     expect(orangeTeam?.players?.size).toBe(1);
     expect(game.selectionOrder).toEqual([TeamColor.ORANGE, TeamColor.RED]);
+});
+
+test('importPlayers', () => {
+    const changes: JsonPlayerData = {
+        players: [{
+            emoji: Emoji.GORILLA,
+            name: 'Gorilla',
+            points: 200,
+            team: TeamColor.ORANGE,
+        }],
+    };
+    game = expectUpdate(new ImportPlayersEvent(changes).updateGame(game), Changes.GAME_SETUP, Changes.CURRENT_ROUND);
+    expect(game.round).toBeNull();
+    expect(game.players.size).toBe(1);
+    const gorilla = game.players.get(Emoji.GORILLA);
+    expect(gorilla).toBeDefined();
+    expect(gorilla?.points).toBe(200);
+    expect(game.teams.size).toBe(1);
+    const orange = game.teams.get(TeamColor.ORANGE);
+    expect(orange).toBeDefined();
+    expect(orange?.points).toBe(0);
+    expect(orange?.players.size).toBe(1);
+    expect(orange?.players.keys()).toContain(Emoji.GORILLA);
+});
+
+test('importPlayersAndTeams', () => {
+    const changes: JsonTeamAndPlayerData = {
+        players: [{
+            emoji: Emoji.GORILLA,
+            name: 'Gorilla',
+            points: 200,
+            team: TeamColor.ORANGE,
+        }],
+        teams: [{
+            color: TeamColor.ORANGE,
+            points: 600,
+            players: [Emoji.GORILLA],
+        }],
+    };
+    game = expectUpdate(new ImportTeamsEvent(changes).updateGame(game), Changes.GAME_SETUP, Changes.CURRENT_ROUND);
+    expect(game.round).toBeNull();
+    expect(game.players.size).toBe(1);
+    const gorilla = game.players.get(Emoji.GORILLA);
+    expect(gorilla).toBeDefined();
+    expect(gorilla?.points).toBe(200);
+    expect(game.teams.size).toBe(1);
+    const orange = game.teams.get(TeamColor.ORANGE);
+    expect(orange).toBeDefined();
+    expect(orange?.points).toBe(600);
+    expect(orange?.players.size).toBe(1);
+    expect(orange?.players.keys()).toContain(Emoji.GORILLA);
 });

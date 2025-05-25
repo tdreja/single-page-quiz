@@ -5,14 +5,14 @@ import { QuestionType } from '../model/quiz/question';
 
 export const i18n_de: Labels = {
     teams: {
-        [TeamColor.RED]: 'Rot',
-        [TeamColor.BLUE]: 'Blau',
-        [TeamColor.GREEN]: 'Grün',
-        [TeamColor.YELLOW]: 'Gelb',
-        [TeamColor.ORANGE]: 'Orange',
-        [TeamColor.PURPLE]: 'Lila',
-        [TeamColor.TURQUOISE]: 'Türkis',
-        [TeamColor.WHITE]: 'Weiß',
+        [TeamColor.RED]: '1 / Rot',
+        [TeamColor.BLUE]: '2 / Blau',
+        [TeamColor.GREEN]: '3 / Grün',
+        [TeamColor.YELLOW]: '4 / Gelb',
+        [TeamColor.ORANGE]: '5 / Orange',
+        [TeamColor.PURPLE]: '6 / Lila',
+        [TeamColor.TURQUOISE]: '7 / Türkis',
+        [TeamColor.WHITE]: '8 / Weiß',
     },
     emojis: {
         DUCK: 'Ente',
@@ -63,6 +63,16 @@ export const i18n_de: Labels = {
         [GameState.GAME_ACTIVE]: 'Quiz',
         [GameState.IMPORT_QUIZ]: 'Quizdatei importieren',
     },
+    importer: {
+        formHeader: 'Datei importieren',
+        noFileUploadedHeader: 'Vorschau',
+        quizUploadedHeader: 'Vorschau - Neues Quiz',
+        playersUploadedHeader: 'Vorschau - Importiere Spieler',
+        teamsUploadedHeader: 'Vorschau - Importiere Spieler & Teams',
+        noNewQuizUploaded: 'Keine Datei hochgeladen',
+        actionCancel: 'Abbrechen',
+        actionApply: 'Übernehmen',
+    },
     playerEditor: {
         tooltipReRollEmoji: 'Neuer zufälliger Emoji',
         tooltipRename: 'Spieler umbenennen',
@@ -110,6 +120,8 @@ export const i18n_de: Labels = {
     },
     quiz: {
         nextSelectingTeam: 'Nächste Frage wählt Team:',
+        columns: 'Kategorien',
+        nextTeamHeader: 'Wer ist dran?',
     },
     settings: {
         tooltipModeShared: 'Geteilt mit Teilnehmern',

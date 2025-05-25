@@ -57,6 +57,7 @@ export function exportStaticGameContent(game: Game): JsonStaticGameData {
         sections.push(exportStaticSectionContent(section));
     }
     return {
+        quizName: game.quizName,
         columns: sections,
     };
 }
@@ -73,6 +74,9 @@ export function importStaticGameContent(game: Game, quiz?: JsonStaticGameData) {
             game.columns.set(gameSection.columnName, gameSection);
         }
         count++;
+    }
+    if (quiz.quizName) {
+        game.quizName = quiz.quizName;
     }
 }
 
@@ -155,7 +159,7 @@ function getTextChoices(json: JsonStaticQuestionData): Map<string, TextChoice> {
         shuffleArray(choices);
 
         for (const choice of choices) {
-            const id = String.fromCharCode(result.size + 1 + 'A'.charCodeAt(0));
+            const id = String.fromCharCode(result.size + 'A'.charCodeAt(0));
             result.set(id, {
                 ...choice,
                 choiceId: id,

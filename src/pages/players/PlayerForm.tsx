@@ -140,7 +140,7 @@ export const PlayerForm = ({ player, availableTeams }: Props): ReactElement => {
                         onClick={() => onGameEvent(new RemovePlayerEvent([player.emoji]))}
                         title={i18n.playerEditor.tooltipRemove}
                     >
-                        person_remove
+                        delete
                     </span>
                 </div>
             </div>
