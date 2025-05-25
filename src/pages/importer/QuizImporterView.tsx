@@ -9,6 +9,7 @@ import { I18N } from '../../i18n/I18N';
 import { GameEventContext } from '../../components/common/GameContext';
 import { ExportQuizView } from './ExportQuizView';
 import { ImportedData, importYaml } from './YamlReader';
+import { ImportPlayersEvent, ImportQuizEvent, ImportTeamsEvent } from '../../events/setup-events';
 
 interface ActionProps {
     applyIcon: string,
@@ -40,6 +41,7 @@ const ImportActions = ({ applyIcon, onApply, onCancel }: ActionProps): ReactElem
 
 export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
     const i18n = useContext(I18N);
+    const onGameEvent = useContext(GameEventContext);
     const [imported, setImported] = useState<ImportedData>({});
     const [previewTable, setPreviewTable] = useState<QuizTable<JsonStaticQuestionData>>(generateJsonQuestionTable({}));
 
@@ -101,7 +103,12 @@ export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
                             </div>
                             <ImportActions
                                 applyIcon="sync_saved_locally"
-                                onApply={() => {}}
+                                onApply={() => {
+                                    if (imported.quiz) {
+                                        onGameEvent(new ImportQuizEvent(imported.quiz));
+                                        setImported({});
+                                    }
+                                }}
                                 onCancel={() => setImported({})}
                             />
                         </>
@@ -116,7 +123,12 @@ export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
                             </div>
                             <ImportActions
                                 applyIcon="how_to_reg"
-                                onApply={() => {}}
+                                onApply={() => {
+                                    if (imported.players) {
+                                        onGameEvent(new ImportPlayersEvent(imported.players));
+                                        setImported({});
+                                    }
+                                }}
                                 onCancel={() => setImported({})}
                             />
                         </>
@@ -131,7 +143,12 @@ export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
                             </div>
                             <ImportActions
                                 applyIcon="reduce_capacity"
-                                onApply={() => {}}
+                                onApply={() => {
+                                    if (imported.teams) {
+                                        onGameEvent(new ImportTeamsEvent(imported.teams));
+                                        setImported({});
+                                    }
+                                }}
                                 onCancel={() => setImported({})}
                             />
                         </>
