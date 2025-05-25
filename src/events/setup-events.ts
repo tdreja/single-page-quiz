@@ -420,9 +420,30 @@ export class ImportPlayersEvent extends BasicGameEvent {
     }
 
     public updateGame(game: Game): GameUpdate {
-        restorePlayers(game, this._players);
+        // Prepare game and import players
         game.teams.clear();
         game.round = null;
+        restorePlayers(game, this._players);
+
+        // Restore teams with 0 points based on player info
+        for (const player of game.players.values()) {
+            if (!player.team) {
+                continue;
+            }
+            const team = game.teams.get(player.team);
+            if (team) {
+                team.players.set(player.emoji, player);
+            } else {
+                const newTeam: Team = {
+                    color: player.team,
+                    points: 0,
+                    players: new Map(),
+                };
+                game.teams.set(newTeam.color, newTeam);
+                newTeam.players.set(player.emoji, player);
+            }
+        }
+
         return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
     }
 }
