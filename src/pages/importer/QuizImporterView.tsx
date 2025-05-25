@@ -10,6 +10,11 @@ import { GameEventContext } from '../../components/common/GameContext';
 import { ExportQuizView } from './ExportQuizView';
 import { ImportedData, importYaml } from './YamlReader';
 import { ImportPlayersEvent, ImportQuizEvent, ImportTeamsEvent } from '../../events/setup-events';
+import { PlayerWithPointsView } from '../../components/common/PlayerWithPointsView';
+import { sortPlayersByName, sortPlayersHighestFirst } from '../../model/game/player';
+import { sortTeamsHighestFirst } from '../../model/game/team';
+import { TeamViewExpanded } from '../../sections/bottom/TeamViewExpanded';
+import { getPlayers } from '../../model/game/json/team';
 
 interface ActionProps {
     applyIcon: string,
@@ -118,8 +123,18 @@ export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
                     imported.players && (
                         <>
                             <div className="card-header">{i18n.importer.playersUploadedHeader}</div>
-                            <div className="card-body">
-
+                            <div className="card-body d-grid grid-columns-lg gap-2">
+                                {
+                                    (imported.players.players || [])
+                                        .sort(sortPlayersHighestFirst)
+                                        .map((player) => (
+                                            <PlayerWithPointsView
+                                                key={`player-${player.emoji}`}
+                                                player={player}
+                                                size="small"
+                                            />
+                                        ))
+                                }
                             </div>
                             <ImportActions
                                 applyIcon="how_to_reg"
@@ -139,7 +154,17 @@ export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
                         <>
                             <div className="card-header">{i18n.importer.teamsUploadedHeader}</div>
                             <div className="card-body">
-
+                                {
+                                    (imported.teams.teams || [])
+                                        .sort(sortTeamsHighestFirst)
+                                        .map((team) => (
+                                            <TeamViewExpanded
+                                                key={`team-${team.color}`}
+                                                team={team}
+                                                players={getPlayers(team, imported.teams)}
+                                            />
+                                        ))
+                                }
                             </div>
                             <ImportActions
                                 applyIcon="reduce_capacity"

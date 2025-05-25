@@ -51,6 +51,7 @@ export const TeamsBottomNav = (): ReactElement => {
                             <TeamViewExpanded
                                 key={`bottom-team-${team.color}`}
                                 team={team}
+                                players={Array.from(team.players.values())}
                             />
                         )
                         : (

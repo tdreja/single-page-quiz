@@ -1,3 +1,4 @@
+import { JsonTeam } from './json/team';
 import { Emoji, Player } from './player';
 
 export enum TeamColor {
@@ -25,14 +26,18 @@ export function allColors(): Array<TeamColor> {
     return Array.from(allColorsArray);
 }
 
-export function sortTeamsHighestFirst(t1: Team, t2: Team): number {
-    const sort = t2.points - t1.points;
+export function sortTeamsHighestFirst(t1: Team | JsonTeam, t2: Team | JsonTeam): number {
+    const points1 = t1.points || 0;
+    const points2 = t2.points || 0;
+    const sort = points2 - points1;
     if (sort != 0) {
         return sort;
     }
     return sortTeamsByColor(t1, t2);
 }
 
-export function sortTeamsByColor(t1: Team, t2: Team): number {
-    return allColorsArray.indexOf(t1.color) - allColorsArray.indexOf(t2.color);
+export function sortTeamsByColor(t1: Team | JsonTeam, t2: Team | JsonTeam): number {
+    const color1 = t1.color ? allColorsArray.indexOf(t1.color) : -1;
+    const color2 = t2.color ? allColorsArray.indexOf(t2.color) : -1;
+    return color1 - color2;
 }

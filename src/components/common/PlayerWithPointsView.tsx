@@ -1,9 +1,10 @@
 import React, { ReactElement } from 'react';
 import { EmojiView } from './EmojiView';
 import { Player } from '../../model/game/player';
+import { JsonPlayer } from '../../model/game/json/player';
 
 interface PlayerProps {
-    player: Player,
+    player: Player | JsonPlayer,
     size: 'small' | 'large',
 }
 
@@ -20,7 +21,9 @@ export const PlayerWithPointsView = ({ player, size }: PlayerProps): ReactElemen
                 gridTemplateColumns: '1fr 4fr 2fr',
             }}
         >
-            <EmojiView emoji={player.emoji} style={{ fontSize: emojiFontSize }} />
+            {
+                player.emoji && (<EmojiView emoji={player.emoji} style={{ fontSize: emojiFontSize }} />)
+            }
             <span style={{ fontSize, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
                 {player.name}
             </span>
