@@ -106,7 +106,7 @@ export const PlayersPageForModeration = (): ReactElement | undefined => {
                                 title={i18n.playerEditor.tooltipRemoveAll}
                                 onClick={() => onGameEvent(new RemovePlayerEvent(Array.from(game.players.keys())))}
                             >
-                                group_remove
+                                delete_sweep
                             </span>
                         </div>
                     </div>
