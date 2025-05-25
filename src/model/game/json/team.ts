@@ -24,6 +24,7 @@ export function storeTeam(team: Team): JsonTeam {
 
 export function restoreTeams(game: Game, json: JsonTeamAndPlayerData) {
     const usedColors: Set<TeamColor> = new Set<TeamColor>();
+    game.selectionOrder.length = 0;
 
     // Add or update the teams from json
     if (json.teams) {
@@ -31,6 +32,7 @@ export function restoreTeams(game: Game, json: JsonTeamAndPlayerData) {
             const color = restoreTeam(game, jsonTeam);
             if (color) {
                 usedColors.add(color);
+                game.selectionOrder.push(color);
             }
         }
     }

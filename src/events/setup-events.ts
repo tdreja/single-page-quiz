@@ -422,6 +422,7 @@ export class ImportPlayersEvent extends BasicGameEvent {
     public updateGame(game: Game): GameUpdate {
         // Prepare game and import players
         game.teams.clear();
+        game.selectionOrder.length = 0;
         game.round = null;
         restorePlayers(game, this._players);
 
@@ -441,6 +442,7 @@ export class ImportPlayersEvent extends BasicGameEvent {
                 };
                 game.teams.set(newTeam.color, newTeam);
                 newTeam.players.set(player.emoji, player);
+                game.selectionOrder.push(newTeam.color);
             }
         }
 
