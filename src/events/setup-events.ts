@@ -1,5 +1,5 @@
 import { nextRandom, shuffleArray } from '../model/common';
-import { Game, GameState } from '../model/game/game';
+import { Game, GamePage } from '../model/game/game';
 import { JsonStaticGameData, JsonTeamAndPlayerData } from '../model/game/json/game';
 import { JsonPlayerData, restorePlayers } from '../model/game/json/player';
 import { restoreTeams } from '../model/game/json/team';
@@ -398,19 +398,19 @@ export class UpdateTeamEvent extends BasicGameEvent {
 /**
  * Switches the game state (aka the shown page).
  */
-export class SwitchStateEvent extends BasicGameEvent {
-    private readonly _targetState: GameState;
+export class SwitchPageEvent extends BasicGameEvent {
+    private readonly _targetState: GamePage;
 
-    public constructor(targetState: GameState) {
-        super(EventType.SWITCH_GAME_STATE);
+    public constructor(targetState: GamePage) {
+        super(EventType.SWITCH_GAME_PAGE);
         this._targetState = targetState;
     }
 
     public updateGame(game: Game): GameUpdate {
-        if (game.state === this._targetState) {
+        if (game.page === this._targetState) {
             return noUpdate(game);
         }
-        game.state = this._targetState;
+        game.page = this._targetState;
         return update(game, Changes.GAME_SETUP);
     }
 }

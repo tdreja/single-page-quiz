@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { GameState } from '../model/game/game';
+import { GamePage } from '../model/game/game';
 import { TeamColor } from '../model/game/team';
 import { i18n_de } from './I18N_de';
 import { i18n_en } from './I18N_en';
@@ -26,7 +26,7 @@ export interface Labels {
  * Labels for all game states.
  */
 export type GameLabels = {
-    [state in GameState]: string;
+    [state in GamePage]: string;
 };
 
 /**

@@ -1,10 +1,10 @@
 import React, { ReactElement, useContext } from 'react';
-import { Game, GameState } from '../model/game/game';
+import { Game, GamePage } from '../model/game/game';
 import { GameContext } from '../components/common/GameContext';
 import { TabContext, TabSettings, TabType } from '../components/mode/TabContext';
 
 export interface SubPageProps {
-    state: GameState,
+    state: GamePage,
     tabType: TabType[],
     children?: ReactElement,
 }
@@ -30,7 +30,7 @@ export const MainPage = ({ children }: MainProps): ReactElement => {
             <div className="w-100">
                 {
                     children
-                        ? children.filter((child) => child.props.state === game.state
+                        ? children.filter((child) => child.props.state === game.page
                           && child.props.tabType.includes(tabSettings.tabType))
                         : undefined
                 }

@@ -3,7 +3,10 @@ import { Emoji, Player } from './player';
 import { Question } from '../quiz/question';
 import { QuestionCell, QuizCell, QuizTable } from '../base/table';
 
-export enum GameState {
+/**
+ * What pages is currently shown?
+*/
+export enum GamePage {
     IMPORT_QUIZ = 'import-quiz',
     TEAM_SETUP = 'team-setup',
     PLAYER_SETUP = 'player-setup',
@@ -50,7 +53,7 @@ export interface Game {
     quizName: string,
     round: GameRound | null,
     roundsCounter: number,
-    state: GameState,
+    page: GamePage,
     teamNavExpanded: boolean,
 }
 
@@ -63,7 +66,7 @@ export function emptyGame(): Game {
         quizName: '',
         round: null,
         roundsCounter: 0,
-        state: GameState.TEAM_SETUP,
+        page: GamePage.TEAM_SETUP,
         teamNavExpanded: false,
     };
 }

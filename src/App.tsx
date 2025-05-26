@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './game.css';
 import './images.css';
 import React, { useCallback, useEffect, useState } from 'react';
-import { emptyGame, Game, GameState } from './model/game/game';
+import { emptyGame, Game, GamePage } from './model/game/game';
 import { Changes, GameEvent } from './events/common-events';
 import { GameContext, GameEventContext, GameEventListener } from './components/common/GameContext';
 import { prepareGame } from './dev/dev-setup';
@@ -103,37 +103,37 @@ function App() {
                         <SettingsBar />
                         <MainPage>
                             {/* Players */}
-                            <SubPage state={GameState.PLAYER_SETUP} tabType={[TabType.PARTICIPANTS]}>
+                            <SubPage state={GamePage.PLAYER_SETUP} tabType={[TabType.PARTICIPANTS]}>
                                 <PlayersPageForParticipants />
                             </SubPage>
-                            <SubPage state={GameState.PLAYER_SETUP} tabType={[TabType.MODERATION, TabType.SHARED]}>
+                            <SubPage state={GamePage.PLAYER_SETUP} tabType={[TabType.MODERATION, TabType.SHARED]}>
                                 <PlayersPageForModeration />
                             </SubPage>
 
                             {/* Teams */}
-                            <SubPage state={GameState.TEAM_SETUP} tabType={[TabType.PARTICIPANTS]}>
+                            <SubPage state={GamePage.TEAM_SETUP} tabType={[TabType.PARTICIPANTS]}>
                                 <TeamsPageForParticipants />
                             </SubPage>
-                            <SubPage state={GameState.TEAM_SETUP} tabType={[TabType.MODERATION, TabType.SHARED]}>
+                            <SubPage state={GamePage.TEAM_SETUP} tabType={[TabType.MODERATION, TabType.SHARED]}>
                                 <TeamsPageForModeration />
                             </SubPage>
 
                             {/* Import */}
-                            <SubPage state={GameState.IMPORT_QUIZ} tabType={[TabType.MODERATION]}>
+                            <SubPage state={GamePage.IMPORT_QUIZ} tabType={[TabType.MODERATION]}>
                                 <QuizImporterView shared={false} />
                             </SubPage>
-                            <SubPage state={GameState.IMPORT_QUIZ} tabType={[TabType.SHARED]}>
+                            <SubPage state={GamePage.IMPORT_QUIZ} tabType={[TabType.SHARED]}>
                                 <QuizImporterView shared={true} />
                             </SubPage>
 
                             {/* Quiz */}
-                            <SubPage state={GameState.GAME_ACTIVE} tabType={[TabType.PARTICIPANTS]}>
+                            <SubPage state={GamePage.GAME_ACTIVE} tabType={[TabType.PARTICIPANTS]}>
                                 <QuizParticipantsPage />
                             </SubPage>
-                            <SubPage state={GameState.GAME_ACTIVE} tabType={[TabType.SHARED]}>
+                            <SubPage state={GamePage.GAME_ACTIVE} tabType={[TabType.SHARED]}>
                                 <QuizModerationPage shared={true} />
                             </SubPage>
-                            <SubPage state={GameState.GAME_ACTIVE} tabType={[TabType.MODERATION]}>
+                            <SubPage state={GamePage.GAME_ACTIVE} tabType={[TabType.MODERATION]}>
                                 <QuizModerationPage shared={false} />
                             </SubPage>
                         </MainPage>

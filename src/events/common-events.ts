@@ -1,11 +1,11 @@
-import { Game, GameRound, GameState } from '../model/game/game';
+import { Game, GameRound, GamePage } from '../model/game/game';
 
 /**
  * All events that can happen in the game.
  */
 export enum EventType {
     // Global events
-    SWITCH_GAME_STATE = 'switch-game-state',
+    SWITCH_GAME_PAGE = 'switch-game-page',
     EXPAND_TEAM_NAV = 'expand-team-nav',
 
     // Events for each round
@@ -152,7 +152,7 @@ export abstract class GameRoundEvent extends BasicGameEvent {
     }
 
     public updateGame(game: Game): GameUpdate {
-        if (game.state !== GameState.GAME_ACTIVE) {
+        if (game.page !== GamePage.GAME_ACTIVE) {
             return noUpdate(game);
         }
         if (game.round) {

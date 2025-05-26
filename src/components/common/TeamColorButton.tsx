@@ -11,7 +11,7 @@ interface ColorChangeProps extends HtmlProps {
 }
 
 function changeColorStyle(color: TeamColor, outlined?: boolean): React.CSSProperties {
-    return button(textColor[color], backgroundColor[color], hoverColor[color], outlined);
+    return button(textColor[color], backgroundColor[color], hoverColor[color], !!outlined);
 }
 
 export const TeamColorButton = (props: ColorChangeProps): ReactElement => {

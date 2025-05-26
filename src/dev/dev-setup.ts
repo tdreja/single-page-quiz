@@ -1,5 +1,5 @@
 import { AddPlayerEvent, AddTeamEvent } from '../events/setup-events';
-import { Game, GameColumn, GameState } from '../model/game/game';
+import { Game, GameColumn, GamePage } from '../model/game/game';
 import { allEmojis, Emoji } from '../model/game/player';
 import { TeamColor } from '../model/game/team';
 import {
@@ -145,5 +145,5 @@ export function prepareGame(game: Game) {
             new EstimateQuestion(columnId, 400, 'Do what you want!', 1000));
         index += 1;
     }
-    game.state = GameState.GAME_ACTIVE;
+    game.page = GamePage.GAME_ACTIVE;
 }
