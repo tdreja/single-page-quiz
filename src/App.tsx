@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { emptyGame, Game, GamePage } from './model/game/game';
 import { Changes, GameEvent } from './events/common-events';
 import { GameContext, GameEventContext, GameEventListener } from './components/common/GameContext';
-import { prepareGame } from './dev/dev-setup';
 import { restoreGameFromStorage, storeGameInStorage, storeStaticGameData } from './components/common/Storage';
 import { SettingsBar } from './sections/top/SettingsBar';
 import { readSettingsFromLocation, TabContext, TabType } from './components/mode/TabContext';
@@ -78,11 +77,6 @@ function App() {
     useEffect(() => {
         // Game from Storage
         const fromStorage = restoreGameFromStorage(game, [Changes.QUIZ_CONTENT, Changes.GAME_SETUP, Changes.CURRENT_ROUND]);
-        if (fromStorage.players.size === 0) {
-            console.warn('No game in storage, use DEV one');
-            prepareGame(fromStorage);
-            storeStaticGameData(exportStaticGameContent(game));
-        }
         setGame(fromStorage);
 
         // Settings from URL
