@@ -1,5 +1,5 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
-import { Game, GameState } from '../../model/game/game';
+import { Game, GamePage } from '../../model/game/game';
 import { sortTeamsHighestFirst } from '../../model/game/team';
 import { ExpandTeamNavEvent } from '../../events/setup-events';
 import { TeamViewCollapsed } from './TeamViewCollapsed';
@@ -14,7 +14,7 @@ export const TeamsBottomNav = (): ReactElement => {
     const [disabled, setDisabled] = useState<boolean>(false);
 
     useEffect(() => {
-        if (game.state !== GameState.GAME_ACTIVE) {
+        if (game.page !== GamePage.GAME_ACTIVE) {
             setExpanded(false);
             setDisabled(true);
             setExpandIcon('check_indeterminate_small');

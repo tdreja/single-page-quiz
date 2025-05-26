@@ -2,7 +2,7 @@ import { QuestionCell, QuizCell, QuizTable } from '../../base/table';
 import { arrayAsSet } from '../../common';
 import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../../quiz/json';
 import { Question } from '../../quiz/question';
-import { Game, GameColumn, GameState, RoundState } from '../game';
+import { Game, GameColumn, GamePage, RoundState } from '../game';
 import { TeamColor } from '../team';
 import { JsonPlayer, JsonPlayerData, restorePlayers as importPlayers, storePlayer } from './player';
 import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team';
@@ -27,7 +27,7 @@ export interface JsonTeamAndPlayerData extends JsonPlayerData {
 export interface JsonUpdatableGameData extends JsonTeamAndPlayerData {
     columns?: Array<JsonDynamicSectionData>,
     selectionOrder?: Array<TeamColor>,
-    state?: GameState,
+    state?: GamePage,
     roundsCounter?: number,
     teamNavExpanded?: boolean,
 }
@@ -91,7 +91,7 @@ export function exportGame(game: Game): JsonUpdatableGameData {
         players,
         quizName: game.quizName,
         columns: sections,
-        state: game.state,
+        state: game.page,
         selectionOrder: game.selectionOrder,
         roundsCounter: game.roundsCounter,
         teamNavExpanded: game.teamNavExpanded,
@@ -120,7 +120,7 @@ export function importGame(game: Game, json?: JsonUpdatableGameData) {
     importTeams(game, json);
     importCompletedQuestions(game, json);
     if (json.state) {
-        game.state = json.state;
+        game.page = json.state;
     }
     if (json.roundsCounter) {
         game.roundsCounter = json.roundsCounter;

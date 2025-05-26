@@ -1,8 +1,8 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
 import { settingsToSearch, TabContext, TabType } from '../../components/mode/TabContext';
 import { GameContext, GameEventContext } from '../../components/common/GameContext';
-import { GameState } from '../../model/game/game';
-import { SwitchStateEvent } from '../../events/setup-events';
+import { GamePage } from '../../model/game/game';
+import { SwitchPageEvent } from '../../events/setup-events';
 import { I18N, Labels } from '../../i18n/I18N';
 
 interface Symbol {
@@ -44,8 +44,8 @@ export const SettingsBar = (): ReactElement => {
     const [mode, setMode] = useState<Symbol>(modeShared);
     const [action, setAction] = useState<Symbol>(actionOpenParticipants);
 
-    const changeState = (state: GameState): void => {
-        onGameUpdate(new SwitchStateEvent(state));
+    const changeState = (state: GamePage): void => {
+        onGameUpdate(new SwitchPageEvent(state));
     };
 
     useEffect(() => {
@@ -94,16 +94,16 @@ export const SettingsBar = (): ReactElement => {
     return (
         <nav id="top-nav" className="navbar sticky-top dark-background d-flex align-items-end pb-0 pt-0 justify-content-between ps-2 pe-2">
             <ul className="nav nav-tabs">
-                <li className={`nav-item nav-link ${game.state === GameState.GAME_ACTIVE ? 'active' : ''}`} onClick={() => changeState(GameState.GAME_ACTIVE)}>
+                <li className={`nav-item nav-link ${game.page === GamePage.GAME_ACTIVE ? 'active' : ''}`} onClick={() => changeState(GamePage.GAME_ACTIVE)}>
                     {i18n.game['game-active']}
                 </li>
-                <li className={`nav-item nav-link ${game.state === GameState.PLAYER_SETUP ? 'active' : ''}`} onClick={() => changeState(GameState.PLAYER_SETUP)}>
+                <li className={`nav-item nav-link ${game.page === GamePage.PLAYER_SETUP ? 'active' : ''}`} onClick={() => changeState(GamePage.PLAYER_SETUP)}>
                     {i18n.game['player-setup']}
                 </li>
-                <li className={`nav-item nav-link ${game.state === GameState.TEAM_SETUP ? 'active' : ''}`} onClick={() => changeState(GameState.TEAM_SETUP)}>
+                <li className={`nav-item nav-link ${game.page === GamePage.TEAM_SETUP ? 'active' : ''}`} onClick={() => changeState(GamePage.TEAM_SETUP)}>
                     {i18n.game['team-setup']}
                 </li>
-                <li className={`nav-item nav-link ${game.state === GameState.IMPORT_QUIZ ? 'active' : ''}`} onClick={() => changeState(GameState.IMPORT_QUIZ)}>
+                <li className={`nav-item nav-link ${game.page === GamePage.IMPORT_QUIZ ? 'active' : ''}`} onClick={() => changeState(GamePage.IMPORT_QUIZ)}>
                     Import Quiz
                 </li>
             </ul>

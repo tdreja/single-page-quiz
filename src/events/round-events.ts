@@ -1,4 +1,4 @@
-import { Game, GameRound, GameState, RoundState } from '../model/game/game';
+import { Game, GameRound, GamePage, RoundState } from '../model/game/game';
 import { getQuestion } from '../model/game/json/game';
 import { TeamColor } from '../model/game/team';
 import { BasicGameEvent, Changes, EventType, GameRoundEvent, GameUpdate, noUpdate, update } from './common-events';
@@ -17,7 +17,7 @@ export class StartRoundEvent extends BasicGameEvent {
     }
 
     public updateGame(game: Game): GameUpdate {
-        if (game.state !== GameState.GAME_ACTIVE) {
+        if (game.page !== GamePage.GAME_ACTIVE) {
             return noUpdate(game);
         }
 

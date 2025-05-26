@@ -11,6 +11,9 @@ import { Changes, EventType, GameRoundEvent, GameUpdate, noUpdate, update } from
 import { ActionQuestion } from '../model/quiz/action-question';
 import { Completion, recalculateCompletion, splitUpPoints } from '../model/quiz/Completion';
 
+/**
+ * The current team has selected a choice from a multiple choice question.
+ */
 export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
     private readonly _choiceId: string;
     private readonly _overrideTeam: TeamColor | null;
@@ -90,6 +93,9 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
     }
 }
 
+/**
+ * A team has submitted their estimate for an estimate question.
+ */
 export class SubmitEstimateEvent extends GameRoundEvent {
     private readonly _team: TeamColor;
     private readonly _estimate: number;
@@ -142,6 +148,9 @@ export class SubmitEstimateEvent extends GameRoundEvent {
     }
 }
 
+/**
+ * One more more teams have completed an action question.
+ */
 export class CompleteActionEvent extends GameRoundEvent {
     private readonly _completion: Completion;
 

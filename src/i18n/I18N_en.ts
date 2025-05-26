@@ -1,8 +1,11 @@
-import { GameState } from '../model/game/game';
+import { GamePage } from '../model/game/game';
 import { TeamColor } from '../model/game/team';
 import { Labels } from './I18N';
 import { QuestionType } from '../model/quiz/question';
 
+/**
+ * All translations used by the application in English.
+ */
 export const i18n_en: Labels = {
     teams: {
         [TeamColor.RED]: '1 / Red',
@@ -15,11 +18,11 @@ export const i18n_en: Labels = {
         [TeamColor.WHITE]: '8 / White',
     },
     game: {
-        [GameState.TEAM_SETUP]: 'Teams',
-        [GameState.PLAYER_SETUP]: 'Players',
-        [GameState.CONTROLLER_SETUP]: 'Controller',
-        [GameState.GAME_ACTIVE]: 'Quiz',
-        [GameState.IMPORT_QUIZ]: 'Import quiz file',
+        [GamePage.TEAM_SETUP]: 'Teams',
+        [GamePage.PLAYER_SETUP]: 'Players',
+        [GamePage.CONTROLLER_SETUP]: 'Controller',
+        [GamePage.GAME_ACTIVE]: 'Quiz',
+        [GamePage.IMPORT_QUIZ]: 'Import quiz file',
     },
     importer: {
         formHeader: 'Import file',

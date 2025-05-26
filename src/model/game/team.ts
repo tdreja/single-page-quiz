@@ -1,6 +1,9 @@
 import { JsonTeam } from './json/team';
 import { Emoji, Player } from './player';
 
+/**
+ * We identify teams by a color.
+ */
 export enum TeamColor {
     // noinspection JSUnusedGlobalSymbols
     RED = 'RED',
@@ -13,6 +16,9 @@ export enum TeamColor {
     WHITE = 'WHITE',
 }
 
+/**
+ * Represents a team in the game.
+ */
 export interface Team {
     readonly color: TeamColor,
     points: number,

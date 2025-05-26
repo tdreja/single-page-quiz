@@ -22,16 +22,6 @@ function buildColumn(name: string, index: number, q100: Question, q200: Question
     };
 }
 
-function getItem(section?: GameColumn, question?: Question): string {
-    if (section) {
-        if (question) {
-            return `${section.columnName}${question.pointsForCompletion}`;
-        }
-        return section.columnName;
-    }
-    return '?';
-}
-
 beforeEach(() => {
     game = emptyGame();
 
@@ -48,41 +38,37 @@ beforeEach(() => {
 
 describe('Question matrix', () => {
     test('Sort sections by index', () => {
-        const table = generateQuestionTable(game, getItem);
-        expect(table.headlines.length).toBe(2);
-        expect(table.headlines[0].inSection).toBe('SectionA');
-        expect(table.headlines[0].label).toBe('SectionA');
-        expect(table.headlines[0].pointsForCompletion).toBeUndefined();
-        expect(table.headlines[0].item).toBe('SectionA');
+        const table = generateQuestionTable(game);
+        expect(table.columnNames.length).toBe(2);
+        expect(table.columnNames[0].inColumn).toBe('SectionA');
+        expect(table.columnNames[0].label).toBe('SectionA');
 
-        expect(table.headlines[1].inSection).toBe('SectionB');
-        expect(table.headlines[1].label).toBe('SectionB');
-        expect(table.headlines[1].pointsForCompletion).toBeUndefined();
-        expect(table.headlines[1].item).toBe('SectionB');
+        expect(table.columnNames[1].inColumn).toBe('SectionB');
+        expect(table.columnNames[1].label).toBe('SectionB');
     });
     test('Points levels are in order', () => {
-        const table = generateQuestionTable(game, getItem);
+        const table = generateQuestionTable(game);
         expect(table.rows.length).toBe(2);
 
         const row100 = table.rows[0];
         expect(row100.length).toBe(2);
-        expect(row100[0].inSection).toBe('SectionA');
+        expect(row100[0].inColumn).toBe('SectionA');
         expect(row100[0].label).toBe('100');
         expect(row100[0].pointsForCompletion).toBe(100);
-        expect(row100[0].item).toBe('SectionA100');
+        expect(row100[0].question).toBeDefined();
 
-        expect(row100[1].inSection).toBe('SectionB');
+        expect(row100[1].inColumn).toBe('SectionB');
         expect(row100[1].label).toBe('100');
         expect(row100[1].pointsForCompletion).toBe(100);
-        expect(row100[1].item).toBe('SectionB100');
+        expect(row100[1].question).toBeDefined();
 
         const row200 = table.rows[1];
         expect(row200.length).toBe(2);
-        expect(row200[0].inSection).toBe('SectionA');
+        expect(row200[0].inColumn).toBe('SectionA');
         expect(row200[0].label).toBe('200');
         expect(row200[0].pointsForCompletion).toBe(200);
 
-        expect(row200[1].inSection).toBe('SectionB');
+        expect(row200[1].inColumn).toBe('SectionB');
         expect(row200[1].label).toBe('200');
         expect(row200[1].pointsForCompletion).toBe(200);
     });

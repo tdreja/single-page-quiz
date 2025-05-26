@@ -1,6 +1,9 @@
 import { JsonPlayer } from './json/player';
 import { TeamColor } from './team';
 
+/**
+ * We used Emoji to identify players in the game.
+*/
 export enum Emoji {
     // noinspection JSUnusedGlobalSymbols
     BADGER = 'BADGER',
@@ -45,6 +48,9 @@ export enum Emoji {
     WHALE = 'WHALE',
 }
 
+/**
+ * Represents a player in the game.
+ */
 export interface Player {
     name: string,
     emoji: Emoji,

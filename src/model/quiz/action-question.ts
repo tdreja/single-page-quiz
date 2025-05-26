@@ -3,6 +3,10 @@ import { BaseQuestion, QuestionType, TextQuestion } from './question';
 import { Team, TeamColor } from '../game/team';
 import { Completion } from './Completion';
 
+/**
+ * A question that requires teams to perform an action external to the quiz,
+ *  with the moderation determining the points awarded.
+ */
 export class ActionQuestion extends BaseQuestion implements TextQuestion {
     private readonly _text: string;
     private readonly _completionPoints: Map<TeamColor, number>;

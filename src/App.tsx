@@ -2,10 +2,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './game.css';
 import './images.css';
 import React, { useCallback, useEffect, useState } from 'react';
-import { emptyGame, Game, GameState } from './model/game/game';
+import { emptyGame, Game, GamePage } from './model/game/game';
 import { Changes, GameEvent } from './events/common-events';
 import { GameContext, GameEventContext, GameEventListener } from './components/common/GameContext';
-import { prepareGame } from './dev/dev-setup';
 import { restoreGameFromStorage, storeGameInStorage, storeStaticGameData } from './components/common/Storage';
 import { SettingsBar } from './sections/top/SettingsBar';
 import { readSettingsFromLocation, TabContext, TabType } from './components/mode/TabContext';
@@ -30,6 +29,11 @@ const channel = new BroadcastChannel('der-grosse-preis');
 let channelListener: ChannelListener = () => {
 };
 
+/**
+ * Main entry point of the application.
+ * Initializes the game state, sets up event listeners, and renders the main application components.
+ * It uses React's context API to provide the game state and event handlers to child components.
+ */
 function App() {
     const [game, setGame] = useState<Game>(initialGame);
     const [tabType, setTabType] = useState<TabType>(TabType.SHARED);
@@ -73,11 +77,6 @@ function App() {
     useEffect(() => {
         // Game from Storage
         const fromStorage = restoreGameFromStorage(game, [Changes.QUIZ_CONTENT, Changes.GAME_SETUP, Changes.CURRENT_ROUND]);
-        if (fromStorage.players.size === 0) {
-            console.warn('No game in storage, use DEV one');
-            prepareGame(fromStorage);
-            storeStaticGameData(exportStaticGameContent(game));
-        }
         setGame(fromStorage);
 
         // Settings from URL
@@ -98,37 +97,37 @@ function App() {
                         <SettingsBar />
                         <MainPage>
                             {/* Players */}
-                            <SubPage state={GameState.PLAYER_SETUP} tabType={[TabType.PARTICIPANTS]}>
+                            <SubPage state={GamePage.PLAYER_SETUP} tabType={[TabType.PARTICIPANTS]}>
                                 <PlayersPageForParticipants />
                             </SubPage>
-                            <SubPage state={GameState.PLAYER_SETUP} tabType={[TabType.MODERATION, TabType.SHARED]}>
+                            <SubPage state={GamePage.PLAYER_SETUP} tabType={[TabType.MODERATION, TabType.SHARED]}>
                                 <PlayersPageForModeration />
                             </SubPage>
 
                             {/* Teams */}
-                            <SubPage state={GameState.TEAM_SETUP} tabType={[TabType.PARTICIPANTS]}>
+                            <SubPage state={GamePage.TEAM_SETUP} tabType={[TabType.PARTICIPANTS]}>
                                 <TeamsPageForParticipants />
                             </SubPage>
-                            <SubPage state={GameState.TEAM_SETUP} tabType={[TabType.MODERATION, TabType.SHARED]}>
+                            <SubPage state={GamePage.TEAM_SETUP} tabType={[TabType.MODERATION, TabType.SHARED]}>
                                 <TeamsPageForModeration />
                             </SubPage>
 
                             {/* Import */}
-                            <SubPage state={GameState.IMPORT_QUIZ} tabType={[TabType.MODERATION]}>
+                            <SubPage state={GamePage.IMPORT_QUIZ} tabType={[TabType.MODERATION]}>
                                 <QuizImporterView shared={false} />
                             </SubPage>
-                            <SubPage state={GameState.IMPORT_QUIZ} tabType={[TabType.SHARED]}>
+                            <SubPage state={GamePage.IMPORT_QUIZ} tabType={[TabType.SHARED]}>
                                 <QuizImporterView shared={true} />
                             </SubPage>
 
                             {/* Quiz */}
-                            <SubPage state={GameState.GAME_ACTIVE} tabType={[TabType.PARTICIPANTS]}>
+                            <SubPage state={GamePage.GAME_ACTIVE} tabType={[TabType.PARTICIPANTS]}>
                                 <QuizParticipantsPage />
                             </SubPage>
-                            <SubPage state={GameState.GAME_ACTIVE} tabType={[TabType.SHARED]}>
+                            <SubPage state={GamePage.GAME_ACTIVE} tabType={[TabType.SHARED]}>
                                 <QuizModerationPage shared={true} />
                             </SubPage>
-                            <SubPage state={GameState.GAME_ACTIVE} tabType={[TabType.MODERATION]}>
+                            <SubPage state={GamePage.GAME_ACTIVE} tabType={[TabType.MODERATION]}>
                                 <QuizModerationPage shared={false} />
                             </SubPage>
                         </MainPage>
