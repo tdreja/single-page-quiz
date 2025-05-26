@@ -6,6 +6,9 @@ import { i18n_en } from './I18N_en';
 import { Emoji } from '../model/game/player';
 import { QuestionType } from '../model/quiz/question';
 
+/**
+ * Overall API with all translations used by the application
+ **/
 export interface Labels {
     teams: TeamLabels,
     emojis: EmojiLabels,
@@ -19,22 +22,38 @@ export interface Labels {
     settings: Settings,
 }
 
+/**
+ * Labels for all game states.
+ */
 export type GameLabels = {
     [state in GameState]: string;
 };
 
+/**
+ * Labels for team colors.
+ */
 export type TeamLabels = {
     [color in TeamColor]: string;
 };
 
+/**
+ * Labels for emojis used in the game.
+ */
 export type EmojiLabels = {
     [emoji in Emoji]: string;
 };
 
+/**
+ * Labels for question types.
+ * Maps each QuestionType to a human-readable string.
+*/
 export type QuestionTypeLabels = {
     [type in QuestionType]: string;
 };
 
+/**
+ * Labels used in the player editor page
+ */
 export interface PlayerEditor {
     labelAdd: string,
     labelName: string,
@@ -55,6 +74,9 @@ export interface PlayerEditor {
     noTeam: string,
 }
 
+/**
+ * Labels used in the team editor page
+ */
 export interface TeamEditor {
     labelActions: string,
     labelPoints: string,
@@ -69,6 +91,9 @@ export interface TeamEditor {
     tooltipShuffle: string,
 }
 
+/**
+ * Labels for the top settings bar.
+ */
 export interface Settings {
     tooltipModeShared: string,
     labelModeShared: string,
@@ -80,6 +105,9 @@ export interface Settings {
     tooltipActionModeration: string,
 }
 
+/**
+ * Labels used in the question page.
+ */
 export interface QuestionLabels {
     stateShowQuestion: string,
     stateShowQuestionNoBuzzer: string,
@@ -101,12 +129,18 @@ export interface QuestionLabels {
     teamsWon: string,
 }
 
+/**
+ * Labels used in the quiz overview page.
+*/
 export interface QuizLabels {
     nextSelectingTeam: string,
     columns: string,
     nextTeamHeader: string,
 }
 
+/**
+ * Labels for the quiz importer page.
+ */
 export interface QuizImportLabels {
     actionCancel: string,
     actionApply: string,
@@ -118,13 +152,16 @@ export interface QuizImportLabels {
     noNewQuizUploaded: string,
 }
 
+/**
+ * Fetches the appropriate labels based on the user's language settings.
+ * Defaults to English if no specific language is detected.
+ */
 export function i18n(): Labels {
     const language = window.navigator.language;
-    console.log('Language?', language);
-    if (language && language.startsWith('en')) {
-        return i18n_en;
+    if (language && language.startsWith('de')) {
+        return i18n_de;
     }
-    return i18n_de;
+    return i18n_en;
 }
 
 export const I18N = createContext<Labels>(i18n_de);

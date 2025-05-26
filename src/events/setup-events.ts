@@ -26,6 +26,9 @@ function addPlayerSmallestToTeam(player: Player, teams: Map<TeamColor, Team>) {
     }
 }
 
+/**
+ * Add all new named players to the game.
+ */
 export class AddPlayerEvent extends BasicGameEvent {
     private readonly _names: Array<string>;
 
@@ -57,6 +60,9 @@ export class AddPlayerEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Remove all players with the given emojis from the game.
+ */
 export class RemovePlayerEvent extends BasicGameEvent {
     private readonly _emojis: Array<Emoji>;
 
@@ -86,6 +92,9 @@ export class RemovePlayerEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Update the player with the given emoji.
+ */
 export class UpdatePlayerEvent extends BasicGameEvent {
     private readonly _emoji: Emoji;
     private readonly _update: (player: Player) => void;
@@ -106,6 +115,9 @@ export class UpdatePlayerEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Move the given player to a new team.
+ */
 export class MovePlayerEvent extends BasicGameEvent {
     private readonly _emoji: Emoji;
     private readonly _newTeam: TeamColor;
@@ -136,6 +148,9 @@ export class MovePlayerEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Resets all given player's points to 0.
+ */
 export class ResetPlayersEvent extends BasicGameEvent {
     private readonly _emojis: Array<Emoji>;
 
@@ -160,6 +175,9 @@ export class ResetPlayersEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Re-rolls the emoji of a player to another random emoji.
+ */
 export class ReRollEmojiEvent extends BasicGameEvent {
     private readonly _oldEmoji: Emoji;
 
@@ -196,6 +214,9 @@ export class ReRollEmojiEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Adds another team to the game.
+ */
 export class AddTeamEvent extends BasicGameEvent {
     private readonly _color?: TeamColor;
 
@@ -224,6 +245,9 @@ export class AddTeamEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Remove all the given teams from the game.
+ */
 export class RemoveTeamEvent extends BasicGameEvent {
     private readonly _colors: Array<TeamColor>;
 
@@ -263,6 +287,9 @@ export class RemoveTeamEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Randomly assign all current players to the given teams.
+ */
 export class ShuffleTeamsEvent extends BasicGameEvent {
     private readonly _colors: Array<TeamColor>;
 
@@ -303,6 +330,9 @@ export class ShuffleTeamsEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Changes the color of the given team
+*/
 export class ChangeTeamColorEvent extends BasicGameEvent {
     private readonly _from: TeamColor;
     private readonly _to: TeamColor;
@@ -342,6 +372,9 @@ export class ChangeTeamColorEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Updates the given team.
+ */
 export class UpdateTeamEvent extends BasicGameEvent {
     private readonly _color: TeamColor;
     private readonly _update: (team: Team) => void;
@@ -362,6 +395,9 @@ export class UpdateTeamEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Switches the game state (aka the shown page).
+ */
 export class SwitchStateEvent extends BasicGameEvent {
     private readonly _targetState: GameState;
 
@@ -379,6 +415,9 @@ export class SwitchStateEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Expands the bottom area showing the teams.
+ */
 export class ExpandTeamNavEvent extends BasicGameEvent {
     private readonly _expanded: boolean;
 
@@ -396,6 +435,9 @@ export class ExpandTeamNavEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Import the JSON quiz data into the game.
+ */
 export class ImportQuizEvent extends BasicGameEvent {
     private readonly _quiz: JsonStaticGameData;
 
@@ -411,6 +453,9 @@ export class ImportQuizEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Import the JSON player data into the game. Resets all teams.
+ */
 export class ImportPlayersEvent extends BasicGameEvent {
     private readonly _players: JsonPlayerData;
 
@@ -450,6 +495,9 @@ export class ImportPlayersEvent extends BasicGameEvent {
     }
 }
 
+/**
+ * Import the JSON team and player data into the game.
+ */
 export class ImportTeamsEvent extends BasicGameEvent {
     private readonly _teams: JsonTeamAndPlayerData;
 

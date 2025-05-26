@@ -30,6 +30,11 @@ const channel = new BroadcastChannel('der-grosse-preis');
 let channelListener: ChannelListener = () => {
 };
 
+/**
+ * Main entry point of the application.
+ * Initializes the game state, sets up event listeners, and renders the main application components.
+ * It uses React's context API to provide the game state and event handlers to child components.
+ */
 function App() {
     const [game, setGame] = useState<Game>(initialGame);
     const [tabType, setTabType] = useState<TabType>(TabType.SHARED);

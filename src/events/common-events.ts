@@ -1,5 +1,8 @@
 import { Game, GameRound, GameState } from '../model/game/game';
 
+/**
+ * All events that can happen in the game.
+ */
 export enum EventType {
     // Global events
     SWITCH_GAME_STATE = 'switch-game-state',
@@ -39,16 +42,25 @@ export enum EventType {
     IMPORT_TEAMS = 'import-teams',
 }
 
+/**
+ * What type of changes have happened to the game by the last game event.
+ */
 export enum Changes {
     QUIZ_CONTENT = 'quiz-content',
     GAME_SETUP = 'game-setup',
     CURRENT_ROUND = 'current-round',
 }
 
+/**
+ * JSON type for storing changes.
+ */
 export type JsonChanges = {
     [change in Changes]: boolean
 };
 
+/**
+ * Stores the changes that have happened to the game as a single JSON object.
+ */
 export function storeChanges(changes: Array<Changes>): JsonChanges {
     return {
         'current-round': changes.includes(Changes.CURRENT_ROUND),
@@ -57,6 +69,9 @@ export function storeChanges(changes: Array<Changes>): JsonChanges {
     };
 }
 
+/**
+ * Restores the changes from a JSON object to an array of Changes
+*/
 export function restoreChanges(changes: JsonChanges): Array<Changes> {
     const result: Array<Changes> = [];
     if (changes['current-round'] === true) {
@@ -71,16 +86,26 @@ export function restoreChanges(changes: JsonChanges): Array<Changes> {
     return result;
 }
 
+/**
+ * Return tuple as result of a game event.
+ * Contains the updated game and an array of changes that have happened.
+*/
 export interface GameUpdate {
     updatedGame: Game,
     updates: Array<Changes>,
 }
 
+/**
+ * Global API for all game events.
+ */
 export interface GameEvent {
     readonly type: EventType,
     updateGame: (game: Game) => GameUpdate,
 }
 
+/**
+ * Helper: Returns a GameUpdate that does not change the game.
+ */
 export function noUpdate(game: Game): GameUpdate {
     return {
         updatedGame: game,
@@ -88,6 +113,9 @@ export function noUpdate(game: Game): GameUpdate {
     };
 }
 
+/**
+ * Helper: Updated game with the given changes.
+ */
 export function update(game: Game, ...updates: Array<Changes>): GameUpdate {
     return {
         // Create a copy of the original so that React can actually see changes!
@@ -98,6 +126,9 @@ export function update(game: Game, ...updates: Array<Changes>): GameUpdate {
     };
 }
 
+/**
+ * Basic class that all game events should extend.
+ */
 export abstract class BasicGameEvent implements GameEvent {
     protected readonly _type: EventType;
 
@@ -112,6 +143,9 @@ export abstract class BasicGameEvent implements GameEvent {
     }
 }
 
+/**
+ * Basic class for all game events targeting a the current game round.
+*/
 export abstract class GameRoundEvent extends BasicGameEvent {
     protected constructor(type: EventType) {
         super(type);

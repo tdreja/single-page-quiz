@@ -3,6 +3,9 @@ import { TeamColor } from '../model/game/team';
 import { Labels } from './I18N';
 import { QuestionType } from '../model/quiz/question';
 
+/**
+ * All translations used by the application in German.
+ */
 export const i18n_de: Labels = {
     teams: {
         [TeamColor.RED]: '1 / Rot',
