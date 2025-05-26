@@ -33,6 +33,10 @@ export interface GameColumn {
     readonly index: number,
 }
 
+/**
+ * One round, aka one active question in the game.
+ * Each question creates a new round.
+ */
 export interface GameRound {
     readonly inColumn: string,
     readonly question: Question,
@@ -57,6 +61,9 @@ export interface Game {
     teamNavExpanded: boolean,
 }
 
+/**
+ * Starting point for a new game.
+ */
 export function emptyGame(): Game {
     return {
         columns: new Map(),
@@ -91,6 +98,9 @@ export function sortGameSectionsByIndex(section1?: GameColumn, section2?: GameCo
     return idx1 - idx2;
 }
 
+/**
+ * Generates the table data for the quiz table from the game object.
+ */
 export function generateQuestionTable(
     game: Game,
 ): QuizTable<Question> {

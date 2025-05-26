@@ -1,11 +1,15 @@
-import { storeUpdatableGameData } from '../components/common/Storage';
-
+/**
+ * Which points are required for each placement?
+ */
 export interface PlacementPointsForAll {
     goldPoints: number,
     silverPoints: number,
     bronzePoints: number,
 }
 
+/**
+ * Look through all points and determine the placements for gold, silver, and bronze.
+ */
 export function calculatePlacementsForAll(points: Array<number>): PlacementPointsForAll {
     const sorted = points.sort((a, b) => b - a);
     return {
@@ -15,12 +19,18 @@ export function calculatePlacementsForAll(points: Array<number>): PlacementPoint
     };
 }
 
+/**
+ * What placements can a player have?
+ */
 export enum Placement {
     GOLD = 'GOLD',
     SILVER = 'SILVER',
     BRONZE = 'BRONZE',
 }
 
+/**
+ * Based on the overall placement points and our current points, determine the placement of a player.
+ */
 export function calculateSinglePlacement(points: number, placements: PlacementPointsForAll): Placement | null {
     if (points <= 0) {
         return null; // 0 points should not have a placement!

@@ -3,7 +3,8 @@ import { IndexedByColor, JsonStaticQuestionData } from './json';
 import { BaseQuestion, QuestionType, TextQuestion } from './question';
 
 /**
- * Base API for estimate questions
+ * A question that requires each of the teams to submit an estimate for the target value.
+ * The estimates are then compared to the target value, and points are awarded based on how close the estimates are.
  */
 export class EstimateQuestion extends BaseQuestion implements TextQuestion {
     private readonly _estimates: Map<TeamColor, number>;

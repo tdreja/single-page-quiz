@@ -58,7 +58,7 @@ export class TextMultipleChoiceQuestion extends BaseQuestion implements Multiple
     protected get jsonChoices(): Array<JsonStaticChoiceData> {
         return this.choicesSorted.map((choice) => ({
             choiceId: choice.choiceId,
-            correct: choice.correct,
+            correct: choice.correct ? true : undefined,
             text: choice.text,
         }));
     }

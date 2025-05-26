@@ -2,6 +2,10 @@ import { Team, TeamColor } from '../game/team';
 import { IndexedByColor, JsonDynamicQuestionData, JsonStaticQuestionData, OptionalQuestion } from './json';
 import { Completion } from './Completion';
 
+/**
+ * Enum to determine the type of question.
+ * It is used during JSON export and import to determine the type of question.
+ */
 export enum QuestionType {
     TEXT_MULTIPLE_CHOICE = 'text-multiple-choice',
     IMAGE_MULTIPLE_CHOICE = 'image-multiple-choice',

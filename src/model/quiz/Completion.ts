@@ -1,9 +1,15 @@
 import { TeamColor } from '../game/team';
 
+/**
+ * How many points did each team receive for the question?
+ */
 export type Completion = {
     [team in TeamColor]?: number;
 };
 
+/**
+ * Splits up the points between the teams from the previous completion and the changed team.
+ */
 export function splitUpPoints(oldCompletion?: Completion,
     maxPoints?: number,
     changedTeam?: TeamColor): Completion {
@@ -25,6 +31,9 @@ export function splitUpPoints(oldCompletion?: Completion,
     return newCompletion;
 }
 
+/**
+ * Recalculates how many points each of the teams should receive after a change in the points of one team.
+ */
 export function recalculateCompletion(
     oldCompletion?: Completion,
     maxPoints?: number,

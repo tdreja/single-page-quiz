@@ -14,7 +14,7 @@ export interface OptionalQuestion {
 }
 
 /**
- * Static content of a question in the game
+ * Static content of a question in the game: During the run of the game, this content is not changed.
  * @see Question
 */
 export interface JsonStaticQuestionData extends OptionalQuestion {
@@ -35,6 +35,9 @@ export interface JsonStaticChoiceData {
     text?: string,
 }
 
+/**
+ * Helper: Has a field for each team color, so we can export things like estimates to JSON.
+ */
 export type IndexedByColor = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [color in TeamColor]?: any;
@@ -51,6 +54,9 @@ export interface JsonDynamicQuestionData {
     additionalData?: IndexedByColor,
 }
 
+/**
+ * Exports the entire static content of the game, including all sections and questions.
+*/
 export function exportStaticGameContent(game: Game): JsonStaticGameData {
     const sections: Array<JsonStaticColumnData> = [];
     for (const section of game.columns.values()) {
@@ -62,6 +68,9 @@ export function exportStaticGameContent(game: Game): JsonStaticGameData {
     };
 }
 
+/**
+ * Imports the static content of the game, including all sections and questions.
+ */
 export function importStaticGameContent(game: Game, quiz?: JsonStaticGameData) {
     game.columns.clear();
     if (!quiz || !quiz.columns) {
@@ -125,6 +134,10 @@ export function jsonContentToQuestion(sectionName?: string, json?: JsonStaticQue
     }
 }
 
+/**
+ * Imports the static choices for a multiple-choice question from the JSON data.
+ * If a choice does not have an ID, we generate new random IDs for all of them.
+ */
 function getTextChoices(json: JsonStaticQuestionData): Map<string, TextChoice> {
     if (!json.choices) {
         return new Map();
