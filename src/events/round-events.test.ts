@@ -137,8 +137,11 @@ test('resetRound', () => {
     game = expectNoUpdate(resetRound.updateGame(game));
     // Start a new round
     game = expectUpdate(startRound.updateGame(game), Changes.CURRENT_ROUND);
+    expect(game.selectionOrder).toEqual([TeamColor.RED, TeamColor.BLUE]);
 
     // Reset the round
     game = expectUpdate(resetRound.updateGame(game), Changes.CURRENT_ROUND);
     expect(game.round).toBeNull();
+    // Red can select again!
+    expect(game.selectionOrder).toEqual([TeamColor.BLUE, TeamColor.RED]);
 });

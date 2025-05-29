@@ -178,6 +178,11 @@ export class ResetRoundEvent extends GameRoundEvent {
 
     public updateQuestionRound(game: Game, _: GameRound): GameUpdate {
         game.round = null;
+        // Reset the selection order
+        const last = game.selectionOrder.pop();
+        if (last) {
+            game.selectionOrder.unshift(last);
+        }
         return update(game, Changes.CURRENT_ROUND);
     }
 }
