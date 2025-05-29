@@ -4,6 +4,7 @@ import {
     ActivateBuzzerEvent,
     CloseRoundEvent,
     RequestAttemptEvent,
+    ResetRoundEvent,
     SkipAttemptEvent,
 } from '../../../../events/round-events';
 import { I18N } from '../../../../i18n/I18N';
@@ -11,6 +12,19 @@ import { GameContext, GameEventContext } from '../../../../components/common/Gam
 import { RoundProps } from '../RoundProps';
 import { sortTeamsByColor } from '../../../../model/game/team';
 import { TeamColorButton } from '../../../../components/common/TeamColorButton';
+
+export const ModerationResetRound = (_: SidebarSectionProps & RoundProps): ReactElement => {
+    const onGameEvent = useContext(GameEventContext);
+    const i18n = useContext(I18N);
+    return (
+        <div className="card-body">
+            <h6>{i18n.question.headlineResetRound}</h6>
+            <span className="btn btn-danger" onClick={() => onGameEvent(new ResetRoundEvent())}>
+                {i18n.question.actionResetRound}
+            </span>
+        </div>
+    );
+};
 
 export const ModerationShowQuestion = ({ round }: SidebarSectionProps & RoundProps): ReactElement => {
     const onGameEvent = useContext(GameEventContext);

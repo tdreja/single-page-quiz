@@ -7,6 +7,7 @@ import { I18N } from '../../../../i18n/I18N';
 import { Sidebar } from '../Sidebar';
 import {
     ModerationBuzzerActive,
+    ModerationResetRound,
     ModerationShowQuestion,
     ModerationShowResults,
     ModerationTeamCanAttempt,
@@ -36,6 +37,11 @@ export const ImageMultipleChoiceQuestionParticipantsView = (
             </div>
             {/* Sidebar */}
             <Sidebar headline={i18n.question.headlineStatus} round={round}>
+                <ModerationResetRound round={round} state={[RoundState.SHOW_QUESTION, RoundState.BUZZER_ACTIVE]} />
+                <ModerationShowQuestion round={round} state={[RoundState.SHOW_QUESTION]} />
+                <ModerationBuzzerActive round={round} state={[RoundState.BUZZER_ACTIVE]} />
+                <ModerationTeamCanAttempt round={round} state={[RoundState.TEAM_CAN_ATTEMPT]} />
+                <ModerationShowResults round={round} state={[RoundState.SHOW_RESULTS]} />
             </Sidebar>
         </div>
     );

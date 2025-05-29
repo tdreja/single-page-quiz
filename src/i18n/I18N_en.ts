@@ -95,6 +95,8 @@ export const i18n_en: Labels = {
         teamsWon: 'Winners:',
         actionCompleteQuestion: 'Complete question',
         headlineCompletionPercent: 'Allocation of points',
+        actionResetRound: 'Back to selection',
+        headlineResetRound: 'Abort question',
     },
     questionTypes: {
         [QuestionType.TEXT_MULTIPLE_CHOICE]: 'Multiple choice question',
