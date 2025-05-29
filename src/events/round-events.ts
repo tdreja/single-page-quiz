@@ -167,3 +167,17 @@ export class CloseRoundEvent extends GameRoundEvent {
         return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
     }
 }
+
+/**
+ * Round was started accidentally and another question should be played instead.
+ */
+export class ResetRoundEvent extends GameRoundEvent {
+    public constructor() {
+        super(EventType.RESET_ROUND);
+    }
+
+    public updateQuestionRound(game: Game, _: GameRound): GameUpdate {
+        game.round = null;
+        return update(game, Changes.CURRENT_ROUND);
+    }
+}

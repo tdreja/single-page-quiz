@@ -6,6 +6,7 @@ import {
     ActivateBuzzerEvent,
     CloseRoundEvent,
     RequestAttemptEvent,
+    ResetRoundEvent,
     SkipRoundEvent,
     StartRoundEvent,
 } from './round-events';
@@ -129,4 +130,15 @@ test('closeRound', () => {
     expect(game.round).toBeNull();
     expect(game.roundsCounter).toBe(1);
     game = expectNoUpdate(closeRound.updateGame(game));
+});
+
+test('resetRound', () => {
+    const resetRound = new ResetRoundEvent();
+    game = expectNoUpdate(resetRound.updateGame(game));
+    // Start a new round
+    game = expectUpdate(startRound.updateGame(game), Changes.CURRENT_ROUND);
+
+    // Reset the round
+    game = expectUpdate(resetRound.updateGame(game), Changes.CURRENT_ROUND);
+    expect(game.round).toBeNull();
 });
