@@ -5,7 +5,7 @@ import { ActionQuestion } from '../../../../model/quiz/action-question';
 import { I18N } from '../../../../i18n/I18N';
 import { Sidebar } from '../Sidebar';
 import { RoundState } from '../../../../model/game/game';
-import { ActionQuestionModerationSectionEditCompletion, ActionQuestionModerationSectionShowCompletion } from './ModerationSections';
+import { ActionQuestionModerationResetRound, ActionQuestionModerationSectionEditCompletion, ActionQuestionModerationSectionShowCompletion } from './ModerationSections';
 import {
     ActionQuestionParticipantsSectionShowCompletion,
     ActionQuestionParticipantsSectionWaitForCompletion,
@@ -57,6 +57,9 @@ export const ActionQuestionModerationView = (
             </div>
             {/* Sidebar */}
             <Sidebar headline={i18n.question.headlineStatus} round={round} className="flex-grow-1 min-width-15">
+                <ActionQuestionModerationResetRound
+                    state={[RoundState.BUZZER_ACTIVE, RoundState.SHOW_QUESTION, RoundState.TEAM_CAN_ATTEMPT]}
+                />
                 <ActionQuestionModerationSectionEditCompletion
                     round={round}
                     question={question}

@@ -7,7 +7,7 @@ import { I18N } from '../../../../i18n/I18N';
 import { Completion, recalculateCompletion } from '../../../../model/quiz/Completion';
 import { sortTeamsByColor, Team } from '../../../../model/game/team';
 import { CompleteActionEvent } from '../../../../events/question-event';
-import { CloseRoundEvent } from '../../../../events/round-events';
+import { CloseRoundEvent, ResetRoundEvent } from '../../../../events/round-events';
 import { TeamColorButton } from '../../../../components/common/TeamColorButton';
 
 interface TeamProps {
@@ -132,5 +132,18 @@ export const ActionQuestionModerationSectionShowCompletion = (
                 </div>
             </div>
         </>
+    );
+};
+
+export const ActionQuestionModerationResetRound = (_: SidebarSectionProps): ReactElement => {
+    const onGameEvent = useContext(GameEventContext);
+    const i18n = useContext(I18N);
+    return (
+        <div className="card-body">
+            <h6>{i18n.question.headlineResetRound}</h6>
+            <span className="btn btn-danger" onClick={() => onGameEvent(new ResetRoundEvent())}>
+                {i18n.question.actionResetRound}
+            </span>
+        </div>
     );
 };

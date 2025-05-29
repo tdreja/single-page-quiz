@@ -114,6 +114,8 @@ export const i18n_de: Labels = {
         teamsWon: 'Gewinner:',
         actionCompleteQuestion: 'Frage abschließen',
         headlineCompletionPercent: 'Punkteverteilung',
+        actionResetRound: 'Zurück zur Auswahl',
+        headlineResetRound: 'Frage abbrechen',
     },
     questionTypes: {
         [QuestionType.TEXT_MULTIPLE_CHOICE]: 'Multiple-Choice-Frage',

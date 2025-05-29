@@ -15,6 +15,7 @@ export enum EventType {
     SKIP_ATTEMPT = 'skip-attempt',
     SKIP_ROUND = 'skip-round',
     CLOSE_ROUND = 'close-round',
+    RESET_ROUND = 'reset-round',
 
     // Events for question types
     SELECT_FROM_MULTIPLE_CHOICE = 'select-from-multiple-choice',
