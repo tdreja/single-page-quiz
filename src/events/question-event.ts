@@ -53,7 +53,7 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
         if (choice.correct) {
             const completion: Completion = {};
             for (const team of teams) {
-                completion[team.color] = 100;
+                completion[team.color] = question.pointsForCompletion;
             }
             question.completeQuestion(game.teams.values(), completion);
             round.state = RoundState.SHOW_RESULTS;

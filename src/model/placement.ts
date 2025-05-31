@@ -11,7 +11,7 @@ export interface PlacementPointsForAll {
  * Look through all points and determine the placements for gold, silver, and bronze.
  */
 export function calculatePlacementsForAll(points: Array<number>): PlacementPointsForAll {
-    const sorted = points.sort((a, b) => b - a);
+    const sorted = Array.from(new Set(points)).sort((a, b) => b - a);
     return {
         goldPoints: sorted.length > 0 ? sorted[0] : -1,
         silverPoints: sorted.length > 1 ? sorted[1] : -1,
