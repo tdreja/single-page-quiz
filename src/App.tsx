@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { emptyGame, Game, GamePage } from './model/game/game';
 import { Changes, GameEvent } from './events/common-events';
 import { GameContext, GameEventContext, GameEventListener } from './components/common/GameContext';
-import { restoreGameFromStorage, storeGameInStorage, storeStaticGameData } from './components/common/Storage';
+import { restoreGameFromStorage, storeGameInStorage } from './components/common/Storage';
 import { SettingsBar } from './sections/top/SettingsBar';
 import { readSettingsFromLocation, TabContext, TabType } from './components/mode/TabContext';
 import { BroadcastJson, restoreGameFromBroadcast, toBroadcastJson } from './model/broadcast';
@@ -13,7 +13,6 @@ import { i18n, I18N } from './i18n/I18N';
 import { MainPage, SubPage } from './pages/MainPage';
 // https://fonts.google.com/icons
 import 'material-symbols';
-import { exportStaticGameContent } from './model/quiz/json';
 import { QuizImporterView } from './pages/importer/QuizImporterView';
 import { TeamsPageForParticipants } from './pages/teams/TeamsPageForParticipants';
 import { PlayersPageForParticipants } from './pages/players/PlayersPageForParticipants';
@@ -22,6 +21,7 @@ import { PlayersPageForModeration } from './pages/players/PlayersPageForModerati
 import { TeamsPageForModeration } from './pages/teams/TeamsPageForModeration';
 import { QuizParticipantsPage } from './pages/quiz/QuizParticipantsPage';
 import { QuizModerationPage } from './pages/quiz/QuizModerationPage';
+import { debugLog } from './components/common/Logging';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -40,10 +40,10 @@ function App() {
 
     // Update game when an event is received and store the new state
     const onGameEvent = useCallback<GameEventListener>((event: GameEvent) => {
-        console.log('Game Event', event);
+        debugLog('Received Game Event', event);
         const update = event.updateGame(game);
         if (update.updates.length > 0) {
-            console.log('Send message to channel', update.updates);
+            debugLog('Game updated by event', event, 'Updates?', update.updates, 'Sending message to channel', 'New Game State', game);
             storeGameInStorage(update.updatedGame, update.updates);
             channel.postMessage(JSON.stringify(toBroadcastJson(update.updatedGame, update.updates)));
             setGame(update.updatedGame);
@@ -52,7 +52,7 @@ function App() {
 
     // Update the game, if another tab has changed it
     const onChannelEvent = useCallback<ChannelListener>((event: MessageEvent) => {
-        console.log('Received message from channel');
+        debugLog('Received message from channel', event.data);
         const json: BroadcastJson = JSON.parse(event.data);
         setGame(restoreGameFromBroadcast(game, json));
     }, [game]);
