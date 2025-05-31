@@ -26,7 +26,7 @@ export class EstimateQuestion extends BaseQuestion implements TextQuestion {
         return this._target;
     }
 
-    public get type(): QuestionType {
+    public get questionType(): QuestionType {
         return QuestionType.ESTIMATE;
     }
 
@@ -36,7 +36,7 @@ export class EstimateQuestion extends BaseQuestion implements TextQuestion {
 
     public exportStaticQuestionData(): JsonStaticQuestionData {
         return {
-            type: QuestionType.ESTIMATE,
+            questionType: QuestionType.ESTIMATE,
             pointsForCompletion: this.pointsForCompletion,
             text: this.text,
             estimateTarget: this.target,

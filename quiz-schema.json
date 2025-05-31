@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/tdreja/single-page-quiz/blob/main/quiz-schema.json",
+  "title": "Quiz",
+  "description": "A quiz with questions for the single-page quiz application",
+  "type": "object",
+  "properties": {
+    "columns": {
+      "type": "array",
+      "description": "All columns / categories in the quiz: Used as containers for the questions.",
+      "items": {
+        "$ref": "#/$defs/colum"
+      }
+    }
+  },
+  "$defs": {
+    "colum": {
+      "type": "object",
+      "description": "A single column / category of questions in the quiz.",
+      "properties": {
+        "columnName": {
+          "type": "string",
+          "description": "What title should be displayed for the current column?"
+        },
+        "questions": {
+          "type": "array",
+          "description": "Array of all questions for this column / category",
+          "items": {
+            "$ref": "#/$defs/question"
+          }
+        }
+      },
+      "required": [
+        "columnName", "questions"
+      ]
+    },
+    "question": {
+      "type": "object",
+      "description": "Common fields used by all question types",
+      "properties": {
+        "questionType": {
+          "type": "string",
+          "description": "Type used to identify the actual question instance."
+        },
+        "pointsForCompletion": {
+          "type": "number",
+          "minimum": 0,
+          "description": "How many points does answering this question give the team? Used to group questions into rows."
+        },
+        "text": {
+          "type": "string",
+          "description": "Text displayed on screen for the given question."
+        }
+      },
+      "required": [
+        "questionType", "pointsForCompletion", "text"
+      ],
+      "oneOf": [
+        {
+          "properties": {
+            "questionType": { "const":  "text-multiple-choice"}
+          },
+          "$ref": "#/$defs/text-multiple-choice-question"
+        },
+        {
+          "properties": {
+            "questionType": { "const":  "image-multiple-choice"}
+          },
+          "$ref": "#/$defs/image-multiple-choice-question"
+        },
+        {
+          "properties": {
+            "questionType": { "const":  "estimate"}
+          },
+          "$ref": "#/$defs/estimate-question"
+        },
+        {
+          "properties": {
+            "questionType": { "const":  "action"}
+          },
+          "$ref": "#/$defs/action-question"
+        }
+      ]
+    },
+    "text-multiple-choice-question": {
+      "type": "object",
+      "description": "Text question with multiple choices as answer options",
+      "properties": {
+        "choices": {
+          "$ref": "#/$defs/choice-array"
+        }
+      },
+      "required": [
+        "choices"
+      ]
+    },
+    "image-multiple-choice-question": {
+      "type": "object",
+      "description": "Image question with multiple choices as answer options",
+      "properties": {
+        "choices": {
+          "$ref": "#/$defs/choice-array"
+        },
+        "imageBase64": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/image-png"
+            },
+            {
+              "$ref": "#/$defs/image-jpeg"
+            }
+          ]
+        }
+      },
+      "required": [
+        "choices", "imageBase64"
+      ]
+    },
+    "estimate-question": {
+      "type": "object",
+      "description": "Estimation question where all teams submit estimates and the closest to the target wins",
+      "properties": {
+        "target": {
+          "type": "number",
+          "description": "The actual amount that answers the estimate question"
+        }
+      },
+      "required": [
+        "target"
+      ]
+    },
+    "action-question": {
+      "type": "object",
+      "description": "Teams are required to perform a challenge outside the application and the moderation defines the winners."
+    },
+    "choice": {
+      "type": "object",
+      "description": "One option displayed to the participants. Can either be correct or false.",
+      "properties": {
+        "text": {
+          "type": ["string", "number"],
+          "description": "Text displayed for the given choice"
+        },
+        "correct": {
+          "type": "boolean",
+          "description": "If true, then selecting this choice will answer the question correctly."
+        },
+        "choiceId": {
+          "type": "string",
+          "description": "ID of the choice. Usually a single letter displayed in front of the choice."
+        }
+      },
+      "required": [
+        "text"
+      ]
+    },
+    "choice-array": {
+      "type": "array",
+      "description": "All choices presented to the user. Only one choice should be correct.",
+      "items": {
+        "$ref": "#/$defs/choice"
+      }
+    },
+    "image-png": {
+      "type": "string",
+      "description": "A PNG image stored as Base64",
+      "contentEncoding": "base64",
+      "contentMediaType": "image/png"
+    },
+    "image-jpeg": {
+      "type": "string",
+      "description": "A JPG image stored as Base64",
+      "contentEncoding": "base64",
+      "contentMediaType": "image/jpeg"
+    }
+  }
+}

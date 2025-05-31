@@ -19,7 +19,7 @@ export enum QuestionType {
 export interface Question extends OptionalQuestion {
     readonly pointsForCompletion: number,
     readonly inColumn: string,
-    readonly type: QuestionType,
+    readonly questionType: QuestionType,
     readonly completedBy: Set<TeamColor>,
     readonly completed: boolean,
     readonly startTimerImmediately: boolean,
@@ -119,5 +119,5 @@ export abstract class BaseQuestion implements Question {
     protected abstract exportAdditionalData(): IndexedByColor | undefined;
     protected abstract importAdditionalData(additionalData?: IndexedByColor): void;
     abstract exportStaticQuestionData(): JsonStaticQuestionData;
-    readonly abstract type: QuestionType;
+    readonly abstract questionType: QuestionType;
 }

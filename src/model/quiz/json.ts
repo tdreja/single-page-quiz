@@ -5,20 +5,20 @@ import { ActionQuestion } from './action-question';
 import { EstimateQuestion } from './estimate-question';
 import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question';
 import { Question, QuestionType } from './question';
-import { JsonStaticGameData, JsonStaticColumnData } from '../game/json/game';
+import { JsonStaticColumnData, JsonStaticGameData } from '../game/json/game';
 
 export interface OptionalQuestion {
     pointsForCompletion?: number,
     inColumn?: string,
-    type?: QuestionType,
+    questionType?: QuestionType,
 }
 
 /**
  * Static content of a question in the game: During the run of the game, this content is not changed.
  * @see Question
-*/
+ */
 export interface JsonStaticQuestionData extends OptionalQuestion {
-    type?: QuestionType,
+    questionType?: QuestionType,
     pointsForCompletion?: number,
     text?: string,
     imageBase64?: string,
@@ -28,7 +28,7 @@ export interface JsonStaticQuestionData extends OptionalQuestion {
 
 /**
  * Static content for choices of a multiple-choice question
-*/
+ */
 export interface JsonStaticChoiceData {
     choiceId?: string,
     correct?: boolean,
@@ -56,7 +56,7 @@ export interface JsonDynamicQuestionData {
 
 /**
  * Exports the entire static content of the game, including all sections and questions.
-*/
+ */
 export function exportStaticGameContent(game: Game): JsonStaticGameData {
     const sections: Array<JsonStaticColumnData> = [];
     for (const section of game.columns.values()) {
@@ -119,10 +119,15 @@ function jsonQuizSectionToGameSection(count: number, json?: JsonStaticColumnData
 }
 
 export function jsonContentToQuestion(sectionName?: string, json?: JsonStaticQuestionData): Question | null {
-    if (!sectionName || !json || !json.type || !json.pointsForCompletion) {
+    if (!sectionName || !json || !json.pointsForCompletion) {
         return null;
     }
-    switch (json.type) {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const type = json.questionType || (json as any)['type'];
+    if (!type) {
+        return null;
+    }
+    switch (type) {
         case QuestionType.TEXT_MULTIPLE_CHOICE:
             return new TextMultipleChoiceQuestion(sectionName, json.pointsForCompletion, json.text || '', getTextChoices(json));
         case QuestionType.IMAGE_MULTIPLE_CHOICE:
@@ -131,6 +136,8 @@ export function jsonContentToQuestion(sectionName?: string, json?: JsonStaticQue
             return new EstimateQuestion(sectionName, json.pointsForCompletion, json.text || '', json.estimateTarget || 0);
         case QuestionType.ACTION:
             return new ActionQuestion(sectionName, json.pointsForCompletion, json.text || '');
+        default:
+            return null;
     }
 }
 

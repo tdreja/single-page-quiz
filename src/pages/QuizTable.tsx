@@ -78,7 +78,7 @@ function AnsweredQuestionCellView({
     const i18n = useContext(I18N);
     const percentage = calcPercentage(rowIndex, rowCount);
     const completed: Array<TeamColor> = cell.question ? Array.from(cell.question.completedBy) : [];
-    const questionType: QuestionType = cell.question?.type || QuestionType.TEXT_MULTIPLE_CHOICE;
+    const questionType: QuestionType = cell.question?.questionType || QuestionType.TEXT_MULTIPLE_CHOICE;
     return (
         <div
             className="btn disabled d-inline-grid align-items-center justify-content-between gap-2 btn-primary-outline"
@@ -122,7 +122,7 @@ function OpenQuestionCellView<QUESTION extends OptionalQuestion>(
         }
     }, [cell, onCellClick]);
 
-    const questionType: QuestionType = cell.question?.type || QuestionType.TEXT_MULTIPLE_CHOICE;
+    const questionType: QuestionType = cell.question?.questionType || QuestionType.TEXT_MULTIPLE_CHOICE;
     return (
         <div
             className="btn fw-bold d-inline-grid align-items-center justify-content-between gap-2 btn-primary"
