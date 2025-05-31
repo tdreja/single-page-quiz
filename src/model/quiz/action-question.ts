@@ -21,7 +21,7 @@ export class ActionQuestion extends BaseQuestion implements TextQuestion {
         return this._text;
     }
 
-    public get type(): QuestionType {
+    public get questionType(): QuestionType {
         return QuestionType.ACTION;
     }
 
@@ -35,7 +35,7 @@ export class ActionQuestion extends BaseQuestion implements TextQuestion {
 
     public exportStaticQuestionData(): JsonStaticQuestionData {
         return {
-            type: QuestionType.ACTION,
+            questionType: QuestionType.ACTION,
             pointsForCompletion: this.pointsForCompletion,
             text: this.text,
         };

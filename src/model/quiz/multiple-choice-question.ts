@@ -47,7 +47,7 @@ export class TextMultipleChoiceQuestion extends BaseQuestion implements Multiple
         return this._text;
     }
 
-    public get type(): QuestionType {
+    public get questionType(): QuestionType {
         return QuestionType.TEXT_MULTIPLE_CHOICE;
     }
 
@@ -65,7 +65,7 @@ export class TextMultipleChoiceQuestion extends BaseQuestion implements Multiple
 
     public exportStaticQuestionData(): JsonStaticQuestionData {
         return {
-            type: this.type,
+            questionType: this.questionType,
             pointsForCompletion: this.pointsForCompletion,
             text: this.text,
             choices: this.jsonChoices,
@@ -120,13 +120,13 @@ export class ImageMultipleChoiceQuestion extends TextMultipleChoiceQuestion impl
         return this._imageBase64;
     }
 
-    public get type(): QuestionType {
+    public get questionType(): QuestionType {
         return QuestionType.IMAGE_MULTIPLE_CHOICE;
     }
 
     public exportStaticQuestionData(): JsonStaticQuestionData {
         return {
-            type: QuestionType.IMAGE_MULTIPLE_CHOICE,
+            questionType: QuestionType.IMAGE_MULTIPLE_CHOICE,
             pointsForCompletion: this.pointsForCompletion,
             text: this.text,
             imageBase64: this.imageBase64,
