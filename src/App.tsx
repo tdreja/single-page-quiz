@@ -12,7 +12,7 @@ import { BroadcastJson, restoreGameFromBroadcast, toBroadcastJson } from './mode
 import { i18n, I18N } from './i18n/I18N';
 import { MainPage, SubPage } from './pages/MainPage';
 // https://fonts.google.com/icons
-import 'material-symbols';
+import 'material-symbols/outlined.css';
 import { QuizImporterView } from './pages/importer/QuizImporterView';
 import { TeamsPageForParticipants } from './pages/teams/TeamsPageForParticipants';
 import { PlayersPageForParticipants } from './pages/players/PlayersPageForParticipants';
