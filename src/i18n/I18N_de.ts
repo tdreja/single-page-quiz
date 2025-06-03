@@ -127,6 +127,9 @@ export const i18n_de: Labels = {
         nextSelectingTeam: 'Nächste Frage wählt Team:',
         columns: 'Kategorien',
         nextTeamHeader: 'Wer ist dran?',
+        gameOverHeader: 'Spielende',
+        gameOverWinner: 'Gewinner:',
+        gameOverNoWinner: 'Kein Gewinner',
     },
     settings: {
         tooltipModeShared: 'Geteilt mit Teilnehmern',

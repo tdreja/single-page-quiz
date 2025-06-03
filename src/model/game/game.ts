@@ -164,3 +164,14 @@ export function generateQuestionTable(
         rows,
     };
 }
+
+export function isGameOver(game: Game): boolean {
+    for (const column of game.columns.values()) {
+        for (const question of column.questions.values()) {
+            if (!question.completed) {
+                return false;
+            }
+        }
+    }
+    return true;
+}

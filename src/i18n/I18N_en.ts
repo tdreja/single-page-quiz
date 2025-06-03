@@ -108,6 +108,9 @@ export const i18n_en: Labels = {
         nextSelectingTeam: 'Next question gets picked by team:',
         columns: 'Categories',
         nextTeamHeader: 'Who\'s next?',
+        gameOverHeader: 'Game over',
+        gameOverWinner: 'Winner:',
+        gameOverNoWinner: 'No winners',
     },
     playerEditor: {
         tooltipReRollEmoji: 'New random emoji',

@@ -1,4 +1,4 @@
-import { Game, GamePage, GameRound, RoundState } from '../model/game/game';
+import { Game, GamePage, GameRound, isGameOver, RoundState } from '../model/game/game';
 import { getQuestion } from '../model/game/json/game';
 import { TeamColor } from '../model/game/team';
 import { BasicGameEvent, Changes, EventType, GameRoundEvent, GameUpdate, noUpdate, update } from './common-events';
@@ -130,17 +130,6 @@ export class SkipAttemptEvent extends GameRoundEvent {
     }
 }
 
-function isGameFinished(game: Game): boolean {
-    for (const column of game.columns.values()) {
-        for (const question of column.questions.values()) {
-            if (!question.completed) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
 /**
  * Nobody can answer? Skip to the results
  */
@@ -158,7 +147,7 @@ export class SkipRoundEvent extends GameRoundEvent {
         round.question.completeQuestion(game.teams.values(), {});
         round.timerStart = null;
         // Check if the game is finished as well
-        if (isGameFinished(game)) {
+        if (isGameOver(game)) {
             game.page = GamePage.TEAM_SETUP;
             return update(game, Changes.CURRENT_ROUND, Changes.GAME_SETUP);
         }
@@ -181,7 +170,7 @@ export class CloseRoundEvent extends GameRoundEvent {
         game.round = null;
         game.roundsCounter += 1;
         // Check if the game is finished as well
-        if (isGameFinished(game)) {
+        if (isGameOver(game)) {
             game.page = GamePage.TEAM_SETUP;
         }
         return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);

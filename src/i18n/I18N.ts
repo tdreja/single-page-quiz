@@ -138,6 +138,9 @@ export interface QuizLabels {
     nextSelectingTeam: string,
     columns: string,
     nextTeamHeader: string,
+    gameOverHeader: string,
+    gameOverWinner: string,
+    gameOverNoWinner: string,
 }
 
 /**
