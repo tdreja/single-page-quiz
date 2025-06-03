@@ -129,7 +129,7 @@ const TriggerTeamAttemptButtons = ({ round }: RoundProps): ReactElement => {
     const game = useContext(GameContext);
     const onGameEvent = useContext(GameEventContext);
     return (
-        <div className="d-flex gap-1">
+        <div className="d-flex gap-1 wrap-last-resort">
             {
                 Array.from(game.teams.values())
                     .filter((team) => !round.teamsAlreadyAttempted.has(team.color))

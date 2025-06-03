@@ -61,6 +61,32 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(4rem, 1fr));
 }
 
+@media (max-width: 1400px) {
+    .grid-columns-xl {
+        grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    }
+
+    .grid-columns-lg {
+        grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+    }
+
+    .grid-columns-md {
+        grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
+    }
+
+    .grid-columns-sm {
+        grid-template-columns: repeat(auto-fit, minmax(3rem, 1fr));
+    }
+
+    #teams-container {
+        white-space: nowrap;
+    }
+
+    .wrap-last-resort {
+        flex-wrap: wrap;
+    }
+}
+
 #teams-container {
     padding-left: 0.5em;
     padding-right: 0.5em;
