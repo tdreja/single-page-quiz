@@ -7,10 +7,12 @@ import { AddTeamEvent, RemoveTeamEvent, ShuffleTeamsEvent } from '../../events/s
 import { calculatePlacementsForAll, PlacementPointsForAll } from '../../model/placement';
 import { GameContext, GameEventContext } from '../../components/common/GameContext';
 import { TeamColorButton } from '../../components/common/TeamColorButton';
+import { DialogContext, openDialog } from '../../components/mode/DialogContext';
 
 export const TeamsPageForModeration = (): ReactElement => {
     const i18n = useContext(I18N);
     const game = useContext<Game>(GameContext);
+    const dialog = useContext(DialogContext);
     const onGameEvent = useContext(GameEventContext);
     const [availableColors, setAvailableColors] = useState<Array<TeamColor>>([]);
     const [placements, setPlacements] = useState<PlacementPointsForAll>(calculatePlacementsForAll([]));
@@ -71,7 +73,12 @@ export const TeamsPageForModeration = (): ReactElement => {
                             <span
                                 className="btn btn-outline-danger material-symbols-outlined"
                                 title={i18n.teamEditor.tooltipClear}
-                                onClick={() => onGameEvent(new RemoveTeamEvent(Array.from(game.teams.keys())))}
+                                onClick={() => openDialog(
+                                    i18n.teamEditor.dialogRemoveAllTitle,
+                                    i18n.teamEditor.dialogRemoveAllMessage,
+                                    dialog,
+                                    () => onGameEvent(new RemoveTeamEvent(Array.from(game.teams.keys()))),
+                                )}
                             >
                                 delete_sweep
                             </span>

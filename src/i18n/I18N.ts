@@ -85,6 +85,10 @@ export interface PlayerEditor {
  * Labels used in the team editor page
  */
 export interface TeamEditor {
+    dialogRemoveAllTitle: string,
+    dialogRemoveAllMessage: string,
+    dialogRemoveSingleTitle: string,
+    dialogRemoveSingleMessage: string,
     labelActions: string,
     labelPoints: string,
     labelSwitchColor: string,

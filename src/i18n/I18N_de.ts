@@ -152,6 +152,10 @@ export const i18n_de: Labels = {
         tooltipActionModeration: 'Öffne Moderationsansicht',
     },
     teamEditor: {
+        dialogRemoveAllTitle: 'Alle Teams entfernen?',
+        dialogRemoveAllMessage: 'Alle Teams werden entfernt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
+        dialogRemoveSingleTitle: 'Team entfernen?',
+        dialogRemoveSingleMessage: 'Das Team wird entfernt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
         labelActions: 'Aktionen',
         labelPoints: 'Punkte',
         labelSwitchColor: 'Farbe ändern',
