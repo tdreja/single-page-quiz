@@ -56,7 +56,8 @@ export const DialogView = ({ dialog, setDialog }: DialogWrapper) => {
                         >
                         </button>
                     </div>
-                    <div className="modal-body" style={{ whiteSpace: 'break-spaces' }}>
+                    <div className="modal-body d-flex flex-column gap-2" style={{ whiteSpace: 'break-spaces' }}>
+                        {dialog?.information}
                         <p>{message}</p>
                     </div>
                     <div className="modal-footer">

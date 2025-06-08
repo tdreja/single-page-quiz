@@ -7,6 +7,7 @@ import { GameEventContext } from '../../components/common/GameContext';
 import { EmojiView } from '../../components/common/EmojiView';
 import { TeamColorButton } from '../../components/common/TeamColorButton';
 import { DialogContext, openDialog } from '../../components/mode/DialogContext';
+import { PlayerWithPointsView } from '../../components/common/PlayerWithPointsView';
 
 export interface Props {
     player: Player,
@@ -144,6 +145,7 @@ export const PlayerForm = ({ player, availableTeams }: Props): ReactElement => {
                             i18n.playerEditor.dialogDeleteSingleMessage,
                             dialog,
                             () => onGameEvent(new RemovePlayerEvent([player.emoji])),
+                            (<PlayerWithPointsView player={player} size="small" />),
                         )}
                         title={i18n.playerEditor.tooltipRemove}
                     >

@@ -110,6 +110,13 @@ export const TeamForm = ({ team, availableColors, placements }: Props): ReactEle
                                 i18n.teamEditor.dialogRemoveSingleMessage,
                                 dialog,
                                 () => onGameEvent(new RemoveTeamEvent([team.color])),
+                                (
+                                    <TeamColorButton color={team.color}>
+                                        <span className="rounded-pill text-bg-light ps-2 pe-2 fw-bold">
+                                            {i18n.teams[team.color]}
+                                        </span>
+                                    </TeamColorButton>
+                                ),
                             )}
                             title={i18n.teamEditor.tooltipRemove}
                         >

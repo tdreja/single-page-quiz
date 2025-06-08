@@ -1,6 +1,4 @@
-import React, { useContext } from 'react';
-import { GameEvent } from '../../events/common-events';
-import { GameEventContext } from '../common/GameContext';
+import React, { ReactElement } from 'react';
 
 export type ActionListener = () => void;
 
@@ -10,6 +8,7 @@ export interface Dialog {
     onYesClick: ActionListener,
     onNoClick: ActionListener,
     onCloseClick: ActionListener,
+    information?: ReactElement,
 }
 
 export interface DialogWrapper {
@@ -26,6 +25,7 @@ export function openDialog(
     message: string,
     dialogContext: DialogWrapper,
     onYesClick: ActionListener,
+    information?: ReactElement,
 ): void {
     dialogContext.setDialog({
         title,
@@ -33,5 +33,6 @@ export function openDialog(
         onYesClick,
         onNoClick: () => {},
         onCloseClick: () => {},
+        information,
     });
 }
