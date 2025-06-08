@@ -17,6 +17,10 @@ export const i18n_de: Labels = {
         [TeamColor.TURQUOISE]: '7 / Türkis',
         [TeamColor.WHITE]: '8 / Weiß',
     },
+    dialog: {
+        actionYes: 'Ja',
+        actionNo: 'Nein',
+    },
     emojis: {
         DUCK: 'Ente',
         SHARK: 'Hai',
@@ -67,6 +71,10 @@ export const i18n_de: Labels = {
         [GamePage.IMPORT_QUIZ]: 'Quizdatei importieren',
     },
     importer: {
+        dialogImportTitle: 'Import abschließen?',
+        dialogImportQuizMessage: 'Das aktuelle Quiz wird durch das importierte Quiz ersetzt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
+        dialogImportPlayersMessage: 'Die Spieler werden durch die importierten Spieler ersetzt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
+        dialogImportTeamsMessage: 'Die Spieler und Teams werden durch die importierten Spieler und Teams ersetzt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
         formHeader: 'Datei importieren',
         noFileUploadedHeader: 'Vorschau',
         quizUploadedHeader: 'Vorschau - Neues Quiz',
@@ -77,6 +85,12 @@ export const i18n_de: Labels = {
         actionApply: 'Übernehmen',
     },
     playerEditor: {
+        dialogResetAllTitle: 'Alle Punkte zurücksetzen?',
+        dialogResetAllMessage: 'Alle Punkte der Spieler werden auf 0 zurückgesetzt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
+        dialogDeleteAllTitle: 'Alle Spieler entfernen?',
+        dialogDeleteAllMessage: 'Alle Spieler werden entfernt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
+        dialogDeleteSingleTitle: 'Spieler entfernen?',
+        dialogDeleteSingleMessage: 'Der Spieler wird entfernt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
         tooltipReRollEmoji: 'Neuer zufälliger Emoji',
         tooltipRename: 'Spieler umbenennen',
         tooltipRemove: 'Spieler entfernen',
@@ -142,6 +156,10 @@ export const i18n_de: Labels = {
         tooltipActionModeration: 'Öffne Moderationsansicht',
     },
     teamEditor: {
+        dialogRemoveAllTitle: 'Alle Teams entfernen?',
+        dialogRemoveAllMessage: 'Alle Teams werden entfernt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
+        dialogRemoveSingleTitle: 'Team entfernen?',
+        dialogRemoveSingleMessage: 'Das Team wird entfernt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
         labelActions: 'Aktionen',
         labelPoints: 'Punkte',
         labelSwitchColor: 'Farbe ändern',

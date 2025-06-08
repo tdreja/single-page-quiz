@@ -17,6 +17,10 @@ export const i18n_en: Labels = {
         [TeamColor.TURQUOISE]: '7 / Torquoise',
         [TeamColor.WHITE]: '8 / White',
     },
+    dialog: {
+        actionYes: 'Yes',
+        actionNo: 'No',
+    },
     game: {
         [GamePage.TEAM_SETUP]: 'Teams',
         [GamePage.PLAYER_SETUP]: 'Players',
@@ -25,6 +29,10 @@ export const i18n_en: Labels = {
         [GamePage.IMPORT_QUIZ]: 'Import quiz file',
     },
     importer: {
+        dialogImportTitle: 'Complete import?',
+        dialogImportQuizMessage: 'The existing quiz will be replaced with the imported quiz.\nThis action cannot be undone.',
+        dialogImportPlayersMessage: 'The existing players will be replaced with the imported players.\nThis action cannot be undone.',
+        dialogImportTeamsMessage: 'The existing teams will be replaced with the imported teams.\nThis action cannot be undone.',
         formHeader: 'Import file',
         noFileUploadedHeader: 'Preview',
         noNewQuizUploaded: 'No file uploaded.',
@@ -113,6 +121,12 @@ export const i18n_en: Labels = {
         gameOverNoWinner: 'No winners',
     },
     playerEditor: {
+        dialogResetAllTitle: 'Reset all points?',
+        dialogResetAllMessage: 'All players\' points will be reset to 0.\nThis action cannot be undone.',
+        dialogDeleteAllTitle: 'Remove all players?',
+        dialogDeleteAllMessage: 'All players will be removed.\nThis action cannot be undone.',
+        dialogDeleteSingleTitle: 'Remove player?',
+        dialogDeleteSingleMessage: 'The player will be removed.\nThis action cannot be undone.',
         tooltipReRollEmoji: 'New random emoji',
         tooltipRename: 'Rename player',
         tooltipRemove: 'Remove player',
@@ -142,6 +156,10 @@ export const i18n_en: Labels = {
         tooltipActionModeration: 'Open moderation view',
     },
     teamEditor: {
+        dialogRemoveAllTitle: 'Remove all teams?',
+        dialogRemoveAllMessage: 'All teams will be removed.\nThis action cannot be undone.',
+        dialogRemoveSingleTitle: 'Remove team?',
+        dialogRemoveSingleMessage: 'The team will be removed.\nThis action cannot be undone.',
         labelActions: 'Actions',
         labelPoints: 'Points',
         labelSwitchColor: 'Change color',

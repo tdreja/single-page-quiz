@@ -11,6 +11,7 @@ import { QuestionType } from '../model/quiz/question';
  **/
 export interface Labels {
     teams: TeamLabels,
+    dialog: DialogLabels,
     emojis: EmojiLabels,
     game: GameLabels,
     importer: QuizImportLabels,
@@ -55,6 +56,12 @@ export type QuestionTypeLabels = {
  * Labels used in the player editor page
  */
 export interface PlayerEditor {
+    dialogResetAllTitle: string,
+    dialogResetAllMessage: string,
+    dialogDeleteAllTitle: string,
+    dialogDeleteAllMessage: string,
+    dialogDeleteSingleTitle: string,
+    dialogDeleteSingleMessage: string,
     labelAdd: string,
     labelName: string,
     labelPoints: string,
@@ -78,6 +85,10 @@ export interface PlayerEditor {
  * Labels used in the team editor page
  */
 export interface TeamEditor {
+    dialogRemoveAllTitle: string,
+    dialogRemoveAllMessage: string,
+    dialogRemoveSingleTitle: string,
+    dialogRemoveSingleMessage: string,
     labelActions: string,
     labelPoints: string,
     labelSwitchColor: string,
@@ -147,6 +158,10 @@ export interface QuizLabels {
  * Labels for the quiz importer page.
  */
 export interface QuizImportLabels {
+    dialogImportTitle: string,
+    dialogImportQuizMessage: string,
+    dialogImportPlayersMessage: string,
+    dialogImportTeamsMessage: string,
     actionCancel: string,
     actionApply: string,
     formHeader: string,
@@ -155,6 +170,11 @@ export interface QuizImportLabels {
     playersUploadedHeader: string,
     teamsUploadedHeader: string,
     noNewQuizUploaded: string,
+}
+
+export interface DialogLabels {
+    actionYes: string,
+    actionNo: string,
 }
 
 /**

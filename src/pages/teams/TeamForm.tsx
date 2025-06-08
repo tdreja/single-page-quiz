@@ -9,6 +9,7 @@ import { backgroundColor, textColor } from '../../components/common/Colors';
 import { PlacementIcon } from '../../components/common/PlacementIcon';
 import { TeamColorButton } from '../../components/common/TeamColorButton';
 import { PlayerWithPointsView } from '../../components/common/PlayerWithPointsView';
+import { DialogContext, openDialog } from '../../components/mode/DialogContext';
 
 interface Props {
     team: Team,
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export const TeamForm = ({ team, availableColors, placements }: Props): ReactElement => {
+    const dialog = useContext(DialogContext);
     const i18n = useContext(I18N);
     const onGameEvent = useContext(GameEventContext);
     const [points, setPoints] = useState<string>(`${team.points}`);
@@ -103,7 +105,19 @@ export const TeamForm = ({ team, availableColors, placements }: Props): ReactEle
                     <div id={`team-actions-${team.color}`}>
                         <span
                             className="btn btn-outline-danger material-symbols-outlined"
-                            onClick={() => onGameEvent(new RemoveTeamEvent([team.color]))}
+                            onClick={() => openDialog(
+                                i18n.teamEditor.dialogRemoveSingleTitle,
+                                i18n.teamEditor.dialogRemoveSingleMessage,
+                                dialog,
+                                () => onGameEvent(new RemoveTeamEvent([team.color])),
+                                (
+                                    <TeamColorButton color={team.color}>
+                                        <span className="rounded-pill text-bg-light ps-2 pe-2 fw-bold">
+                                            {i18n.teams[team.color]}
+                                        </span>
+                                    </TeamColorButton>
+                                ),
+                            )}
                             title={i18n.teamEditor.tooltipRemove}
                         >
                             delete
