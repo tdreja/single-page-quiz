@@ -15,6 +15,7 @@ import { sortPlayersByName, sortPlayersHighestFirst } from '../../model/game/pla
 import { sortTeamsHighestFirst } from '../../model/game/team';
 import { TeamViewExpanded } from '../../sections/bottom/TeamViewExpanded';
 import { getPlayers } from '../../model/game/json/team';
+import { DialogContext, openDialog } from '../../components/mode/DialogContext';
 
 interface ActionProps {
     applyIcon: string,
@@ -47,6 +48,7 @@ const ImportActions = ({ applyIcon, onApply, onCancel }: ActionProps): ReactElem
 export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
     const i18n = useContext(I18N);
     const onGameEvent = useContext(GameEventContext);
+    const dialog = useContext(DialogContext);
     const [imported, setImported] = useState<ImportedData>({});
     const [previewTable, setPreviewTable] = useState<QuizTable<JsonStaticQuestionData>>(generateJsonQuestionTable({}));
 
@@ -63,6 +65,54 @@ export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
         table: previewTable,
         showDetails: !shared,
     };
+
+    const importQuiz = useCallback(() => {
+        const quiz = imported.quiz;
+        if (!quiz) {
+            return;
+        }
+        openDialog(
+            i18n.importer.dialogImportTitle,
+            i18n.importer.dialogImportQuizMessage,
+            dialog,
+            () => {
+                onGameEvent(new ImportQuizEvent(quiz));
+                setImported({});
+            },
+        );
+    }, [imported]);
+
+    const importPlayers = useCallback(() => {
+        const players = imported.players;
+        if (!players) {
+            return;
+        }
+        openDialog(
+            i18n.importer.dialogImportTitle,
+            i18n.importer.dialogImportPlayersMessage,
+            dialog,
+            () => {
+                onGameEvent(new ImportPlayersEvent(players));
+                setImported({});
+            },
+        );
+    }, [imported]);
+
+    const importTeams = useCallback(() => {
+        const teams = imported.teams;
+        if (!teams) {
+            return;
+        }
+        openDialog(
+            i18n.importer.dialogImportTitle,
+            i18n.importer.dialogImportTeamsMessage,
+            dialog,
+            () => {
+                onGameEvent(new ImportTeamsEvent(teams));
+                setImported({});
+            },
+        );
+    }, [imported]);
 
     useEffect(() => {
         if (imported.quiz) {
@@ -108,12 +158,7 @@ export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
                             </div>
                             <ImportActions
                                 applyIcon="sync_saved_locally"
-                                onApply={() => {
-                                    if (imported.quiz) {
-                                        onGameEvent(new ImportQuizEvent(imported.quiz));
-                                        setImported({});
-                                    }
-                                }}
+                                onApply={importQuiz}
                                 onCancel={() => setImported({})}
                             />
                         </>
@@ -138,12 +183,7 @@ export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
                             </div>
                             <ImportActions
                                 applyIcon="how_to_reg"
-                                onApply={() => {
-                                    if (imported.players) {
-                                        onGameEvent(new ImportPlayersEvent(imported.players));
-                                        setImported({});
-                                    }
-                                }}
+                                onApply={importPlayers}
                                 onCancel={() => setImported({})}
                             />
                         </>
@@ -168,12 +208,7 @@ export const QuizImporterView = ({ shared }: SharedProps): ReactElement => {
                             </div>
                             <ImportActions
                                 applyIcon="reduce_capacity"
-                                onApply={() => {
-                                    if (imported.teams) {
-                                        onGameEvent(new ImportTeamsEvent(imported.teams));
-                                        setImported({});
-                                    }
-                                }}
+                                onApply={importTeams}
                                 onCancel={() => setImported({})}
                             />
                         </>

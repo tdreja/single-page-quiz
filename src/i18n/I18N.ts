@@ -158,6 +158,10 @@ export interface QuizLabels {
  * Labels for the quiz importer page.
  */
 export interface QuizImportLabels {
+    dialogImportTitle: string,
+    dialogImportQuizMessage: string,
+    dialogImportPlayersMessage: string,
+    dialogImportTeamsMessage: string,
     actionCancel: string,
     actionApply: string,
     formHeader: string,

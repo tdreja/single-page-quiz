@@ -29,6 +29,10 @@ export const i18n_en: Labels = {
         [GamePage.IMPORT_QUIZ]: 'Import quiz file',
     },
     importer: {
+        dialogImportTitle: 'Complete import?',
+        dialogImportQuizMessage: 'The existing quiz will be replaced with the imported quiz.\nThis action cannot be undone.',
+        dialogImportPlayersMessage: 'The existing players will be replaced with the imported players.\nThis action cannot be undone.',
+        dialogImportTeamsMessage: 'The existing teams will be replaced with the imported teams.\nThis action cannot be undone.',
         formHeader: 'Import file',
         noFileUploadedHeader: 'Preview',
         noNewQuizUploaded: 'No file uploaded.',

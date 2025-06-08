@@ -71,6 +71,10 @@ export const i18n_de: Labels = {
         [GamePage.IMPORT_QUIZ]: 'Quizdatei importieren',
     },
     importer: {
+        dialogImportTitle: 'Import abschließen?',
+        dialogImportQuizMessage: 'Das aktuelle Quiz wird durch das importierte Quiz ersetzt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
+        dialogImportPlayersMessage: 'Die Spieler werden durch die importierten Spieler ersetzt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
+        dialogImportTeamsMessage: 'Die Spieler und Teams werden durch die importierten Spieler und Teams ersetzt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
         formHeader: 'Datei importieren',
         noFileUploadedHeader: 'Vorschau',
         quizUploadedHeader: 'Vorschau - Neues Quiz',
