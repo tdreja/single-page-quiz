@@ -41,6 +41,7 @@ export const i18n_en: Labels = {
         teamsUploadedHeader: 'Preview - Imported players & teams',
         actionCancel: 'Cancel',
         actionApply: 'Apply',
+        waitingForImport: 'Waiting on moderation...',
     },
     emojis: {
         DUCK: 'Duck',

@@ -170,6 +170,7 @@ export interface QuizImportLabels {
     playersUploadedHeader: string,
     teamsUploadedHeader: string,
     noNewQuizUploaded: string,
+    waitingForImport: string,
 }
 
 export interface DialogLabels {

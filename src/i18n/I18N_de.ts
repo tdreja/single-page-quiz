@@ -83,6 +83,7 @@ export const i18n_de: Labels = {
         noNewQuizUploaded: 'Keine Datei hochgeladen',
         actionCancel: 'Abbrechen',
         actionApply: 'Übernehmen',
+        waitingForImport: 'Warte auf Moderation...',
     },
     playerEditor: {
         dialogResetAllTitle: 'Alle Punkte zurücksetzen?',

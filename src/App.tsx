@@ -24,6 +24,7 @@ import { QuizModerationPage } from './pages/quiz/QuizModerationPage';
 import { debugLog } from './components/common/Logging';
 import { Dialog, DialogContext, DialogWrapper } from './components/mode/DialogContext';
 import { DialogView } from './components/common/DialogView';
+import { ImporterLoadingView } from './pages/importer/ImporterLoadingView';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -123,6 +124,9 @@ function App() {
                                 </SubPage>
                                 <SubPage state={GamePage.IMPORT_QUIZ} tabType={[TabType.SHARED]}>
                                     <QuizImporterView shared={true} />
+                                </SubPage>
+                                <SubPage state={GamePage.IMPORT_QUIZ} tabType={[TabType.PARTICIPANTS]}>
+                                    <ImporterLoadingView />
                                 </SubPage>
 
                                 {/* Quiz */}
