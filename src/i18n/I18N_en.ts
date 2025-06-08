@@ -17,6 +17,10 @@ export const i18n_en: Labels = {
         [TeamColor.TURQUOISE]: '7 / Torquoise',
         [TeamColor.WHITE]: '8 / White',
     },
+    dialog: {
+        actionYes: 'Yes',
+        actionNo: 'No',
+    },
     game: {
         [GamePage.TEAM_SETUP]: 'Teams',
         [GamePage.PLAYER_SETUP]: 'Players',
@@ -113,6 +117,10 @@ export const i18n_en: Labels = {
         gameOverNoWinner: 'No winners',
     },
     playerEditor: {
+        dialogResetAllTitle: 'Reset all points?',
+        dialogResetAllMessage: 'All players\' points will be reset to 0.\nThis action cannot be undone.',
+        dialogDeleteAllTitle: 'Remove all players?',
+        dialogDeleteAllMessage: 'All players will be removed.\nThis action cannot be undone.',
         tooltipReRollEmoji: 'New random emoji',
         tooltipRename: 'Rename player',
         tooltipRemove: 'Remove player',

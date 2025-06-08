@@ -39,13 +39,7 @@ let channelListener: ChannelListener = () => {
 function App() {
     const [game, setGame] = useState<Game>(initialGame);
     const [tabType, setTabType] = useState<TabType>(TabType.SHARED);
-    const [dialog, setDialog] = useState<Dialog | undefined>({
-        title: '',
-        message: '',
-        onYesClick: () => {},
-        onNoClick: () => {},
-        onCloseClick: () => {},
-    });
+    const [dialog, setDialog] = useState<Dialog | undefined>(undefined);
 
     // Update game when an event is received and store the new state
     const onGameEvent = useCallback<GameEventListener>((event: GameEvent) => {

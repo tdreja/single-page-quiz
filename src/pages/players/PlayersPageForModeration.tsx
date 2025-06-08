@@ -10,10 +10,12 @@ import { calculatePlacementsForAll, PlacementPointsForAll } from '../../model/pl
 import { PlayerHeader } from './PlayerHeader';
 import { GameContext, GameEventContext } from '../../components/common/GameContext';
 import { AccordionItem } from '../../components/common/AccordionItem';
+import { DialogContext, openDialog } from '../../components/mode/DialogContext';
 
 export const PlayersPageForModeration = (): ReactElement | undefined => {
     const game = useContext<Game>(GameContext);
     const onGameEvent = useContext(GameEventContext);
+    const dialog = useContext(DialogContext);
     const i18n = useContext(I18N);
     const [newPlayersText, setNewPlayersText] = useState<string>('');
     const [expanded, setExpanded] = useState<Expanded | null>(null);
@@ -90,7 +92,12 @@ export const PlayersPageForModeration = (): ReactElement | undefined => {
                             <span
                                 className="btn btn-outline-warning material-symbols-outlined"
                                 title={i18n.playerEditor.tooltipResetAll}
-                                onClick={() => onGameEvent(new ResetPlayersEvent(Array.from(game.players.keys())))}
+                                onClick={() => openDialog(
+                                    i18n.playerEditor.dialogResetAllTitle,
+                                    i18n.playerEditor.dialogResetAllMessage,
+                                    dialog,
+                                    () => onGameEvent(new ResetPlayersEvent(Array.from(game.players.keys()))),
+                                )}
                             >
                                 reset_settings
                             </span>
@@ -104,7 +111,12 @@ export const PlayersPageForModeration = (): ReactElement | undefined => {
                             <span
                                 className="btn btn-outline-danger material-symbols-outlined"
                                 title={i18n.playerEditor.tooltipRemoveAll}
-                                onClick={() => onGameEvent(new RemovePlayerEvent(Array.from(game.players.keys())))}
+                                onClick={() => openDialog(
+                                    i18n.playerEditor.dialogDeleteAllTitle,
+                                    i18n.playerEditor.dialogDeleteAllMessage,
+                                    dialog,
+                                    () => onGameEvent(new RemovePlayerEvent(Array.from(game.players.keys()))),
+                                )}
                             >
                                 delete_sweep
                             </span>

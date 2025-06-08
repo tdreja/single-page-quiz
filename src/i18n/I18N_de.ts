@@ -17,6 +17,10 @@ export const i18n_de: Labels = {
         [TeamColor.TURQUOISE]: '7 / Türkis',
         [TeamColor.WHITE]: '8 / Weiß',
     },
+    dialog: {
+        actionYes: 'Ja',
+        actionNo: 'Nein',
+    },
     emojis: {
         DUCK: 'Ente',
         SHARK: 'Hai',
@@ -77,6 +81,10 @@ export const i18n_de: Labels = {
         actionApply: 'Übernehmen',
     },
     playerEditor: {
+        dialogResetAllTitle: 'Alle Punkte zurücksetzen?',
+        dialogResetAllMessage: 'Alle Punkte der Spieler werden auf 0 zurückgesetzt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
+        dialogDeleteAllTitle: 'Alle Spieler entfernen?',
+        dialogDeleteAllMessage: 'Alle Spieler werden entfernt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
         tooltipReRollEmoji: 'Neuer zufälliger Emoji',
         tooltipRename: 'Spieler umbenennen',
         tooltipRemove: 'Spieler entfernen',
