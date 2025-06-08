@@ -85,6 +85,8 @@ export const i18n_de: Labels = {
         dialogResetAllMessage: 'Alle Punkte der Spieler werden auf 0 zurückgesetzt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
         dialogDeleteAllTitle: 'Alle Spieler entfernen?',
         dialogDeleteAllMessage: 'Alle Spieler werden entfernt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
+        dialogDeleteSingleTitle: 'Spieler entfernen?',
+        dialogDeleteSingleMessage: 'Der Spieler wird entfernt.\nDiese Aktion kann nicht rückgängig gemacht werden.',
         tooltipReRollEmoji: 'Neuer zufälliger Emoji',
         tooltipRename: 'Spieler umbenennen',
         tooltipRemove: 'Spieler entfernen',

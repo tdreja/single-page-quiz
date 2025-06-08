@@ -6,6 +6,7 @@ import { TeamColor } from '../../model/game/team';
 import { GameEventContext } from '../../components/common/GameContext';
 import { EmojiView } from '../../components/common/EmojiView';
 import { TeamColorButton } from '../../components/common/TeamColorButton';
+import { DialogContext, openDialog } from '../../components/mode/DialogContext';
 
 export interface Props {
     player: Player,
@@ -13,6 +14,7 @@ export interface Props {
 }
 
 export const PlayerForm = ({ player, availableTeams }: Props): ReactElement => {
+    const dialog = useContext(DialogContext);
     const i18n = useContext(I18N);
     const onGameEvent = useContext(GameEventContext);
     const [name, setName] = useState<string>(player.name);
@@ -137,7 +139,12 @@ export const PlayerForm = ({ player, availableTeams }: Props): ReactElement => {
                     <span
                         className="btn btn-outline-danger material-symbols-outlined"
                         style={{ gridColumn: 'delete' }}
-                        onClick={() => onGameEvent(new RemovePlayerEvent([player.emoji]))}
+                        onClick={() => openDialog(
+                            i18n.playerEditor.dialogDeleteSingleTitle,
+                            i18n.playerEditor.dialogDeleteSingleMessage,
+                            dialog,
+                            () => onGameEvent(new RemovePlayerEvent([player.emoji])),
+                        )}
                         title={i18n.playerEditor.tooltipRemove}
                     >
                         delete

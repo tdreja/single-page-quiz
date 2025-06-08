@@ -121,6 +121,8 @@ export const i18n_en: Labels = {
         dialogResetAllMessage: 'All players\' points will be reset to 0.\nThis action cannot be undone.',
         dialogDeleteAllTitle: 'Remove all players?',
         dialogDeleteAllMessage: 'All players will be removed.\nThis action cannot be undone.',
+        dialogDeleteSingleTitle: 'Remove player?',
+        dialogDeleteSingleMessage: 'The player will be removed.\nThis action cannot be undone.',
         tooltipReRollEmoji: 'New random emoji',
         tooltipRename: 'Rename player',
         tooltipRemove: 'Remove player',

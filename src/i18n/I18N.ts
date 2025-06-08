@@ -60,6 +60,8 @@ export interface PlayerEditor {
     dialogResetAllMessage: string,
     dialogDeleteAllTitle: string,
     dialogDeleteAllMessage: string,
+    dialogDeleteSingleTitle: string,
+    dialogDeleteSingleMessage: string,
     labelAdd: string,
     labelName: string,
     labelPoints: string,
