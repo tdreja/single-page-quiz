@@ -55,6 +55,15 @@ export const PlayersPageForModeration = (): ReactElement | undefined => {
         setPlacements(calculatePlacementsForAll(Array.from(game.players.values()).map((player) => player.points)));
     }, [game]);
 
+    useEffect(() => {
+        if (expanded) {
+            const accordion = document.getElementById(`player-layout-${expanded.emoji}`);
+            if (accordion) {
+                accordion.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    }, [expanded]);
+
     return (
         <div
             className="accordion accordion-flush d-flex flex-column flex-wrap border-top rounded-top column-gap-3 justify-content-start align-content-start"
@@ -129,6 +138,7 @@ export const PlayersPageForModeration = (): ReactElement | undefined => {
                     (
                         <AccordionItem
                             key={`player-${player.emoji}`}
+                            id={`player-layout-${player.emoji}`}
                             isExpanded={() => isExpanded(player)}
                             toggle={() => toggle(player.emoji, player.name)}
                             style={{ minWidth: '20rem' }}
