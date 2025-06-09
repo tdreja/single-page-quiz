@@ -106,7 +106,11 @@ function App() {
                                 <SubPage state={GamePage.PLAYER_SETUP} tabType={[TabType.PARTICIPANTS]}>
                                     <PlayersPageForParticipants />
                                 </SubPage>
-                                <SubPage state={GamePage.PLAYER_SETUP} tabType={[TabType.MODERATION, TabType.SHARED]}>
+                                <SubPage
+                                    state={GamePage.PLAYER_SETUP}
+                                    tabType={[TabType.MODERATION, TabType.SHARED]}
+                                    scrollHorizontal={true}
+                                >
                                     <PlayersPageForModeration />
                                 </SubPage>
 
