@@ -32,7 +32,7 @@ export const TeamView = ({ team, placements }: Props): ReactElement => {
                 </div>
                 <span className="rounded-pill text-bg-light ps-2 pe-2">{team.points}</span>
             </div>
-            <div className="card-body d-grid gap-2 grid-columns-lg">
+            <div className="card-body d-grid gap-2 grid-columns-xl">
                 {
                     Array.from(team.players.values()).sort(sortPlayersHighestFirst)
                         .map((player) => (
