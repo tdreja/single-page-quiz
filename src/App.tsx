@@ -22,9 +22,10 @@ import { TeamsPageForModeration } from './pages/teams/TeamsPageForModeration';
 import { QuizParticipantsPage } from './pages/quiz/QuizParticipantsPage';
 import { QuizModerationPage } from './pages/quiz/QuizModerationPage';
 import { debugLog } from './components/common/Logging';
-import { Dialog, DialogContext, DialogWrapper } from './components/mode/DialogContext';
+import { Dialog, DialogContext } from './components/mode/DialogContext';
 import { DialogView } from './components/common/DialogView';
 import { ImporterLoadingView } from './pages/importer/ImporterLoadingView';
+import { QuizEditorView } from './pages/editor/QuizEditorView';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -142,6 +143,17 @@ function App() {
                                 </SubPage>
                                 <SubPage state={GamePage.GAME_ACTIVE} tabType={[TabType.MODERATION]}>
                                     <QuizModerationPage shared={false} />
+                                </SubPage>
+
+                                {/* Quiz Editor */}
+                                <SubPage state={GamePage.EDIT_QUIZ} tabType={[TabType.MODERATION]}>
+                                    <QuizEditorView shared={false} />
+                                </SubPage>
+                                <SubPage state={GamePage.EDIT_QUIZ} tabType={[TabType.SHARED]}>
+                                    <QuizEditorView shared={true} />
+                                </SubPage>
+                                <SubPage state={GamePage.EDIT_QUIZ} tabType={[TabType.PARTICIPANTS]}>
+                                    <ImporterLoadingView />
                                 </SubPage>
                             </MainPage>
                             <TeamsBottomNav />

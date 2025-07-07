@@ -12,6 +12,7 @@ export enum GamePage {
     PLAYER_SETUP = 'player-setup',
     CONTROLLER_SETUP = 'controller-setup',
     GAME_ACTIVE = 'game-active',
+    EDIT_QUIZ = 'edit-quiz',
 }
 
 /**

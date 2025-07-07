@@ -27,6 +27,7 @@ export const i18n_en: Labels = {
         [GamePage.CONTROLLER_SETUP]: 'Controller',
         [GamePage.GAME_ACTIVE]: 'Quiz',
         [GamePage.IMPORT_QUIZ]: 'Import quiz file',
+        [GamePage.EDIT_QUIZ]: 'Edit quiz',
     },
     importer: {
         dialogImportTitle: 'Complete import?',
