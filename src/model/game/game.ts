@@ -8,6 +8,7 @@ import { QuestionCell, QuizCell, QuizTable } from '../base/table';
 */
 export enum GamePage {
     IMPORT_QUIZ = 'import-quiz',
+    EDIT_QUIZ = 'edit-quiz',
     TEAM_SETUP = 'team-setup',
     PLAYER_SETUP = 'player-setup',
     CONTROLLER_SETUP = 'controller-setup',

@@ -130,7 +130,7 @@ function App() {
                                     <QuizImporterView shared={true} />
                                 </SubPage>
                                 <SubPage state={GamePage.IMPORT_QUIZ} tabType={[TabType.PARTICIPANTS]}>
-                                    <ImporterLoadingView />
+                                    <ImporterLoadingView loadingMessage={(labels) => labels.importer.waitingForImport} />
                                 </SubPage>
 
                                 {/* Quiz */}
@@ -142,6 +142,17 @@ function App() {
                                 </SubPage>
                                 <SubPage state={GamePage.GAME_ACTIVE} tabType={[TabType.MODERATION]}>
                                     <QuizModerationPage shared={false} />
+                                </SubPage>
+
+                                {/* Editor */}
+                                <SubPage state={GamePage.EDIT_QUIZ} tabType={[TabType.MODERATION]}>
+                                    <QuizImporterView shared={false} />
+                                </SubPage>
+                                <SubPage state={GamePage.EDIT_QUIZ} tabType={[TabType.SHARED]}>
+                                    <ImporterLoadingView loadingMessage={(labels) => labels.quizEditor.editorCannotBeShared} />
+                                </SubPage>
+                                <SubPage state={GamePage.EDIT_QUIZ} tabType={[TabType.PARTICIPANTS]}>
+                                    <ImporterLoadingView loadingMessage={(labels) => labels.quizEditor.waitingOnEditor} />
                                 </SubPage>
                             </MainPage>
                             <TeamsBottomNav />

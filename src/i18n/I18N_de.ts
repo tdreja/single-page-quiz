@@ -68,7 +68,8 @@ export const i18n_de: Labels = {
         [GamePage.PLAYER_SETUP]: 'Spieler',
         [GamePage.CONTROLLER_SETUP]: 'Controller',
         [GamePage.GAME_ACTIVE]: 'Quiz',
-        [GamePage.IMPORT_QUIZ]: 'Quizdatei importieren',
+        [GamePage.IMPORT_QUIZ]: 'Import / Export',
+        [GamePage.EDIT_QUIZ]: 'Quiz Editor',
     },
     importer: {
         dialogImportTitle: 'Import abschließen?',
@@ -172,5 +173,9 @@ export const i18n_de: Labels = {
         tooltipSwitchColor: 'Farbe ändern',
         labelShuffle: 'Spieler neu auf Teams aufteilen',
         tooltipShuffle: 'Spieler neu auf Teams aufteilen',
+    },
+    quizEditor: {
+        editorCannotBeShared: 'Editor muss im Modus "Nur Moderation" geöffnet werden!',
+        waitingOnEditor: 'Warte auf Moderation...',
     },
 };

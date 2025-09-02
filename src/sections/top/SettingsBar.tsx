@@ -103,8 +103,11 @@ export const SettingsBar = (): ReactElement => {
                 <li className={`nav-item nav-link ${game.page === GamePage.TEAM_SETUP ? 'active' : ''}`} onClick={() => changeState(GamePage.TEAM_SETUP)}>
                     {i18n.game['team-setup']}
                 </li>
+                <li className={`nav-item nav-link ${game.page === GamePage.EDIT_QUIZ ? 'active' : ''}`} onClick={() => changeState(GamePage.EDIT_QUIZ)}>
+                    {i18n.game['edit-quiz']}
+                </li>
                 <li className={`nav-item nav-link ${game.page === GamePage.IMPORT_QUIZ ? 'active' : ''}`} onClick={() => changeState(GamePage.IMPORT_QUIZ)}>
-                    Import Quiz
+                    {i18n.game['import-quiz']}
                 </li>
             </ul>
             <div className="d-flex mb-2 mt-2 gap-2">

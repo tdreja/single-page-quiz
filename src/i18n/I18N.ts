@@ -21,6 +21,7 @@ export interface Labels {
     playerEditor: PlayerEditor,
     teamEditor: TeamEditor,
     settings: Settings,
+    quizEditor: QuizEditorLabels,
 }
 
 /**
@@ -176,6 +177,11 @@ export interface QuizImportLabels {
 export interface DialogLabels {
     actionYes: string,
     actionNo: string,
+}
+
+export interface QuizEditorLabels {
+    waitingOnEditor: string,
+    editorCannotBeShared: string,
 }
 
 /**

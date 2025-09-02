@@ -26,7 +26,8 @@ export const i18n_en: Labels = {
         [GamePage.PLAYER_SETUP]: 'Players',
         [GamePage.CONTROLLER_SETUP]: 'Controller',
         [GamePage.GAME_ACTIVE]: 'Quiz',
-        [GamePage.IMPORT_QUIZ]: 'Import quiz file',
+        [GamePage.IMPORT_QUIZ]: 'Import / Export',
+        [GamePage.EDIT_QUIZ]: 'Quiz Editor',
     },
     importer: {
         dialogImportTitle: 'Complete import?',
@@ -172,5 +173,9 @@ export const i18n_en: Labels = {
         tooltipSwitchColor: 'Change color',
         labelShuffle: 'Shuffle players into teams',
         tooltipShuffle: 'Shuffle players into different teams',
+    },
+    quizEditor: {
+        editorCannotBeShared: 'Editor requires "Moderation only" view!',
+        waitingOnEditor: 'Waiting on moderation...',
     },
 };
