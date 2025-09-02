@@ -25,6 +25,7 @@ import { debugLog } from './components/common/Logging';
 import { Dialog, DialogContext, DialogWrapper } from './components/mode/DialogContext';
 import { DialogView } from './components/common/DialogView';
 import { ImporterLoadingView } from './pages/importer/ImporterLoadingView';
+import { QuizEditorView } from './pages/editor/QuizEditorView';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -146,7 +147,7 @@ function App() {
 
                                 {/* Editor */}
                                 <SubPage state={GamePage.EDIT_QUIZ} tabType={[TabType.MODERATION]}>
-                                    <QuizImporterView shared={false} />
+                                    <QuizEditorView />
                                 </SubPage>
                                 <SubPage state={GamePage.EDIT_QUIZ} tabType={[TabType.SHARED]}>
                                     <ImporterLoadingView loadingMessage={(labels) => labels.quizEditor.editorCannotBeShared} />
