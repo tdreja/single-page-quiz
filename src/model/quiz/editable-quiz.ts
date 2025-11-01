@@ -1,5 +1,6 @@
 import { Question } from './question';
 import { Game, GameColumn } from '../game/game';
+import { QuestionCell, QuizTable } from '../base/table';
 
 export interface EditableQuizColumn {
     questions: Array<Question>,
@@ -68,4 +69,47 @@ function toColumn(editableColumn: EditableQuizColumn, columnCount: number): Game
         column.questions.set(question.pointsForCompletion, question);
     }
     return column;
+}
+
+export function generateEditorQuestionTable(editableQuiz: EditableQuiz): QuizTable<Question> {
+    const table: QuizTable<Question> = {
+        columnNames: [],
+        rows: [],
+    };
+
+    for (const column of editableQuiz.columns) {
+        table.columnNames.push({
+            inColumn: column.columnName,
+            key: column.columnName,
+            label: column.columnName,
+        });
+    }
+    for (let counter = 0; counter < editableQuiz.questionCount; counter++) {
+        const row: QuestionCell<Question>[] = [];
+        for (const column of editableQuiz.columns) {
+            let question: Question | undefined = undefined;
+            if (counter < column.questions.length) {
+                question = column.questions[counter];
+            }
+            if (question) {
+                row.push({
+                    inColumn: column.columnName,
+                    label: `${question.pointsForCompletion}`,
+                    pointsForCompletion: question.pointsForCompletion,
+                    question: question,
+                    key: `${column.columnName}-${question.pointsForCompletion}`,
+                });
+            } else {
+                row.push({
+                    inColumn: column.columnName,
+                    label: '-',
+                    pointsForCompletion: counter,
+                    key: `${column.columnName}-empty-${counter}`,
+                });
+            }
+        }
+        table.rows.push(row);
+    }
+
+    return table;
 }
