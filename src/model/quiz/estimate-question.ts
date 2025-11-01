@@ -63,4 +63,8 @@ export class EstimateQuestion extends BaseQuestion implements TextQuestion {
             }
         }
     }
+
+    public withPointsUpdated(pointsForCompletion: number, inColumn: string): EstimateQuestion {
+        return new EstimateQuestion(inColumn, pointsForCompletion, this.text, this.target);
+    }
 }

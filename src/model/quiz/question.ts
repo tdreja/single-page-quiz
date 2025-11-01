@@ -27,6 +27,7 @@ export interface Question extends OptionalQuestion {
     exportStaticQuestionData: () => JsonStaticQuestionData,
     exportDynamicQuestionData: () => JsonDynamicQuestionData,
     importDynamicQuestionData: (state: JsonDynamicQuestionData) => void,
+    withPointsUpdated: (pointsForCompletion: number, inColumn: string) => Question,
 }
 
 /**
@@ -115,6 +116,8 @@ export abstract class BaseQuestion implements Question {
         }
         this.importAdditionalData(state.additionalData);
     }
+
+    public abstract withPointsUpdated(pointsForCompletion: number, inColumn: string): BaseQuestion;
 
     protected abstract exportAdditionalData(): IndexedByColor | undefined;
     protected abstract importAdditionalData(additionalData?: IndexedByColor): void;

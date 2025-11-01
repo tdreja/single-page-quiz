@@ -70,4 +70,8 @@ export class ActionQuestion extends BaseQuestion implements TextQuestion {
             }
         }
     }
+
+    public withPointsUpdated(pointsForCompletion: number, inColumn: string): ActionQuestion {
+        return new ActionQuestion(inColumn, pointsForCompletion, this.text);
+    }
 }

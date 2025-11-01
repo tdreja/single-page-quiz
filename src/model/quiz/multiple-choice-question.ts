@@ -97,6 +97,10 @@ export class TextMultipleChoiceQuestion extends BaseQuestion implements Multiple
             }
         }
     }
+
+    public withPointsUpdated(pointsForCompletion: number, inColumn: string): TextMultipleChoiceQuestion {
+        return new TextMultipleChoiceQuestion(inColumn, pointsForCompletion, this.text, this.choices);
+    }
 }
 
 /**
@@ -132,5 +136,9 @@ export class ImageMultipleChoiceQuestion extends TextMultipleChoiceQuestion impl
             imageBase64: this.imageBase64,
             choices: this.jsonChoices,
         };
+    }
+
+    public withPointsUpdated(pointsForCompletion: number, inColumn: string): ImageMultipleChoiceQuestion {
+        return new ImageMultipleChoiceQuestion(inColumn, pointsForCompletion, this.text, this.imageBase64, this.choices);
     }
 }
