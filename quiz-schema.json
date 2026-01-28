@@ -126,7 +126,7 @@
         }
       },
       "required": [
-        "target"
+        "estimateTarget"
       ]
     },
     "action-question": {
