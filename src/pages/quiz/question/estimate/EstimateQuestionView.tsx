@@ -19,12 +19,14 @@ import {
     ModerationTeamCanAttempt,
 } from '../multiple-choice/ModerationSections';
 import { GameContext } from '../../../../components/common/GameContext';
-import { TeamEstimateInput } from './TeamEstimate';
+import { TeamEstimateInput, TeamEstimateView } from './TeamEstimate';
 
 export const EstimateQuestionParticipantsView = (
     { round, question }: QuestionProps<EstimateQuestion>,
 ): ReactElement => {
     const i18n = useContext(I18N);
+    const game = useContext(GameContext);
+    const completed = round.state === RoundState.SHOW_RESULTS;
     return (
         <div className="d-flex gap-2">
             <div className="card flex-grow-1">
@@ -33,6 +35,20 @@ export const EstimateQuestionParticipantsView = (
                 </div>
                 <div className="card-body">
                     <h4 className="card-title pb-2">{question.text}</h4>
+                    {completed && (
+                        <h5 className="mb-4">{`${i18n.question.headlineEstimateAnswer} ${question.target}`}</h5>
+                    )}
+                    <div className="d-grid gap-3" style={{ gridTemplateColumns: '1fr 1fr' }}>
+                        { Array.from(game.teams.keys()).map((team) =>
+                            (
+                                <TeamEstimateView
+                                    key={`estimate-view-${team}`}
+                                    team={team}
+                                    round={round}
+                                    question={question}
+                                />
+                            ))}
+                    </div>
                 </div>
             </div>
             {/* Sidebar */}
@@ -51,6 +67,7 @@ export const EstimateQuestionModerationView = (
 ): ReactElement => {
     const i18n = useContext(I18N);
     const game = useContext(GameContext);
+    const completed = round.state === RoundState.SHOW_RESULTS;
     return (
         <div className="d-flex gap-2">
             <div className="card flex-grow-1">
@@ -59,15 +76,21 @@ export const EstimateQuestionModerationView = (
                 </div>
                 <div className="card-body">
                     <h4 className="card-title pb-2">{question.text}</h4>
-                    { game.teams.keys().map((team) =>
-                        (
-                            <TeamEstimateInput
-                                key={`estimate-input-${team}`}
-                                team={team}
-                                round={round}
-                                shared={shared}
-                            />
-                        ))}
+                    {completed && (
+                        <h5 className="mb-4">{`${i18n.question.headlineEstimateAnswer} ${question.target}`}</h5>
+                    )}
+                    <div className="d-grid gap-3" style={{ gridTemplateColumns: '1fr 1fr' }}>
+                        { Array.from(game.teams.keys()).map((team) =>
+                            (
+                                <TeamEstimateInput
+                                    key={`estimate-input-${team}`}
+                                    team={team}
+                                    round={round}
+                                    shared={shared}
+                                    question={question}
+                                />
+                            ))}
+                    </div>
                 </div>
             </div>
             {/* Sidebar */}

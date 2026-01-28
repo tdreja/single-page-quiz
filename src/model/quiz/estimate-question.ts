@@ -7,7 +7,7 @@ import { BaseQuestion, QuestionType, TextQuestion } from './question';
  * The estimates are then compared to the target value, and points are awarded based on how close the estimates are.
  */
 export class EstimateQuestion extends BaseQuestion implements TextQuestion {
-    private readonly _estimates: Map<TeamColor, number>;
+    private readonly _estimates: Map<TeamColor, number | null>;
     private readonly _text: string;
     private readonly _target: number;
 
@@ -30,7 +30,7 @@ export class EstimateQuestion extends BaseQuestion implements TextQuestion {
         return QuestionType.ESTIMATE;
     }
 
-    public get estimates(): Map<TeamColor, number> {
+    public get estimates(): Map<TeamColor, number | null> {
         return this._estimates;
     }
 
@@ -57,8 +57,9 @@ export class EstimateQuestion extends BaseQuestion implements TextQuestion {
             return;
         }
         for (const team of Object.keys(additionalData) as [TeamColor]) {
-            const estimate = Number(additionalData[team]);
-            if (!isNaN(estimate)) {
+            const input = additionalData[team];
+            const estimate = input == null ? null : Number(input);
+            if (estimate == null || !isNaN(estimate)) {
                 this._estimates.set(team, estimate);
             }
         }

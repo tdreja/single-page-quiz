@@ -98,9 +98,9 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
  */
 export class SubmitEstimateEvent extends GameRoundEvent {
     private readonly _team: TeamColor;
-    private readonly _estimate: number;
+    private readonly _estimate: number | null;
 
-    public constructor(team: TeamColor, estimate: number) {
+    public constructor(team: TeamColor, estimate: number | null) {
         super(EventType.SUBMIT_ESTIMATE);
         this._team = team;
         this._estimate = estimate;
@@ -125,6 +125,9 @@ export class SubmitEstimateEvent extends GameRoundEvent {
         let completion: Completion = {};
         let closestDistance: number | null = null;
         for (const [team, estimate] of question.estimates) {
+            if (estimate === null) {
+                continue; // Skip this team!
+            }
             const dist = Math.abs(question.target - estimate);
             if (closestDistance === null || closestDistance > dist) {
                 completion = recalculateCompletion(completion, question.pointsForCompletion, team, question.pointsForCompletion);
