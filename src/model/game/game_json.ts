@@ -1,6 +1,6 @@
 import { QuestionCell, QuizCell, QuizTable } from '../base/table';
 import { arrayAsSet } from '../common';
-import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../quiz/json';
+import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../quiz/question_json';
 import { Question } from '../quiz/question';
 import { Game, GameColumn, GamePage, RoundState } from './game';
 import { TeamColor } from './team';

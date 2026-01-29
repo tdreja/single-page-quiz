@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test } from '@jest/globals';
 import { emptyGame, Game, GameColumn, GameRound, RoundState } from '../game/game';
 import { Question } from './question';
-import { exportStaticGameContent, importStaticGameContent } from './json';
+import { exportStaticGameContent, importStaticGameContent } from './question_json';
 import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question';
 import { TeamColor } from '../game/team';
 import { exportCurrentRound, importCurrentRound, JsonCurrentRound, JsonStaticGameData } from '../game/game_json';

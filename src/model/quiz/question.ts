@@ -1,5 +1,5 @@
 import { Team, TeamColor } from '../game/team';
-import { IndexedByColor, JsonDynamicQuestionData, JsonStaticQuestionData, OptionalQuestion } from './json';
+import { IndexedByColor, JsonDynamicQuestionData, JsonStaticQuestionData, OptionalQuestion } from './question_json';
 import { Completion } from './Completion';
 
 /**

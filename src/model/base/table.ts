@@ -1,4 +1,4 @@
-import { OptionalQuestion } from '../quiz/json';
+import { OptionalQuestion } from '../quiz/question_json';
 
 export interface QuizTable<QUESTION extends OptionalQuestion> {
     columnNames: QuizCell[],

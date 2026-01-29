@@ -9,7 +9,7 @@ import {
     JsonStaticGameData,
     JsonUpdatableGameData,
 } from './game/game_json';
-import { exportStaticGameContent, importStaticGameContent } from './quiz/json';
+import { exportStaticGameContent, importStaticGameContent } from './quiz/question_json';
 
 /**
  * We send out a single JSON object in the broadcast event and use it's fields to determine what to update.

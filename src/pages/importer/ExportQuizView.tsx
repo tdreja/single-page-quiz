@@ -3,7 +3,7 @@ import { I18N } from '../../i18n/I18N';
 import { Game } from '../../model/game/game';
 import { GameContext } from '../../components/common/GameContext';
 import { stringify } from 'yaml';
-import { exportStaticGameContent } from '../../model/quiz/json';
+import { exportStaticGameContent } from '../../model/quiz/question_json';
 import { JsonPlayer, JsonPlayerData, storePlayer } from '../../model/game/player_json';
 import { JsonTeam, storeTeam } from '../../model/game/team_json';
 import { JsonTeamAndPlayerData } from '../../model/game/game_json';

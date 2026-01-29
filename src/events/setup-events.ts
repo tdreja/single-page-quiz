@@ -5,7 +5,7 @@ import { JsonPlayerData, restorePlayers } from '../model/game/player_json';
 import { restoreTeams } from '../model/game/team_json';
 import { allEmojis, Emoji, Player } from '../model/game/player';
 import { allColors, Team, TeamColor } from '../model/game/team';
-import { importStaticGameContent } from '../model/quiz/json';
+import { importStaticGameContent } from '../model/quiz/question_json';
 import { BasicGameEvent, Changes, EventType, GameUpdate, noUpdate, update } from './common-events';
 
 export function findSmallestTeam(teams: Map<TeamColor, Team>): Team | null {

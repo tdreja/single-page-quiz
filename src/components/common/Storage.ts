@@ -9,7 +9,7 @@ import {
     JsonStaticGameData,
     JsonUpdatableGameData,
 } from '../../model/game/game_json';
-import { exportStaticGameContent, importStaticGameContent } from '../../model/quiz/json';
+import { exportStaticGameContent, importStaticGameContent } from '../../model/quiz/question_json';
 
 export function storeGameInStorage(game: Game, updates: Array<Changes>) {
     if (updates.includes(Changes.QUIZ_CONTENT)) {

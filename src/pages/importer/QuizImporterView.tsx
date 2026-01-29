@@ -2,7 +2,7 @@ import React, { ReactElement, useCallback, useContext, useEffect, useState } fro
 import { generateJsonQuestionTable } from '../../model/game/game_json';
 import { QuizTableProps, QuizTableView } from '../QuizTable';
 import { QuizTable } from '../../model/base/table';
-import { JsonStaticQuestionData } from '../../model/quiz/json';
+import { JsonStaticQuestionData } from '../../model/quiz/question_json';
 import { SharedProps } from '../quiz/SharedProps';
 import { I18N } from '../../i18n/I18N';
 import { GameEventContext } from '../../components/common/GameContext';
