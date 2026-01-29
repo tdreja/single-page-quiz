@@ -1,5 +1,5 @@
-import { Game } from '../game';
-import { Emoji, Player } from '../player';
+import { Game } from './game';
+import { Emoji, Player } from './player';
 
 /**
  * JSON is identical to the regular player, but all fields are optional

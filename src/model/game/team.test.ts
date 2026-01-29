@@ -1,7 +1,7 @@
 import { beforeEach, expect, test } from '@jest/globals';
-import { emptyGame, Game } from '../game';
-import { Emoji, Player } from '../player';
-import { Team, TeamColor } from '../team';
+import { emptyGame, Game } from './game';
+import { Emoji, Player } from './player';
+import { Team, TeamColor } from './team';
 import { importGame } from './game_json';
 import { storePlayer } from './player_json';
 import { JsonTeam, restoreTeams, storeTeam } from './team_json';

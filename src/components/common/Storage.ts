@@ -8,7 +8,7 @@ import {
     JsonCurrentRound,
     JsonStaticGameData,
     JsonUpdatableGameData,
-} from '../../model/game/json/game_json';
+} from '../../model/game/game_json';
 import { exportStaticGameContent, importStaticGameContent } from '../../model/quiz/json';
 
 export function storeGameInStorage(game: Game, updates: Array<Changes>) {

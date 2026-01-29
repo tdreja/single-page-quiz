@@ -1,8 +1,8 @@
 import { nextRandom, shuffleArray } from '../model/common';
 import { Game, GamePage } from '../model/game/game';
-import { JsonStaticGameData, JsonTeamAndPlayerData } from '../model/game/json/game_json';
-import { JsonPlayerData, restorePlayers } from '../model/game/json/player_json';
-import { restoreTeams } from '../model/game/json/team_json';
+import { JsonStaticGameData, JsonTeamAndPlayerData } from '../model/game/game_json';
+import { JsonPlayerData, restorePlayers } from '../model/game/player_json';
+import { restoreTeams } from '../model/game/team_json';
 import { allEmojis, Emoji, Player } from '../model/game/player';
 import { allColors, Team, TeamColor } from '../model/game/team';
 import { importStaticGameContent } from '../model/quiz/json';

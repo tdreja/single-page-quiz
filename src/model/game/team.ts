@@ -1,4 +1,4 @@
-import { JsonTeam } from './json/team_json';
+import { JsonTeam } from './team_json';
 import { Emoji, Player } from './player';
 
 /**

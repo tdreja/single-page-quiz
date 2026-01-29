@@ -1,9 +1,9 @@
-import { QuestionCell, QuizCell, QuizTable } from '../../base/table';
-import { arrayAsSet } from '../../common';
-import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../../quiz/json';
-import { Question } from '../../quiz/question';
-import { Game, GameColumn, GamePage, RoundState } from '../game';
-import { TeamColor } from '../team';
+import { QuestionCell, QuizCell, QuizTable } from '../base/table';
+import { arrayAsSet } from '../common';
+import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../quiz/json';
+import { Question } from '../quiz/question';
+import { Game, GameColumn, GamePage, RoundState } from './game';
+import { TeamColor } from './team';
 import { JsonPlayer, JsonPlayerData, restorePlayers as importPlayers, storePlayer } from './player_json';
 import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team_json';
 

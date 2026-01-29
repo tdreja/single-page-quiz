@@ -8,7 +8,7 @@ import {
     JsonCurrentRound,
     JsonStaticGameData,
     JsonUpdatableGameData,
-} from './game/json/game_json';
+} from './game/game_json';
 import { exportStaticGameContent, importStaticGameContent } from './quiz/json';
 
 /**

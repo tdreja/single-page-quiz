@@ -3,7 +3,7 @@ import { emptyGame, Game, GameColumn, GameRound, RoundState } from '../game/game
 import { Question } from './question';
 import { exportStaticGameContent, importStaticGameContent } from './json';
 import { EstimateQuestion } from './estimate-question';
-import { exportCurrentRound, importCurrentRound, JsonCurrentRound, JsonStaticGameData } from '../game/json/game_json';
+import { exportCurrentRound, importCurrentRound, JsonCurrentRound, JsonStaticGameData } from '../game/game_json';
 import { asSet } from '../common';
 import { TeamColor } from '../game/team';
 

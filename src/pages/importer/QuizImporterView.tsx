@@ -1,5 +1,5 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
-import { generateJsonQuestionTable } from '../../model/game/json/game_json';
+import { generateJsonQuestionTable } from '../../model/game/game_json';
 import { QuizTableProps, QuizTableView } from '../QuizTable';
 import { QuizTable } from '../../model/base/table';
 import { JsonStaticQuestionData } from '../../model/quiz/json';
@@ -13,7 +13,7 @@ import { PlayerWithPointsView } from '../../components/common/PlayerWithPointsVi
 import { sortPlayersHighestFirst } from '../../model/game/player';
 import { sortTeamsHighestFirst } from '../../model/game/team';
 import { TeamViewExpanded } from '../../sections/bottom/TeamViewExpanded';
-import { getPlayers } from '../../model/game/json/team_json';
+import { getPlayers } from '../../model/game/team_json';
 import { DialogContext, openDialog } from '../../components/mode/DialogContext';
 
 interface ActionProps {
