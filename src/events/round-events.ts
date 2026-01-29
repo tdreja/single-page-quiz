@@ -1,5 +1,5 @@
 import { Game, GamePage, GameRound, isGameOver, RoundState } from '../model/game/game';
-import { getQuestion } from '../model/game/json/game';
+import { getQuestion } from '../model/game/game_json';
 import { TeamColor } from '../model/game/team';
 import { BasicGameEvent, Changes, EventType, GameRoundEvent, GameUpdate, noUpdate, update } from './common-events';
 

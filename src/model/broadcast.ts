@@ -1,7 +1,15 @@
 import { Changes } from '../events/common-events';
 import { Game } from './game/game';
-import { exportCurrentRound, exportGame, importCurrentRound, importGame, JsonCurrentRound, JsonStaticGameData, JsonUpdatableGameData } from './game/json/game';
-import { exportStaticGameContent, importStaticGameContent } from './quiz/json';
+import {
+    exportCurrentRound,
+    exportGame,
+    importCurrentRound,
+    importGame,
+    JsonCurrentRound,
+    JsonStaticGameData,
+    JsonUpdatableGameData,
+} from './game/game_json';
+import { exportStaticGameContent, importStaticGameContent } from './quiz/question_json';
 
 /**
  * We send out a single JSON object in the broadcast event and use it's fields to determine what to update.

@@ -1,11 +1,11 @@
-import { QuestionCell, QuizCell, QuizTable } from '../../base/table';
-import { arrayAsSet } from '../../common';
-import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../../quiz/json';
-import { Question } from '../../quiz/question';
-import { Game, GameColumn, GamePage, RoundState } from '../game';
-import { TeamColor } from '../team';
-import { JsonPlayer, JsonPlayerData, restorePlayers as importPlayers, storePlayer } from './player';
-import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team';
+import { QuestionCell, QuizCell, QuizTable } from '../base/table';
+import { arrayAsSet } from '../common';
+import { JsonDynamicQuestionData, JsonStaticQuestionData } from '../quiz/question_json';
+import { Question } from '../quiz/question';
+import { Game, GameColumn, GamePage, RoundState } from './game';
+import { TeamColor } from './team';
+import { JsonPlayer, JsonPlayerData, restorePlayers as importPlayers, storePlayer } from './player_json';
+import { JsonTeam, restoreTeams as importTeams, storeTeam } from './team_json';
 
 /**
  * Static data for a complete quiz with all sections

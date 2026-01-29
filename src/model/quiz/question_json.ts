@@ -5,7 +5,7 @@ import { ActionQuestion } from './action-question';
 import { EstimateQuestion } from './estimate-question';
 import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question';
 import { Question, QuestionType } from './question';
-import { JsonStaticColumnData, JsonStaticGameData } from '../game/json/game';
+import { JsonStaticColumnData, JsonStaticGameData } from '../game/game_json';
 
 export interface OptionalQuestion {
     pointsForCompletion?: number,

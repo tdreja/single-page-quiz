@@ -4,7 +4,7 @@ import { button } from '../components/common/ButtonColor';
 import { TeamColor } from '../model/game/team';
 import { TeamColorButton } from '../components/common/TeamColorButton';
 import { QuestionCell, QuizCell, QuizTable } from '../model/base/table';
-import { OptionalQuestion } from '../model/quiz/json';
+import { OptionalQuestion } from '../model/quiz/question_json';
 import { BaseQuestion, QuestionType } from '../model/quiz/question';
 import { I18N } from '../i18n/I18N';
 import { QuestionTypeIcons } from '../components/common/QuestionTypeIcons';

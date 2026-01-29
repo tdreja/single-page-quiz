@@ -4,8 +4,8 @@ import { Player, sortPlayersHighestFirst } from '../../model/game/player';
 import { I18N } from '../../i18n/I18N';
 import { backgroundColor, textColor } from '../../components/common/Colors';
 import { PlayerWithPointsView } from '../../components/common/PlayerWithPointsView';
-import { JsonTeam } from '../../model/game/json/team';
-import { JsonPlayer } from '../../model/game/json/player';
+import { JsonTeam } from '../../model/game/team_json';
+import { JsonPlayer } from '../../model/game/player_json';
 
 interface TeamProps {
     team: Team | JsonTeam,

@@ -1,11 +1,11 @@
 import { nextRandom, shuffleArray } from '../model/common';
 import { Game, GamePage } from '../model/game/game';
-import { JsonStaticGameData, JsonTeamAndPlayerData } from '../model/game/json/game';
-import { JsonPlayerData, restorePlayers } from '../model/game/json/player';
-import { restoreTeams } from '../model/game/json/team';
+import { JsonStaticGameData, JsonTeamAndPlayerData } from '../model/game/game_json';
+import { JsonPlayerData, restorePlayers } from '../model/game/player_json';
+import { restoreTeams } from '../model/game/team_json';
 import { allEmojis, Emoji, Player } from '../model/game/player';
 import { allColors, Team, TeamColor } from '../model/game/team';
-import { importStaticGameContent } from '../model/quiz/json';
+import { importStaticGameContent } from '../model/quiz/question_json';
 import { BasicGameEvent, Changes, EventType, GameUpdate, noUpdate, update } from './common-events';
 
 export function findSmallestTeam(teams: Map<TeamColor, Team>): Team | null {

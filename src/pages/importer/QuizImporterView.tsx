@@ -1,9 +1,8 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
-import { generateJsonQuestionTable, JsonStaticGameData } from '../../model/game/json/game';
-import { parse } from 'yaml';
+import { generateJsonQuestionTable } from '../../model/game/game_json';
 import { QuizTableProps, QuizTableView } from '../QuizTable';
 import { QuizTable } from '../../model/base/table';
-import { JsonStaticQuestionData } from '../../model/quiz/json';
+import { JsonStaticQuestionData } from '../../model/quiz/question_json';
 import { SharedProps } from '../quiz/SharedProps';
 import { I18N } from '../../i18n/I18N';
 import { GameEventContext } from '../../components/common/GameContext';
@@ -11,10 +10,10 @@ import { ExportQuizView } from './ExportQuizView';
 import { ImportedData, importYaml } from './YamlReader';
 import { ImportPlayersEvent, ImportQuizEvent, ImportTeamsEvent } from '../../events/setup-events';
 import { PlayerWithPointsView } from '../../components/common/PlayerWithPointsView';
-import { sortPlayersByName, sortPlayersHighestFirst } from '../../model/game/player';
+import { sortPlayersHighestFirst } from '../../model/game/player';
 import { sortTeamsHighestFirst } from '../../model/game/team';
 import { TeamViewExpanded } from '../../sections/bottom/TeamViewExpanded';
-import { getPlayers } from '../../model/game/json/team';
+import { getPlayers } from '../../model/game/team_json';
 import { DialogContext, openDialog } from '../../components/mode/DialogContext';
 
 interface ActionProps {

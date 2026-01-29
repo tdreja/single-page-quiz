@@ -1,9 +1,9 @@
-import { describe, expect, test, beforeEach } from '@jest/globals';
-import { emptyGame, Game, GameRound, GameColumn, RoundState } from '../game/game';
+import { beforeEach, describe, expect, test } from '@jest/globals';
+import { emptyGame, Game, GameColumn, GameRound, RoundState } from '../game/game';
 import { Question } from './question';
-import { exportStaticGameContent, importStaticGameContent } from './json';
+import { exportStaticGameContent, importStaticGameContent } from './question_json';
 import { EstimateQuestion } from './estimate-question';
-import { JsonCurrentRound, JsonStaticGameData, importCurrentRound, exportCurrentRound } from '../game/json/game';
+import { exportCurrentRound, importCurrentRound, JsonCurrentRound, JsonStaticGameData } from '../game/game_json';
 import { asSet } from '../common';
 import { TeamColor } from '../game/team';
 

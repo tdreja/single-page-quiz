@@ -1,5 +1,5 @@
 import { TeamColor } from '../game/team';
-import { IndexedByColor, JsonStaticQuestionData } from './json';
+import { IndexedByColor, JsonStaticQuestionData } from './question_json';
 import { BaseQuestion, QuestionType, TextQuestion } from './question';
 
 /**
