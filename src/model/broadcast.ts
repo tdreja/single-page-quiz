@@ -1,6 +1,14 @@
 import { Changes } from '../events/common-events';
 import { Game } from './game/game';
-import { exportCurrentRound, exportGame, importCurrentRound, importGame, JsonCurrentRound, JsonStaticGameData, JsonUpdatableGameData } from './game/json/game';
+import {
+    exportCurrentRound,
+    exportGame,
+    importCurrentRound,
+    importGame,
+    JsonCurrentRound,
+    JsonStaticGameData,
+    JsonUpdatableGameData,
+} from './game/json/game_json';
 import { exportStaticGameContent, importStaticGameContent } from './quiz/json';
 
 /**

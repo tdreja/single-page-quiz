@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { EmojiView } from './EmojiView';
 import { Player } from '../../model/game/player';
-import { JsonPlayer } from '../../model/game/json/player';
+import { JsonPlayer } from '../../model/game/json/player_json';
 
 interface PlayerProps {
     player: Player | JsonPlayer,

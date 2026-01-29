@@ -1,10 +1,10 @@
-import { describe, expect, test, beforeEach } from '@jest/globals';
-import { emptyGame, Game, GameRound, GameColumn, RoundState } from '../game/game';
+import { beforeEach, describe, expect, test } from '@jest/globals';
+import { emptyGame, Game, GameColumn, GameRound, RoundState } from '../game/game';
 import { Question } from './question';
 import { exportStaticGameContent, importStaticGameContent } from './json';
 import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question';
 import { TeamColor } from '../game/team';
-import { JsonCurrentRound, JsonStaticGameData, importCurrentRound, exportCurrentRound } from '../game/json/game';
+import { exportCurrentRound, importCurrentRound, JsonCurrentRound, JsonStaticGameData } from '../game/json/game_json';
 import { asSet } from '../common';
 
 describe('TextMultipleChoiceQuestion', () => {

@@ -4,9 +4,9 @@ import { Game } from '../../model/game/game';
 import { GameContext } from '../../components/common/GameContext';
 import { stringify } from 'yaml';
 import { exportStaticGameContent } from '../../model/quiz/json';
-import { JsonPlayer, JsonPlayerData, storePlayer } from '../../model/game/json/player';
-import { JsonTeam, storeTeam } from '../../model/game/json/team';
-import { JsonTeamAndPlayerData } from '../../model/game/json/game';
+import { JsonPlayer, JsonPlayerData, storePlayer } from '../../model/game/json/player_json';
+import { JsonTeam, storeTeam } from '../../model/game/json/team_json';
+import { JsonTeamAndPlayerData } from '../../model/game/json/game_json';
 
 function downloadYaml(yaml: string, fileName: string) {
     const href = document.createElement('a');

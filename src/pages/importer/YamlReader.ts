@@ -1,6 +1,6 @@
 import { parse } from 'yaml';
-import { JsonStaticGameData, JsonTeamAndPlayerData } from '../../model/game/json/game';
-import { JsonPlayerData } from '../../model/game/json/player';
+import { JsonStaticGameData, JsonTeamAndPlayerData } from '../../model/game/json/game_json';
+import { JsonPlayerData } from '../../model/game/json/player_json';
 
 export interface ImportedData {
     quiz?: JsonStaticGameData,

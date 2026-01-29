@@ -1,6 +1,14 @@
 import { Changes } from '../../events/common-events';
 import { Game } from '../../model/game/game';
-import { exportCurrentRound, exportGame, importCurrentRound, importGame, JsonCurrentRound, JsonStaticGameData, JsonUpdatableGameData } from '../../model/game/json/game';
+import {
+    exportCurrentRound,
+    exportGame,
+    importCurrentRound,
+    importGame,
+    JsonCurrentRound,
+    JsonStaticGameData,
+    JsonUpdatableGameData,
+} from '../../model/game/json/game_json';
 import { exportStaticGameContent, importStaticGameContent } from '../../model/quiz/json';
 
 export function storeGameInStorage(game: Game, updates: Array<Changes>) {

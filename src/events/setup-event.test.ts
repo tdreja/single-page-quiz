@@ -27,8 +27,8 @@ import {
 } from './setup-events';
 import { Changes } from './common-events';
 import { Game } from '../model/game/game';
-import { JsonPlayer, JsonPlayerData } from '../model/game/json/player';
-import { JsonTeamAndPlayerData } from '../model/game/json/game';
+import { JsonPlayerData } from '../model/game/json/player_json';
+import { JsonTeamAndPlayerData } from '../model/game/json/game_json';
 
 let game: Game;
 beforeEach(() => {

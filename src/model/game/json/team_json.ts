@@ -1,8 +1,8 @@
 import { Game } from '../game';
 import { Emoji } from '../player';
 import { Team, TeamColor } from '../team';
-import { JsonTeamAndPlayerData } from './game';
-import { JsonPlayer, JsonPlayerData } from './player';
+import { JsonTeamAndPlayerData } from './game_json';
+import { JsonPlayer, JsonPlayerData } from './player_json';
 
 /**
  * JSON is identical to the regular team, but only contains the Emojis as an Array

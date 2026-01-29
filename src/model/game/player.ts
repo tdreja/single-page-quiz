@@ -1,4 +1,4 @@
-import { JsonPlayer } from './json/player';
+import { JsonPlayer } from './json/player_json';
 import { TeamColor } from './team';
 
 /**
