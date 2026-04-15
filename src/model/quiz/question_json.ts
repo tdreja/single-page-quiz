@@ -3,8 +3,8 @@ import { Game, GameColumn } from '../game/game';
 import { TeamColor } from '../game/team';
 import { ActionQuestion } from './action-question';
 import { EstimateQuestion } from './estimate-question';
-import { ImageMultipleChoiceQuestion, TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question';
-import { Question, QuestionType } from './question';
+import { TextChoice, TextMultipleChoiceQuestion } from './multiple-choice-question';
+import { MarkdownText, Question, QuestionType } from './question';
 import { JsonStaticColumnData, JsonStaticGameData } from '../game/game_json';
 
 export interface OptionalQuestion {
@@ -20,8 +20,7 @@ export interface OptionalQuestion {
 export interface JsonStaticQuestionData extends OptionalQuestion {
     questionType?: QuestionType,
     pointsForCompletion?: number,
-    text?: string,
-    imageBase64?: string,
+    text?: MarkdownText,
     choices?: Array<JsonStaticChoiceData>,
     estimateTarget?: number,
 }
@@ -32,7 +31,7 @@ export interface JsonStaticQuestionData extends OptionalQuestion {
 export interface JsonStaticChoiceData {
     choiceId?: string,
     correct?: boolean,
-    text?: string,
+    text?: MarkdownText,
 }
 
 /**
@@ -130,8 +129,6 @@ export function jsonContentToQuestion(sectionName?: string, json?: JsonStaticQue
     switch (type) {
         case QuestionType.TEXT_MULTIPLE_CHOICE:
             return new TextMultipleChoiceQuestion(sectionName, json.pointsForCompletion, json.text || '', getTextChoices(json));
-        case QuestionType.IMAGE_MULTIPLE_CHOICE:
-            return new ImageMultipleChoiceQuestion(sectionName, json.pointsForCompletion, json.text || '', json.imageBase64 || '', getTextChoices(json));
         case QuestionType.ESTIMATE:
             return new EstimateQuestion(sectionName, json.pointsForCompletion, json.text || '', json.estimateTarget || 0);
         case QuestionType.ACTION:

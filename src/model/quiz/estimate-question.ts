@@ -1,6 +1,6 @@
 import { TeamColor } from '../game/team';
 import { IndexedByColor, JsonStaticQuestionData } from './question_json';
-import { BaseQuestion, QuestionType, TextQuestion } from './question';
+import { BaseQuestion, MarkdownText, QuestionType, TextQuestion } from './question';
 
 /**
  * A question that requires each of the teams to submit an estimate for the target value.
@@ -8,17 +8,17 @@ import { BaseQuestion, QuestionType, TextQuestion } from './question';
  */
 export class EstimateQuestion extends BaseQuestion implements TextQuestion {
     private readonly _estimates: Map<TeamColor, number | null>;
-    private readonly _text: string;
+    private readonly _text: MarkdownText;
     private readonly _target: number;
 
-    public constructor(inColumn: string, pointsForCompletion: number, text: string, target: number) {
+    public constructor(inColumn: string, pointsForCompletion: number, text: MarkdownText, target: number) {
         super(inColumn, pointsForCompletion);
         this._text = text;
         this._target = target;
         this._estimates = new Map<TeamColor, number>();
     }
 
-    public get text(): string {
+    public get text(): MarkdownText {
         return this._text;
     }
 

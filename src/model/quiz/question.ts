@@ -3,12 +3,16 @@ import { IndexedByColor, JsonDynamicQuestionData, JsonStaticQuestionData, Option
 import { Completion } from './Completion';
 
 /**
+ * Alias for Markdown text
+ */
+export type MarkdownText = string;
+
+/**
  * Enum to determine the type of question.
  * It is used during JSON export and import to determine the type of question.
  */
 export enum QuestionType {
     TEXT_MULTIPLE_CHOICE = 'text-multiple-choice',
-    IMAGE_MULTIPLE_CHOICE = 'image-multiple-choice',
     ESTIMATE = 'estimate',
     ACTION = 'action',
 }
@@ -33,14 +37,7 @@ export interface Question extends OptionalQuestion {
  * Base API for text-based questions
  */
 export interface TextQuestion extends Question {
-    readonly text: string,
-}
-
-/**
- * Base API for image-based questions
- */
-export interface ImageQuestion extends Question {
-    readonly imageBase64: string,
+    readonly text: MarkdownText,
 }
 
 /**

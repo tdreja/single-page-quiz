@@ -1,6 +1,6 @@
 import { TeamColor } from '../game/team';
 import { IndexedByColor, JsonStaticChoiceData, JsonStaticQuestionData } from './question_json';
-import { BaseQuestion, ImageQuestion, Question, QuestionType, TextQuestion } from './question';
+import { BaseQuestion, MarkdownText, Question, QuestionType, TextQuestion } from './question';
 
 /**
  * Base API for choices selectable in multiple-choice questions
@@ -15,7 +15,7 @@ export interface Choice {
  * Base API for a textual choice
  */
 export interface TextChoice extends Choice {
-    readonly text: string,
+    readonly text: MarkdownText,
 }
 
 /**
@@ -31,9 +31,9 @@ export interface MultipleChoiceQuestion<CHOICE extends Choice> extends Question 
  */
 export class TextMultipleChoiceQuestion extends BaseQuestion implements MultipleChoiceQuestion<TextChoice>, TextQuestion {
     private readonly _choices: Map<string, TextChoice>;
-    private readonly _text: string;
+    private readonly _text: MarkdownText;
 
-    public constructor(inColumn: string, pointsForCompletion: number, text: string, choices: Map<string, TextChoice>) {
+    public constructor(inColumn: string, pointsForCompletion: number, text: MarkdownText, choices: Map<string, TextChoice>) {
         super(inColumn, pointsForCompletion);
         this._choices = choices;
         this._text = text;
@@ -43,7 +43,7 @@ export class TextMultipleChoiceQuestion extends BaseQuestion implements Multiple
         return this._choices;
     }
 
-    public get text(): string {
+    public get text(): MarkdownText {
         return this._text;
     }
 
@@ -96,41 +96,5 @@ export class TextMultipleChoiceQuestion extends BaseQuestion implements Multiple
                 choice.selectedBy.add(team);
             }
         }
-    }
-}
-
-/**
- * Multiple choice question with image question and text answers
- */
-export class ImageMultipleChoiceQuestion extends TextMultipleChoiceQuestion implements ImageQuestion {
-    private readonly _imageBase64: string;
-
-    public constructor(
-        inSection: string,
-        pointsForCompletion: number,
-        text: string,
-        imageBase64: string,
-        choices: Map<string, TextChoice>,
-    ) {
-        super(inSection, pointsForCompletion, text, choices);
-        this._imageBase64 = imageBase64;
-    }
-
-    public get imageBase64(): string {
-        return this._imageBase64;
-    }
-
-    public get questionType(): QuestionType {
-        return QuestionType.IMAGE_MULTIPLE_CHOICE;
-    }
-
-    public exportStaticQuestionData(): JsonStaticQuestionData {
-        return {
-            questionType: QuestionType.IMAGE_MULTIPLE_CHOICE,
-            pointsForCompletion: this.pointsForCompletion,
-            text: this.text,
-            imageBase64: this.imageBase64,
-            choices: this.jsonChoices,
-        };
     }
 }
