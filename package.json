@@ -16,7 +16,8 @@
     "material-symbols": "^0.44.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "yaml": "^2.8.3"
+    "yaml": "^2.8.3",
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
