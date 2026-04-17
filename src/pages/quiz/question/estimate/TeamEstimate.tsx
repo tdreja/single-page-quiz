@@ -69,8 +69,8 @@ export const TeamEstimateView = ({ round, question, team }: EstimateProps): Reac
                 <SubmitBadge question={question} team={team} round={round} />
             </div>
             <div className="card-body d-flex flex-column align-items-center gap-2">
-                {completed && estimate && (
-                    <h5>{`${i18n.question.headlineTeamEstimate} ${estimate}`}</h5>
+                {completed && estimate !== null && estimate !== undefined && (
+                    <h5>{`${i18n.question.headlineTeamEstimate} ${i18n.numberFormat.format(estimate)}${question.unit ? (' ' + question.unit) : ''}`}</h5>
                 )}
             </div>
         </div>

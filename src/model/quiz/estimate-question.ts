@@ -46,6 +46,7 @@ export class EstimateQuestion extends BaseQuestion implements TextQuestion {
             pointsForCompletion: this.pointsForCompletion,
             text: this.text,
             estimateTarget: this.target,
+            estimateUnit: this.unit || undefined,
         };
     }
 
