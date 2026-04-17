@@ -1,5 +1,5 @@
 import React, { ReactElement, useCallback, useContext } from 'react';
-import { I18N, Labels } from '../../../../i18n/I18N';
+import { I18N } from '../../../../i18n/I18N';
 import { RoundProps } from '../RoundProps';
 import { TeamColor } from '../../../../model/game/team';
 import { GameEventContext } from '../../../../components/common/GameContext';
@@ -9,34 +9,34 @@ import { EstimateQuestion } from '../../../../model/quiz/estimate-question';
 import { RoundState } from '../../../../model/game/game';
 import { SharedProps } from '../../SharedProps';
 
+const nonDigits: RegExp = /\D/g;
+const removeInputs: RegExp = /[^\d.,\s]/g;
+
 interface EstimateProps extends RoundProps {
     question: EstimateQuestion,
     team: TeamColor,
+}
+
+function validateInput(value: string | null | undefined): string {
+    if (value) {
+        const clean = value.replaceAll(removeInputs, '');
+        if (clean.length === 0) {
+            return '';
+        }
+        return clean;
+    }
+    return '';
 }
 
 function asNumberOrNull(value: string | null | undefined): number | null {
     if (!value) {
         return null;
     }
-    const nr = Number(value);
+    const nr = Number(value.replaceAll(/\D/g, ''));
     if (Number.isNaN(nr) || !Number.isFinite(nr)) {
         return null;
     }
     return nr;
-}
-
-function formatEstimate(
-    complete: boolean,
-    i18n: Labels,
-    estimate: number | null | undefined,
-) {
-    if (complete) {
-        if (estimate === null || estimate === undefined) {
-            return '-';
-        }
-        return i18n.numberFormat.format(estimate);
-    }
-    return estimate === null || estimate === undefined ? '' : `${estimate}`;
 }
 
 const SubmitBadge = ({ round, question, team }: EstimateProps): ReactElement | undefined => {
@@ -80,16 +80,21 @@ export const TeamEstimateView = ({ round, question, team }: EstimateProps): Reac
 export const TeamEstimateInput = ({ round, question, team }: EstimateProps & SharedProps): ReactElement => {
     const i18n = useContext(I18N);
     const onGameEvent = useContext(GameEventContext);
-    const [estimate, setEstimate] = React.useState<number | null>(null);
+    const [estimate, setEstimate] = React.useState<string>('');
 
     const onSubmitEstimate = useCallback(() => {
-        if (estimate != null) {
-            onGameEvent(new SubmitEstimateEvent(team, estimate));
+        const est = asNumberOrNull(estimate);
+        if (est != null) {
+            setEstimate(i18n.numberFormat.format(est));
+            onGameEvent(new SubmitEstimateEvent(team, est));
+        } else {
+            setEstimate('');
+            onGameEvent(new SubmitEstimateEvent(team, null));
         }
     }, [estimate, onGameEvent, team]);
 
     const onResetEstimate = useCallback(() => {
-        setEstimate(null);
+        setEstimate('');
         onGameEvent(new SubmitEstimateEvent(team, null));
     }, [onGameEvent, team]);
 
@@ -116,8 +121,8 @@ export const TeamEstimateInput = ({ round, question, team }: EstimateProps & Sha
                         type={(submittedEstimate && !completed) ? 'password' : 'text'}
                         className="form-control text-end"
                         id={`team-estimate-input-${team}`}
-                        value={formatEstimate(completed, i18n, estimate)}
-                        onChange={(ev) => setEstimate(asNumberOrNull(ev.target.value))}
+                        value={estimate}
+                        onChange={(ev) => setEstimate(validateInput(ev.target.value))}
                         data-1p-ignore
                         data-bwignore
                         data-lpignore="true"
