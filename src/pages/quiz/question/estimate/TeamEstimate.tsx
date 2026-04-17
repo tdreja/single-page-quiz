@@ -9,16 +9,30 @@ import { EstimateQuestion } from '../../../../model/quiz/estimate-question';
 import { RoundState } from '../../../../model/game/game';
 import { SharedProps } from '../../SharedProps';
 
+const nonDigits: RegExp = /\D/g;
+const removeInputs: RegExp = /[^\d.,\s]/g;
+
 interface EstimateProps extends RoundProps {
     question: EstimateQuestion,
     team: TeamColor,
+}
+
+function validateInput(value: string | null | undefined): string {
+    if (value) {
+        const clean = value.replaceAll(removeInputs, '');
+        if (clean.length === 0) {
+            return '';
+        }
+        return clean;
+    }
+    return '';
 }
 
 function asNumberOrNull(value: string | null | undefined): number | null {
     if (!value) {
         return null;
     }
-    const nr = Number(value);
+    const nr = Number(value.replaceAll(/\D/g, ''));
     if (Number.isNaN(nr) || !Number.isFinite(nr)) {
         return null;
     }
@@ -55,27 +69,32 @@ export const TeamEstimateView = ({ round, question, team }: EstimateProps): Reac
                 <SubmitBadge question={question} team={team} round={round} />
             </div>
             <div className="card-body d-flex flex-column align-items-center gap-2">
-                {completed && estimate && (
-                    <h5>{`${i18n.question.headlineTeamEstimate} ${estimate}`}</h5>
+                {completed && estimate !== null && estimate !== undefined && (
+                    <h5>{`${i18n.question.headlineTeamEstimate} ${i18n.numberFormat.format(estimate)}${question.unit ? (' ' + question.unit) : ''}`}</h5>
                 )}
             </div>
         </div>
     );
 };
 
-export const TeamEstimateInput = ({ round, question, shared, team }: EstimateProps & SharedProps): ReactElement => {
+export const TeamEstimateInput = ({ round, question, team }: EstimateProps & SharedProps): ReactElement => {
     const i18n = useContext(I18N);
     const onGameEvent = useContext(GameEventContext);
-    const [estimate, setEstimate] = React.useState<number | null>(null);
+    const [estimate, setEstimate] = React.useState<string>('');
 
     const onSubmitEstimate = useCallback(() => {
-        if (estimate != null) {
-            onGameEvent(new SubmitEstimateEvent(team, estimate));
+        const est = asNumberOrNull(estimate);
+        if (est != null) {
+            setEstimate(i18n.numberFormat.format(est));
+            onGameEvent(new SubmitEstimateEvent(team, est));
+        } else {
+            setEstimate('');
+            onGameEvent(new SubmitEstimateEvent(team, null));
         }
     }, [estimate, onGameEvent, team]);
 
     const onResetEstimate = useCallback(() => {
-        setEstimate(null);
+        setEstimate('');
         onGameEvent(new SubmitEstimateEvent(team, null));
     }, [onGameEvent, team]);
 
@@ -99,16 +118,23 @@ export const TeamEstimateInput = ({ round, question, shared, team }: EstimatePro
                     </span>
                     <input
                         autoComplete="off"
-                        type={(!shared || completed) ? 'text' : 'password'}
-                        className="form-control"
+                        type={(submittedEstimate && !completed) ? 'password' : 'text'}
+                        className="form-control text-end"
                         id={`team-estimate-input-${team}`}
-                        value={estimate == null ? '' : `${estimate}`}
-                        onChange={(ev) => setEstimate(asNumberOrNull(ev.target.value))}
+                        value={estimate}
+                        onChange={(ev) => setEstimate(validateInput(ev.target.value))}
                         data-1p-ignore
                         data-bwignore
                         data-lpignore="true"
                         data-form-type="other"
                     />
+                    {question.unit && (
+                        <span
+                            className="input-group-text"
+                        >
+                            {question.unit}
+                        </span>
+                    )}
                     <span
                         className={`input-group-text btn btn-outline-secondary material-symbols-outlined ${(submittedEstimate !== undefined || completed) ? 'disabled' : ''}`}
                         onClick={onSubmitEstimate}

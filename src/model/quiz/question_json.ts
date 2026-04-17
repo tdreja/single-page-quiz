@@ -23,6 +23,7 @@ export interface JsonStaticQuestionData extends OptionalQuestion {
     text?: MarkdownText,
     choices?: Array<JsonStaticChoiceData>,
     estimateTarget?: number,
+    estimateUnit?: string,
 }
 
 /**
@@ -130,7 +131,7 @@ export function jsonContentToQuestion(sectionName?: string, json?: JsonStaticQue
         case QuestionType.TEXT_MULTIPLE_CHOICE:
             return new TextMultipleChoiceQuestion(sectionName, json.pointsForCompletion, json.text || '', getTextChoices(json));
         case QuestionType.ESTIMATE:
-            return new EstimateQuestion(sectionName, json.pointsForCompletion, json.text || '', json.estimateTarget || 0);
+            return new EstimateQuestion(sectionName, json.pointsForCompletion, json.text || '', json.estimateTarget || 0, json.estimateUnit || null);
         case QuestionType.ACTION:
             return new ActionQuestion(sectionName, json.pointsForCompletion, json.text || '');
         default:

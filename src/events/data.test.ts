@@ -37,7 +37,7 @@ export function newTestSetup(): Game {
     choices.set('a', choiceAWrong);
     choices.set('b', choiceBCorrect);
     questionMultiChoice = new TextMultipleChoiceQuestion(sectionId, questionPoints, 'Question?', choices);
-    questionEstimate = new EstimateQuestion(sectionId, questionPoints + 100, 'Estimate', 1000);
+    questionEstimate = new EstimateQuestion(sectionId, questionPoints + 100, 'Estimate', 1000, 'm/s');
 
     // TeamViewExpanded Blue
     playerBlueDuck = {
