@@ -10,11 +10,13 @@ export class EstimateQuestion extends BaseQuestion implements TextQuestion {
     private readonly _estimates: Map<TeamColor, number | null>;
     private readonly _text: MarkdownText;
     private readonly _target: number;
+    private readonly _unit: string | null;
 
-    public constructor(inColumn: string, pointsForCompletion: number, text: MarkdownText, target: number) {
+    public constructor(inColumn: string, pointsForCompletion: number, text: MarkdownText, target: number, unit: string | null) {
         super(inColumn, pointsForCompletion);
         this._text = text;
         this._target = target;
+        this._unit = unit;
         this._estimates = new Map<TeamColor, number>();
     }
 
@@ -24,6 +26,10 @@ export class EstimateQuestion extends BaseQuestion implements TextQuestion {
 
     public get target(): number {
         return this._target;
+    }
+
+    public get unit(): string | null {
+        return this._unit;
     }
 
     public get questionType(): QuestionType {

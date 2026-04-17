@@ -18,7 +18,7 @@ describe('EstimateQuestion', () => {
     beforeEach(() => {
         sId = 'Test';
         points = 10;
-        estimateQuestion = new EstimateQuestion(sId, 10, 'Test question text', 42);
+        estimateQuestion = new EstimateQuestion(sId, 10, 'Test question text', 42, 'km');
         gameSection = {
             columnName: sId,
             questions: new Map<number, Question>(),

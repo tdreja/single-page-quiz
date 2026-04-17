@@ -1,5 +1,5 @@
 import React, { ReactElement, useCallback, useContext } from 'react';
-import { I18N } from '../../../../i18n/I18N';
+import { I18N, Labels } from '../../../../i18n/I18N';
 import { RoundProps } from '../RoundProps';
 import { TeamColor } from '../../../../model/game/team';
 import { GameEventContext } from '../../../../components/common/GameContext';
@@ -23,6 +23,20 @@ function asNumberOrNull(value: string | null | undefined): number | null {
         return null;
     }
     return nr;
+}
+
+function formatEstimate(
+    complete: boolean,
+    i18n: Labels,
+    estimate: number | null | undefined,
+) {
+    if (complete) {
+        if (estimate === null || estimate === undefined) {
+            return '-';
+        }
+        return i18n.numberFormat.format(estimate);
+    }
+    return estimate === null || estimate === undefined ? '' : `${estimate}`;
 }
 
 const SubmitBadge = ({ round, question, team }: EstimateProps): ReactElement | undefined => {
@@ -63,7 +77,7 @@ export const TeamEstimateView = ({ round, question, team }: EstimateProps): Reac
     );
 };
 
-export const TeamEstimateInput = ({ round, question, shared, team }: EstimateProps & SharedProps): ReactElement => {
+export const TeamEstimateInput = ({ round, question, team }: EstimateProps & SharedProps): ReactElement => {
     const i18n = useContext(I18N);
     const onGameEvent = useContext(GameEventContext);
     const [estimate, setEstimate] = React.useState<number | null>(null);
@@ -100,15 +114,22 @@ export const TeamEstimateInput = ({ round, question, shared, team }: EstimatePro
                     <input
                         autoComplete="off"
                         type={(submittedEstimate && !completed) ? 'password' : 'text'}
-                        className="form-control"
+                        className="form-control text-end"
                         id={`team-estimate-input-${team}`}
-                        value={estimate == null ? '' : (completed ? i18n.numberFormat.format(estimate) : `${estimate}`)}
+                        value={formatEstimate(completed, i18n, estimate)}
                         onChange={(ev) => setEstimate(asNumberOrNull(ev.target.value))}
                         data-1p-ignore
                         data-bwignore
                         data-lpignore="true"
                         data-form-type="other"
                     />
+                    {question.unit && (
+                        <span
+                            className="input-group-text"
+                        >
+                            {question.unit}
+                        </span>
+                    )}
                     <span
                         className={`input-group-text btn btn-outline-secondary material-symbols-outlined ${(submittedEstimate !== undefined || completed) ? 'disabled' : ''}`}
                         onClick={onSubmitEstimate}
