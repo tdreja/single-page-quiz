@@ -90,7 +90,7 @@ export const EstimateQuestionModerationView = (
                         </Markdown>
                     </div>
                     {completed && (
-                        <h5 className="mb-4">{`${i18n.question.headlineEstimateAnswer} ${question.target}`}</h5>
+                        <h5 className="mb-4">{`${i18n.question.headlineEstimateAnswer} ${i18n.numberFormat.format(question.target)}`}</h5>
                     )}
                     <div className="d-grid gap-3" style={{ gridTemplateColumns: '1fr 1fr' }}>
                         { Array.from(game.teams.keys()).map((team) =>

@@ -22,6 +22,7 @@ export interface Labels {
     teamEditor: TeamEditor,
     settings: Settings,
     quizEditor: QuizEditorLabels,
+    numberFormat: Intl.NumberFormat,
 }
 
 /**

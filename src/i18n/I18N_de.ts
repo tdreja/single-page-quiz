@@ -7,6 +7,7 @@ import { QuestionType } from '../model/quiz/question';
  * All translations used by the application in German.
  */
 export const i18n_de: Labels = {
+    numberFormat: new Intl.NumberFormat('de-DE'),
     teams: {
         [TeamColor.RED]: '1 / Rot',
         [TeamColor.BLUE]: '2 / Blau',

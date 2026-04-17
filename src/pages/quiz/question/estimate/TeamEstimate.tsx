@@ -99,10 +99,10 @@ export const TeamEstimateInput = ({ round, question, shared, team }: EstimatePro
                     </span>
                     <input
                         autoComplete="off"
-                        type={(!shared || completed) ? 'text' : 'password'}
+                        type={(submittedEstimate && !completed) ? 'password' : 'text'}
                         className="form-control"
                         id={`team-estimate-input-${team}`}
-                        value={estimate == null ? '' : `${estimate}`}
+                        value={estimate == null ? '' : (completed ? i18n.numberFormat.format(estimate) : `${estimate}`)}
                         onChange={(ev) => setEstimate(asNumberOrNull(ev.target.value))}
                         data-1p-ignore
                         data-bwignore
