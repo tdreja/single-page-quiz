@@ -5,11 +5,16 @@ import { ActionQuestion } from '../../../../model/quiz/action-question';
 import { I18N } from '../../../../i18n/I18N';
 import { Sidebar } from '../Sidebar';
 import { RoundState } from '../../../../model/game/game';
-import { ActionQuestionModerationResetRound, ActionQuestionModerationSectionEditCompletion, ActionQuestionModerationSectionShowCompletion } from './ModerationSections';
+import {
+    ActionQuestionModerationResetRound,
+    ActionQuestionModerationSectionEditCompletion,
+    ActionQuestionModerationSectionShowCompletion,
+} from './ModerationSections';
 import {
     ActionQuestionParticipantsSectionShowCompletion,
     ActionQuestionParticipantsSectionWaitForCompletion,
 } from './ParticipantsSections';
+import Markdown from 'react-markdown';
 
 export const ActionQuestionParticipantsView = (
     { round, question }: QuestionProps<ActionQuestion>,
@@ -23,7 +28,13 @@ export const ActionQuestionParticipantsView = (
                     {`${round.inColumn} ${round.question.pointsForCompletion}`}
                 </div>
                 <div className="card-body">
-                    <h4 className="card-title pb-2">{question.text}</h4>
+                    <div className="card-title pb-2 markdown-large">
+                        <Markdown
+                            urlTransform={(input) => input}
+                        >
+                            {question.text}
+                        </Markdown>
+                    </div>
                 </div>
             </div>
             {/* Sidebar */}
@@ -52,7 +63,13 @@ export const ActionQuestionModerationView = (
                     {`${round.inColumn} ${round.question.pointsForCompletion}`}
                 </div>
                 <div className="card-body">
-                    <h4 className="card-title pb-2">{question.text}</h4>
+                    <div className="card-title pb-2 markdown-large">
+                        <Markdown
+                            urlTransform={(input) => input}
+                        >
+                            {question.text}
+                        </Markdown>
+                    </div>
                 </div>
             </div>
             {/* Sidebar */}
