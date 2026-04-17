@@ -19,6 +19,7 @@ import {
     ParticipantsShowResults,
     ParticipantsTeamCanAttempt,
 } from './ParticipantsSections';
+import Markdown from 'react-markdown';
 
 export const TextMultipleChoiceQuestionParticipantsView = (
     { round, question }: QuestionProps<TextMultipleChoiceQuestion>,
@@ -31,7 +32,13 @@ export const TextMultipleChoiceQuestionParticipantsView = (
                     {`${round.inColumn} ${round.question.pointsForCompletion}`}
                 </div>
                 <div className="card-body">
-                    <h4 className="card-title pb-2">{question.text}</h4>
+                    <div className="card-title pb-2 markdown-large">
+                        <Markdown
+                            urlTransform={(input) => input}
+                        >
+                            {question.text}
+                        </Markdown>
+                    </div>
                     <TextChoices choices={question.choicesSorted} shared={true} round={round} />
                 </div>
             </div>
@@ -57,7 +64,13 @@ export const TextMultipleChoiceQuestionModerationView = (
                     {`${round.inColumn} ${round.question.pointsForCompletion}`}
                 </div>
                 <div className="card-body">
-                    <h4 className="card-title pb-2">{question.text}</h4>
+                    <div className="card-title pb-2 markdown-large">
+                        <Markdown
+                            urlTransform={(input) => input}
+                        >
+                            {question.text}
+                        </Markdown>
+                    </div>
                     <TextChoices choices={question.choicesSorted} shared={shared} round={round} />
                 </div>
             </div>

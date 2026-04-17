@@ -1,12 +1,7 @@
 import { Game, GameRound, getTeams, RoundState } from '../model/game/game';
 import { Team, TeamColor } from '../model/game/team';
 import { EstimateQuestion } from '../model/quiz/estimate-question';
-import {
-    Choice,
-    ImageMultipleChoiceQuestion,
-    MultipleChoiceQuestion,
-    TextMultipleChoiceQuestion,
-} from '../model/quiz/multiple-choice-question';
+import { Choice, MultipleChoiceQuestion, TextMultipleChoiceQuestion } from '../model/quiz/multiple-choice-question';
 import { Changes, EventType, GameRoundEvent, GameUpdate, noUpdate, update } from './common-events';
 import { ActionQuestion } from '../model/quiz/action-question';
 import { Completion, recalculateCompletion, splitUpPoints } from '../model/quiz/Completion';
@@ -84,9 +79,6 @@ export class SelectFromMultipleChoiceEvent extends GameRoundEvent {
 
     protected findQuestion(round: GameRound): MultipleChoiceQuestion<Choice> | null {
         if (round.question instanceof TextMultipleChoiceQuestion) {
-            return round.question;
-        }
-        if (round.question instanceof ImageMultipleChoiceQuestion) {
             return round.question;
         }
         return null;

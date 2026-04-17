@@ -139,7 +139,6 @@ export const i18n_de: Labels = {
     },
     questionTypes: {
         [QuestionType.TEXT_MULTIPLE_CHOICE]: 'Multiple-Choice-Frage',
-        [QuestionType.IMAGE_MULTIPLE_CHOICE]: 'Multiple-Choice-Frage (Bild)',
         [QuestionType.ESTIMATE]: 'Schätzfrage',
         [QuestionType.ACTION]: 'Aktion',
     },

@@ -1,5 +1,5 @@
 import { IndexedByColor, JsonStaticQuestionData } from './question_json';
-import { BaseQuestion, QuestionType, TextQuestion } from './question';
+import { BaseQuestion, MarkdownText, QuestionType, TextQuestion } from './question';
 import { Team, TeamColor } from '../game/team';
 import { Completion } from './Completion';
 
@@ -8,16 +8,16 @@ import { Completion } from './Completion';
  *  with the moderation determining the points awarded.
  */
 export class ActionQuestion extends BaseQuestion implements TextQuestion {
-    private readonly _text: string;
+    private readonly _text: MarkdownText;
     private readonly _completionPoints: Map<TeamColor, number>;
 
-    public constructor(inColumn: string, pointsForCompletion: number, text: string) {
+    public constructor(inColumn: string, pointsForCompletion: number, text: MarkdownText) {
         super(inColumn, pointsForCompletion);
         this._text = text;
         this._completionPoints = new Map<TeamColor, number>();
     }
 
-    public get text(): string {
+    public get text(): MarkdownText {
         return this._text;
     }
 

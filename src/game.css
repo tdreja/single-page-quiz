@@ -118,3 +118,56 @@ body {
 .min-width-15 {
     min-width: 15vw;
 }
+
+/* Adjust the size for small markdown content */
+.markdown-small {
+    width: 100%;
+    font-size: 1.275rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+/* Adjust the size for large markdown content */
+.markdown-large {
+    width: 100%;
+    font-size: 1.375rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-height: min(50vh, 30rem);
+    overflow: visible;
+}
+
+.markdown-small > p,
+.markdown-large > p {
+    font-size: 1em;
+    margin: 0;
+}
+.markdown-small > h1,
+.markdown-large > h1 {
+    font-size: 1.5em;
+}
+.markdown-small > h2,
+.markdown-large > h2 {
+    font-size: 1.375em;
+}
+.markdown-small > h3,
+.markdown-large > h3 {
+    font-size: 1.25em;
+}
+.markdown-small > h4,
+.markdown-large > h4 {
+    font-size: 1.1em;
+}
+.markdown-small > p:has(img),
+.markdown-large > p:has(img) {
+    align-self: center;
+}
+.markdown-large img {
+    max-width: 100%;
+    max-height: min(40vh, 25rem);
+}
+.markdown-small img {
+    max-width: 100%;
+    max-height: 10vh;
+}

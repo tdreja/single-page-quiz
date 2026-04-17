@@ -20,6 +20,7 @@ import {
 } from '../multiple-choice/ModerationSections';
 import { GameContext } from '../../../../components/common/GameContext';
 import { TeamEstimateInput, TeamEstimateView } from './TeamEstimate';
+import Markdown from 'react-markdown';
 
 export const EstimateQuestionParticipantsView = (
     { round, question }: QuestionProps<EstimateQuestion>,
@@ -34,7 +35,13 @@ export const EstimateQuestionParticipantsView = (
                     {`${round.inColumn} ${round.question.pointsForCompletion}`}
                 </div>
                 <div className="card-body">
-                    <h4 className="card-title pb-2">{question.text}</h4>
+                    <div className="card-title pb-2 markdown-large">
+                        <Markdown
+                            urlTransform={(input) => input}
+                        >
+                            {question.text}
+                        </Markdown>
+                    </div>
                     {completed && (
                         <h5 className="mb-4">{`${i18n.question.headlineEstimateAnswer} ${question.target}`}</h5>
                     )}
@@ -75,7 +82,13 @@ export const EstimateQuestionModerationView = (
                     {`${round.inColumn} ${round.question.pointsForCompletion}`}
                 </div>
                 <div className="card-body">
-                    <h4 className="card-title pb-2">{question.text}</h4>
+                    <div className="card-title pb-2 markdown-large">
+                        <Markdown
+                            urlTransform={(input) => input}
+                        >
+                            {question.text}
+                        </Markdown>
+                    </div>
                     {completed && (
                         <h5 className="mb-4">{`${i18n.question.headlineEstimateAnswer} ${question.target}`}</h5>
                     )}
