@@ -35,7 +35,7 @@ export const TeamsPageForModeration = (): ReactElement => {
                             {i18n.teamEditor.tooltipAdd}
                         </label>
                         <div id="add-new-teams">
-                            <div className="btn-group">
+                            <div className="app-chip-group">
                                 {
                                     availableColors.map((color) => (
                                         <TeamColorButton

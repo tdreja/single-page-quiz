@@ -16,8 +16,8 @@ export const PlayersPageForParticipants = (): ReactElement => {
     return (
         <div
             id="all-players"
-            className="d-flex flex-column flex-wrap column-gap-4 row-gap-1 justify-content-start align-content-start"
-            style={{ maxHeight: 'calc(100vh - 8rem)' }}
+            className="d-flex flex-column flex-wrap column-gap-3 row-gap-2 justify-content-start align-content-start"
+            style={{ maxHeight: 'calc(100vh - 17rem)' }}
         >
             {
                 Array.from(game.players.values()).sort(sortPlayersHighestFirst)
@@ -26,7 +26,7 @@ export const PlayersPageForParticipants = (): ReactElement => {
                             key={`player-${player.emoji}`}
                             player={player}
                             placements={placements}
-                            className="border rounded pt-2 pb-2 ps-2 pe-4"
+                            className="player-tile"
                         />
                     ))
             }

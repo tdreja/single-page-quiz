@@ -117,6 +117,8 @@ export interface Settings {
     labelModeParticipants: string,
     tooltipActionParticipants: string,
     tooltipActionModeration: string,
+    appTitle: string,
+    appSubtitle: string,
 }
 
 /**

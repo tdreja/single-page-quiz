@@ -16,7 +16,7 @@ export const PlayerWithPointsView = ({ player, size }: PlayerProps): ReactElemen
             part="player"
             id={`player-${player.emoji}`}
             key={player.emoji}
-            className="d-grid gap-1 align-items-center border border-secondary-subtle rounded ps-1 pe-1"
+            className="player-chip d-grid gap-1 align-items-center"
             style={{
                 gridTemplateColumns: '1fr 4fr 2fr',
             }}

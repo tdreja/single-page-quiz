@@ -45,11 +45,11 @@ const Choice = ({ round, choice, shared }: ChoiceProps): ReactElement => {
     const onGameEvent = useContext(GameEventContext);
     return (
         <div
-            className={`d-inline-flex border rounded gap-2 p-2 btn align-items-baseline bg-body ${buttonStyle(round, choice, shared)}`}
+            className={`choice-tile btn ${buttonStyle(round, choice, shared)}`}
             onClick={() => onGameEvent(new SelectFromMultipleChoiceEvent(choice.choiceId))}
-            style={asReactCss({ '--bs-btn-color': '#000' })}
+            style={asReactCss({ '--bs-btn-color': 'var(--app-ink)' })}
         >
-            <h5 className={`badge mb-0 ${badgeStyle(round, choice, shared)}`}>{choice.choiceId}</h5>
+            <h5 className={`choice-badge badge mb-0 ${badgeStyle(round, choice, shared)}`}>{choice.choiceId}</h5>
             <div className="mb-0 markdown-small">
                 <Markdown
                     urlTransform={(input) => input}

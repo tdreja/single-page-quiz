@@ -92,8 +92,17 @@ export const SettingsBar = (): ReactElement => {
     }, [tabSettings]);
 
     return (
-        <nav id="top-nav" className="navbar sticky-top dark-background d-flex align-items-end pb-0 pt-0 justify-content-between ps-2 pe-2">
-            <ul className="nav nav-tabs">
+        <nav id="top-nav" className="dark-background">
+            <div className="app-brand">
+                <span className="app-logo">
+                    <span className="trophy" />
+                </span>
+                <span className="app-brand-text">
+                    {i18n.settings.appTitle}
+                    <small>{i18n.settings.appSubtitle}</small>
+                </span>
+            </div>
+            <ul className="nav app-tabs">
                 <li className={`nav-item nav-link ${game.page === GamePage.GAME_ACTIVE ? 'active' : ''}`} onClick={() => changeState(GamePage.GAME_ACTIVE)}>
                     {i18n.game['game-active']}
                 </li>
@@ -110,19 +119,19 @@ export const SettingsBar = (): ReactElement => {
                     {i18n.game['import-quiz']}
                 </li>
             </ul>
-            <div className="d-flex mb-2 mt-2 gap-2">
+            <div className="app-topbar-actions">
                 <span
-                    className="btn btn-outline-light btn-outline-dark-background d-flex align-items-center gap-2"
+                    className="btn app-topbar-btn"
                     title={mode.tooltip(i18n)}
                     onClick={onModeClick}
                 >
                     <span className="material-symbols-outlined">
                         {mode.symbol}
                     </span>
-                    {mode.label(i18n)}
+                    {mode.label(i18n) && <span className="app-topbar-label">{mode.label(i18n)}</span>}
                 </span>
                 <span
-                    className="btn material-symbols-outlined btn-outline-light btn-outline-dark-background"
+                    className="btn app-topbar-btn material-symbols-outlined"
                     title={action.tooltip(i18n)}
                     onClick={onActionClick}
                 >

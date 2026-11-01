@@ -114,7 +114,7 @@ export const PlayerForm = ({ player, availableTeams }: Props): ReactElement => {
                     {i18n.playerEditor.labelTeam}
                 </label>
                 <div id={`player-team-${player.emoji}`}>
-                    <div className="btn-group">
+                    <div className="app-chip-group">
                         {
                             availableTeams.map((team) => (
                                 <TeamColorButton
