@@ -27,6 +27,20 @@ export function shuffleArray<TYPE>(array: Array<TYPE>) {
     }
 }
 
+/**
+ * Returns a shuffled copy of the array. If the array has at least two different items, the order always changes.
+ */
+export function shuffledCopy<TYPE>(array: ReadonlyArray<TYPE>): TYPE[] {
+    const result = [...array];
+    if (result.length < 2 || result.every((item) => item === result[0])) {
+        return result;
+    }
+    do {
+        shuffleArray(result);
+    } while (result.every((item, idx) => item === array[idx]));
+    return result;
+}
+
 export function nextRandom<VALUE>(values: Array<VALUE>): VALUE | null {
     if (values.length === 0) {
         return null;

@@ -7,6 +7,8 @@ import { EditorState } from '../../model/quiz/editor';
 export interface EditorSelection {
     columnUid: string,
     row: number,
+    // Shuffle the choices of the question when returning to the overview
+    shuffleChoices?: boolean,
 }
 
 /**

@@ -45,6 +45,7 @@ export const i18n_en: Labels = {
         actionCancel: 'Cancel',
         actionApply: 'Apply',
         waitingForImport: 'Waiting on moderation...',
+        labelExportShuffled: 'Export with shuffled answers',
     },
     emojis: {
         DUCK: 'Duck',
@@ -218,6 +219,7 @@ export const i18n_en: Labels = {
         labelEstimatePreview: 'Shown answer:',
         labelUnsavedChanges: 'Unsaved changes',
         labelImageUploading: 'Adding image...',
+        labelShuffleChoices: 'Shuffle answers',
         labelAllSaved: 'All changes saved',
         labelNewColumn: 'Category',
         actionSaveAndStart: 'Save and start game',

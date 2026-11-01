@@ -111,6 +111,7 @@ export const i18n_de: Labels = {
         actionCancel: 'Abbrechen',
         actionApply: 'Übernehmen',
         waitingForImport: 'Warte auf Moderation...',
+        labelExportShuffled: 'Mit gemischten Antworten exportieren',
     },
     playerEditor: {
         dialogResetAllTitle: 'Alle Punkte zurücksetzen?',
@@ -218,6 +219,7 @@ export const i18n_de: Labels = {
         labelEstimatePreview: 'Angezeigte Antwort:',
         labelUnsavedChanges: 'Ungespeicherte Änderungen',
         labelImageUploading: 'Bild wird hinzugefügt...',
+        labelShuffleChoices: 'Antworten mischen',
         labelAllSaved: 'Alles gespeichert',
         labelNewColumn: 'Kategorie',
         actionSaveAndStart: 'Speichern und Spiel starten',
