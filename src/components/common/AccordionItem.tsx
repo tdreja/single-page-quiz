@@ -19,7 +19,7 @@ export const AccordionItem = (props: AccordionProps): ReactElement => {
     delete (html as any)['headerChildren'];
 
     return (
-        <div {...html} className={`${html.className || ''} accordion-item border-top-0 border-start border-end border-bottom`}>
+        <div {...html} className={`${html.className || ''} accordion-item`}>
             <h2 className="accordion-header">
                 <button
                     className={`accordion-button ${props.isExpanded() ? '' : 'collapsed'}`}

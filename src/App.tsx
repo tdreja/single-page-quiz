@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './theme.css';
 import './game.css';
 import './images.css';
 import React, { useCallback, useEffect, useState } from 'react';

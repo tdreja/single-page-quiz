@@ -10,9 +10,9 @@ interface TeamProps {
 export const TeamViewCollapsed = ({ team }: TeamProps): ReactElement => {
     const i18n = useContext(I18N);
     return (
-        <TeamColorButton color={team.color} className="d-inline-flex justify-content-between">
-            <span className="rounded-pill text-bg-light ps-2 pe-2 fw-bold">{i18n.teams[team.color]}</span>
-            <span className="rounded-pill text-bg-light ps-2 pe-2">{team.points}</span>
+        <TeamColorButton color={team.color} className="team-score-chip">
+            <span className="team-score-name">{i18n.teams[team.color]}</span>
+            <span className="team-score-points">{i18n.numberFormat.format(team.points)}</span>
         </TeamColorButton>
     );
 };

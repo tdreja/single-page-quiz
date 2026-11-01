@@ -27,7 +27,7 @@ export const TextMultipleChoiceQuestionParticipantsView = (
     const i18n = useContext(I18N);
     return (
         <div className="d-flex gap-2">
-            <div className="card flex-grow-1">
+            <div className="card question-card flex-grow-1">
                 <div className="card-header">
                     {`${round.inColumn} ${round.question.pointsForCompletion}`}
                 </div>
@@ -59,7 +59,7 @@ export const TextMultipleChoiceQuestionModerationView = (
     const i18n = useContext(I18N);
     return (
         <div className="d-flex gap-2">
-            <div className="card flex-grow-1">
+            <div className="card question-card flex-grow-1">
                 <div className="card-header">
                     {`${round.inColumn} ${round.question.pointsForCompletion}`}
                 </div>

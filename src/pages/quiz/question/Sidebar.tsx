@@ -24,7 +24,7 @@ export const Sidebar = ({ round, headline, className, children }: SidebarProps):
     }, [round.timerStart]);
 
     return (
-        <div className={`card ${className}`}>
+        <div className={`card question-sidebar ${className || ''}`}>
             <div className="card-header">{headline}</div>
             {
                 children
@@ -32,7 +32,7 @@ export const Sidebar = ({ round, headline, className, children }: SidebarProps):
                     : undefined
             }
             {timeInfo && (
-                <div className="card-footer">
+                <div className="card-footer question-timer">
                     <span className="me-2">{i18n.question.headlineTimer}</span>
                     {timeInfo.days.length > 0 && (<span className="time-section">{timeInfo.days}</span>)}
                     {timeInfo.hours.length > 0 && (<span className="time-section">{timeInfo.hours}</span>)}

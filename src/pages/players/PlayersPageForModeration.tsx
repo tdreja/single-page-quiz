@@ -66,11 +66,11 @@ export const PlayersPageForModeration = (): ReactElement | undefined => {
 
     return (
         <div
-            className="accordion accordion-flush d-flex flex-column flex-wrap border-top rounded-top column-gap-3 justify-content-start align-content-start"
-            style={{ maxHeight: 'calc(100vh - 8rem)' }}
+            className="accordion app-accordion d-flex flex-column flex-wrap column-gap-3 row-gap-2 justify-content-start align-content-start"
+            style={{ maxHeight: 'calc(100vh - 17rem)' }}
         >
             <div
-                className="accordion-item border-top-0 border-start border-end border-bottom"
+                className="accordion-item"
                 style={{ minWidth: '20rem' }}
             >
                 <div className="accordion-body">

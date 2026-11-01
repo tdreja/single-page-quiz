@@ -186,6 +186,8 @@ export const i18n_en: Labels = {
         labelModeParticipants: '',
         tooltipActionParticipants: 'Open participant view',
         tooltipActionModeration: 'Open moderation view',
+        appTitle: 'The Great Price',
+        appSubtitle: 'Game night',
     },
     teamEditor: {
         dialogRemoveAllTitle: 'Remove all teams?',

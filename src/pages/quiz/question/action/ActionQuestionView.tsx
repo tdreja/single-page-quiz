@@ -23,7 +23,7 @@ export const ActionQuestionParticipantsView = (
     return (
 
         <div className="d-flex gap-2 min-height-50">
-            <div className="card flex-grow-1">
+            <div className="card question-card flex-grow-1">
                 <div className="card-header">
                     {`${round.inColumn} ${round.question.pointsForCompletion}`}
                 </div>
@@ -58,7 +58,7 @@ export const ActionQuestionModerationView = (
     const i18n = useContext(I18N);
     return (
         <div className="d-flex gap-2 min-height-50">
-            <div className="card flex-grow-1">
+            <div className="card question-card flex-grow-1">
                 <div className="card-header">
                     {`${round.inColumn} ${round.question.pointsForCompletion}`}
                 </div>

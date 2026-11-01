@@ -186,6 +186,8 @@ export const i18n_de: Labels = {
         labelModeParticipants: '',
         tooltipActionParticipants: 'Öffne Teilnehmeransicht',
         tooltipActionModeration: 'Öffne Moderationsansicht',
+        appTitle: 'Der große Preis',
+        appSubtitle: 'Quiz-Abend',
     },
     teamEditor: {
         dialogRemoveAllTitle: 'Alle Teams entfernen?',

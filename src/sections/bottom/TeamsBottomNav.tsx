@@ -35,7 +35,7 @@ export const TeamsBottomNav = (): ReactElement => {
     return (
         <nav
             id="teams-container"
-            className="navbar sticky-bottom bg-body-secondary d-flex flex-row gap-2 align-items-end"
+            className="app-bottombar d-flex flex-row gap-2 align-items-end"
         >
             <span
                 className={`btn btn-outline-secondary material-symbols-outlined ${disabled ? 'disabled' : ''}`}

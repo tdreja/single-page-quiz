@@ -1,0 +1,235 @@
+/*
+ * Application theme: Design tokens and Bootstrap customizations.
+ * Loaded directly after Bootstrap, so the rules here replace its defaults.
+ */
+:root {
+    --app-bg: #f4f6fa;
+    --app-ink: #172033;
+    --app-ink-soft: #263149;
+    --app-muted: #687386;
+    --app-line: #e4e8ef;
+    --app-line-soft: #edf0f5;
+    --app-paper: #fff;
+    --app-paper-soft: #fafbfe;
+    --app-input-bg: #fbfcfe;
+    --app-accent: #6558d3;
+    --app-accent-rgb: 101, 88, 211;
+    --app-accent-dark: #5145bf;
+    --app-accent-soft: #efedff;
+    --app-accent-line: #c9c5f4;
+    --app-focus-ring: 0 0 0 3px rgba(var(--app-accent-rgb), 0.12);
+    --app-shadow-sm: 0 2px 8px rgba(24, 36, 58, 0.04);
+    --app-shadow: 0 5px 20px rgba(26, 42, 68, 0.05);
+    --app-shadow-lg: 0 16px 48px rgba(27, 39, 65, 0.08);
+    --app-font: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+    --bs-body-bg: var(--app-bg);
+    --bs-body-color: var(--app-ink);
+    --bs-body-font-family: var(--app-font);
+    --bs-emphasis-color: var(--app-ink);
+    --bs-secondary-color: var(--app-muted);
+    --bs-border-color: var(--app-line);
+    --bs-border-radius: 10px;
+    --bs-border-radius-sm: 8px;
+    --bs-border-radius-lg: 14px;
+    --bs-border-radius-xl: 18px;
+    --bs-primary: var(--app-accent);
+    --bs-primary-rgb: var(--app-accent-rgb);
+    --bs-link-color: var(--app-accent);
+    --bs-link-color-rgb: var(--app-accent-rgb);
+    --bs-link-hover-color: var(--app-accent-dark);
+    --bs-focus-ring-color: rgba(var(--app-accent-rgb), 0.12);
+    --bs-box-shadow: var(--app-shadow);
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.02em;
+}
+
+/* Cards */
+.card {
+    --bs-card-bg: var(--app-paper);
+    --bs-card-border-color: var(--app-line);
+    --bs-card-border-radius: 17px;
+    --bs-card-inner-border-radius: 16px;
+    --bs-card-cap-bg: var(--app-paper-soft);
+    --bs-card-cap-color: var(--app-ink-soft);
+    --bs-card-cap-padding-y: 0.85rem;
+    --bs-card-cap-padding-x: 1.125rem;
+    --bs-card-spacer-y: 1.125rem;
+    --bs-card-spacer-x: 1.125rem;
+    box-shadow: var(--app-shadow);
+}
+
+.card-header {
+    font-weight: 750;
+    border-bottom-color: var(--app-line-soft);
+}
+
+.card-footer {
+    border-top-color: var(--app-line-soft);
+}
+
+.card .card {
+    --bs-card-border-radius: 12px;
+    --bs-card-inner-border-radius: 11px;
+    box-shadow: none;
+}
+
+/* Buttons */
+.btn {
+    --bs-btn-border-radius: 10px;
+    --bs-btn-font-weight: 650;
+    transition: color .15s, background-color .15s, border-color .15s, box-shadow .15s, transform .15s;
+}
+
+.btn:not(.disabled):not(:disabled):hover {
+    transform: translateY(-1px);
+}
+
+.btn-sm {
+    --bs-btn-border-radius: 8px;
+}
+
+.btn-lg {
+    --bs-btn-border-radius: 12px;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--app-accent);
+    --bs-btn-border-color: var(--app-accent);
+    --bs-btn-hover-bg: var(--app-accent-dark);
+    --bs-btn-hover-border-color: var(--app-accent-dark);
+    --bs-btn-active-bg: var(--app-accent-dark);
+    --bs-btn-active-border-color: var(--app-accent-dark);
+    --bs-btn-disabled-bg: var(--app-accent);
+    --bs-btn-disabled-border-color: var(--app-accent);
+    --bs-btn-focus-shadow-rgb: var(--app-accent-rgb);
+    box-shadow: 0 4px 12px rgba(23, 32, 51, 0.12);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--app-accent);
+    --bs-btn-border-color: var(--app-accent-line);
+    --bs-btn-hover-bg: var(--app-accent);
+    --bs-btn-hover-border-color: var(--app-accent);
+    --bs-btn-active-bg: var(--app-accent-dark);
+    --bs-btn-active-border-color: var(--app-accent-dark);
+    --bs-btn-disabled-color: var(--app-accent);
+    --bs-btn-disabled-border-color: var(--app-accent-line);
+    --bs-btn-focus-shadow-rgb: var(--app-accent-rgb);
+}
+
+.btn-secondary,
+.btn-outline-secondary {
+    --bs-btn-color: #566176;
+    --bs-btn-bg: var(--app-paper);
+    --bs-btn-border-color: #dfe4ed;
+    --bs-btn-hover-color: var(--app-accent);
+    --bs-btn-hover-bg: #f8f7ff;
+    --bs-btn-hover-border-color: #c6c1fa;
+    --bs-btn-active-color: var(--app-accent-dark);
+    --bs-btn-active-bg: var(--app-accent-soft);
+    --bs-btn-active-border-color: #c6c1fa;
+    --bs-btn-disabled-color: #9aa3b2;
+    --bs-btn-disabled-bg: var(--app-paper);
+    --bs-btn-disabled-border-color: var(--app-line);
+    --bs-btn-focus-shadow-rgb: var(--app-accent-rgb);
+}
+
+/* Forms */
+.form-label {
+    color: #4a566b;
+    font-size: 0.8rem;
+    font-weight: 750;
+    margin-bottom: 0.5rem;
+}
+
+.form-control,
+.form-select {
+    background-color: var(--app-input-bg);
+    border-color: #dfe4ed;
+    min-height: 42px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--app-paper);
+    border-color: #8c83e9;
+    box-shadow: var(--app-focus-ring);
+}
+
+.input-group-text {
+    background-color: #f6f7fb;
+    border-color: #dfe4ed;
+    color: #596579;
+}
+
+.form-control[type=file] {
+    border: 1px dashed #c9cde0;
+    border-radius: 12px;
+    padding: 0.625rem;
+    cursor: pointer;
+}
+
+.form-control[type=file]::file-selector-button {
+    border: 0;
+    border-radius: 9px;
+    margin: 0 0.875rem 0 0;
+    padding: 0.5rem 1rem;
+    background-color: var(--app-accent);
+    color: #fff;
+    font-weight: 700;
+}
+
+.form-control[type=file]:hover:not(:disabled):not([readonly])::file-selector-button {
+    background-color: var(--app-accent-dark);
+}
+
+/* Accordion */
+.accordion {
+    --bs-accordion-bg: var(--app-paper);
+    --bs-accordion-border-color: var(--app-line);
+    --bs-accordion-border-radius: 13px;
+    --bs-accordion-inner-border-radius: 12px;
+    --bs-accordion-btn-bg: var(--app-paper-soft);
+    --bs-accordion-btn-color: var(--app-ink-soft);
+    --bs-accordion-btn-focus-box-shadow: var(--app-focus-ring);
+    --bs-accordion-active-bg: #f1f0ff;
+    --bs-accordion-active-color: #4238a5;
+}
+
+.accordion-button {
+    font-weight: 700;
+}
+
+/* Badges */
+.badge {
+    --bs-badge-border-radius: 8px;
+    --bs-badge-font-weight: 800;
+}
+
+/* Dialogs */
+.modal {
+    background-color: rgba(16, 23, 43, 0.55);
+    backdrop-filter: blur(6px);
+}
+
+.modal-content {
+    --bs-modal-border-width: 0;
+    --bs-modal-border-radius: 22px;
+    --bs-modal-inner-border-radius: 22px;
+    --bs-modal-header-border-color: var(--app-line-soft);
+    --bs-modal-footer-border-color: var(--app-line-soft);
+    --bs-modal-padding: 1.5rem;
+    --bs-modal-header-padding: 1.25rem 1.5rem;
+    box-shadow: 0 28px 90px rgba(16, 23, 43, 0.27);
+}
+
+.modal-title {
+    font-weight: 800;
+}

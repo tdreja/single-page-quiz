@@ -82,7 +82,7 @@ export const TeamForm = ({ team, availableColors, placements }: Props): ReactEle
                         {i18n.teamEditor.labelSwitchColor}
                     </label>
                     <div id={`team-colors-${team.color}`}>
-                        <div className="btn-group">
+                        <div className="app-chip-group">
                             {
                                 availableColors.map((color) => (
                                     <TeamColorButton

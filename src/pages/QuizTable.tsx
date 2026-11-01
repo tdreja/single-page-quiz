@@ -81,7 +81,7 @@ function AnsweredQuestionCellView({
     const questionType: QuestionType = cell.question?.questionType || QuestionType.TEXT_MULTIPLE_CHOICE;
     return (
         <div
-            className="btn disabled d-inline-grid align-items-center justify-content-between gap-2 btn-primary-outline"
+            className="btn disabled quiz-cell quiz-cell-done d-inline-grid align-items-center justify-content-between gap-2 btn-primary-outline"
             style={{ ...cellColor(percentage, true), opacity: 1, gridTemplateColumns: '1fr auto 1fr' }}
         >
             <div className="d-inline-flex gap-2">
@@ -125,12 +125,12 @@ function OpenQuestionCellView<QUESTION extends OptionalQuestion>(
     const questionType: QuestionType = cell.question?.questionType || QuestionType.TEXT_MULTIPLE_CHOICE;
     return (
         <div
-            className="btn fw-bold d-inline-grid align-items-center justify-content-between gap-2 btn-primary"
+            className="btn quiz-cell d-inline-grid align-items-center justify-content-between gap-2 btn-primary"
             style={{ ...cellColor(percentage, false), gridTemplateColumns: '1fr auto 1fr' }}
             onClick={listener}
         >
             <span />
-            <span className="rounded-pill text-bg-light ps-3 pt-1 pb-1 pe-3">{cell.label}</span>
+            <span className="quiz-cell-points">{cell.label}</span>
             <div>
                 {showDetails && (
                     <span
@@ -148,7 +148,7 @@ function OpenQuestionCellView<QUESTION extends OptionalQuestion>(
 function HeadlineView({ cell }: HeadlineCellProps): ReactElement {
     return (
         <div className="d-flex align-items-center justify-content-center">
-            <span className="rounded-pill text-bg-dark ps-3 pe-3 pb-1 pt-1 fw-bold">
+            <span className="quiz-column-title">
                 {cell.label}
             </span>
         </div>
