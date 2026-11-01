@@ -27,6 +27,7 @@ import { DialogView } from './components/common/DialogView';
 import { ImporterLoadingView } from './pages/importer/ImporterLoadingView';
 import { QuizEditorView } from './pages/editor/QuizEditorView';
 import { EditorSession, EditorSessionContext } from './components/mode/EditorContext';
+import { hasUnsavedChanges } from './model/quiz/editor';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -44,6 +45,21 @@ function App() {
     const [tabType, setTabType] = useState<TabType>(TabType.SHARED);
     const [dialog, setDialog] = useState<Dialog | undefined>(undefined);
     const [editorSession, setEditorSession] = useState<EditorSession | null>(null);
+    const editorUnsaved = !!editorSession && hasUnsavedChanges(editorSession.state);
+
+    // Unsaved changes in the editor are only kept in memory: Let the browser ask before leaving the page
+    useEffect(() => {
+        if (!editorUnsaved) {
+            return;
+        }
+        const warnBeforeUnload = (event: BeforeUnloadEvent) => {
+            event.preventDefault();
+            // Required by older browsers to show the dialog
+            event.returnValue = '';
+        };
+        window.addEventListener('beforeunload', warnBeforeUnload);
+        return () => window.removeEventListener('beforeunload', warnBeforeUnload);
+    }, [editorUnsaved]);
 
     // Update game when an event is received and store the new state
     const onGameEvent = useCallback<GameEventListener>((event: GameEvent) => {
