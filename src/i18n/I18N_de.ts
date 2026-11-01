@@ -223,6 +223,7 @@ export const i18n_de: Labels = {
         actionUndo: 'Rückgängig',
         actionRestore: 'Gespeichertes Quiz wiederherstellen',
         actionBack: 'Übersicht',
+        actionApplyAndBack: 'Übernehmen und zurück zur Übersicht',
         actionAddColumn: 'Kategorie',
         actionAddRow: 'Punkte',
         actionAddQuestion: 'Frage hinzufügen',

@@ -234,6 +234,16 @@ export const QuestionEditor = ({ data, problems, pos, onChange, onBack }: Questi
                     </ul>
                 )}
             </div>
+            <div className="card-footer d-flex">
+                <button
+                    type="button"
+                    className="btn btn-primary d-inline-flex align-items-center gap-1"
+                    onClick={onBack}
+                >
+                    <span className="material-symbols-outlined">check</span>
+                    {labels.actionApplyAndBack}
+                </button>
+            </div>
         </div>
     );
 };

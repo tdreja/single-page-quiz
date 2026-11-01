@@ -205,6 +205,7 @@ export interface QuizEditorLabels {
     actionUndo: string,
     actionRestore: string,
     actionBack: string,
+    actionApplyAndBack: string,
     actionAddColumn: string,
     actionAddRow: string,
     actionAddQuestion: string,

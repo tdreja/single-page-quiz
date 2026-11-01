@@ -223,6 +223,7 @@ export const i18n_en: Labels = {
         actionUndo: 'Undo',
         actionRestore: 'Restore saved quiz',
         actionBack: 'Overview',
+        actionApplyAndBack: 'Apply and back to overview',
         actionAddColumn: 'Category',
         actionAddRow: 'Points',
         actionAddQuestion: 'Add question',
