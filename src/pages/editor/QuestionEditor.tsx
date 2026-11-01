@@ -18,7 +18,7 @@ import { QuestionType } from '../../model/quiz/question';
 import { QuestionTypeIcons } from '../../components/common/QuestionTypeIcons';
 import { MarkdownEditor } from './MarkdownEditor';
 import { EditorChangeListener, problemsAt, QuestionEditorProps } from './EditorProps';
-import { IconButton } from './StructureEditor';
+import { MoveRemoveControls } from './EditorControls';
 
 const allQuestionTypes: QuestionType[] = [QuestionType.TEXT_MULTIPLE_CHOICE, QuestionType.ESTIMATE, QuestionType.ACTION];
 
@@ -44,12 +44,22 @@ const MultipleChoiceSection = ({ data, pos, question, onChange, problemTypes }: 
             <label className="form-label fw-bold mb-0">{labels.labelChoices}</label>
             {question.choices.map((choice, idx) => (
                 <div key={choice.uid} className="d-flex gap-2 align-items-start">
-                    <span className="badge text-bg-dark fs-6 mt-2" style={{ minWidth: '2rem' }}>
+                    <span className="badge text-bg-dark fs-6 mt-1" style={{ minWidth: '2rem' }}>
                         {String.fromCharCode('A'.charCodeAt(0) + idx)}
                     </span>
+                    <MoveRemoveControls
+                        orientation="vertical"
+                        canMoveBackward={idx > 0}
+                        canMoveForward={idx < question.choices.length - 1}
+                        onMove={(offset) => update(moveChoice(question, idx, offset))}
+                        onRemove={() => update(removeChoice(question, idx))}
+                        moveBackwardTitle={labels.tooltipMoveUp}
+                        moveForwardTitle={labels.tooltipMoveDown}
+                        removeTitle={labels.tooltipRemoveChoice}
+                    />
                     <button
                         type="button"
-                        className={`btn material-symbols-outlined mt-1 ${choice.correct ? 'btn-success' : (noCorrect ? 'btn-outline-danger' : 'btn-outline-secondary')}`}
+                        className={`btn btn-sm material-symbols-outlined ${choice.correct ? 'btn-success' : (noCorrect ? 'btn-outline-danger' : 'btn-outline-secondary')}`}
                         title={labels.tooltipToggleCorrect}
                         aria-pressed={choice.correct}
                         onClick={() => update(updateChoice(question, idx, (c) => ({ ...c, correct: !c.correct })))}
@@ -62,26 +72,6 @@ const MultipleChoiceSection = ({ data, pos, question, onChange, problemTypes }: 
                             value={choice.text}
                             invalid={choice.text.trim().length === 0}
                             onChange={(text) => update(updateChoice(question, idx, (c) => ({ ...c, text })), `choice:${choice.uid}`)}
-                        />
-                    </div>
-                    <div className="d-flex gap-1 mt-1">
-                        <IconButton
-                            icon="keyboard_arrow_up"
-                            title={labels.tooltipMoveUp}
-                            disabled={idx === 0}
-                            onClick={() => update(moveChoice(question, idx, -1))}
-                        />
-                        <IconButton
-                            icon="keyboard_arrow_down"
-                            title={labels.tooltipMoveDown}
-                            disabled={idx === question.choices.length - 1}
-                            onClick={() => update(moveChoice(question, idx, 1))}
-                        />
-                        <IconButton
-                            icon="delete"
-                            title={labels.tooltipRemoveChoice}
-                            className="btn-outline-danger"
-                            onClick={() => update(removeChoice(question, idx))}
                         />
                     </div>
                 </div>
@@ -180,15 +170,9 @@ export const QuestionEditor = ({ data, problems, pos, onChange, onBack }: Questi
     return (
         <div className="card">
             <div className="card-header d-flex align-items-center gap-2">
-                <span className="rounded-pill text-bg-dark ps-3 pe-3 pb-1 pt-1 fw-bold">
-                    {column.columnName || '-'}
-                </span>
-                <span className="rounded-pill text-bg-primary ps-3 pe-3 pb-1 pt-1 fw-bold">
-                    {Number.isNaN(points) ? '-' : points}
-                </span>
                 <button
                     type="button"
-                    className="btn btn-sm btn-outline-danger d-inline-flex align-items-center gap-1 ms-auto"
+                    className="btn btn-sm btn-outline-danger d-inline-flex align-items-center gap-1"
                     onClick={() => {
                         onChange(setQuestionAt(data, pos, null));
                         onBack();
@@ -197,6 +181,12 @@ export const QuestionEditor = ({ data, problems, pos, onChange, onBack }: Questi
                     <span className="material-symbols-outlined">delete</span>
                     {labels.tooltipRemoveQuestion}
                 </button>
+                <span className="rounded-pill text-bg-dark ps-3 pe-3 pb-1 pt-1 fw-bold">
+                    {column.columnName || '-'}
+                </span>
+                <span className="rounded-pill text-bg-primary ps-3 pe-3 pb-1 pt-1 fw-bold">
+                    {Number.isNaN(points) ? '-' : points}
+                </span>
             </div>
             <div className="card-body d-flex flex-column gap-4">
                 {/* Question type */}

@@ -17,6 +17,7 @@ import {
 import { QuestionType } from '../../model/quiz/question';
 import { QuestionTypeIcons } from '../../components/common/QuestionTypeIcons';
 import { problemsAt, StructureEditorProps } from './EditorProps';
+import { IconButton, MoveRemoveControls } from './EditorControls';
 
 const allQuestionTypes: QuestionType[] = [QuestionType.TEXT_MULTIPLE_CHOICE, QuestionType.ESTIMATE, QuestionType.ACTION];
 
@@ -34,26 +35,6 @@ function previewText(question: EditorQuestion): string {
     return firstLine.length > 60 ? `${firstLine.substring(0, 57)}...` : firstLine;
 }
 
-interface IconButtonProps {
-    icon: string,
-    title: string,
-    onClick: () => void,
-    disabled?: boolean,
-    className?: string,
-}
-
-export const IconButton = ({ icon, title, onClick, disabled, className }: IconButtonProps): ReactElement => (
-    <button
-        type="button"
-        className={`btn btn-sm material-symbols-outlined ${className || 'btn-outline-secondary'}`}
-        title={title}
-        disabled={disabled}
-        onClick={onClick}
-    >
-        {icon}
-    </button>
-);
-
 /**
  * Overview of the quiz: Categories as columns, points levels as rows, questions as cells.
  */
@@ -67,34 +48,24 @@ export const StructureEditor = ({ data, problems, onChange, onSelect }: Structur
         <div className="card">
             <div
                 className="card-body d-grid gap-2 quiz-editor-grid"
-                style={{ gridTemplateColumns: `7rem repeat(${columnCount}, minmax(12rem, 1fr)) auto` }}
+                style={{ gridTemplateColumns: `max-content repeat(${columnCount}, minmax(12rem, 20rem)) max-content` }}
             >
                 {/* Headline: Categories */}
-                <div className="d-flex align-items-end small text-body-secondary fw-bold">{labels.labelPoints}</div>
+                <div className="d-flex align-items-end justify-content-end small text-body-secondary fw-bold pb-2">{labels.labelPoints}</div>
                 {data.columns.map((column, columnIdx) => {
                     const invalid = problemsAt(problems, { column: columnIdx }).length > 0;
                     return (
-                        <div key={column.uid} className="d-flex flex-column gap-1">
-                            <div className="d-flex gap-1 justify-content-center">
-                                <IconButton
-                                    icon="chevron_left"
-                                    title={labels.tooltipMoveLeft}
-                                    disabled={columnIdx === 0}
-                                    onClick={() => onChange(moveColumn(data, columnIdx, -1))}
-                                />
-                                <IconButton
-                                    icon="chevron_right"
-                                    title={labels.tooltipMoveRight}
-                                    disabled={columnIdx === columnCount - 1}
-                                    onClick={() => onChange(moveColumn(data, columnIdx, 1))}
-                                />
-                                <IconButton
-                                    icon="delete"
-                                    title={labels.tooltipRemoveColumn}
-                                    className="btn-outline-danger"
-                                    onClick={() => onChange(removeColumn(data, columnIdx))}
-                                />
-                            </div>
+                        <div key={column.uid} className="d-flex gap-1">
+                            <MoveRemoveControls
+                                orientation="horizontal"
+                                canMoveBackward={columnIdx > 0}
+                                canMoveForward={columnIdx < columnCount - 1}
+                                onMove={(offset) => onChange(moveColumn(data, columnIdx, offset))}
+                                onRemove={() => onChange(removeColumn(data, columnIdx))}
+                                moveBackwardTitle={labels.tooltipMoveLeft}
+                                moveForwardTitle={labels.tooltipMoveRight}
+                                removeTitle={labels.tooltipRemoveColumn}
+                            />
                             <input
                                 className={`form-control fw-bold text-center ${invalid ? 'is-invalid' : ''}`}
                                 value={column.columnName}
@@ -121,36 +92,26 @@ export const StructureEditor = ({ data, problems, onChange, onSelect }: Structur
                     const invalidPoints = problemsAt(problems, { row }).length > 0;
                     return (
                         <React.Fragment key={`row-${row}`}>
-                            <div className="d-flex flex-column gap-1 justify-content-center">
+                            <div className="d-flex gap-1 align-items-center">
+                                <MoveRemoveControls
+                                    orientation="vertical"
+                                    canMoveBackward={row > 0}
+                                    canMoveForward={row < rowCount - 1}
+                                    onMove={(offset) => onChange(moveRow(data, row, offset))}
+                                    onRemove={() => onChange(removePointLevel(data, row))}
+                                    moveBackwardTitle={labels.tooltipMoveUp}
+                                    moveForwardTitle={labels.tooltipMoveDown}
+                                    removeTitle={labels.tooltipRemoveRow}
+                                />
                                 <input
                                     type="number"
                                     min={1}
                                     step={1}
-                                    className={`form-control text-center ${invalidPoints ? 'is-invalid' : ''}`}
+                                    className={`form-control text-center quiz-editor-points ${invalidPoints ? 'is-invalid' : ''}`}
                                     value={Number.isNaN(points) ? '' : points}
                                     aria-label={labels.labelPoints}
                                     onChange={(ev) => onChange(changePointLevel(data, row, ev.target.valueAsNumber), `points:${row}`)}
                                 />
-                                <div className="d-flex gap-1 justify-content-center">
-                                    <IconButton
-                                        icon="keyboard_arrow_up"
-                                        title={labels.tooltipMoveUp}
-                                        disabled={row === 0}
-                                        onClick={() => onChange(moveRow(data, row, -1))}
-                                    />
-                                    <IconButton
-                                        icon="keyboard_arrow_down"
-                                        title={labels.tooltipMoveDown}
-                                        disabled={row === rowCount - 1}
-                                        onClick={() => onChange(moveRow(data, row, 1))}
-                                    />
-                                    <IconButton
-                                        icon="delete"
-                                        title={labels.tooltipRemoveRow}
-                                        className="btn-outline-danger"
-                                        onClick={() => onChange(removePointLevel(data, row))}
-                                    />
-                                </div>
                             </div>
                             {data.columns.map((column, columnIdx) => {
                                 const question = column.questions[row];

@@ -126,30 +126,8 @@ export const QuizEditorView = (): ReactElement | null => {
     return (
         <div className="d-flex flex-column gap-3 quiz-editor">
             <div className="card">
-                <div className="card-body d-flex flex-wrap align-items-end gap-3">
-                    <div style={{ flex: '1 1 12rem', minWidth: '10rem', maxWidth: '40rem' }}>
-                        <label className="form-label fw-bold" htmlFor="quiz-editor-name">{labels.labelQuizName}</label>
-                        <input
-                            id="quiz-editor-name"
-                            className="form-control"
-                            value={state.current.quizName}
-                            onChange={(ev) => onChange(renameQuiz(state.current, ev.target.value), 'quiz-name')}
-                        />
-                    </div>
-                    <div className="d-flex flex-wrap justify-content-end align-items-center gap-2 ms-auto">
-                        <span className={`badge ${unsaved ? 'text-bg-warning' : 'text-bg-light'} d-inline-flex align-items-center gap-1 text-nowrap`}>
-                            <span className="material-symbols-outlined fs-6">{unsaved ? 'edit_note' : 'cloud_done'}</span>
-                            {unsaved ? labels.labelUnsavedChanges : labels.labelAllSaved}
-                        </span>
-                        <button
-                            type="button"
-                            className="btn btn-outline-secondary d-inline-flex align-items-center gap-1"
-                            disabled={!state.previous}
-                            onClick={onUndo}
-                        >
-                            <span className="material-symbols-outlined">undo</span>
-                            {labels.actionUndo}
-                        </button>
+                <div className="card-body d-flex flex-wrap align-items-end gap-2">
+                    <div className="d-flex align-items-center gap-2">
                         {selected && (
                             <button
                                 type="button"
@@ -160,7 +138,29 @@ export const QuizEditorView = (): ReactElement | null => {
                                 {labels.actionBack}
                             </button>
                         )}
+                        <button
+                            type="button"
+                            className="btn btn-outline-secondary d-inline-flex align-items-center gap-1"
+                            disabled={!state.previous}
+                            onClick={onUndo}
+                        >
+                            <span className="material-symbols-outlined">undo</span>
+                            {labels.actionUndo}
+                        </button>
                     </div>
+                    <div style={{ flex: '1 1 12rem', minWidth: '10rem', maxWidth: '40rem' }}>
+                        <label className="form-label fw-bold" htmlFor="quiz-editor-name">{labels.labelQuizName}</label>
+                        <input
+                            id="quiz-editor-name"
+                            className="form-control"
+                            value={state.current.quizName}
+                            onChange={(ev) => onChange(renameQuiz(state.current, ev.target.value), 'quiz-name')}
+                        />
+                    </div>
+                    <span className={`badge ${unsaved ? 'text-bg-warning' : 'text-bg-light'} d-inline-flex align-items-center gap-1 text-nowrap mb-2`}>
+                        <span className="material-symbols-outlined fs-6">{unsaved ? 'edit_note' : 'cloud_done'}</span>
+                        {unsaved ? labels.labelUnsavedChanges : labels.labelAllSaved}
+                    </span>
                 </div>
                 {problems.length > 0 && (
                     <div className="card-footer text-danger small d-flex flex-wrap gap-2 align-items-center">
