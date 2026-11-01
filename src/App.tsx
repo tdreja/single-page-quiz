@@ -26,6 +26,8 @@ import { Dialog, DialogContext, DialogWrapper } from './components/mode/DialogCo
 import { DialogView } from './components/common/DialogView';
 import { ImporterLoadingView } from './pages/importer/ImporterLoadingView';
 import { QuizEditorView } from './pages/editor/QuizEditorView';
+import { EditorSession, EditorSessionContext } from './components/mode/EditorContext';
+import { hasUnsavedChanges } from './model/quiz/editor';
 
 type ChannelListener = (event: MessageEvent) => void;
 const initialGame = emptyGame();
@@ -42,6 +44,22 @@ function App() {
     const [game, setGame] = useState<Game>(initialGame);
     const [tabType, setTabType] = useState<TabType>(TabType.SHARED);
     const [dialog, setDialog] = useState<Dialog | undefined>(undefined);
+    const [editorSession, setEditorSession] = useState<EditorSession | null>(null);
+    const editorUnsaved = !!editorSession && hasUnsavedChanges(editorSession.state);
+
+    // Unsaved changes in the editor are only kept in memory: Let the browser ask before leaving the page
+    useEffect(() => {
+        if (!editorUnsaved) {
+            return;
+        }
+        const warnBeforeUnload = (event: BeforeUnloadEvent) => {
+            event.preventDefault();
+            // Required by older browsers to show the dialog
+            event.returnValue = '';
+        };
+        window.addEventListener('beforeunload', warnBeforeUnload);
+        return () => window.removeEventListener('beforeunload', warnBeforeUnload);
+    }, [editorUnsaved]);
 
     // Update game when an event is received and store the new state
     const onGameEvent = useCallback<GameEventListener>((event: GameEvent) => {
@@ -100,63 +118,65 @@ function App() {
                 <TabContext.Provider value={{ tabType, setTabType: onChangeSettings }}>
                     <I18N.Provider value={i18n()}>
                         <DialogContext.Provider value={{ dialog, setDialog }}>
-                            <DialogView dialog={dialog} setDialog={setDialog} />
-                            <SettingsBar />
-                            <MainPage>
-                                {/* Players */}
-                                <SubPage state={GamePage.PLAYER_SETUP} tabType={[TabType.PARTICIPANTS]}>
-                                    <PlayersPageForParticipants />
-                                </SubPage>
-                                <SubPage
-                                    state={GamePage.PLAYER_SETUP}
-                                    tabType={[TabType.MODERATION, TabType.SHARED]}
-                                    scrollHorizontal={true}
-                                >
-                                    <PlayersPageForModeration />
-                                </SubPage>
+                            <EditorSessionContext.Provider value={{ session: editorSession, setSession: setEditorSession }}>
+                                <DialogView dialog={dialog} setDialog={setDialog} />
+                                <SettingsBar />
+                                <MainPage>
+                                    {/* Players */}
+                                    <SubPage state={GamePage.PLAYER_SETUP} tabType={[TabType.PARTICIPANTS]}>
+                                        <PlayersPageForParticipants />
+                                    </SubPage>
+                                    <SubPage
+                                        state={GamePage.PLAYER_SETUP}
+                                        tabType={[TabType.MODERATION, TabType.SHARED]}
+                                        scrollHorizontal={true}
+                                    >
+                                        <PlayersPageForModeration />
+                                    </SubPage>
 
-                                {/* Teams */}
-                                <SubPage state={GamePage.TEAM_SETUP} tabType={[TabType.PARTICIPANTS]}>
-                                    <TeamsPageForParticipants />
-                                </SubPage>
-                                <SubPage state={GamePage.TEAM_SETUP} tabType={[TabType.MODERATION, TabType.SHARED]}>
-                                    <TeamsPageForModeration />
-                                </SubPage>
+                                    {/* Teams */}
+                                    <SubPage state={GamePage.TEAM_SETUP} tabType={[TabType.PARTICIPANTS]}>
+                                        <TeamsPageForParticipants />
+                                    </SubPage>
+                                    <SubPage state={GamePage.TEAM_SETUP} tabType={[TabType.MODERATION, TabType.SHARED]}>
+                                        <TeamsPageForModeration />
+                                    </SubPage>
 
-                                {/* Import */}
-                                <SubPage state={GamePage.IMPORT_QUIZ} tabType={[TabType.MODERATION]}>
-                                    <QuizImporterView shared={false} />
-                                </SubPage>
-                                <SubPage state={GamePage.IMPORT_QUIZ} tabType={[TabType.SHARED]}>
-                                    <QuizImporterView shared={true} />
-                                </SubPage>
-                                <SubPage state={GamePage.IMPORT_QUIZ} tabType={[TabType.PARTICIPANTS]}>
-                                    <ImporterLoadingView loadingMessage={(labels) => labels.importer.waitingForImport} />
-                                </SubPage>
+                                    {/* Import */}
+                                    <SubPage state={GamePage.IMPORT_QUIZ} tabType={[TabType.MODERATION]}>
+                                        <QuizImporterView shared={false} />
+                                    </SubPage>
+                                    <SubPage state={GamePage.IMPORT_QUIZ} tabType={[TabType.SHARED]}>
+                                        <QuizImporterView shared={true} />
+                                    </SubPage>
+                                    <SubPage state={GamePage.IMPORT_QUIZ} tabType={[TabType.PARTICIPANTS]}>
+                                        <ImporterLoadingView loadingMessage={(labels) => labels.importer.waitingForImport} />
+                                    </SubPage>
 
-                                {/* Quiz */}
-                                <SubPage state={GamePage.GAME_ACTIVE} tabType={[TabType.PARTICIPANTS]}>
-                                    <QuizParticipantsPage />
-                                </SubPage>
-                                <SubPage state={GamePage.GAME_ACTIVE} tabType={[TabType.SHARED]}>
-                                    <QuizModerationPage shared={true} />
-                                </SubPage>
-                                <SubPage state={GamePage.GAME_ACTIVE} tabType={[TabType.MODERATION]}>
-                                    <QuizModerationPage shared={false} />
-                                </SubPage>
+                                    {/* Quiz */}
+                                    <SubPage state={GamePage.GAME_ACTIVE} tabType={[TabType.PARTICIPANTS]}>
+                                        <QuizParticipantsPage />
+                                    </SubPage>
+                                    <SubPage state={GamePage.GAME_ACTIVE} tabType={[TabType.SHARED]}>
+                                        <QuizModerationPage shared={true} />
+                                    </SubPage>
+                                    <SubPage state={GamePage.GAME_ACTIVE} tabType={[TabType.MODERATION]}>
+                                        <QuizModerationPage shared={false} />
+                                    </SubPage>
 
-                                {/* Editor */}
-                                <SubPage state={GamePage.EDIT_QUIZ} tabType={[TabType.MODERATION]}>
-                                    <QuizEditorView />
-                                </SubPage>
-                                <SubPage state={GamePage.EDIT_QUIZ} tabType={[TabType.SHARED]}>
-                                    <ImporterLoadingView loadingMessage={(labels) => labels.quizEditor.editorCannotBeShared} />
-                                </SubPage>
-                                <SubPage state={GamePage.EDIT_QUIZ} tabType={[TabType.PARTICIPANTS]}>
-                                    <ImporterLoadingView loadingMessage={(labels) => labels.quizEditor.waitingOnEditor} />
-                                </SubPage>
-                            </MainPage>
-                            <TeamsBottomNav />
+                                    {/* Editor */}
+                                    <SubPage state={GamePage.EDIT_QUIZ} tabType={[TabType.MODERATION]}>
+                                        <QuizEditorView />
+                                    </SubPage>
+                                    <SubPage state={GamePage.EDIT_QUIZ} tabType={[TabType.SHARED]}>
+                                        <ImporterLoadingView loadingMessage={(labels) => labels.quizEditor.editorCannotBeShared} />
+                                    </SubPage>
+                                    <SubPage state={GamePage.EDIT_QUIZ} tabType={[TabType.PARTICIPANTS]}>
+                                        <ImporterLoadingView loadingMessage={(labels) => labels.quizEditor.waitingOnEditor} />
+                                    </SubPage>
+                                </MainPage>
+                                <TeamsBottomNav />
+                            </EditorSessionContext.Provider>
                         </DialogContext.Provider>
                     </I18N.Provider>
                 </TabContext.Provider>

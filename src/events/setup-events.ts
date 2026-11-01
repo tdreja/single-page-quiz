@@ -513,3 +513,31 @@ export class ImportTeamsEvent extends BasicGameEvent {
         return update(game, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
     }
 }
+
+/**
+ * Stores the quiz from the editor in the game and starts the game.
+ * As the questions are replaced, the progress of the game is reset: points, completed questions and the current round.
+ * Players and teams are kept.
+ */
+export class SaveQuizEvent extends BasicGameEvent {
+    private readonly _quiz: JsonStaticGameData;
+
+    constructor(quiz: JsonStaticGameData) {
+        super(EventType.SAVE_QUIZ);
+        this._quiz = quiz;
+    }
+
+    public updateGame(game: Game): GameUpdate {
+        importStaticGameContent(game, this._quiz);
+        game.round = null;
+        game.roundsCounter = 0;
+        game.page = GamePage.GAME_ACTIVE;
+        for (const team of game.teams.values()) {
+            team.points = 0;
+        }
+        for (const player of game.players.values()) {
+            player.points = 0;
+        }
+        return update(game, Changes.QUIZ_CONTENT, Changes.GAME_SETUP, Changes.CURRENT_ROUND);
+    }
+}

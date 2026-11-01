@@ -5,6 +5,7 @@ import { i18n_de } from './I18N_de';
 import { i18n_en } from './I18N_en';
 import { Emoji } from '../model/game/player';
 import { QuestionType } from '../model/quiz/question';
+import { EditorProblemType } from '../model/quiz/editor';
 
 /**
  * Overall API with all translations used by the application
@@ -187,7 +188,65 @@ export interface DialogLabels {
 export interface QuizEditorLabels {
     waitingOnEditor: string,
     editorCannotBeShared: string,
+    labelQuizName: string,
+    labelColumnName: string,
+    labelPoints: string,
+    labelQuestionType: string,
+    labelQuestionText: string,
+    labelChoices: string,
+    labelCorrect: string,
+    labelEstimateTarget: string,
+    labelEstimateUnit: string,
+    labelEstimatePreview: string,
+    labelUnsavedChanges: string,
+    labelImageUploading: string,
+    labelAllSaved: string,
+    labelNewColumn: string,
+    actionSaveAndStart: string,
+    actionUndo: string,
+    actionRestore: string,
+    actionBack: string,
+    actionApplyAndBack: string,
+    actionAddColumn: string,
+    actionAddRow: string,
+    actionAddQuestion: string,
+    actionAddChoice: string,
+    tooltipMoveLeft: string,
+    tooltipMoveRight: string,
+    tooltipMoveUp: string,
+    tooltipMoveDown: string,
+    tooltipRemoveColumn: string,
+    tooltipRemoveRow: string,
+    tooltipRemoveQuestion: string,
+    tooltipRemoveChoice: string,
+    tooltipToggleCorrect: string,
+    tooltipEditQuestion: string,
+    tooltipBold: string,
+    tooltipItalic: string,
+    tooltipStrikethrough: string,
+    tooltipHeading: string,
+    tooltipBulletList: string,
+    tooltipOrderedList: string,
+    tooltipQuote: string,
+    tooltipCode: string,
+    tooltipImage: string,
+    hintActionQuestion: string,
+    hintEstimateQuestion: string,
+    hintEmptyQuiz: string,
+    dialogSaveAndStartTitle: string,
+    dialogSaveAndStartResetMessage: string,
+    dialogRestoreTitle: string,
+    dialogRestoreMessage: string,
+    problemsHeader: string,
+    problems: EditorProblemLabels,
 }
+
+/**
+ * Labels for problems found by the editor validation.
+ */
+export type EditorProblemLabels = {
+    [type in EditorProblemType]: string;
+};
 
 /**
  * Fetches the appropriate labels based on the user's language settings.
