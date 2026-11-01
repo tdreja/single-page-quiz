@@ -2,6 +2,7 @@ import React, { ReactElement, useCallback, useContext, useEffect, useRef, useSta
 import { Editor, defaultValueCtx, rootCtx } from '@milkdown/kit/core';
 import {
     commonmark,
+    insertImageCommand,
     toggleEmphasisCommand,
     toggleInlineCodeCommand,
     toggleStrongCommand,
@@ -14,10 +15,13 @@ import { gfm, toggleStrikethroughCommand } from '@milkdown/kit/preset/gfm';
 import { history } from '@milkdown/kit/plugin/history';
 import { clipboard } from '@milkdown/kit/plugin/clipboard';
 import { listener, listenerCtx } from '@milkdown/kit/plugin/listener';
+import { upload, uploadConfig, Uploader } from '@milkdown/kit/plugin/upload';
+import { Decoration } from '@milkdown/kit/prose/view';
 import { callCommand } from '@milkdown/kit/utils';
 import { Milkdown, MilkdownProvider, useEditor, useInstance } from '@milkdown/react';
 import { I18N, QuizEditorLabels } from '../../i18n/I18N';
 import { MarkdownText } from '../../model/quiz/question';
+import { imageFileToDataUrl } from '../../components/common/ImageResize';
 
 export interface MarkdownEditorProps {
     value: MarkdownText,
@@ -45,9 +49,41 @@ const toolbarActions: ToolbarAction[] = [
     { icon: 'format_quote', tooltip: (l) => l.tooltipQuote, command: callCommand(wrapInBlockquoteCommand.key), small: false },
 ];
 
+function isImage(file: File): boolean {
+    return file.type.startsWith('image/');
+}
+
+function altText(file: File): string {
+    return file.name.replace(/\.[^.]+$/, '');
+}
+
+/**
+ * Inserts dropped or pasted images as (scaled down) base64 data URLs, so they are stored directly in the markdown
+ */
+const imageUploader: Uploader = async (files, schema) => {
+    const nodes = await Promise.all(Array.from(files).filter(isImage).map(async (file) => {
+        const src = await imageFileToDataUrl(file);
+        return schema.nodes.image.createAndFill({ src, alt: altText(file) });
+    }));
+    return nodes.filter((node) => node !== null);
+};
+
 const Toolbar = ({ size }: { size: 'small' | 'large', }): ReactElement => {
     const i18n = useContext(I18N);
     const [loading, getEditor] = useInstance();
+    const fileInput = useRef<HTMLInputElement>(null);
+
+    const insertImages = useCallback(async (files: FileList | null) => {
+        for (const file of Array.from(files || []).filter(isImage)) {
+            const src = await imageFileToDataUrl(file);
+            getEditor()?.action(callCommand(insertImageCommand.key, { src, alt: altText(file) }));
+        }
+        if (fileInput.current) {
+            // Allows selecting the same file again
+            fileInput.current.value = '';
+        }
+    }, [getEditor]);
+
     return (
         <div className="btn-group btn-group-sm markdown-editor-toolbar" role="toolbar">
             {toolbarActions.filter((action) => size === 'large' || action.small).map((action) => (
@@ -64,12 +100,31 @@ const Toolbar = ({ size }: { size: 'small' | 'large', }): ReactElement => {
                     {action.icon}
                 </button>
             ))}
+            <button
+                type="button"
+                className="btn btn-outline-secondary material-symbols-outlined"
+                title={i18n.quizEditor.tooltipImage}
+                disabled={loading}
+                onMouseDown={(ev) => ev.preventDefault()}
+                onClick={() => fileInput.current?.click()}
+            >
+                image
+            </button>
+            <input
+                ref={fileInput}
+                type="file"
+                accept="image/*"
+                multiple={true}
+                className="d-none"
+                onChange={(ev) => insertImages(ev.target.files)}
+            />
         </div>
     );
 };
 
 const MilkdownInstance = ({ value, onChange }: Pick<MarkdownEditorProps, 'value' | 'onChange'>): ReactElement => {
     // Milkdown is not a controlled component: The initial value is only read once and changes are pushed via listener
+    const i18n = useContext(I18N);
     const onChangeRef = useRef(onChange);
     onChangeRef.current = onChange;
 
@@ -78,11 +133,22 @@ const MilkdownInstance = ({ value, onChange }: Pick<MarkdownEditorProps, 'value'
             ctx.set(rootCtx, root);
             ctx.set(defaultValueCtx, value);
             ctx.get(listenerCtx).markdownUpdated((_, markdown) => onChangeRef.current(markdown));
+            ctx.update(uploadConfig.key, (prev) => ({
+                ...prev,
+                uploader: imageUploader,
+                uploadWidgetFactory: (pos, spec) => {
+                    const widget = document.createElement('span');
+                    widget.className = 'text-body-secondary fst-italic';
+                    widget.textContent = i18n.quizEditor.labelImageUploading;
+                    return Decoration.widget(pos, widget, spec);
+                },
+            }));
         })
         .use(commonmark)
         .use(gfm)
         .use(history)
         .use(clipboard)
+        .use(upload)
         .use(listener), []);
 
     return <Milkdown />;
