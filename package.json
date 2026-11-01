@@ -12,12 +12,14 @@
     "lint:fix": "./node_modules/.bin/eslint src/ --ext .ts,.tsx --fix"
   },
   "dependencies": {
+    "@milkdown/kit": "^7.23.0",
+    "@milkdown/react": "^7.23.0",
     "bootstrap": "^5.3.8",
     "material-symbols": "^0.44.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "yaml": "^2.8.3",
-    "react-markdown": "^10.1.0"
+    "react-markdown": "^10.1.0",
+    "yaml": "^2.8.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

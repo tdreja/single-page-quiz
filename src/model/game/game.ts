@@ -176,3 +176,30 @@ export function isGameOver(game: Game): boolean {
     }
     return true;
 }
+
+/**
+ * Has the game already progressed, e.g. answered questions, an open round or points for teams or players?
+ */
+export function isGameInProgress(game: Game): boolean {
+    if (game.round || game.roundsCounter > 0) {
+        return true;
+    }
+    for (const column of game.columns.values()) {
+        for (const question of column.questions.values()) {
+            if (question.completed) {
+                return true;
+            }
+        }
+    }
+    for (const team of game.teams.values()) {
+        if (team.points !== 0) {
+            return true;
+        }
+    }
+    for (const player of game.players.values()) {
+        if (player.points !== 0) {
+            return true;
+        }
+    }
+    return false;
+}

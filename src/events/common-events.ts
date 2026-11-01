@@ -41,6 +41,9 @@ export enum EventType {
     IMPORT_QUIZ = 'import-quiz',
     IMPORT_PLAYERS = 'import-players',
     IMPORT_TEAMS = 'import-teams',
+
+    // Editor Events
+    SAVE_QUIZ = 'save-quiz',
 }
 
 /**
