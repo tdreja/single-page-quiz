@@ -1,9 +1,9 @@
-import React, { ReactElement, useCallback, useContext } from 'react';
+import React, { ReactElement, useCallback, useContext, useState } from 'react';
 import { I18N } from '../../i18n/I18N';
 import { Game } from '../../model/game/game';
 import { GameContext } from '../../components/common/GameContext';
 import { stringify } from 'yaml';
-import { exportStaticGameContent } from '../../model/quiz/question_json';
+import { exportStaticGameContent, shuffleAllChoices } from '../../model/quiz/question_json';
 import { JsonPlayer, JsonPlayerData, storePlayer } from '../../model/game/player_json';
 import { JsonTeam, storeTeam } from '../../model/game/team_json';
 import { JsonTeamAndPlayerData } from '../../model/game/game_json';
@@ -19,11 +19,13 @@ function downloadYaml(yaml: string, fileName: string) {
 export const ExportQuizView = (): ReactElement => {
     const i18n = useContext(I18N);
     const game = useContext<Game>(GameContext);
+    const [shuffled, setShuffled] = useState<boolean>(false);
 
     const exportQuiz = useCallback(() => {
-        const content = stringify(exportStaticGameContent(game));
+        const quiz = exportStaticGameContent(game);
+        const content = stringify(shuffled ? shuffleAllChoices(quiz) : quiz);
         downloadYaml(content, `${game.quizName}.yaml`);
-    }, [game]);
+    }, [game, shuffled]);
 
     const exportPlayers = useCallback(() => {
         const players: Array<JsonPlayer> = Array.from(game.players.values())
@@ -51,13 +53,25 @@ export const ExportQuizView = (): ReactElement => {
     return (
         <div className="card">
             <div className="card-header">Quiz exportieren</div>
-            <div className="card-body d-flex gap-2">
+            <div className="card-body d-flex flex-wrap align-items-center gap-2">
                 <div
                     className="btn btn-outline-primary d-inline-flex align-items-center gap-2"
                     onClick={exportQuiz}
                 >
                     <span className="material-symbols-outlined">deployed_code_update</span>
                     Export Quiz
+                </div>
+                <div className="form-check me-3">
+                    <input
+                        id="export-shuffled"
+                        type="checkbox"
+                        className="form-check-input"
+                        checked={shuffled}
+                        onChange={(ev) => setShuffled(ev.target.checked)}
+                    />
+                    <label className="form-check-label" htmlFor="export-shuffled">
+                        {i18n.importer.labelExportShuffled}
+                    </label>
                 </div>
                 <div
                     className="btn btn-outline-primary d-inline-flex align-items-center gap-2"

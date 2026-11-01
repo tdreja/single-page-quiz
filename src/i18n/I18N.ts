@@ -178,6 +178,7 @@ export interface QuizImportLabels {
     teamsUploadedHeader: string,
     noNewQuizUploaded: string,
     waitingForImport: string,
+    labelExportShuffled: string,
 }
 
 export interface DialogLabels {
@@ -200,6 +201,7 @@ export interface QuizEditorLabels {
     labelEstimatePreview: string,
     labelUnsavedChanges: string,
     labelImageUploading: string,
+    labelShuffleChoices: string,
     labelAllSaved: string,
     labelNewColumn: string,
     actionSaveAndStart: string,

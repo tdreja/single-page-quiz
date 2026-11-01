@@ -1,5 +1,5 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Editor, defaultValueCtx, rootCtx } from '@milkdown/kit/core';
+import { Editor, defaultValueCtx, editorViewOptionsCtx, rootCtx } from '@milkdown/kit/core';
 import {
     commonmark,
     insertImageCommand,
@@ -16,7 +16,8 @@ import { history } from '@milkdown/kit/plugin/history';
 import { clipboard } from '@milkdown/kit/plugin/clipboard';
 import { listener, listenerCtx } from '@milkdown/kit/plugin/listener';
 import { upload, uploadConfig, Uploader } from '@milkdown/kit/plugin/upload';
-import { Decoration } from '@milkdown/kit/prose/view';
+import { Transaction } from '@milkdown/kit/prose/state';
+import { Decoration, EditorView } from '@milkdown/kit/prose/view';
 import { callCommand } from '@milkdown/kit/utils';
 import { Milkdown, MilkdownProvider, useEditor, useInstance } from '@milkdown/react';
 import { I18N, QuizEditorLabels } from '../../i18n/I18N';
@@ -67,6 +68,25 @@ const imageUploader: Uploader = async (files, schema) => {
     }));
     return nodes.filter((node) => node !== null);
 };
+
+/**
+ * Milkdown runs its input rules (e.g. **bold**) for every text input, even if several characters arrive at once
+ * (fast typing, autocorrect, IME). Its start position is then calculated beyond the document, which crashes the editor.
+ * Therefore, the input rules only run for single typed characters, longer inputs are inserted as they are.
+ */
+function insertMultipleCharsWithoutInputRules(
+    view: EditorView,
+    _from: number,
+    _to: number,
+    text: string,
+    deflt: () => Transaction,
+): boolean {
+    if (text.length <= 1) {
+        return false;
+    }
+    view.dispatch(deflt());
+    return true;
+}
 
 const Toolbar = ({ size }: { size: 'small' | 'large', }): ReactElement => {
     const i18n = useContext(I18N);
@@ -132,6 +152,7 @@ const MilkdownInstance = ({ value, onChange }: Pick<MarkdownEditorProps, 'value'
         .config((ctx) => {
             ctx.set(rootCtx, root);
             ctx.set(defaultValueCtx, value);
+            ctx.update(editorViewOptionsCtx, (prev) => ({ ...prev, handleTextInput: insertMultipleCharsWithoutInputRules }));
             ctx.get(listenerCtx).markdownUpdated((_, markdown) => onChangeRef.current(markdown));
             ctx.update(uploadConfig.key, (prev) => ({
                 ...prev,

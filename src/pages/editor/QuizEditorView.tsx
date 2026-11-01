@@ -12,9 +12,11 @@ import {
     initEditorState,
     markSaved,
     renameQuiz,
+    shuffleChoices,
     toEditorData,
     toJsonStaticGameData,
     undo,
+    updateQuestionAt,
     validateEditorData,
 } from '../../model/quiz/editor';
 import { exportStaticGameContent } from '../../model/quiz/question_json';
@@ -85,7 +87,20 @@ export const QuizEditorView = (): ReactElement | null => {
         });
     }, []);
 
-    const onBack = useCallback(() => setSession((s) => s && { ...s, selection: null }), []);
+    const onShuffleChoicesChange = useCallback((shuffle: boolean) => {
+        setSession((s) => s && s.selection ? { ...s, selection: { ...s.selection, shuffleChoices: shuffle } } : s);
+    }, []);
+
+    const onBack = useCallback(() => setSession((s) => {
+        if (!s) {
+            return s;
+        }
+        const pos = resolveSelection(s.state.current, s.selection);
+        const state = pos && s.selection?.shuffleChoices
+            ? applyChange(s.state, updateQuestionAt(s.state.current, pos, shuffleChoices))
+            : s.state;
+        return { ...s, state, selection: null };
+    }), []);
 
     const onUndo = useCallback(() => setSession((s) => s && { ...s, state: undo(s.state) }), []);
 
@@ -177,6 +192,8 @@ export const QuizEditorView = (): ReactElement | null => {
                         data={state.current}
                         problems={problems}
                         pos={selected}
+                        shuffleChoices={!!session.selection?.shuffleChoices}
+                        onShuffleChoicesChange={onShuffleChoicesChange}
                         onChange={onChange}
                         onBack={onBack}
                     />

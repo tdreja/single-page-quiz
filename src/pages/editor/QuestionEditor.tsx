@@ -30,11 +30,18 @@ interface SectionProps {
     problemTypes: EditorProblemType[],
 }
 
+interface MultipleChoiceSectionProps extends SectionProps {
+    shuffleChoices: boolean,
+    onShuffleChoicesChange: (shuffle: boolean) => void,
+}
+
 function cellKey(pos: CellPosition): string {
     return `${pos.column}:${pos.row}`;
 }
 
-const MultipleChoiceSection = ({ data, pos, question, onChange, problemTypes }: SectionProps): ReactElement => {
+const MultipleChoiceSection = ({
+    data, pos, question, onChange, problemTypes, shuffleChoices, onShuffleChoicesChange,
+}: MultipleChoiceSectionProps): ReactElement => {
     const i18n = useContext(I18N);
     const labels = i18n.quizEditor;
     const update = (q: EditorQuestion, mergeKey?: string) => onChange(setQuestionAt(data, pos, q), mergeKey);
@@ -85,6 +92,18 @@ const MultipleChoiceSection = ({ data, pos, question, onChange, problemTypes }: 
                     <span className="material-symbols-outlined">add</span>
                     {labels.actionAddChoice}
                 </button>
+            </div>
+            <div className="form-check">
+                <input
+                    id={`shuffle-choices-${cellKey(pos)}`}
+                    type="checkbox"
+                    className="form-check-input"
+                    checked={shuffleChoices}
+                    onChange={(ev) => onShuffleChoicesChange(ev.target.checked)}
+                />
+                <label className="form-check-label" htmlFor={`shuffle-choices-${cellKey(pos)}`}>
+                    {labels.labelShuffleChoices}
+                </label>
             </div>
         </div>
     );
@@ -154,7 +173,9 @@ const ActionSection = (): ReactElement => {
 /**
  * Editor for a single question, including the specific fields of each question type.
  */
-export const QuestionEditor = ({ data, problems, pos, onChange, onBack }: QuestionEditorProps): ReactElement | null => {
+export const QuestionEditor = ({
+    data, problems, pos, shuffleChoices, onShuffleChoicesChange, onChange, onBack,
+}: QuestionEditorProps): ReactElement | null => {
     const i18n = useContext(I18N);
     const labels = i18n.quizEditor;
     const question = getQuestionAt(data, pos);
@@ -222,7 +243,13 @@ export const QuestionEditor = ({ data, problems, pos, onChange, onBack }: Questi
                 </div>
 
                 {/* Type specific content */}
-                {question.questionType === QuestionType.TEXT_MULTIPLE_CHOICE && <MultipleChoiceSection {...sectionProps} />}
+                {question.questionType === QuestionType.TEXT_MULTIPLE_CHOICE && (
+                    <MultipleChoiceSection
+                        {...sectionProps}
+                        shuffleChoices={shuffleChoices}
+                        onShuffleChoicesChange={onShuffleChoicesChange}
+                    />
+                )}
                 {question.questionType === QuestionType.ESTIMATE && <EstimateSection {...sectionProps} />}
                 {question.questionType === QuestionType.ACTION && <ActionSection />}
 

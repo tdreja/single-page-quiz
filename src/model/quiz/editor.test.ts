@@ -16,11 +16,13 @@ import {
     markSaved,
     moveChoice,
     moveColumn,
+    newChoice,
     removeColumn,
     removePointLevel,
     renameColumn,
     renameQuiz,
     setQuestionAt,
+    shuffleChoices,
     suggestNextPointLevel,
     toEditorData,
     toJsonStaticGameData,
@@ -35,6 +37,7 @@ import { expectUpdate } from '../../events/data.test';
 import { Changes } from '../../events/common-events';
 import { TextMultipleChoiceQuestion } from './multiple-choice-question';
 import { EstimateQuestion } from './estimate-question';
+import { exportStaticGameContent, shuffleAllChoices } from './question_json';
 
 let game: Game;
 beforeEach(() => {
@@ -215,3 +218,24 @@ function questionEstimateCompleted() {
     const question = game.columns.get(sectionId)?.questions.get(questionPoints + 100);
     question?.completeQuestion([teamBlue], { [teamBlue.color]: 200 });
 }
+
+test('shuffleChoices changes the order of the choices', () => {
+    const question = { ...emptyQuestion(), choices: ['a', 'b', 'c', 'd'].map((text, idx) => newChoice(idx === 0, text)) };
+    const shuffled = shuffleChoices(question);
+    expect(shuffled.choices.map((c) => c.text)).not.toEqual(['a', 'b', 'c', 'd']);
+    expect([...shuffled.choices].sort((a, b) => a.text.localeCompare(b.text))).toEqual(question.choices);
+    expect(shuffled.choices.find((c) => c.correct)?.text).toBe('a');
+
+    const estimate = emptyQuestion(QuestionType.ESTIMATE);
+    expect(shuffleChoices(estimate)).toBe(estimate);
+});
+
+test('shuffleAllChoices relabels the shuffled choices', () => {
+    const quiz = exportStaticGameContent(game);
+    const shuffled = shuffleAllChoices(quiz);
+    const original = quiz.columns?.[0].questions?.find((q) => q.choices)?.choices;
+    const choices = shuffled.columns?.[0].questions?.find((q) => q.choices)?.choices;
+    expect(choices?.map((c) => c.choiceId)).toEqual(['A', 'B']);
+    expect(choices?.map((c) => c.text)).toEqual([...(original || [])].reverse().map((c) => c.text));
+    expect(choices?.find((c) => c.correct)?.text).toBe(original?.find((c) => c.correct)?.text);
+});
