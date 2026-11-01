@@ -1,4 +1,4 @@
-import { shuffleArray } from '../common';
+import { shuffleArray, shuffledCopy } from '../common';
 import { Game, GameColumn } from '../game/game';
 import { TeamColor } from '../game/team';
 import { ActionQuestion } from './action-question';
@@ -65,6 +65,28 @@ export function exportStaticGameContent(game: Game): JsonStaticGameData {
     return {
         quizName: game.quizName,
         columns: sections,
+    };
+}
+
+/**
+ * Returns a copy of the static content, in which the choices of all multiple-choice questions are shuffled
+ * and labeled again from A onwards.
+ */
+export function shuffleAllChoices(quiz: JsonStaticGameData): JsonStaticGameData {
+    return {
+        ...quiz,
+        columns: quiz.columns?.map((column) => ({
+            ...column,
+            questions: column.questions?.map((question) => question.choices
+                ? {
+                    ...question,
+                    choices: shuffledCopy(question.choices).map((choice, idx) => ({
+                        ...choice,
+                        choiceId: String.fromCharCode('A'.charCodeAt(0) + idx),
+                    })),
+                }
+                : question),
+        })),
     };
 }
 

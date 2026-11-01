@@ -1,3 +1,4 @@
+import { shuffledCopy } from '../common';
 import { Game, sortGameSectionsByIndex } from '../game/game';
 import { JsonStaticColumnData, JsonStaticGameData } from '../game/game_json';
 import { MarkdownText, QuestionType } from './question';
@@ -326,6 +327,17 @@ export function removeChoice(question: EditorQuestion, choice: number): EditorQu
 
 export function moveChoice(question: EditorQuestion, choice: number, offset: number): EditorQuestion {
     return { ...question, choices: moveItem(question.choices, choice, offset) };
+}
+
+/**
+ * Shuffles the choices of a multiple-choice question, which assigns new letters to them.
+ * Other question types are returned unchanged.
+ */
+export function shuffleChoices(question: EditorQuestion): EditorQuestion {
+    if (question.questionType !== QuestionType.TEXT_MULTIPLE_CHOICE) {
+        return question;
+    }
+    return { ...question, choices: shuffledCopy(question.choices) };
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

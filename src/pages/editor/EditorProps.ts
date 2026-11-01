@@ -18,6 +18,8 @@ export interface StructureEditorProps extends EditorProps {
 
 export interface QuestionEditorProps extends EditorProps {
     pos: CellPosition,
+    shuffleChoices: boolean,
+    onShuffleChoicesChange: (shuffle: boolean) => void,
     onBack: () => void,
 }
 
